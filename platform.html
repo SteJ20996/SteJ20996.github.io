@@ -698,25 +698,21 @@
   <div class="reveal">
     <p class="section-label">04 — Live Demo</p>
     <h2 class="section-title">The Calibration Mirror.</h2>
-    <p class="section-lede">One math problem. It won't just mark you right or wrong — it will show you the gap between how sure you felt and how right you were. That gap is the raw material Delta learns from. Try it honestly.</p>
+    <p class="section-lede">Three quick problems. Each one shows you the gap between how sure you felt and how right you were — and after the last, Delta assembles the pattern into your calibration profile. One answer is an anecdote; three start to look like a signal. Try them honestly.</p>
   </div>
 
   <div class="demo-wrap reveal">
     <div class="demo">
       <div class="demo-head">
         <div class="title">&#916; &nbsp;Calibration Mirror</div>
-        <div class="demo-steps" id="pips">
-          <div class="step-pip active"></div>
-          <div class="step-pip"></div>
-          <div class="step-pip"></div>
-        </div>
+        <div class="demo-steps" id="pips"></div>
       </div>
       <div class="demo-body">
 
         <!-- STAGE 1: answer -->
         <div class="stage active" id="stage-answer">
-          <div class="prompt-label">Step 1 of 3 — Commit to an answer</div>
-          <p class="stem">A jacket is marked down <b>20%</b>. At the register, an extra <b>20%</b> comes off the already-reduced price. What is the <b>total</b> discount off the original price?</p>
+          <div class="prompt-label" id="answerLabel">Question 1 of 3 — Commit to an answer</div>
+          <p class="stem" id="stem"></p>
           <div class="options" id="options"></div>
           <div class="demo-actions">
             <button class="demo-btn primary" id="toConf" disabled>Next: rate your confidence →</button>
@@ -725,7 +721,7 @@
 
         <!-- STAGE 2: confidence -->
         <div class="stage" id="stage-conf">
-          <div class="prompt-label">Step 2 of 3 — How sure are you, honestly?</div>
+          <div class="prompt-label" id="confLabel">Question 1 of 3 — How sure are you, honestly?</div>
           <p class="stem" style="font-size:1rem;color:var(--muted);">No penalty for uncertainty. The point is to notice the distance between feeling and fact.</p>
           <div class="conf-row">
             <div class="conf-val"><span id="confNum">70</span>%</div>
@@ -740,7 +736,7 @@
 
         <!-- STAGE 3: reveal -->
         <div class="stage" id="stage-reveal">
-          <div class="prompt-label">Step 3 of 3 — What the gap tells us</div>
+          <div class="prompt-label" id="revealLabel">Question 1 of 3 — What the gap tells us</div>
 
           <div class="gap-viz">
             <div class="gap-title">Confidence vs. reality</div>
@@ -774,7 +770,46 @@
           </div>
 
           <div class="demo-actions" style="margin-top:1.3rem;">
-            <button class="demo-btn ghost" id="restart">↺ Try again with a different answer</button>
+            <button class="demo-btn primary" id="nextItem">Next question →</button>
+          </div>
+        </div>
+
+        <!-- STAGE 4: calibration profile -->
+        <div class="stage" id="stage-summary">
+          <div class="prompt-label">Your calibration profile — three questions in</div>
+
+          <div class="gap-viz">
+            <div class="gap-title">Felt vs. real, across all three</div>
+            <div class="gap-bars">
+              <div class="gap-bar-row">
+                <span class="lab">Avg. confidence</span>
+                <div class="gap-track"><div class="gap-fill conf" id="sFillConf"></div></div>
+                <span class="gap-num" id="sNumConf">—</span>
+              </div>
+              <div class="gap-bar-row">
+                <span class="lab">Actual accuracy</span>
+                <div class="gap-track"><div class="gap-fill truth" id="sFillAcc"></div></div>
+                <span class="gap-num" id="sNumAcc">—</span>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="gap-headline" id="sHeadline"></h3>
+          <p class="diag" id="sDiag"></p>
+
+          <div class="mirror">
+            <h4>&#916; Your learner model — three data points in</h4>
+            <ul id="sMirrorList"></ul>
+          </div>
+
+          <div class="nextstep">
+            <div class="k">Delta's next move</div>
+            <div class="act" id="sNextAct"></div>
+            <div class="det" id="sNextDet"></div>
+          </div>
+
+          <div class="demo-actions" style="margin-top:1.3rem;">
+            <button class="demo-btn ghost" id="restart">↺ Start over</button>
           </div>
 
           <p class="seam-note">
@@ -953,21 +988,53 @@
   //  Everything below the divider comment is presentation only.
   // ══════════════════════════════════════════════════════════════════════════
 
-  const ITEM = {
-    id: 'pct-compound-01',
-    concept: 'Successive percentage change',
-    stem: '20% then another 20% off the reduced price',
-    options: [
-      { id: 'a', text: '40%', misconception: 'additive-percentages',
-        note: 'You added the two discounts (20 + 20). But the second 20% is taken off the <b>already-reduced</b> price, not the original — so the discounts don’t simply add.' },
-      { id: 'b', text: '36%', correct: true },
-      { id: 'c', text: '44%', misconception: 'over-compounding',
-        note: 'Successive discounts <b>shrink</b> the price multiplicatively — they can’t total more than adding them would.' },
-      { id: 'd', text: '4%', misconception: 'subtracting-percentages',
-        note: 'The two discounts don’t cancel each other. Both reduce the price; they don’t compete.' },
-    ],
-    work: '(1 − 0.20) × (1 − 0.20) = 0.80 × 0.80 = 0.64  →  a 36% total discount.',
-  };
+  const ITEMS = [
+    {
+      id: 'pct-compound-01',
+      concept: 'Successive percentage change',
+      stem: 'A jacket is marked down <b>20%</b>. At the register, an extra <b>20%</b> comes off the already-reduced price. What is the <b>total</b> discount off the original price?',
+      options: [
+        { id: 'a', text: '40%', misconception: 'additive-percentages',
+          note: 'You added the two discounts (20 + 20). But the second 20% is taken off the <b>already-reduced</b> price, not the original — so the discounts don’t simply add.' },
+        { id: 'b', text: '36%', correct: true },
+        { id: 'c', text: '44%', misconception: 'over-compounding',
+          note: 'Successive discounts <b>shrink</b> the price multiplicatively — they can’t total more than adding them would.' },
+        { id: 'd', text: '4%', misconception: 'subtracting-percentages',
+          note: 'The two discounts don’t cancel each other. Both reduce the price; they don’t compete.' },
+      ],
+      work: '(1 − 0.20) × (1 − 0.20) = 0.80 × 0.80 = 0.64  →  a 36% total discount.',
+    },
+    {
+      id: 'rate-harmonic-01',
+      concept: 'Averaging rates (time-weighted)',
+      stem: 'You drive to a city at <b>60 mph</b> and return along the same road at <b>30 mph</b>. What is your <b>average speed</b> for the whole round trip?',
+      options: [
+        { id: 'a', text: '45 mph', misconception: 'arithmetic-mean-of-rates',
+          note: 'You averaged the two speeds: (60 + 30) ÷ 2. But you spend <b>twice as long</b> at 30 mph as at 60 mph, so the slow leg dominates. Average speed weights by <b>time</b>, not by leg.' },
+        { id: 'b', text: '40 mph', correct: true },
+        { id: 'c', text: '35 mph', misconception: 'over-correction',
+          note: 'Right instinct — the slow leg <b>does</b> dominate — but the exact time-weighted answer works out higher, at 40 mph.' },
+        { id: 'd', text: 'It depends on the distance', misconception: 'missing-information-illusion',
+          note: 'It feels like you need the distance, but it <b>cancels</b>: doubling the distance doubles both the miles and the hours, leaving the average unchanged.' },
+      ],
+      work: 'avg = 2d ÷ (d/60 + d/30) = 2d ÷ (d/20) = 40 mph — more time is spent at 30.',
+    },
+    {
+      id: 'crt-batball-01',
+      concept: 'Equations vs. intuition',
+      stem: 'A bat and a ball cost <b>$1.10</b> together. The bat costs <b>$1.00 more</b> than the ball. How much is the <b>ball</b>?',
+      options: [
+        { id: 'a', text: '10¢', misconception: 'attribute-substitution',
+          note: 'The fast, intuitive split: 1.10 − 1.00 = 0.10. But check it — a 10¢ ball makes the bat $1.10 and the total <b>$1.20</b>. This item is famous in cognitive science precisely because it makes smart people confidently wrong.' },
+        { id: 'b', text: '5¢', correct: true },
+        { id: 'c', text: '15¢', misconception: 'unchecked-adjustment',
+          note: 'Check it against the constraint: a 15¢ ball makes the bat $1.15 and the total <b>$1.30</b> — the answer was adjusted, but never verified.' },
+        { id: 'd', text: '$1.00', misconception: 'attribute-swap',
+          note: '$1.00 is the bat’s <b>extra</b> over the ball — the difference, not the ball’s price.' },
+      ],
+      work: 'ball = x, bat = x + 1.00  →  2x + 1.00 = 1.10  →  x = 0.05.',
+    },
+  ];
 
   const AdaptiveEngine = {
     // Diagnose a single response. (Phase 1: Claude authors `note` + a follow-up.)
@@ -977,16 +1044,17 @@
       const truth = correct ? 100 : 0;
       // The calibration gap: distance between felt confidence and being right.
       const gap = Math.abs(confidence - truth);
-      return { correct, confidence, truth, gap, misconception: opt.misconception || null, note: opt.note || null, choice: opt };
+      return { correct, confidence, truth, gap, concept: item.concept,
+               misconception: opt.misconception || null, note: opt.note || null, choice: opt };
     },
 
     // Revise the learner model from one diagnostic event. (Phase 1: richer, persistent.)
     updateModel(model, dx) {
       const inferences = [];
       if (dx.misconception) {
-        inferences.push(['Misconception detected', `<b>${labelFor(dx.misconception)}</b> on “${ITEM.concept}.”`]);
+        inferences.push(['Misconception detected', `<b>${labelFor(dx.misconception)}</b> on “${dx.concept}.”`]);
       } else {
-        inferences.push(['Concept', `<b>${ITEM.concept}</b> — answered correctly.`]);
+        inferences.push(['Concept', `<b>${dx.concept}</b> — answered correctly.`]);
       }
       if (!dx.correct && dx.confidence >= 65) {
         inferences.push(['Calibration', `High confidence + wrong → a <b>hidden blind spot</b>, flagged as top priority.`]);
@@ -1005,12 +1073,24 @@
     // Choose the next move. (Phase 1: Claude authors the actual next item.)
     nextStep(dx) {
       if (dx.correct && dx.confidence >= 65)
-        return { act: 'Raise the difficulty', det: 'Confident and right — the next item interleaves a harder variant (three successive discounts, or a discount then a tax) to keep you in the productive-struggle zone.' };
+        return { act: 'Raise the difficulty', det: 'Confident and right — the next item interleaves a harder variant to keep you in the productive-struggle zone.' };
       if (!dx.correct && dx.confidence >= 65)
         return { act: 'Isolate the blind spot', det: 'Confident and wrong is the most valuable signal there is. The next item strips away the story and targets this exact idea — then re-tests it after a short gap so a corrected idea becomes a durable one.' };
       if (dx.correct && dx.confidence < 45)
         return { act: 'Confirm, then space', det: 'Right but unsure — the engine treats this as unproven. It will re-surface a variant soon to convert a possible guess into knowledge you can trust.' };
-      return { act: 'Scaffold down', det: 'Wrong and unsure — the engine breaks the idea into a smaller step (a single discount first) before rebuilding to the full problem.' };
+      return { act: 'Scaffold down', det: 'Wrong and unsure — the engine breaks the idea into a smaller step before rebuilding to the full problem.' };
+    },
+
+    // Aggregate a session into a calibration profile. (Phase 1: Claude narrates it.)
+    summarize(records) {
+      const n = records.length;
+      const nRight = records.filter(r => r.correct).length;
+      const avgConf = Math.round(records.reduce((s, r) => s + r.confidence, 0) / n);
+      const acc = Math.round(100 * nRight / n);
+      const blind = records.filter(r => !r.correct && r.confidence >= 65);
+      const lucky = records.filter(r => r.correct && r.confidence < 45);
+      const gap = avgConf - acc; // positive = overconfident, negative = underconfident
+      return { n, nRight, avgConf, acc, blind, lucky, gap };
     },
   };
 
@@ -1019,57 +1099,99 @@
       'additive-percentages': 'adds successive percentages instead of compounding them',
       'over-compounding': 'overshoots when combining percentage changes',
       'subtracting-percentages': 'treats two discounts as cancelling',
+      'arithmetic-mean-of-rates': 'averages rates by leg instead of weighting by time',
+      'over-correction': 'right instinct, but corrects without computing',
+      'missing-information-illusion': 'assumes missing information is needed when it cancels out',
+      'attribute-substitution': 'substitutes an easy split for the stated constraint',
+      'unchecked-adjustment': 'adjusts an answer without re-checking the constraint',
+      'attribute-swap': 'reports the difference in place of the asked quantity',
     })[m] || m;
   }
 
   // ── Presentation layer ──────────────────────────────────────────────────────
-  const state = { choice: null, confidence: 70 };
-
+  const state = { idx: 0, choice: null, confidence: 70, records: [] };
   const optionsEl = document.getElementById('options');
-  ITEM.options.forEach(o => {
-    const b = document.createElement('button');
-    b.className = 'option';
-    b.dataset.id = o.id;
-    b.innerHTML = `<span class="key">${o.id.toUpperCase()}</span><span class="txt">${o.text}</span>`;
-    b.addEventListener('click', () => {
-      state.choice = o.id;
-      document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
-      b.classList.add('selected');
-      document.getElementById('toConf').disabled = false;
-    });
-    optionsEl.appendChild(b);
-  });
+  const conf = document.getElementById('conf');
 
-  const pips = document.querySelectorAll('#pips .step-pip');
-  function goStage(name, stepIndex) {
-    document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
-    document.getElementById('stage-' + name).classList.add('active');
+  // Pips: one per question, plus one for the profile.
+  const pipsWrap = document.getElementById('pips');
+  for (let i = 0; i <= ITEMS.length; i++) {
+    const p = document.createElement('div');
+    p.className = 'step-pip';
+    pipsWrap.appendChild(p);
+  }
+  const pips = pipsWrap.querySelectorAll('.step-pip');
+  function setPip(k) {
     pips.forEach((p, i) => {
-      p.classList.toggle('active', i === stepIndex);
-      p.classList.toggle('done', i < stepIndex);
+      p.classList.toggle('active', i === k);
+      p.classList.toggle('done', i < k);
     });
   }
 
-  document.getElementById('toConf').addEventListener('click', () => goStage('conf', 1));
-  document.getElementById('backAns').addEventListener('click', () => goStage('answer', 0));
+  function goStage(name) {
+    document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+    document.getElementById('stage-' + name).classList.add('active');
+  }
 
-  const conf = document.getElementById('conf');
+  function currentItem() { return ITEMS[state.idx]; }
+
+  function renderItem() {
+    const item = currentItem();
+    const qLabel = `Question ${state.idx + 1} of ${ITEMS.length}`;
+    document.getElementById('answerLabel').textContent = `${qLabel} — Commit to an answer`;
+    document.getElementById('confLabel').textContent = `${qLabel} — How sure are you, honestly?`;
+    document.getElementById('revealLabel').textContent = `${qLabel} — What the gap tells us`;
+    document.getElementById('stem').innerHTML = item.stem;
+
+    // rebuild options
+    optionsEl.innerHTML = '';
+    item.options.forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'option';
+      b.dataset.id = o.id;
+      b.innerHTML = `<span class="key">${o.id.toUpperCase()}</span><span class="txt">${o.text}</span>`;
+      b.addEventListener('click', () => {
+        state.choice = o.id;
+        document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+        b.classList.add('selected');
+        document.getElementById('toConf').disabled = false;
+      });
+      optionsEl.appendChild(b);
+    });
+
+    // reset per-item inputs
+    state.choice = null;
+    state.confidence = 70;
+    conf.value = 70;
+    document.getElementById('confNum').textContent = '70';
+    document.getElementById('toConf').disabled = true;
+    document.getElementById('fillConf').style.width = '0';
+    document.getElementById('fillTruth').style.width = '0';
+    setPip(state.idx);
+  }
+
+  document.getElementById('toConf').addEventListener('click', () => goStage('conf'));
+  document.getElementById('backAns').addEventListener('click', () => goStage('answer'));
+
   conf.addEventListener('input', () => {
     state.confidence = +conf.value;
     document.getElementById('confNum').textContent = conf.value;
   });
 
   document.getElementById('reveal').addEventListener('click', () => {
-    const dx = AdaptiveEngine.diagnose(ITEM, state.choice, state.confidence);
+    const dx = AdaptiveEngine.diagnose(currentItem(), state.choice, state.confidence);
+    state.records.push(dx);
     renderReveal(dx);
-    goStage('reveal', 2);
+    goStage('reveal');
   });
 
   function renderReveal(dx) {
+    const item = currentItem();
+
     // mark the options
     document.querySelectorAll('.option').forEach(el => {
       el.classList.remove('selected');
-      const o = ITEM.options.find(x => x.id === el.dataset.id);
+      const o = item.options.find(x => x.id === el.dataset.id);
       if (o.correct) { el.classList.add('correct'); addVerdict(el, 'correct answer'); }
       if (el.dataset.id === dx.choice.id && !o.correct) { el.classList.add('wrong'); addVerdict(el, 'your answer'); }
     });
@@ -1110,7 +1232,7 @@
     } else {
       diag.innerHTML = `<b>Here’s the specific idea that slipped:</b> ${dx.note} The point isn’t the wrong answer — it’s that a confident wrong answer is invisible to you but loud to the system.`;
     }
-    document.getElementById('work').textContent = ITEM.work;
+    document.getElementById('work').textContent = item.work;
 
     // mirror
     const list = document.getElementById('mirrorList');
@@ -1125,6 +1247,89 @@
     const ns = AdaptiveEngine.nextStep(dx);
     document.getElementById('nextAct').textContent = ns.act;
     document.getElementById('nextDet').textContent = ns.det;
+
+    // advance button
+    document.getElementById('nextItem').textContent =
+      state.idx < ITEMS.length - 1 ? 'Next question →' : 'See your calibration profile →';
+  }
+
+  document.getElementById('nextItem').addEventListener('click', () => {
+    state.idx++;
+    if (state.idx < ITEMS.length) {
+      renderItem();
+      goStage('answer');
+    } else {
+      renderSummary();
+      setPip(ITEMS.length);
+      goStage('summary');
+    }
+  });
+
+  function renderSummary() {
+    const s = AdaptiveEngine.summarize(state.records);
+
+    setTimeout(() => {
+      document.getElementById('sFillConf').style.width = s.avgConf + '%';
+      document.getElementById('sFillAcc').style.width = Math.max(s.acc, 6) + '%';
+    }, 60);
+    document.getElementById('sFillAcc').classList.toggle('zero', s.acc === 0);
+    document.getElementById('sNumConf').textContent = s.avgConf + '%';
+    document.getElementById('sNumAcc').textContent = s.acc + '%';
+
+    // headline + narrative
+    const h = document.getElementById('sHeadline');
+    const d = document.getElementById('sDiag');
+    if (s.gap >= 15) {
+      h.textContent = `You felt ${s.avgConf}% — you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
+      h.className = 'gap-headline blindspot';
+      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were confident-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}One question is an anecdote; a pattern across ${s.n} is a signal. A real session would keep tightening this estimate.`;
+    } else if (s.gap <= -15) {
+      h.textContent = `You scored ${s.acc}% but only felt ${s.avgConf}% — you know more than you trust.`;
+      h.className = 'gap-headline';
+      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but rated like guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}A real session would work on trust, not just accuracy.`;
+    } else {
+      h.textContent = `Felt ${s.avgConf}%, scored ${s.acc}% — your calibration is close.`;
+      h.className = 'gap-headline calibrated';
+      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} confident-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}With calibration this close, Delta shifts its effort from correcting your self-assessment to raising the difficulty ceiling.`;
+    }
+
+    // aggregated learner model
+    const list = document.getElementById('sMirrorList');
+    list.innerHTML = '';
+    const rows = [];
+    rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct.`]);
+    rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b> — priority signal.`
+             : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b> — trust needs building.`
+             : `Within <b>${Math.abs(s.gap)} points</b> of reality — well calibrated.`]);
+    const missed = state.records.filter(r => r.misconception);
+    if (missed.length) {
+      rows.push(['Misconceptions', missed.map(r => `<b>${labelFor(r.misconception)}</b>`).join('; ') + '.']);
+    } else {
+      rows.push(['Misconceptions', 'None detected in this set.']);
+    }
+    rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b> — each on its own clock.`]);
+    rows.forEach(([k, v]) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span><b>${k}:</b> ${v}</span>`;
+      list.appendChild(li);
+    });
+
+    // aggregated next move
+    const act = document.getElementById('sNextAct');
+    const det = document.getElementById('sNextDet');
+    if (s.blind.length) {
+      act.textContent = 'Target the blind spots first';
+      det.textContent = `The confident-and-wrong ideas come first: strip the story, isolate each broken concept, re-test after a gap. Everything else waits — fixing an invisible error beats polishing a visible skill.`;
+    } else if (s.gap <= -15) {
+      act.textContent = 'Build trust, then raise difficulty';
+      det.textContent = 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge — then moves the ceiling up.';
+    } else if (s.acc === 100) {
+      act.textContent = 'Raise the ceiling';
+      det.textContent = 'Clean sweep with honest confidence. The next set interleaves harder variants of all three concepts to find the real edge of your understanding.';
+    } else {
+      act.textContent = 'Scaffold the shaky ideas';
+      det.textContent = 'The missed ideas were known-unknowns — you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.';
+    }
   }
 
   function addVerdict(el, text) {
@@ -1136,20 +1341,14 @@
   }
 
   document.getElementById('restart').addEventListener('click', () => {
-    state.choice = null;
-    state.confidence = 70;
-    conf.value = 70;
-    document.getElementById('confNum').textContent = '70';
-    document.getElementById('toConf').disabled = true;
-    document.querySelectorAll('.option').forEach(el => {
-      el.className = 'option';
-      const v = el.querySelector('.verdict');
-      if (v) v.remove();
-    });
-    document.getElementById('fillConf').style.width = '0';
-    document.getElementById('fillTruth').style.width = '0';
-    goStage('answer', 0);
+    state.idx = 0;
+    state.records = [];
+    renderItem();
+    goStage('answer');
   });
+
+  // boot
+  renderItem();
 </script>
 </body>
 </html>

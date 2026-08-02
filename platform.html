@@ -323,30 +323,47 @@
   .option.correct .verdict { color: var(--good); }
   .option.wrong .verdict { color: var(--accent); }
 
-  .conf-row { margin-bottom: 1.3rem; }
-  .conf-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    color: var(--accent);
+  .conf-levels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+    margin-bottom: 1.4rem;
   }
-  input[type=range] {
-    -webkit-appearance: none; appearance: none;
-    width: 100%; height: 6px; border-radius: 4px;
-    background: linear-gradient(90deg, var(--accent-light), var(--accent));
-    outline: none; margin-top: .6rem;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: #fff; border: 3px solid var(--accent);
-    cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.15);
-  }
-  input[type=range]::-moz-range-thumb {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: #fff; border: 3px solid var(--accent);
+  .conf-level {
+    border: 1.5px solid var(--rule);
+    border-radius: 9px;
+    background: var(--paper);
     cursor: pointer;
+    padding: .9rem .6rem;
+    text-align: center;
+    font-family: inherit;
+    color: var(--ink);
+    transition: border-color .2s, background .2s, transform .1s;
   }
-  .conf-scale { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); margin-top: .4rem; }
+  .conf-level:hover { border-color: var(--accent-light); transform: translateY(-1px); }
+  .conf-level.selected { border-color: var(--accent); background: rgba(176,74,50,.06); }
+  .cl-name {
+    display: block;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: .25rem;
+  }
+  .cl-pay {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .66rem;
+    color: var(--muted);
+    letter-spacing: .02em;
+  }
+  .conf-level.selected .cl-pay { color: var(--accent); }
+  .score-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: var(--muted);
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .score-chip b { color: var(--accent); font-size: .95rem; }
 
   .demo-actions { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
   .demo-btn {
@@ -576,7 +593,7 @@
     .hero-text h1 { font-size: 2.6rem; }
     .hero-visual { order: -1; }
     .hero-graphic { width: 220px; height: 220px; }
-    .prose-grid, .dims, .contract { grid-template-columns: 1fr; }
+    .prose-grid, .dims, .contract, .conf-levels { grid-template-columns: 1fr; }
     .contract-col.asks { border-right: none; border-bottom: 1px solid var(--rule); }
     .loop { grid-template-columns: 1fr; }
     .loop-step::after { content: '↓'; right: 50%; top: auto; bottom: -1rem; transform: translateX(50%); }
@@ -705,6 +722,7 @@
     <div class="demo">
       <div class="demo-head">
         <div class="title">&#916; &nbsp;Calibration Mirror</div>
+        <div class="score-chip">Score <b id="scoreVal">0</b></div>
         <div class="demo-steps" id="pips"></div>
       </div>
       <div class="demo-body">
@@ -722,15 +740,11 @@
         <!-- STAGE 2: confidence -->
         <div class="stage" id="stage-conf">
           <div class="prompt-label" id="confLabel">Question 1 of 3 — How sure are you, honestly?</div>
-          <p class="stem" style="font-size:1rem;color:var(--muted);">No penalty for uncertainty. The point is to notice the distance between feeling and fact.</p>
-          <div class="conf-row">
-            <div class="conf-val"><span id="confNum">70</span>%</div>
-            <input type="range" id="conf" min="0" max="100" value="70" step="5" />
-            <div class="conf-scale"><span>Total guess</span><span>Certain</span></div>
-          </div>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">The marking follows certainty-based marking (Gardner-Medwin): a confident miss costs far more than an honest guess, so <b>honesty is your best strategy</b> — overclaiming and sandbagging both lose points on average.</p>
+          <div class="conf-levels" id="confLevels"></div>
           <div class="demo-actions">
             <button class="demo-btn ghost" id="backAns">← Change answer</button>
-            <button class="demo-btn primary" id="reveal">Reveal the gap →</button>
+            <button class="demo-btn primary" id="reveal" disabled>Reveal the gap →</button>
           </div>
         </div>
 
@@ -1036,15 +1050,47 @@
     },
   ];
 
+  // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM).
+  // The payoff table makes honest reporting the expected-score-maximizing
+  // strategy: claiming "Certain" pays only if you're right > ~80% of the time.
+  const LEVELS = [
+    { n: 1, label: 'Guessing',    conf: 50, right: 1, wrong: 0  },
+    { n: 2, label: 'Fairly sure', conf: 75, right: 2, wrong: -2 },
+    { n: 3, label: 'Certain',     conf: 92, right: 3, wrong: -6 },
+  ];
+
   const AdaptiveEngine = {
-    // Diagnose a single response. (Phase 1: Claude authors `note` + a follow-up.)
-    diagnose(item, choiceId, confidence) {
+    // Diagnose a single response from its full trace: the answer, the stated
+    // certainty, and the silent behavioral channel (time, answer changes).
+    // (Phase 1: Claude authors the notes + a Socratic follow-up.)
+    diagnose(item, choiceId, level, behavior) {
       const opt = item.options.find(o => o.id === choiceId);
       const correct = !!opt.correct;
-      const truth = correct ? 100 : 0;
-      // The calibration gap: distance between felt confidence and being right.
-      const gap = Math.abs(confidence - truth);
-      return { correct, confidence, truth, gap, concept: item.concept,
+      const marks = correct ? level.right : level.wrong;
+      const b = behavior;
+      const fast = b.tFirst !== null && b.tFirst <= 10;
+      const wavering = b.tTotal >= 40 || b.changes >= 2;
+
+      // Cross-check the stated certainty against the behavioral trace —
+      // disagreement between the two is itself a diagnostic signal.
+      let behaviorNote, inconsistent = false;
+      if (level.n >= 2 && wavering) {
+        inconsistent = true;
+        const why = [];
+        if (b.tTotal >= 40) why.push(`took ${fmtSec(b.tTotal)}`);
+        if (b.changes >= 2) why.push(`changed your answer ${b.changes}×`);
+        behaviorNote = `You claimed “${level.label}” — but ${why.join(' and ')}. Your behavior reads less sure than your report.`;
+      } else if (level.n === 1 && fast && b.changes === 0) {
+        inconsistent = true;
+        behaviorNote = `You claimed “Guessing” — but committed in ${fmtSec(b.tFirst)} without wavering. Your behavior reads more sure than your report${correct ? ' — possibly knowledge you don’t yet trust' : ''}.`;
+      } else if (level.n === 3 && fast && !correct) {
+        behaviorNote = `Answered in ${fmtSec(b.tFirst)}, certain, and wrong — the signature of an automatic misconception: the answer came from a cached rule, not fresh reasoning.`;
+      } else {
+        behaviorNote = `Committed in ${fmtSec(b.tTotal)} with ${b.changes} change${b.changes === 1 ? '' : 's'} — consistent with your stated certainty.`;
+      }
+
+      return { correct, level, marks, confidence: level.conf, concept: item.concept,
+               behavior: b, behaviorNote, inconsistent,
                misconception: opt.misconception || null, note: opt.note || null, choice: opt };
     },
 
@@ -1056,15 +1102,18 @@
       } else {
         inferences.push(['Concept', `<b>${dx.concept}</b> — answered correctly.`]);
       }
-      if (!dx.correct && dx.confidence >= 65) {
-        inferences.push(['Calibration', `High confidence + wrong → a <b>hidden blind spot</b>, flagged as top priority.`]);
-      } else if (dx.correct && dx.confidence < 45) {
-        inferences.push(['Calibration', `Right but unsure → possibly a <b>lucky guess</b>; mastery not yet trusted.`]);
+      if (!dx.correct && dx.level.n === 3) {
+        inferences.push(['Calibration', `“Certain” + wrong → a <b>hidden blind spot</b>, flagged as top priority.`]);
+      } else if (!dx.correct && dx.level.n === 2) {
+        inferences.push(['Calibration', `“Fairly sure” + wrong → a <b>misjudged lean</b>, scheduled for correction.`]);
+      } else if (dx.correct && dx.level.n === 1) {
+        inferences.push(['Calibration', `Right but called a guess → possibly <b>untrusted knowledge</b>; mastery not yet credited.`]);
       } else if (dx.correct) {
-        inferences.push(['Calibration', `Well-calibrated — confidence matched the outcome.`]);
+        inferences.push(['Calibration', `Certainty matched the outcome — well calibrated.`]);
       } else {
-        inferences.push(['Calibration', `Low confidence + wrong — a <b>known unknown</b>, easier to fix.`]);
+        inferences.push(['Calibration', `Guessing + wrong — an honest <b>known unknown</b>, easier to fix.`]);
       }
+      inferences.push(['Behavior', dx.behaviorNote]);
       const decay = dx.correct ? '~5 days' : '~2 days';
       inferences.push(['Spacing', `Scheduled for retrieval in <b>${decay}</b> to test whether this sticks.`]);
       return inferences;
@@ -1072,13 +1121,17 @@
 
     // Choose the next move. (Phase 1: Claude authors the actual next item.)
     nextStep(dx) {
-      if (dx.correct && dx.confidence >= 65)
-        return { act: 'Raise the difficulty', det: 'Confident and right — the next item interleaves a harder variant to keep you in the productive-struggle zone.' };
-      if (!dx.correct && dx.confidence >= 65)
-        return { act: 'Isolate the blind spot', det: 'Confident and wrong is the most valuable signal there is. The next item strips away the story and targets this exact idea — then re-tests it after a short gap so a corrected idea becomes a durable one.' };
-      if (dx.correct && dx.confidence < 45)
-        return { act: 'Confirm, then space', det: 'Right but unsure — the engine treats this as unproven. It will re-surface a variant soon to convert a possible guess into knowledge you can trust.' };
-      return { act: 'Scaffold down', det: 'Wrong and unsure — the engine breaks the idea into a smaller step before rebuilding to the full problem.' };
+      if (!dx.correct && dx.level.n === 3)
+        return { act: 'Isolate the blind spot', det: 'Certain-and-wrong is the most valuable signal there is. The next item strips away the story and targets this exact idea — then re-tests it after a short gap so a corrected idea becomes a durable one.' };
+      if (!dx.correct && dx.level.n === 2)
+        return { act: 'Correct the lean, then re-test', det: 'A moderately confident miss usually means a half-formed rule. The next item isolates the concept, and a spaced re-test checks that the correction held.' };
+      if (dx.correct && dx.level.n === 3)
+        return { act: 'Raise the difficulty', det: 'Certain and right — the next item interleaves a harder variant to keep you in the productive-struggle zone.' };
+      if (dx.correct && dx.level.n === 1)
+        return { act: 'Confirm, then space', det: 'Right but reported as a guess — the engine treats this as unproven. It will re-surface a variant soon to convert a possible guess into knowledge you can trust.' };
+      if (dx.correct)
+        return { act: 'Consolidate, then raise', det: 'Right with honest moderate confidence — one spaced confirmation, then a harder variant.' };
+      return { act: 'Scaffold down', det: 'Wrong, and you knew you were guessing — the engine breaks the idea into a smaller step before rebuilding to the full problem.' };
     },
 
     // Aggregate a session into a calibration profile. (Phase 1: Claude narrates it.)
@@ -1087,10 +1140,14 @@
       const nRight = records.filter(r => r.correct).length;
       const avgConf = Math.round(records.reduce((s, r) => s + r.confidence, 0) / n);
       const acc = Math.round(100 * nRight / n);
-      const blind = records.filter(r => !r.correct && r.confidence >= 65);
-      const lucky = records.filter(r => r.correct && r.confidence < 45);
+      const blind = records.filter(r => !r.correct && r.level.n === 3);
+      const leans = records.filter(r => !r.correct && r.level.n === 2);
+      const lucky = records.filter(r => r.correct && r.level.n === 1);
+      const inconsistent = records.filter(r => r.inconsistent);
+      const score = records.reduce((s, r) => s + r.marks, 0);
+      const maxScore = 3 * n;
       const gap = avgConf - acc; // positive = overconfident, negative = underconfident
-      return { n, nRight, avgConf, acc, blind, lucky, gap };
+      return { n, nRight, avgConf, acc, blind, leans, lucky, inconsistent, score, maxScore, gap };
     },
   };
 
@@ -1108,10 +1165,27 @@
     })[m] || m;
   }
 
+  function fmtSec(s) { return s < 1 ? '<1s' : Math.round(s) + 's'; }
+
   // ── Presentation layer ──────────────────────────────────────────────────────
-  const state = { idx: 0, choice: null, confidence: 70, records: [] };
+  const state = { idx: 0, choice: null, level: null, records: [], score: 0,
+                  tShown: 0, tFirst: null, clicks: 0 };
   const optionsEl = document.getElementById('options');
-  const conf = document.getElementById('conf');
+
+  // Certainty buttons (built once; reset per item).
+  const levelsEl = document.getElementById('confLevels');
+  LEVELS.forEach(lv => {
+    const b = document.createElement('button');
+    b.className = 'conf-level';
+    b.innerHTML = `<span class="cl-name">${lv.label}</span><span class="cl-pay">right +${lv.right} · wrong ${lv.wrong}</span>`;
+    b.addEventListener('click', () => {
+      state.level = lv;
+      levelsEl.querySelectorAll('.conf-level').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      document.getElementById('reveal').disabled = false;
+    });
+    levelsEl.appendChild(b);
+  });
 
   // Pips: one per question, plus one for the profile.
   const pipsWrap = document.getElementById('pips');
@@ -1151,6 +1225,9 @@
       b.dataset.id = o.id;
       b.innerHTML = `<span class="key">${o.id.toUpperCase()}</span><span class="txt">${o.text}</span>`;
       b.addEventListener('click', () => {
+        // silent behavioral channel: time to first commitment, answer switches
+        if (state.tFirst === null) state.tFirst = (performance.now() - state.tShown) / 1000;
+        state.clicks++;
         state.choice = o.id;
         document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
         b.classList.add('selected');
@@ -1159,12 +1236,15 @@
       optionsEl.appendChild(b);
     });
 
-    // reset per-item inputs
+    // reset per-item inputs and the behavioral trace
     state.choice = null;
-    state.confidence = 70;
-    conf.value = 70;
-    document.getElementById('confNum').textContent = '70';
+    state.level = null;
+    state.tShown = performance.now();
+    state.tFirst = null;
+    state.clicks = 0;
     document.getElementById('toConf').disabled = true;
+    document.getElementById('reveal').disabled = true;
+    levelsEl.querySelectorAll('.conf-level').forEach(x => x.classList.remove('selected'));
     document.getElementById('fillConf').style.width = '0';
     document.getElementById('fillTruth').style.width = '0';
     setPip(state.idx);
@@ -1173,14 +1253,16 @@
   document.getElementById('toConf').addEventListener('click', () => goStage('conf'));
   document.getElementById('backAns').addEventListener('click', () => goStage('answer'));
 
-  conf.addEventListener('input', () => {
-    state.confidence = +conf.value;
-    document.getElementById('confNum').textContent = conf.value;
-  });
-
   document.getElementById('reveal').addEventListener('click', () => {
-    const dx = AdaptiveEngine.diagnose(currentItem(), state.choice, state.confidence);
+    const behavior = {
+      tFirst: state.tFirst,
+      tTotal: (performance.now() - state.tShown) / 1000,
+      changes: Math.max(0, state.clicks - 1),
+    };
+    const dx = AdaptiveEngine.diagnose(currentItem(), state.choice, state.level, behavior);
     state.records.push(dx);
+    state.score += dx.marks;
+    document.getElementById('scoreVal').textContent = state.score;
     renderReveal(dx);
     goStage('reveal');
   });
@@ -1204,31 +1286,40 @@
       ft.style.width = (dx.correct ? 100 : 6) + '%';
     }, 60);
     ft.classList.toggle('zero', !dx.correct);
-    document.getElementById('numConf').textContent = dx.confidence + '%';
+    document.getElementById('numConf').textContent = '~' + dx.confidence + '%';
     document.getElementById('numTruth').textContent = dx.correct ? 'right' : 'wrong';
 
     // headline
     const h = document.getElementById('headline');
-    if (dx.correct && dx.confidence >= 65) {
-      h.textContent = 'Confident and correct — well calibrated.';
+    const mk = dx.marks > 0 ? `+${dx.marks}` : `${dx.marks}`;
+    if (dx.correct && dx.level.n === 3) {
+      h.textContent = `Certain and correct — well calibrated. (${mk})`;
+      h.className = 'gap-headline calibrated';
+    } else if (dx.correct && dx.level.n === 2) {
+      h.textContent = `Fairly sure and right — solid. (${mk})`;
       h.className = 'gap-headline calibrated';
     } else if (dx.correct) {
-      h.textContent = 'Correct — but you weren’t sure. That’s a gap too.';
+      h.textContent = `Right — but you called it a guess. That’s a gap too. (${mk})`;
       h.className = 'gap-headline';
-    } else if (dx.confidence >= 65) {
-      h.textContent = `You were ${dx.confidence}% sure — and wrong. This is the blind spot.`;
+    } else if (dx.level.n === 3) {
+      h.textContent = `You said “Certain” — and missed. This is the blind spot. (${mk})`;
       h.className = 'gap-headline blindspot';
+    } else if (dx.level.n === 2) {
+      h.textContent = `Fairly sure — and wrong. A lean worth correcting. (${mk})`;
+      h.className = 'gap-headline';
     } else {
-      h.textContent = 'Wrong, and you sensed it. An honest known-unknown.';
+      h.textContent = `Wrong — and you knew you were guessing. An honest known-unknown. (${mk})`;
       h.className = 'gap-headline';
     }
 
     // diagnosis
     const diag = document.getElementById('diag');
     if (dx.correct) {
-      diag.innerHTML = dx.confidence >= 65
-        ? 'Your confidence matched reality. Delta learns little from easy hits, so it will now nudge the difficulty up.'
-        : 'You got it — but a right answer you didn’t trust behaves like a guess. Delta will re-test to see if the knowledge is real.';
+      diag.innerHTML = dx.level.n === 3
+        ? 'Your certainty matched reality. Delta learns little from easy hits, so it will now nudge the difficulty up.'
+        : dx.level.n === 2
+          ? 'Right, with honest moderate confidence. One spaced confirmation and this concept gets credited as solid.'
+          : 'You got it — but a right answer you didn’t trust behaves like a guess. Delta will re-test to see if the knowledge is real.';
     } else {
       diag.innerHTML = `<b>Here’s the specific idea that slipped:</b> ${dx.note} The point isn’t the wrong answer — it’s that a confident wrong answer is invisible to you but loud to the system.`;
     }
@@ -1280,24 +1371,24 @@
     const h = document.getElementById('sHeadline');
     const d = document.getElementById('sDiag');
     if (s.gap >= 15) {
-      h.textContent = `You felt ${s.avgConf}% — you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
+      h.textContent = `You claimed ~${s.avgConf}% — you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
       h.className = 'gap-headline blindspot';
-      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were confident-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}One question is an anecdote; a pattern across ${s.n} is a signal. A real session would keep tightening this estimate.`;
+      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking — inflated certainty is exactly what it prices in. A real session would keep tightening this estimate.`;
     } else if (s.gap <= -15) {
-      h.textContent = `You scored ${s.acc}% but only felt ${s.avgConf}% — you know more than you trust.`;
+      h.textContent = `You scored ${s.acc}% but only claimed ~${s.avgConf}% — you know more than you trust.`;
       h.className = 'gap-headline';
-      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but rated like guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}A real session would work on trust, not just accuracy.`;
+      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but filed as guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}You left points on the table: <b>${s.score} of ${s.maxScore}</b> — sandbagging is priced in too. A real session would work on trust, not just accuracy.`;
     } else {
-      h.textContent = `Felt ${s.avgConf}%, scored ${s.acc}% — your calibration is close.`;
+      h.textContent = `Claimed ~${s.avgConf}%, scored ${s.acc}% — your calibration is close.`;
       h.className = 'gap-headline calibrated';
-      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} confident-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}With calibration this close, Delta shifts its effort from correcting your self-assessment to raising the difficulty ceiling.`;
+      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} certain-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking. With calibration this close, Delta shifts its effort from correcting your self-assessment to raising the difficulty ceiling.`;
     }
 
     // aggregated learner model
     const list = document.getElementById('sMirrorList');
     list.innerHTML = '';
     const rows = [];
-    rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct.`]);
+    rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct · score <b>${s.score}</b> of ${s.maxScore}.`]);
     rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b> — priority signal.`
              : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b> — trust needs building.`
              : `Within <b>${Math.abs(s.gap)} points</b> of reality — well calibrated.`]);
@@ -1307,6 +1398,9 @@
     } else {
       rows.push(['Misconceptions', 'None detected in this set.']);
     }
+    rows.push(['Behavior', s.inconsistent.length
+             ? `Stated certainty and behavior <b>disagreed on ${s.inconsistent.length} of ${s.n}</b> — the disagreement is itself diagnostic.`
+             : `Stated certainty and behavior <b>agreed throughout</b> — a trustworthy signal.`]);
     rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b> — each on its own clock.`]);
     rows.forEach(([k, v]) => {
       const li = document.createElement('li');
@@ -1343,6 +1437,8 @@
   document.getElementById('restart').addEventListener('click', () => {
     state.idx = 0;
     state.records = [];
+    state.score = 0;
+    document.getElementById('scoreVal').textContent = '0';
     renderItem();
     goStage('answer');
   });

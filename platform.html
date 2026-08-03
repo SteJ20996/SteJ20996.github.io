@@ -365,6 +365,78 @@
   }
   .score-chip b { color: var(--accent); font-size: .95rem; }
 
+  .field-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1rem 0 .35rem;
+  }
+  .ans-input {
+    width: 100%;
+    max-width: 280px;
+    padding: .7rem .9rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 9px;
+    background: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .explain-box {
+    width: 100%;
+    padding: .7rem .9rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 9px;
+    background: var(--paper);
+    font-family: inherit;
+    font-size: .95rem;
+    line-height: 1.55;
+    color: var(--ink);
+    resize: vertical;
+  }
+  .ans-input:focus, .explain-box:focus { outline: none; border-color: var(--accent); }
+
+  /* report item cards */
+  .report-item {
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: .8rem;
+    background: var(--paper);
+  }
+  .report-item.correct { border-left: 4px solid var(--good); }
+  .report-item.wrong { border-left: 4px solid var(--accent); }
+  .ri-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: .8rem;
+    flex-wrap: wrap;
+    margin-bottom: .35rem;
+  }
+  .ri-title { font-weight: 600; font-size: .92rem; }
+  .ri-title .mark { font-weight: 700; }
+  .report-item.correct .mark { color: var(--good); }
+  .report-item.wrong .mark { color: var(--accent); }
+  .ri-meta { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--muted); }
+  .ri-line { font-size: .86rem; color: #45443f; margin-top: .3rem; }
+  .ri-line b { color: var(--ink); }
+  .ri-work { font-family: 'JetBrains Mono', monospace; font-size: .74rem; color: var(--muted); margin-top: .45rem; }
+  .ri-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .03em;
+    padding: .12rem .45rem;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+  .ri-tag.ok { background: rgba(63,125,92,.12); color: var(--good); }
+  .ri-tag.miss { background: rgba(176,74,50,.1); color: var(--accent); }
+
   .demo-actions { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
   .demo-btn {
     padding: .65rem 1.4rem; border-radius: 7px; border: none;
@@ -715,88 +787,51 @@
   <div class="reveal">
     <p class="section-label">04 — Live Demo</p>
     <h2 class="section-title">The Calibration Mirror.</h2>
-    <p class="section-lede">Three quick problems. Each one shows you the gap between how sure you felt and how right you were — and after the last, Delta assembles the pattern into your calibration profile. One answer is an anecdote; three start to look like a signal. Try them honestly.</p>
+    <p class="section-lede">Six short-answer problems, each a different type. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty — because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
   </div>
 
   <div class="demo-wrap reveal">
     <div class="demo">
       <div class="demo-head">
         <div class="title">&#916; &nbsp;Calibration Mirror</div>
-        <div class="score-chip">Score <b id="scoreVal">0</b></div>
+        <div class="score-chip">Question <b id="qNum">1</b> / <span id="qTotal">6</span></div>
         <div class="demo-steps" id="pips"></div>
       </div>
       <div class="demo-body">
 
-        <!-- STAGE 1: answer -->
+        <!-- STAGE 1: answer + reasoning -->
         <div class="stage active" id="stage-answer">
-          <div class="prompt-label" id="answerLabel">Question 1 of 3 — Commit to an answer</div>
+          <div class="prompt-label" id="answerLabel">Question 1 of 6 — Answer, then show your thinking</div>
           <p class="stem" id="stem"></p>
-          <div class="options" id="options"></div>
-          <div class="demo-actions">
-            <button class="demo-btn primary" id="toConf" disabled>Next: rate your confidence →</button>
+          <label class="field-label" for="ansInput">Your answer <span id="unitHint" style="text-transform:none;letter-spacing:0;"></span></label>
+          <input class="ans-input" id="ansInput" type="text" inputmode="decimal" autocomplete="off" />
+          <label class="field-label" for="explInput">In a sentence or two — why?</label>
+          <textarea class="explain-box" id="explInput" rows="3" placeholder="Sketch your reasoning — a formula, a sentence, English or 中文, whatever shows how you got there."></textarea>
+          <div class="demo-actions" style="margin-top:1.2rem;">
+            <button class="demo-btn primary" id="toConf" disabled>Next: rate your certainty →</button>
           </div>
         </div>
 
-        <!-- STAGE 2: confidence -->
+        <!-- STAGE 2: certainty -->
         <div class="stage" id="stage-conf">
-          <div class="prompt-label" id="confLabel">Question 1 of 3 — How sure are you, honestly?</div>
+          <div class="prompt-label" id="confLabel">Question 1 of 6 — How sure are you, honestly?</div>
           <p class="stem" style="font-size:1rem;color:var(--muted);">The marking follows certainty-based marking (Gardner-Medwin): a confident miss costs far more than an honest guess, so <b>honesty is your best strategy</b> — overclaiming and sandbagging both lose points on average.</p>
           <div class="conf-levels" id="confLevels"></div>
           <div class="demo-actions">
             <button class="demo-btn ghost" id="backAns">← Change answer</button>
-            <button class="demo-btn primary" id="reveal" disabled>Reveal the gap →</button>
+            <button class="demo-btn primary" id="lockIn" disabled>Lock it in →</button>
           </div>
         </div>
 
-        <!-- STAGE 3: reveal -->
-        <div class="stage" id="stage-reveal">
-          <div class="prompt-label" id="revealLabel">Question 1 of 3 — What the gap tells us</div>
+        <!-- STAGE 3: full-session report -->
+        <div class="stage" id="stage-report">
+          <div class="prompt-label">Your report — six questions, analyzed together</div>
 
           <div class="gap-viz">
-            <div class="gap-title">Confidence vs. reality</div>
+            <div class="gap-title">Claimed vs. real, across the session</div>
             <div class="gap-bars">
               <div class="gap-bar-row">
-                <span class="lab">You felt</span>
-                <div class="gap-track"><div class="gap-fill conf" id="fillConf"></div></div>
-                <span class="gap-num" id="numConf">—</span>
-              </div>
-              <div class="gap-bar-row">
-                <span class="lab">You were</span>
-                <div class="gap-track"><div class="gap-fill truth" id="fillTruth"></div></div>
-                <span class="gap-num" id="numTruth">—</span>
-              </div>
-            </div>
-          </div>
-
-          <h3 class="gap-headline" id="headline"></h3>
-          <p class="diag" id="diag"></p>
-          <div class="work" id="work"></div>
-
-          <div class="mirror">
-            <h4>&#916; What the system just learned about you</h4>
-            <ul id="mirrorList"></ul>
-          </div>
-
-          <div class="nextstep">
-            <div class="k">Delta's next move</div>
-            <div class="act" id="nextAct"></div>
-            <div class="det" id="nextDet"></div>
-          </div>
-
-          <div class="demo-actions" style="margin-top:1.3rem;">
-            <button class="demo-btn primary" id="nextItem">Next question →</button>
-          </div>
-        </div>
-
-        <!-- STAGE 4: calibration profile -->
-        <div class="stage" id="stage-summary">
-          <div class="prompt-label">Your calibration profile — three questions in</div>
-
-          <div class="gap-viz">
-            <div class="gap-title">Felt vs. real, across all three</div>
-            <div class="gap-bars">
-              <div class="gap-bar-row">
-                <span class="lab">Avg. confidence</span>
+                <span class="lab">Avg. certainty</span>
                 <div class="gap-track"><div class="gap-fill conf" id="sFillConf"></div></div>
                 <span class="gap-num" id="sNumConf">—</span>
               </div>
@@ -811,8 +846,10 @@
           <h3 class="gap-headline" id="sHeadline"></h3>
           <p class="diag" id="sDiag"></p>
 
+          <div id="reportItems"></div>
+
           <div class="mirror">
-            <h4>&#916; Your learner model — three data points in</h4>
+            <h4>&#916; Your learner model — six data points in</h4>
             <ul id="sMirrorList"></ul>
           </div>
 
@@ -827,7 +864,7 @@
           </div>
 
           <p class="seam-note">
-            <b>Preview note.</b> Everything above is produced by a small <b>rule-based engine</b> running in your browser — no model, no network, no data leaves this page. The engine exposes a deliberately model-agnostic interface: <b>diagnose()</b>, <b>updateModel()</b>, <b>nextStep()</b>. In the next phase, those three functions route through a Claude model to generate the diagnosis in natural language, ask a Socratic follow-up, and author the next item on the fly. The seam is already in the code below.
+            <b>Preview note.</b> Everything above runs in your browser — no model, no network, no data leaves this page. Numeric answers are graded exactly by a tolerant parser; your written explanations are scanned by a small, transparent <b>keyword heuristic</b> standing in for the real grader. That is the seam: in Phase 1, the engine's <b>diagnose()</b>, <b>updateModel()</b> and <b>nextStep()</b> route through a Claude model that reads your actual prose — grading partial understanding, catching misconceptions nobody pre-enumerated, and asking a Socratic follow-up. The interface is already model-agnostic in the code below.
           </p>
         </div>
 
@@ -1007,48 +1044,129 @@
       id: 'pct-compound-01',
       concept: 'Successive percentage change',
       stem: 'A jacket is marked down <b>20%</b>. At the register, an extra <b>20%</b> comes off the already-reduced price. What is the <b>total</b> discount off the original price?',
-      options: [
-        { id: 'a', text: '40%', misconception: 'additive-percentages',
-          note: 'You added the two discounts (20 + 20). But the second 20% is taken off the <b>already-reduced</b> price, not the original — so the discounts don’t simply add.' },
-        { id: 'b', text: '36%', correct: true },
-        { id: 'c', text: '44%', misconception: 'over-compounding',
-          note: 'Successive discounts <b>shrink</b> the price multiplicatively — they can’t total more than adding them would.' },
-        { id: 'd', text: '4%', misconception: 'subtracting-percentages',
-          note: 'The two discounts don’t cancel each other. Both reduce the price; they don’t compete.' },
-      ],
+      unit: 'in %', display: '36%',
+      accept: [{ v: 36, tol: 0.5 }, { v: 0.36, tol: 0.005 }],
       work: '(1 − 0.20) × (1 − 0.20) = 0.80 × 0.80 = 0.64  →  a 36% total discount.',
+      wrongDx: [
+        { test: a => near(a, 40, 0.5) || near(a, 0.40, 0.005), m: 'additive-percentages' },
+        { test: a => near(a, 44, 0.5), m: 'over-compounding' },
+        { test: a => near(a, 4, 0.5), m: 'subtracting-percentages' },
+      ],
+      explDx: [
+        { re: /(20\s*\+\s*20|(simply|just)\s+add|相加|加起来|直接加)/i, m: 'additive-percentages' },
+      ],
+      keyIdea: {
+        re: /(0\.8|80\s*%|0\.64|64\s*%|already[ -]?reduced|reduced\s+price|new\s+price|sale\s+price|multipl|compound|八折|降价后|新价|基数|乘)/i,
+        label: 'the second 20% applies to the already-reduced price (0.8 × 0.8)',
+      },
     },
     {
       id: 'rate-harmonic-01',
       concept: 'Averaging rates (time-weighted)',
       stem: 'You drive to a city at <b>60 mph</b> and return along the same road at <b>30 mph</b>. What is your <b>average speed</b> for the whole round trip?',
-      options: [
-        { id: 'a', text: '45 mph', misconception: 'arithmetic-mean-of-rates',
-          note: 'You averaged the two speeds: (60 + 30) ÷ 2. But you spend <b>twice as long</b> at 30 mph as at 60 mph, so the slow leg dominates. Average speed weights by <b>time</b>, not by leg.' },
-        { id: 'b', text: '40 mph', correct: true },
-        { id: 'c', text: '35 mph', misconception: 'over-correction',
-          note: 'Right instinct — the slow leg <b>does</b> dominate — but the exact time-weighted answer works out higher, at 40 mph.' },
-        { id: 'd', text: 'It depends on the distance', misconception: 'missing-information-illusion',
-          note: 'It feels like you need the distance, but it <b>cancels</b>: doubling the distance doubles both the miles and the hours, leaving the average unchanged.' },
-      ],
+      unit: 'in mph', display: '40 mph',
+      accept: [{ v: 40, tol: 0.5 }],
       work: 'avg = 2d ÷ (d/60 + d/30) = 2d ÷ (d/20) = 40 mph — more time is spent at 30.',
+      wrongDx: [
+        { test: a => near(a, 45, 0.5), m: 'arithmetic-mean-of-rates' },
+        { test: a => near(a, 35, 2), m: 'over-correction' },
+      ],
+      explDx: [
+        { re: /(\(?\s*60\s*\+\s*30\s*\)?\s*(\/|÷)\s*2|average\s+of\s+the\s+two|两个?速度.*平均|直接平均)/i, m: 'arithmetic-mean-of-rates' },
+      ],
+      keyIdea: {
+        re: /(time|longer|twice\s+as\s+long|harmonic|d\s*\/\s*60|d\s*\/\s*30|时间|更久|慢.*(久|长)|调和)/i,
+        label: 'average speed weights by time — the 30 mph leg takes twice as long',
+      },
     },
     {
       id: 'crt-batball-01',
       concept: 'Equations vs. intuition',
       stem: 'A bat and a ball cost <b>$1.10</b> together. The bat costs <b>$1.00 more</b> than the ball. How much is the <b>ball</b>?',
-      options: [
-        { id: 'a', text: '10¢', misconception: 'attribute-substitution',
-          note: 'The fast, intuitive split: 1.10 − 1.00 = 0.10. But check it — a 10¢ ball makes the bat $1.10 and the total <b>$1.20</b>. This item is famous in cognitive science precisely because it makes smart people confidently wrong.' },
-        { id: 'b', text: '5¢', correct: true },
-        { id: 'c', text: '15¢', misconception: 'unchecked-adjustment',
-          note: 'Check it against the constraint: a 15¢ ball makes the bat $1.15 and the total <b>$1.30</b> — the answer was adjusted, but never verified.' },
-        { id: 'd', text: '$1.00', misconception: 'attribute-swap',
-          note: '$1.00 is the bat’s <b>extra</b> over the ball — the difference, not the ball’s price.' },
-      ],
+      unit: 'in ¢ or $', display: '5¢ ($0.05)',
+      accept: [{ v: 5, tol: 0.01 }, { v: 0.05, tol: 0.001 }],
       work: 'ball = x, bat = x + 1.00  →  2x + 1.00 = 1.10  →  x = 0.05.',
+      wrongDx: [
+        { test: a => near(a, 10, 0.01) || near(a, 0.10, 0.001), m: 'attribute-substitution' },
+      ],
+      explDx: [
+        { re: /(1\.10?\s*[-−–]\s*1(\.00?)?(?!\d)|直接(减|相减))/i, m: 'attribute-substitution' },
+      ],
+      keyIdea: {
+        re: /(x\s*\+\s*1|2x|equation|1\.05|difference|设|方程|未知数|差)/i,
+        label: 'sets up the constraint: ball + (ball + 1.00) = 1.10',
+      },
+    },
+    {
+      id: 'exp-lily-01',
+      concept: 'Exponential vs. linear growth',
+      stem: 'A patch of lily pads <b>doubles in size every day</b>. It covers the whole pond on <b>day 48</b>. On what day did it cover <b>half</b> the pond?',
+      unit: 'day number', display: 'day 47',
+      accept: [{ v: 47, tol: 0.01 }],
+      work: 'Doubling each day means half the pond is exactly one day before full: 48 − 1 = 47.',
+      wrongDx: [
+        { test: a => near(a, 24, 0.5), m: 'linear-scaling' },
+      ],
+      explDx: [
+        { re: /(48\s*(\/|÷)\s*2|half\s+of\s+48|48\s*的一半|时间.*一半|一半.*时间)/i, m: 'linear-scaling' },
+      ],
+      keyIdea: {
+        re: /(day\s+before|one\s+day|doubl|halv|48\s*[-−–]\s*1|前一天|翻倍|倍增)/i,
+        label: 'doubling means “half” is one day before “full”',
+      },
+    },
+    {
+      id: 'prop-machines-01',
+      concept: 'Rates and proportion',
+      stem: 'It takes <b>5 machines 5 minutes</b> to make <b>5 widgets</b>. How long would it take <b>100 machines</b> to make <b>100 widgets</b>?',
+      unit: 'in minutes', display: '5 minutes',
+      accept: [{ v: 5, tol: 0.01 }],
+      work: 'Each machine makes 1 widget in 5 minutes — 100 machines make 100 widgets in the same 5 minutes.',
+      wrongDx: [
+        { test: a => near(a, 100, 0.5), m: 'pattern-matching-proportion' },
+      ],
+      explDx: [
+        { re: /(100.*100.*100|same\s+pattern|成比例|等比例|照.?比例|类推)/i, m: 'pattern-matching-proportion' },
+      ],
+      keyIdea: {
+        re: /(each\s+machine|per\s+machine|1\s+widget|one\s+widget|parallel|同时|每台|一台|速率|rate)/i,
+        label: 'the per-machine rate: one machine, one widget, five minutes',
+      },
+    },
+    {
+      id: 'prob-coin-01',
+      concept: 'Independence of events',
+      stem: 'A fair coin lands <b>heads five times in a row</b>. What is the probability that the <b>next</b> toss is also heads?',
+      unit: 'in %', display: '50%',
+      accept: [{ v: 50, tol: 0.5 }, { v: 0.5, tol: 0.005 }],
+      work: 'Each toss is independent — the coin has no memory. P(heads) = 1/2 = 50%.',
+      wrongDx: [
+        { test: a => (a > 0 && a <= 3) || near(a, 0.015625, 0.01), m: 'conjunction-confusion' },
+        { test: a => normPct(a) < 50, m: 'gamblers-fallacy' },
+        { test: a => normPct(a) > 50, m: 'hot-hand' },
+      ],
+      explDx: [
+        { re: /(due|owed|its\s+turn|该出|轮到|要出反|平衡|补偿)/i, m: 'gamblers-fallacy' },
+      ],
+      keyIdea: {
+        re: /(independ|no\s+memory|each\s+(toss|flip)|separate|独立|无记忆|互不影响|每次)/i,
+        label: 'independence — past tosses do not change the next one',
+      },
     },
   ];
+
+  // Tolerant numeric answer parsing: strips units/currency, handles fractions,
+  // accepts English or Chinese phrasing around the number.
+  function parseAnswer(raw) {
+    if (!raw) return null;
+    let s = raw.trim().toLowerCase().replace(/[，,]/g, '').replace(/[$￥¢]/g, '').replace(/percent|per\s*cent/g, '%');
+    const frac = s.match(/(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
+    if (frac) return parseFloat(frac[1]) / parseFloat(frac[2]);
+    const m = s.match(/-?(?:\d+\.?\d*|\.\d+)/);
+    return m ? parseFloat(m[0]) : null;
+  }
+  const near = (a, v, tol) => a !== null && Math.abs(a - v) <= tol;
+  const normPct = a => (a !== null && a <= 1 ? a * 100 : a);
 
   // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM).
   // The payoff table makes honest reporting the expected-score-maximizing
@@ -1060,78 +1178,79 @@
   ];
 
   const AdaptiveEngine = {
-    // Diagnose a single response from its full trace: the answer, the stated
-    // certainty, and the silent behavioral channel (time, answer changes).
-    // (Phase 1: Claude authors the notes + a Socratic follow-up.)
-    diagnose(item, choiceId, level, behavior) {
-      const opt = item.options.find(o => o.id === choiceId);
-      const correct = !!opt.correct;
+    // Diagnose one constructed response: the numeric answer is graded exactly;
+    // the written explanation is scanned by a transparent keyword heuristic.
+    // (Phase 1: Claude reads the prose itself — partial credit, unanticipated
+    // misconceptions, and a Socratic follow-up.)
+    diagnose(item, raw, expl, level, behavior) {
+      const val = parseAnswer(raw);
+      const correct = val !== null && item.accept.some(a => near(val, a.v, a.tol));
       const marks = correct ? level.right : level.wrong;
+
+      // Misconception: first from the answer itself, then from the explanation.
+      let misconception = null, source = null;
+      if (!correct && val !== null) {
+        const w = item.wrongDx.find(w => w.test(val));
+        if (w) { misconception = w.m; source = 'from your answer'; }
+      }
+      const explHit = item.explDx.find(d => d.re.test(expl));
+      if (explHit) {
+        if (!misconception) { misconception = explHit.m; source = 'from your explanation'; }
+        else if (explHit.m === misconception) { source = 'answer + explanation agree'; }
+      }
+      const keyIdeaPresent = item.keyIdea.re.test(expl);
+
+      // Behavioral cross-check (constructed response runs slower than MCQ).
       const b = behavior;
-      const fast = b.tFirst !== null && b.tFirst <= 10;
-      const wavering = b.tTotal >= 40 || b.changes >= 2;
-
-      // Cross-check the stated certainty against the behavioral trace —
-      // disagreement between the two is itself a diagnostic signal.
-      let behaviorNote, inconsistent = false;
-      if (level.n >= 2 && wavering) {
+      let behaviorNote = null, inconsistent = false;
+      if (level.n === 3 && b.tTotal >= 90) {
         inconsistent = true;
-        const why = [];
-        if (b.tTotal >= 40) why.push(`took ${fmtSec(b.tTotal)}`);
-        if (b.changes >= 2) why.push(`changed your answer ${b.changes}×`);
-        behaviorNote = `You claimed “${level.label}” — but ${why.join(' and ')}. Your behavior reads less sure than your report.`;
-      } else if (level.n === 1 && fast && b.changes === 0) {
+        behaviorNote = `claimed “Certain” but deliberated for ${fmtSec(b.tTotal)}`;
+      } else if (level.n === 1 && b.tTotal <= 15 && correct) {
         inconsistent = true;
-        behaviorNote = `You claimed “Guessing” — but committed in ${fmtSec(b.tFirst)} without wavering. Your behavior reads more sure than your report${correct ? ' — possibly knowledge you don’t yet trust' : ''}.`;
-      } else if (level.n === 3 && fast && !correct) {
-        behaviorNote = `Answered in ${fmtSec(b.tFirst)}, certain, and wrong — the signature of an automatic misconception: the answer came from a cached rule, not fresh reasoning.`;
-      } else {
-        behaviorNote = `Committed in ${fmtSec(b.tTotal)} with ${b.changes} change${b.changes === 1 ? '' : 's'} — consistent with your stated certainty.`;
+        behaviorNote = `claimed “Guessing” but answered correctly in ${fmtSec(b.tTotal)}`;
       }
 
-      return { correct, level, marks, confidence: level.conf, concept: item.concept,
+      return { item, raw, val, expl, correct, level, marks, confidence: level.conf,
+               concept: item.concept, misconception, source, keyIdeaPresent,
                behavior: b, behaviorNote, inconsistent,
-               misconception: opt.misconception || null, note: opt.note || null, choice: opt };
+               unparsed: raw !== '' && val === null };
     },
 
-    // Revise the learner model from one diagnostic event. (Phase 1: richer, persistent.)
-    updateModel(model, dx) {
-      const inferences = [];
-      if (dx.misconception) {
-        inferences.push(['Misconception detected', `<b>${labelFor(dx.misconception)}</b> on “${dx.concept}.”`]);
-      } else {
-        inferences.push(['Concept', `<b>${dx.concept}</b> — answered correctly.`]);
-      }
-      if (!dx.correct && dx.level.n === 3) {
-        inferences.push(['Calibration', `“Certain” + wrong → a <b>hidden blind spot</b>, flagged as top priority.`]);
-      } else if (!dx.correct && dx.level.n === 2) {
-        inferences.push(['Calibration', `“Fairly sure” + wrong → a <b>misjudged lean</b>, scheduled for correction.`]);
-      } else if (dx.correct && dx.level.n === 1) {
-        inferences.push(['Calibration', `Right but called a guess → possibly <b>untrusted knowledge</b>; mastery not yet credited.`]);
-      } else if (dx.correct) {
-        inferences.push(['Calibration', `Certainty matched the outcome — well calibrated.`]);
-      } else {
-        inferences.push(['Calibration', `Guessing + wrong — an honest <b>known unknown</b>, easier to fix.`]);
-      }
-      inferences.push(['Behavior', dx.behaviorNote]);
-      const decay = dx.correct ? '~5 days' : '~2 days';
-      inferences.push(['Spacing', `Scheduled for retrieval in <b>${decay}</b> to test whether this sticks.`]);
-      return inferences;
+    // Build the visible learner model from the whole session.
+    // (Phase 1: persistent across sessions, narrated by Claude.)
+    updateModel(records) {
+      const s = this.summarize(records);
+      const rows = [];
+      rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct · score <b>${s.score}</b> of ${s.maxScore} under honesty-aligned marking.`]);
+      rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b> — priority signal.`
+               : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b> — trust needs building.`
+               : `Within <b>${Math.abs(s.gap)} points</b> of reality — well calibrated.`]);
+      const mis = [...new Set(records.filter(r => r.misconception).map(r => labelFor(r.misconception)))];
+      rows.push(['Misconceptions', mis.length ? mis.map(m => `<b>${m}</b>`).join('; ') + '.' : 'None detected in this set.']);
+      const shaky = records.filter(r => r.correct && !r.keyIdeaPresent).length;
+      rows.push(['Explanations', shaky
+               ? `<b>${shaky} correct answer(s)</b> came with explanations that didn't show the key idea — right results on unshown reasoning get re-tested, not credited.`
+               : `Your explanations tracked your answers — reasoning and results agree.`]);
+      const inc = records.filter(r => r.inconsistent);
+      rows.push(['Behavior', inc.length
+               ? `Stated certainty and behavior <b>disagreed on ${inc.length} of ${s.n}</b> — the disagreement is itself diagnostic.`
+               : `Stated certainty and behavior <b>agreed throughout</b> — a trustworthy signal.`]);
+      rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b> — each on its own clock.`]);
+      return rows;
     },
 
-    // Choose the next move. (Phase 1: Claude authors the actual next item.)
-    nextStep(dx) {
-      if (!dx.correct && dx.level.n === 3)
-        return { act: 'Isolate the blind spot', det: 'Certain-and-wrong is the most valuable signal there is. The next item strips away the story and targets this exact idea — then re-tests it after a short gap so a corrected idea becomes a durable one.' };
-      if (!dx.correct && dx.level.n === 2)
-        return { act: 'Correct the lean, then re-test', det: 'A moderately confident miss usually means a half-formed rule. The next item isolates the concept, and a spaced re-test checks that the correction held.' };
-      if (dx.correct && dx.level.n === 3)
-        return { act: 'Raise the difficulty', det: 'Certain and right — the next item interleaves a harder variant to keep you in the productive-struggle zone.' };
-      if (dx.correct && dx.level.n === 1)
-        return { act: 'Confirm, then space', det: 'Right but reported as a guess — the engine treats this as unproven. It will re-surface a variant soon to convert a possible guess into knowledge you can trust.' };
-      if (dx.correct)
-        return { act: 'Consolidate, then raise', det: 'Right with honest moderate confidence — one spaced confirmation, then a harder variant.' };
-      return { act: 'Scaffold down', det: 'Wrong, and you knew you were guessing — the engine breaks the idea into a smaller step before rebuilding to the full problem.' };
+    // Choose the next move from the whole profile. (Phase 1: Claude authors
+    // the actual next item set.)
+    nextStep(records) {
+      const s = this.summarize(records);
+      if (s.blind.length)
+        return { act: 'Target the blind spots first', det: 'The certain-and-wrong ideas come first: strip the story, isolate each broken concept, re-test after a gap. Everything else waits — fixing an invisible error beats polishing a visible skill.' };
+      if (s.gap <= -15)
+        return { act: 'Build trust, then raise difficulty', det: 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge — then moves the ceiling up.' };
+      if (s.acc === 100)
+        return { act: 'Raise the ceiling', det: 'Clean sweep with honest certainty. The next set interleaves harder variants of all six concepts to find the real edge of your understanding.' };
+      return { act: 'Scaffold the shaky ideas', det: 'The missed ideas were mostly known-unknowns — you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.' };
     },
 
     // Aggregate a session into a calibration profile. (Phase 1: Claude narrates it.)
@@ -1158,19 +1277,22 @@
       'subtracting-percentages': 'treats two discounts as cancelling',
       'arithmetic-mean-of-rates': 'averages rates by leg instead of weighting by time',
       'over-correction': 'right instinct, but corrects without computing',
-      'missing-information-illusion': 'assumes missing information is needed when it cancels out',
       'attribute-substitution': 'substitutes an easy split for the stated constraint',
-      'unchecked-adjustment': 'adjusts an answer without re-checking the constraint',
-      'attribute-swap': 'reports the difference in place of the asked quantity',
+      'linear-scaling': 'scales exponential growth as if it were linear',
+      'pattern-matching-proportion': 'pattern-matches the numbers instead of computing the per-machine rate',
+      'gamblers-fallacy': 'expects past outcomes to push the next one (gambler’s fallacy)',
+      'hot-hand': 'projects a streak into a bias (hot hand)',
+      'conjunction-confusion': 'answers the probability of the whole streak, not the next toss',
     })[m] || m;
   }
 
   function fmtSec(s) { return s < 1 ? '<1s' : Math.round(s) + 's'; }
+  function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
   // ── Presentation layer ──────────────────────────────────────────────────────
-  const state = { idx: 0, choice: null, level: null, records: [], score: 0,
-                  tShown: 0, tFirst: null, clicks: 0 };
-  const optionsEl = document.getElementById('options');
+  const state = { idx: 0, level: null, records: [], tShown: 0 };
+  const ansInput = document.getElementById('ansInput');
+  const explInput = document.getElementById('explInput');
 
   // Certainty buttons (built once; reset per item).
   const levelsEl = document.getElementById('confLevels');
@@ -1182,12 +1304,12 @@
       state.level = lv;
       levelsEl.querySelectorAll('.conf-level').forEach(x => x.classList.remove('selected'));
       b.classList.add('selected');
-      document.getElementById('reveal').disabled = false;
+      document.getElementById('lockIn').disabled = false;
     });
     levelsEl.appendChild(b);
   });
 
-  // Pips: one per question, plus one for the profile.
+  // Pips: one per question, plus one for the report.
   const pipsWrap = document.getElementById('pips');
   for (let i = 0; i <= ITEMS.length; i++) {
     const p = document.createElement('div');
@@ -1209,236 +1331,121 @@
 
   function currentItem() { return ITEMS[state.idx]; }
 
+  function checkReady() {
+    document.getElementById('toConf').disabled =
+      !(ansInput.value.trim() && explInput.value.trim().length >= 5);
+  }
+  ansInput.addEventListener('input', checkReady);
+  explInput.addEventListener('input', checkReady);
+
   function renderItem() {
     const item = currentItem();
     const qLabel = `Question ${state.idx + 1} of ${ITEMS.length}`;
-    document.getElementById('answerLabel').textContent = `${qLabel} — Commit to an answer`;
+    document.getElementById('answerLabel').textContent = `${qLabel} — Answer, then show your thinking`;
     document.getElementById('confLabel').textContent = `${qLabel} — How sure are you, honestly?`;
-    document.getElementById('revealLabel').textContent = `${qLabel} — What the gap tells us`;
     document.getElementById('stem').innerHTML = item.stem;
-
-    // rebuild options
-    optionsEl.innerHTML = '';
-    item.options.forEach(o => {
-      const b = document.createElement('button');
-      b.className = 'option';
-      b.dataset.id = o.id;
-      b.innerHTML = `<span class="key">${o.id.toUpperCase()}</span><span class="txt">${o.text}</span>`;
-      b.addEventListener('click', () => {
-        // silent behavioral channel: time to first commitment, answer switches
-        if (state.tFirst === null) state.tFirst = (performance.now() - state.tShown) / 1000;
-        state.clicks++;
-        state.choice = o.id;
-        document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
-        b.classList.add('selected');
-        document.getElementById('toConf').disabled = false;
-      });
-      optionsEl.appendChild(b);
-    });
-
-    // reset per-item inputs and the behavioral trace
-    state.choice = null;
+    document.getElementById('unitHint').textContent = `(${item.unit})`;
+    document.getElementById('qNum').textContent = state.idx + 1;
+    ansInput.value = '';
+    explInput.value = '';
     state.level = null;
     state.tShown = performance.now();
-    state.tFirst = null;
-    state.clicks = 0;
     document.getElementById('toConf').disabled = true;
-    document.getElementById('reveal').disabled = true;
+    document.getElementById('lockIn').disabled = true;
     levelsEl.querySelectorAll('.conf-level').forEach(x => x.classList.remove('selected'));
-    document.getElementById('fillConf').style.width = '0';
-    document.getElementById('fillTruth').style.width = '0';
     setPip(state.idx);
   }
 
   document.getElementById('toConf').addEventListener('click', () => goStage('conf'));
   document.getElementById('backAns').addEventListener('click', () => goStage('answer'));
 
-  document.getElementById('reveal').addEventListener('click', () => {
-    const behavior = {
-      tFirst: state.tFirst,
-      tTotal: (performance.now() - state.tShown) / 1000,
-      changes: Math.max(0, state.clicks - 1),
-    };
-    const dx = AdaptiveEngine.diagnose(currentItem(), state.choice, state.level, behavior);
+  // Lock in the item silently — no feedback until the whole session is done,
+  // so later questions stay uncontaminated by earlier reveals.
+  document.getElementById('lockIn').addEventListener('click', () => {
+    const behavior = { tTotal: (performance.now() - state.tShown) / 1000 };
+    const dx = AdaptiveEngine.diagnose(
+      currentItem(), ansInput.value.trim(), explInput.value.trim(), state.level, behavior);
     state.records.push(dx);
-    state.score += dx.marks;
-    document.getElementById('scoreVal').textContent = state.score;
-    renderReveal(dx);
-    goStage('reveal');
-  });
-
-  function renderReveal(dx) {
-    const item = currentItem();
-
-    // mark the options
-    document.querySelectorAll('.option').forEach(el => {
-      el.classList.remove('selected');
-      const o = item.options.find(x => x.id === el.dataset.id);
-      if (o.correct) { el.classList.add('correct'); addVerdict(el, 'correct answer'); }
-      if (el.dataset.id === dx.choice.id && !o.correct) { el.classList.add('wrong'); addVerdict(el, 'your answer'); }
-    });
-
-    // bars
-    const fc = document.getElementById('fillConf');
-    const ft = document.getElementById('fillTruth');
-    setTimeout(() => {
-      fc.style.width = dx.confidence + '%';
-      ft.style.width = (dx.correct ? 100 : 6) + '%';
-    }, 60);
-    ft.classList.toggle('zero', !dx.correct);
-    document.getElementById('numConf').textContent = '~' + dx.confidence + '%';
-    document.getElementById('numTruth').textContent = dx.correct ? 'right' : 'wrong';
-
-    // headline
-    const h = document.getElementById('headline');
-    const mk = dx.marks > 0 ? `+${dx.marks}` : `${dx.marks}`;
-    if (dx.correct && dx.level.n === 3) {
-      h.textContent = `Certain and correct — well calibrated. (${mk})`;
-      h.className = 'gap-headline calibrated';
-    } else if (dx.correct && dx.level.n === 2) {
-      h.textContent = `Fairly sure and right — solid. (${mk})`;
-      h.className = 'gap-headline calibrated';
-    } else if (dx.correct) {
-      h.textContent = `Right — but you called it a guess. That’s a gap too. (${mk})`;
-      h.className = 'gap-headline';
-    } else if (dx.level.n === 3) {
-      h.textContent = `You said “Certain” — and missed. This is the blind spot. (${mk})`;
-      h.className = 'gap-headline blindspot';
-    } else if (dx.level.n === 2) {
-      h.textContent = `Fairly sure — and wrong. A lean worth correcting. (${mk})`;
-      h.className = 'gap-headline';
-    } else {
-      h.textContent = `Wrong — and you knew you were guessing. An honest known-unknown. (${mk})`;
-      h.className = 'gap-headline';
-    }
-
-    // diagnosis
-    const diag = document.getElementById('diag');
-    if (dx.correct) {
-      diag.innerHTML = dx.level.n === 3
-        ? 'Your certainty matched reality. Delta learns little from easy hits, so it will now nudge the difficulty up.'
-        : dx.level.n === 2
-          ? 'Right, with honest moderate confidence. One spaced confirmation and this concept gets credited as solid.'
-          : 'You got it — but a right answer you didn’t trust behaves like a guess. Delta will re-test to see if the knowledge is real.';
-    } else {
-      diag.innerHTML = `<b>Here’s the specific idea that slipped:</b> ${dx.note} The point isn’t the wrong answer — it’s that a confident wrong answer is invisible to you but loud to the system.`;
-    }
-    document.getElementById('work').textContent = item.work;
-
-    // mirror
-    const list = document.getElementById('mirrorList');
-    list.innerHTML = '';
-    AdaptiveEngine.updateModel({}, dx).forEach(([k, v]) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span><b>${k}:</b> ${v}</span>`;
-      list.appendChild(li);
-    });
-
-    // next step
-    const ns = AdaptiveEngine.nextStep(dx);
-    document.getElementById('nextAct').textContent = ns.act;
-    document.getElementById('nextDet').textContent = ns.det;
-
-    // advance button
-    document.getElementById('nextItem').textContent =
-      state.idx < ITEMS.length - 1 ? 'Next question →' : 'See your calibration profile →';
-  }
-
-  document.getElementById('nextItem').addEventListener('click', () => {
     state.idx++;
     if (state.idx < ITEMS.length) {
       renderItem();
       goStage('answer');
     } else {
-      renderSummary();
+      renderReport();
       setPip(ITEMS.length);
-      goStage('summary');
+      goStage('report');
     }
   });
 
-  function renderSummary() {
-    const s = AdaptiveEngine.summarize(state.records);
+  function renderReport() {
+    const records = state.records;
+    const s = AdaptiveEngine.summarize(records);
 
     setTimeout(() => {
       document.getElementById('sFillConf').style.width = s.avgConf + '%';
       document.getElementById('sFillAcc').style.width = Math.max(s.acc, 6) + '%';
     }, 60);
     document.getElementById('sFillAcc').classList.toggle('zero', s.acc === 0);
-    document.getElementById('sNumConf').textContent = s.avgConf + '%';
+    document.getElementById('sNumConf').textContent = '~' + s.avgConf + '%';
     document.getElementById('sNumAcc').textContent = s.acc + '%';
 
-    // headline + narrative
     const h = document.getElementById('sHeadline');
     const d = document.getElementById('sDiag');
     if (s.gap >= 15) {
       h.textContent = `You claimed ~${s.avgConf}% — you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
       h.className = 'gap-headline blindspot';
-      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking — inflated certainty is exactly what it prices in. A real session would keep tightening this estimate.`;
+      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking — inflated certainty is exactly what it prices in.`;
     } else if (s.gap <= -15) {
       h.textContent = `You scored ${s.acc}% but only claimed ~${s.avgConf}% — you know more than you trust.`;
       h.className = 'gap-headline';
-      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but filed as guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}You left points on the table: <b>${s.score} of ${s.maxScore}</b> — sandbagging is priced in too. A real session would work on trust, not just accuracy.`;
+      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but filed as guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}You left points on the table: <b>${s.score} of ${s.maxScore}</b> — sandbagging is priced in too.`;
     } else {
       h.textContent = `Claimed ~${s.avgConf}%, scored ${s.acc}% — your calibration is close.`;
       h.className = 'gap-headline calibrated';
-      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} certain-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking. With calibration this close, Delta shifts its effort from correcting your self-assessment to raising the difficulty ceiling.`;
+      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} certain-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking.`;
     }
 
-    // aggregated learner model
+    // Per-item breakdown.
+    const wrap = document.getElementById('reportItems');
+    wrap.innerHTML = '';
+    records.forEach((r, i) => {
+      const div = document.createElement('div');
+      div.className = 'report-item ' + (r.correct ? 'correct' : 'wrong');
+      let html = `<div class="ri-head">
+        <span class="ri-title"><span class="mark">${r.correct ? '✓' : '✗'}</span> Q${i + 1} · ${r.concept}</span>
+        <span class="ri-meta">claimed ${r.level.label} · ${r.marks > 0 ? '+' + r.marks : r.marks} · ${fmtSec(r.behavior.tTotal)}</span>
+      </div>`;
+      html += `<div class="ri-line">Your answer: <b>${escapeHtml(r.raw) || '—'}</b> → correct: <b>${r.item.display}</b>${r.unparsed ? ' <span class="ri-tag miss">couldn’t read a number — Phase 1 Claude parses any format</span>' : ''}</div>`;
+      if (r.misconception) {
+        html += `<div class="ri-line">Misconception (${r.source}): <b>${labelFor(r.misconception)}</b></div>`;
+      }
+      html += `<div class="ri-line">${r.keyIdeaPresent
+        ? `<span class="ri-tag ok">key idea shown</span> ${r.item.keyIdea.label}`
+        : `<span class="ri-tag miss">key idea not found</span> ${r.item.keyIdea.label}`}</div>`;
+      if (r.behaviorNote) {
+        html += `<div class="ri-line">Behavior: ${r.behaviorNote} — the disagreement is itself a signal.</div>`;
+      }
+      html += `<div class="ri-work">${r.item.work}</div>`;
+      div.innerHTML = html;
+      wrap.appendChild(div);
+    });
+
+    // Learner model + next move.
     const list = document.getElementById('sMirrorList');
     list.innerHTML = '';
-    const rows = [];
-    rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct · score <b>${s.score}</b> of ${s.maxScore}.`]);
-    rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b> — priority signal.`
-             : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b> — trust needs building.`
-             : `Within <b>${Math.abs(s.gap)} points</b> of reality — well calibrated.`]);
-    const missed = state.records.filter(r => r.misconception);
-    if (missed.length) {
-      rows.push(['Misconceptions', missed.map(r => `<b>${labelFor(r.misconception)}</b>`).join('; ') + '.']);
-    } else {
-      rows.push(['Misconceptions', 'None detected in this set.']);
-    }
-    rows.push(['Behavior', s.inconsistent.length
-             ? `Stated certainty and behavior <b>disagreed on ${s.inconsistent.length} of ${s.n}</b> — the disagreement is itself diagnostic.`
-             : `Stated certainty and behavior <b>agreed throughout</b> — a trustworthy signal.`]);
-    rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b> — each on its own clock.`]);
-    rows.forEach(([k, v]) => {
+    AdaptiveEngine.updateModel(records).forEach(([k, v]) => {
       const li = document.createElement('li');
       li.innerHTML = `<span><b>${k}:</b> ${v}</span>`;
       list.appendChild(li);
     });
-
-    // aggregated next move
-    const act = document.getElementById('sNextAct');
-    const det = document.getElementById('sNextDet');
-    if (s.blind.length) {
-      act.textContent = 'Target the blind spots first';
-      det.textContent = `The confident-and-wrong ideas come first: strip the story, isolate each broken concept, re-test after a gap. Everything else waits — fixing an invisible error beats polishing a visible skill.`;
-    } else if (s.gap <= -15) {
-      act.textContent = 'Build trust, then raise difficulty';
-      det.textContent = 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge — then moves the ceiling up.';
-    } else if (s.acc === 100) {
-      act.textContent = 'Raise the ceiling';
-      det.textContent = 'Clean sweep with honest confidence. The next set interleaves harder variants of all three concepts to find the real edge of your understanding.';
-    } else {
-      act.textContent = 'Scaffold the shaky ideas';
-      det.textContent = 'The missed ideas were known-unknowns — you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.';
-    }
-  }
-
-  function addVerdict(el, text) {
-    if (el.querySelector('.verdict')) return;
-    const s = document.createElement('span');
-    s.className = 'verdict';
-    s.textContent = text;
-    el.appendChild(s);
+    const ns = AdaptiveEngine.nextStep(records);
+    document.getElementById('sNextAct').textContent = ns.act;
+    document.getElementById('sNextDet').textContent = ns.det;
   }
 
   document.getElementById('restart').addEventListener('click', () => {
     state.idx = 0;
     state.records = [];
-    state.score = 0;
-    document.getElementById('scoreVal').textContent = '0';
     renderItem();
     goStage('answer');
   });

@@ -804,7 +804,7 @@
         <!-- STAGE 0: pick a level -->
         <div class="stage active" id="stage-band">
           <div class="prompt-label">Before we start — whose math?</div>
-          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “a streak changes the next coin toss.”</p>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “two machines’ times add instead of their rates.” The top band runs at the hard end of SAT math: long, multi-step problems where the reasoning chain is the whole game.</p>
           <div class="conf-levels" id="bandPick"></div>
         </div>
 
@@ -1309,116 +1309,118 @@
 
   const HIGH_ITEMS = [
     {
-      id: 'pct-compound-01',
-      concept: 'Successive percentage change',
-      stem: 'A jacket is marked down <b>20%</b>. At the register, an extra <b>20%</b> comes off the already-reduced price. What is the <b>total</b> discount off the original price?',
-      unit: 'in %', display: '36%',
-      accept: [{ v: 36, tol: 0.5 }, { v: 0.36, tol: 0.005 }],
-      work: '(1 − 0.20) × (1 − 0.20) = 0.80 × 0.80 = 0.64  →  a 36% total discount.',
+      id: 'sat-meanlist-01',
+      concept: 'Working in totals (mean manipulation)',
+      stem: 'A teacher recorded the quiz scores of <b>20 students</b>; the mean score was <b>82</b>. Checking the roster, she found that two of those scores — <b>58</b> and <b>62</b> — belonged to students from another class, so she removed them from the data set. She then added the score of one student who took a make-up quiz. The mean of the resulting <b>19 scores</b> is <b>85</b>. What score did the make-up student earn?',
+      unit: 'a number', display: '95',
+      accept: [{ v: 95, tol: 0.01 }],
+      work: 'Totals, not averages: 20×82 = 1640. Remove 58+62 → 1520 (18 scores). New total must be 19×85 = 1615 → make-up = 1615 − 1520 = 95.',
       wrongDx: [
-        { test: a => near(a, 40, 0.5) || near(a, 0.40, 0.005), m: 'additive-percentages' },
-        { test: a => near(a, 44, 0.5), m: 'over-compounding' },
-        { test: a => near(a, 4, 0.5), m: 'subtracting-percentages' },
+        { test: a => near(a, 145, 0.5), m: 'ignores-removed-scores' },
+        { test: a => near(a, 85, 0.01), m: 'new-value-equals-new-mean' },
+        { test: a => near(a, 180, 0.5), m: 'wrong-count-after-changes' },
       ],
       explDx: [
-        { re: /(20\s*\+\s*20|(simply|just)\s+add|相加|加起来|直接加)/i, m: 'additive-percentages' },
+        { re: /(must\s+equal\s+the\s+mean|just\s+85|等于(新)?平均)/i, m: 'new-value-equals-new-mean' },
       ],
       keyIdea: {
-        re: /(0\.8|80\s*%|0\.64|64\s*%|already[ -]?reduced|reduced\s+price|new\s+price|sale\s+price|multipl|compound|八折|降价后|新价|基数|乘)/i,
-        label: 'the second 20% applies to the already-reduced price (0.8 × 0.8)',
+        re: /(1640|1615|1520|total|20\s*[×x\*]\s*82|19\s*[×x\*]\s*85|sum|总分|总和|先算总)/i,
+        label: 'convert every mean to a total (20×82 and 19×85) and track what enters and leaves the sum',
       },
     },
     {
-      id: 'rate-harmonic-01',
-      concept: 'Averaging rates (time-weighted)',
-      stem: 'You drive to a city at <b>60 mph</b> and return along the same road at <b>30 mph</b>. What is your <b>average speed</b> for the whole round trip?',
-      unit: 'in mph', display: '40 mph',
-      accept: [{ v: 40, tol: 0.5 }],
-      work: 'avg = 2d ÷ (d/60 + d/30) = 2d ÷ (d/20) = 40 mph — more time is spent at 30.',
+      id: 'sat-nosol-01',
+      concept: 'Systems with no solution (parameter)',
+      stem: 'In the system below, k is a constant.<br><span style="font-family:\'JetBrains Mono\',monospace;">3x − 5y = 8<br>kx + 10y = −9</span><br>If the system has <b>no solution</b>, what is the value of <b>k</b>?',
+      unit: 'a number', display: '−6',
+      accept: [{ v: -6, tol: 0.01 }],
+      work: 'No solution = parallel lines: scale the first equation by −2 → −6x + 10y = −16. Matching kx + 10y = −9 needs k = −6 (and −9 ≠ −16 confirms they never meet).',
       wrongDx: [
-        { test: a => near(a, 45, 0.5), m: 'arithmetic-mean-of-rates' },
-        { test: a => near(a, 35, 2), m: 'over-correction' },
+        { test: a => near(a, 6, 0.01), m: 'sign-slip-in-proportion' },
       ],
       explDx: [
-        { re: /(\(?\s*60\s*\+\s*30\s*\)?\s*(\/|÷)\s*2|average\s+of\s+the\s+two|两个?速度.*平均|直接平均)/i, m: 'arithmetic-mean-of-rates' },
+        { re: /(solve\s+the\s+system|intersection|find\s+x\s+and\s+y|解方程组|求交点|联立求解)/i, m: 'solves-for-intersection' },
       ],
       keyIdea: {
-        re: /(time|longer|twice\s+as\s+long|harmonic|d\s*\/\s*60|d\s*\/\s*30|时间|更久|慢.*(久|长)|调和)/i,
-        label: 'average speed weights by time — the 30 mph leg takes twice as long',
+        re: /(parallel|proportional|same\s+slope|[×x\*]\s*\(?\s*[-−]\s*2|scale|multiply.*[-−]?2|平行|成比例|斜率相(同|等)|乘以\s*[-−]?2)/i,
+        label: 'no solution means parallel: coefficients proportional (scale by −2), constants not',
       },
     },
     {
-      id: 'crt-batball-01',
-      concept: 'Equations vs. intuition',
-      stem: 'A bat and a ball cost <b>$1.10</b> together. The bat costs <b>$1.00 more</b> than the ball. How much is the <b>ball</b>?',
-      unit: 'in ¢ or $', display: '5¢ ($0.05)',
-      accept: [{ v: 5, tol: 0.01 }, { v: 0.05, tol: 0.001 }],
-      work: 'ball = x, bat = x + 1.00  →  2x + 1.00 = 1.10  →  x = 0.05.',
+      id: 'sat-exprate-01',
+      concept: 'Per-year rate from a per-period model',
+      stem: 'The population of a town is modeled by <span style="font-family:\'JetBrains Mono\',monospace;">P(t) = 8,000(1.21)<sup>t/2</sup></span>, where t is the number of years from now. According to the model, by what <b>percent</b> does the population increase <b>each year</b>?',
+      unit: 'in %', display: '10%',
+      accept: [{ v: 10, tol: 0.1 }, { v: 0.1, tol: 0.001 }],
+      work: 'Per year the factor is (1.21)^(1/2) = √1.21 = 1.1 — a 10% increase each year. (Check: 1.1 × 1.1 = 1.21 over two years.)',
       wrongDx: [
-        { test: a => near(a, 10, 0.01) || near(a, 0.10, 0.001), m: 'attribute-substitution' },
+        { test: a => near(a, 10.5, 0.1), m: 'divides-the-percent-linearly' },
+        { test: a => near(a, 21, 0.1), m: 'reads-rate-per-year' },
       ],
       explDx: [
-        { re: /(1\.10?\s*[-−–]\s*1(\.00?)?(?!\d)|直接(减|相减))/i, m: 'attribute-substitution' },
+        { re: /(21\s*(\/|÷)\s*2|divide.*(21|percent).*2|除以\s*2|21.*一半)/i, m: 'divides-the-percent-linearly' },
       ],
       keyIdea: {
-        re: /(x\s*\+\s*1|2x|equation|1\.05|difference|设|方程|未知数|差)/i,
-        label: 'sets up the constraint: ball + (ball + 1.00) = 1.10',
+        re: /(square\s+root|sqrt|√|1\.21\s*\^?\s*\(?\s*1\s*\/\s*2|1\.1\b|开(平)?方|根号|平方根)/i,
+        label: 'percent growth compounds — take the square root of 1.21 (=1.1), don’t halve the 21%',
       },
     },
     {
-      id: 'exp-lily-01',
-      concept: 'Exponential vs. linear growth',
-      stem: 'A patch of lily pads <b>doubles in size every day</b>. It covers the whole pond on <b>day 48</b>. On what day did it cover <b>half</b> the pond?',
-      unit: 'day number', display: 'day 47',
-      accept: [{ v: 47, tol: 0.01 }],
-      work: 'Doubling each day means half the pond is exactly one day before full: 48 − 1 = 47.',
+      id: 'sat-mixture-01',
+      concept: 'Mixture by replacement',
+      stem: 'A tank contains <b>12 liters</b> of a <b>25%</b> acid solution. A technician drains some of the solution and <b>replaces it with pure acid</b>, so that the tank again holds 12 liters — now a <b>40%</b> acid solution. How many <b>liters</b> did the technician replace?',
+      unit: 'in liters', display: '2.4',
+      accept: [{ v: 2.4, tol: 0.05 }],
+      work: 'Let x be the liters replaced. Acid after: 0.25(12 − x) + 1.00x = 0.40 × 12 → 3 + 0.75x = 4.8 → x = 2.4.',
       wrongDx: [
-        { test: a => near(a, 24, 0.5), m: 'linear-scaling' },
+        { test: a => near(a, 3, 0.05), m: 'adds-instead-of-replaces' },
+        { test: a => near(a, 1.8, 0.05), m: 'tracks-only-the-difference' },
       ],
       explDx: [
-        { re: /(48\s*(\/|÷)\s*2|half\s+of\s+48|48\s*的一半|时间.*一半|一半.*时间)/i, m: 'linear-scaling' },
+        { re: /(12\s*\+\s*x|just\s+add|pour\s+in|直接(加|倒)入|加进去)/i, m: 'adds-instead-of-replaces' },
       ],
       keyIdea: {
-        re: /(day\s+before|one\s+day|doubl|halv|48\s*[-−–]\s*1|前一天|翻倍|倍增)/i,
-        label: 'doubling means “half” is one day before “full”',
+        re: /(12\s*[-−]\s*x|0\.25\s*\(|carries?\s+acid\s+out|removed.*acid|drain.*take|带走|抽走.*酸|剩下.*25)/i,
+        label: 'the drained liters carry acid out with them: 0.25(12 − x) + x',
       },
     },
     {
-      id: 'prop-machines-01',
-      concept: 'Rates and proportion',
-      stem: 'It takes <b>5 machines 5 minutes</b> to make <b>5 widgets</b>. How long would it take <b>100 machines</b> to make <b>100 widgets</b>?',
-      unit: 'in minutes', display: '5 minutes',
-      accept: [{ v: 5, tol: 0.01 }],
-      work: 'Each machine makes 1 widget in 5 minutes — 100 machines make 100 widgets in the same 5 minutes.',
+      id: 'sat-workrate-01',
+      concept: 'Combined work with a head start',
+      stem: 'Working alone, machine A completes a production order in <b>6 hours</b>; machine B completes the same order in <b>4 hours</b>. Machine A starts the order alone. Exactly <b>one hour later</b>, machine B joins in, and the two machines work together until the order is finished. From the moment A started, how many <b>hours</b> did the whole order take?',
+      unit: 'in hours', display: '3',
+      accept: [{ v: 3, tol: 0.01 }],
+      work: 'Rates add, times don’t: A does 1/6 in the first hour, leaving 5/6. Together they work at 1/6 + 1/4 = 5/12 per hour → (5/6) ÷ (5/12) = 2 more hours → 3 hours total.',
       wrongDx: [
-        { test: a => near(a, 100, 0.5), m: 'pattern-matching-proportion' },
+        { test: a => near(a, 2.4, 0.05), m: 'ignores-the-head-start' },
+        { test: a => near(a, 5, 0.01), m: 'averages-the-times' },
+        { test: a => near(a, 10, 0.01), m: 'adds-the-times' },
       ],
       explDx: [
-        { re: /(100.*100.*100|same\s+pattern|成比例|等比例|照.?比例|类推)/i, m: 'pattern-matching-proportion' },
+        { re: /(\(?6\s*\+\s*4\)?\s*(\/|÷)\s*2|average.*times?|平均.*(时间|小时))/i, m: 'averages-the-times' },
       ],
       keyIdea: {
-        re: /(each\s+machine|per\s+machine|1\s+widget|one\s+widget|parallel|同时|每台|一台|速率|rate)/i,
-        label: 'the per-machine rate: one machine, one widget, five minutes',
+        re: /(1\s*\/\s*6|1\s*\/\s*4|5\s*\/\s*12|rates?\s+add|per\s+hour|first\s+hour|头?一个?小时|速率|每小时|先干)/i,
+        label: 'convert to rates (1/6 and 1/4 per hour), handle A’s solo hour, then divide the rest by the combined rate',
       },
     },
     {
-      id: 'prob-coin-01',
-      concept: 'Independence of events',
-      stem: 'A fair coin lands <b>heads five times in a row</b>. What is the probability that the <b>next</b> toss is also heads?',
-      unit: 'in %', display: '50%',
-      accept: [{ v: 50, tol: 0.5 }, { v: 0.5, tol: 0.005 }],
-      work: 'Each toss is independent — the coin has no memory. P(heads) = 1/2 = 50%.',
+      id: 'sat-circle-01',
+      concept: 'Circle equations (completing the square)',
+      stem: 'The graph of <span style="font-family:\'JetBrains Mono\',monospace;">x² + y² − 8x + 6y − 11 = 0</span> in the xy-plane is a circle. What is the <b>radius</b> of the circle?',
+      unit: 'a number', display: '6',
+      accept: [{ v: 6, tol: 0.01 }],
+      work: 'Complete both squares: (x² − 8x + 16) + (y² + 6y + 9) = 11 + 16 + 9 → (x − 4)² + (y + 3)² = 36 → r = 6.',
       wrongDx: [
-        { test: a => (a > 0 && a <= 3) || near(a, 0.015625, 0.01), m: 'conjunction-confusion' },
-        { test: a => normPct(a) < 50, m: 'gamblers-fallacy' },
-        { test: a => normPct(a) > 50, m: 'hot-hand' },
+        { test: a => near(a, 36, 0.01), m: 'reports-radius-squared' },
+        { test: a => near(a, 3.32, 0.06) || near(a, 11, 0.01), m: 'forgets-to-complete-the-square' },
       ],
       explDx: [
-        { re: /(due|owed|its\s+turn|该出|轮到|要出反|平衡|补偿)/i, m: 'gamblers-fallacy' },
+        { re: /(r\s*=\s*36|radius.*36|半径.*36)/i, m: 'reports-radius-squared' },
       ],
       keyIdea: {
-        re: /(independ|no\s+memory|each\s+(toss|flip)|separate|独立|无记忆|互不影响|每次)/i,
-        label: 'independence — past tosses do not change the next one',
+        re: /(complet.*square|\(x\s*[-−]\s*4\)|16.*9|add.*both\s+sides|36|配方|两边(同时)?加|补全平方)/i,
+        label: 'complete the square in x and y, adding 16 and 9 to both sides, then take √36',
       },
     },
   ];
@@ -1434,14 +1436,13 @@
   // accepts English or Chinese phrasing around the number.
   function parseAnswer(raw) {
     if (!raw) return null;
-    let s = raw.trim().toLowerCase().replace(/[，,]/g, '').replace(/[$￥¢]/g, '').replace(/percent|per\s*cent/g, '%');
+    let s = raw.trim().toLowerCase().replace(/[，,]/g, '').replace(/[$￥¢]/g, '').replace(/[−–]/g, '-').replace(/percent|per\s*cent/g, '%');
     const frac = s.match(/(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
     if (frac) return parseFloat(frac[1]) / parseFloat(frac[2]);
     const m = s.match(/-?(?:\d+\.?\d*|\.\d+)/);
     return m ? parseFloat(m[0]) : null;
   }
   const near = (a, v, tol) => a !== null && Math.abs(a - v) <= tol;
-  const normPct = a => (a !== null && a <= 1 ? a * 100 : a);
 
   // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM).
   // The payoff table makes honest reporting the expected-score-maximizing
@@ -1547,17 +1548,20 @@
 
   function labelFor(m) {
     return ({
-      'additive-percentages': 'adds successive percentages instead of compounding them',
-      'over-compounding': 'overshoots when combining percentage changes',
-      'subtracting-percentages': 'treats two discounts as cancelling',
-      'arithmetic-mean-of-rates': 'averages rates by leg instead of weighting by time',
-      'over-correction': 'right instinct, but corrects without computing',
-      'attribute-substitution': 'substitutes an easy split for the stated constraint',
-      'linear-scaling': 'scales exponential growth as if it were linear',
-      'pattern-matching-proportion': 'pattern-matches the numbers instead of computing the per-machine rate',
-      'gamblers-fallacy': 'expects past outcomes to push the next one (gambler’s fallacy)',
-      'hot-hand': 'projects a streak into a bias (hot hand)',
-      'conjunction-confusion': 'answers the probability of the whole streak, not the next toss',
+      'ignores-removed-scores': 'updates the total without taking the removed scores out of it',
+      'new-value-equals-new-mean': 'assumes the added value must equal the new mean',
+      'wrong-count-after-changes': 'divides by the old count after the list changed size',
+      'sign-slip-in-proportion': 'matches the coefficient ratio but loses a sign along the way',
+      'solves-for-intersection': 'solves for an intersection the question says must not exist',
+      'divides-the-percent-linearly': 'halves the two-year percent instead of taking a square root',
+      'reads-rate-per-year': 'reads the per-period growth rate as a per-year rate',
+      'adds-instead-of-replaces': 'pours acid in without draining the solution it replaces',
+      'tracks-only-the-difference': 'tracks the acid shortfall but not what draining carries out',
+      'ignores-the-head-start': 'starts both machines together, erasing the head start',
+      'averages-the-times': 'averages the two completion times',
+      'adds-the-times': 'adds completion times instead of adding rates',
+      'reports-radius-squared': 'stops at r² = 36 instead of taking the square root',
+      'forgets-to-complete-the-square': 'moves the constant across but never adds the completed squares',
       'operational-equals': 'reads “=” as “the answer comes next” instead of a balance',
       'perimeter-for-area': 'computes the perimeter when asked for area',
       'adds-the-sides': 'adds the two sides instead of multiplying them',

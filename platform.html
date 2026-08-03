@@ -564,6 +564,8 @@
     top: auto; bottom: -2.2rem;
     transform: translateX(50%);
   }
+  .flow3 { grid-template-columns: repeat(3, 1fr); }
+  .flow3 .loop-step:last-child::after { content: none; }
 
   /* ---- DIMENSIONS ---- */
   .dims { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
@@ -787,20 +789,27 @@
   <div class="reveal">
     <p class="section-label">04 — Live Demo</p>
     <h2 class="section-title">The Calibration Mirror.</h2>
-    <p class="section-lede">Six short-answer problems, each a different type. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty — because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
+    <p class="section-lede">Pick your level — elementary, middle, or high school &amp; beyond — then six short-answer problems tuned to the misconceptions that actually live at that age. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty — because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
   </div>
 
   <div class="demo-wrap reveal">
     <div class="demo">
       <div class="demo-head">
         <div class="title">&#916; &nbsp;Calibration Mirror</div>
-        <div class="score-chip">Question <b id="qNum">1</b> / <span id="qTotal">6</span></div>
+        <div class="score-chip">Question <b id="qNum">–</b> / <span id="qTotal">–</span></div>
         <div class="demo-steps" id="pips"></div>
       </div>
       <div class="demo-body">
 
+        <!-- STAGE 0: pick a level -->
+        <div class="stage active" id="stage-band">
+          <div class="prompt-label">Before we start — whose math?</div>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “a streak changes the next coin toss.”</p>
+          <div class="conf-levels" id="bandPick"></div>
+        </div>
+
         <!-- STAGE 1: answer + reasoning -->
-        <div class="stage active" id="stage-answer">
+        <div class="stage" id="stage-answer">
           <div class="prompt-label" id="answerLabel">Question 1 of 6 — Answer, then show your thinking</div>
           <p class="stem" id="stem"></p>
           <label class="field-label" for="ansInput">Your answer <span id="unitHint" style="text-transform:none;letter-spacing:0;"></span></label>
@@ -825,7 +834,7 @@
 
         <!-- STAGE 3: full-session report -->
         <div class="stage" id="stage-report">
-          <div class="prompt-label">Your report — six questions, analyzed together</div>
+          <div class="prompt-label">Your report — the whole session, analyzed together</div>
 
           <div class="gap-viz">
             <div class="gap-title">Claimed vs. real, across the session</div>
@@ -849,7 +858,7 @@
           <div id="reportItems"></div>
 
           <div class="mirror">
-            <h4>&#916; Your learner model — six data points in</h4>
+            <h4>&#916; Your learner model — built from this session</h4>
             <ul id="sMirrorList"></ul>
           </div>
 
@@ -973,11 +982,45 @@
   </div>
 </section>
 
+<!-- HOMEWORK (coming) -->
+<div class="divider"><hr /></div>
+<section id="homework">
+  <div class="reveal">
+    <p class="section-label">08 — Coming Next</p>
+    <h2 class="section-title">Your own homework is the best question bank.</h2>
+    <p class="section-lede">The demo above uses curated problems. The real version starts from the problems you already have: photograph tonight's worksheet, and Delta turns it into a mirror session.</p>
+  </div>
+  <div class="loop flow3 reveal">
+    <div class="loop-step">
+      <div class="num">STEP 01</div>
+      <h4>Snap the page</h4>
+      <p>A phone photo of the worksheet, the textbook page, or a marked-up test — messy handwriting included.</p>
+    </div>
+    <div class="loop-step">
+      <div class="num">STEP 02</div>
+      <h4>Delta reads the problems</h4>
+      <p>A vision-capable Claude model extracts each problem, classifies its concept, and drafts its misconception map — the same metadata the curated items above carry.</p>
+    </div>
+    <div class="loop-step">
+      <div class="num">STEP 03</div>
+      <h4>The mirror runs on each</h4>
+      <p>Problem by problem: your answer, your reasoning, your certainty — then the full report. Not “here's the solution,” but “here's what you understand.”</p>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2.2rem;">
+    <div class="callout">
+      <div class="tag">⚠ Why this isn't live yet</div>
+      <p>Reading photographed homework requires a vision model — there is no honest rule-based stand-in for it. It ships with <strong>Phase 1</strong>, when Claude moves behind the seam; the flow above is the design contract for that work.</p>
+      <p>And the inversion is the whole point: photo-solver apps use your homework to <strong>hand you answers</strong>; Delta uses the same photo to <strong>map your understanding</strong>. Same input, opposite theory of learning.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ROADMAP -->
 <div class="divider"><hr /></div>
 <section id="roadmap">
   <div class="reveal">
-    <p class="section-label">08 — Roadmap</p>
+    <p class="section-label">09 — Roadmap</p>
     <h2 class="section-title">From rule-based seed to model-in-the-loop.</h2>
     <p class="section-lede">This page is the seed. The architecture is designed so the intelligence can be upgraded without rebuilding the loop.</p>
   </div>
@@ -992,7 +1035,7 @@
       <div class="rm-dot"></div>
       <div class="rm-phase">Phase 1 — model in the loop</div>
       <h4>Claude behind the seam <span class="badge next">Next</span></h4>
-      <p>Route those three functions through a Claude model: natural-language diagnosis of <em>why</em> you erred, a Socratic follow-up question, and items authored on demand to target your exact gap — over any subject, not a fixed question bank.</p>
+      <p>Route those three functions through a Claude model: natural-language diagnosis of <em>why</em> you erred, a Socratic follow-up question, and items authored on demand to target your exact gap — over any subject, not a fixed question bank. This is also where photographed homework (above) becomes a live input: a vision model reads the page and feeds each problem into the same loop.</p>
     </div>
     <div class="rm-item future">
       <div class="rm-dot"></div>
@@ -1039,7 +1082,232 @@
   //  Everything below the divider comment is presentation only.
   // ══════════════════════════════════════════════════════════════════════════
 
-  const ITEMS = [
+  const ELEM_ITEMS = [
+    {
+      id: 'elem-equals-01',
+      concept: 'What the equals sign means',
+      stem: '8 + 4 = <b>□</b> + 5. What number goes in the box?',
+      unit: 'a number', display: '7',
+      accept: [{ v: 7, tol: 0.01 }],
+      work: 'Both sides must balance: 8 + 4 = 12, so □ + 5 = 12 → □ = 7.',
+      wrongDx: [
+        { test: a => near(a, 12, 0.01), m: 'operational-equals' },
+      ],
+      explDx: [
+        { re: /(8\s*\+\s*4\s*(=|是|就是)\s*12|answer\s+is\s+12|等于\s*12)/i, m: 'operational-equals' },
+      ],
+      keyIdea: {
+        re: /(both\s+sides|balance|same\s+(amount|value)|12.*=.*12|两边|相等|平衡|一样多)/i,
+        label: 'the equals sign balances both sides — it is not “the answer comes next”',
+      },
+    },
+    {
+      id: 'elem-area-01',
+      concept: 'Area vs. perimeter',
+      stem: 'A rectangle is <b>5 cm</b> long and <b>3 cm</b> wide. What is its <b>area</b>?',
+      unit: 'in cm²', display: '15 cm²',
+      accept: [{ v: 15, tol: 0.01 }],
+      work: 'Area = length × width = 5 × 3 = 15 cm².',
+      wrongDx: [
+        { test: a => near(a, 16, 0.01), m: 'perimeter-for-area' },
+        { test: a => near(a, 8, 0.01), m: 'adds-the-sides' },
+      ],
+      explDx: [
+        { re: /(5\s*\+\s*3|add.*sides|around|2\s*[×x\*]|加.*边|一圈)/i, m: 'perimeter-for-area' },
+      ],
+      keyIdea: {
+        re: /(5\s*[×x\*]\s*3|multipl|length.*width|rows?\s+of|长.*宽|乘|一行.*行)/i,
+        label: 'area covers the inside: length × width (5 × 3)',
+      },
+    },
+    {
+      id: 'elem-borrow-01',
+      concept: 'Subtraction with regrouping',
+      stem: '52 − 27 = ?',
+      unit: 'a number', display: '25',
+      accept: [{ v: 25, tol: 0.01 }],
+      work: 'Regroup: 52 = 40 + 12, then 12 − 7 = 5 and 40 − 20 = 20 → 25.',
+      wrongDx: [
+        { test: a => near(a, 35, 0.01), m: 'smaller-from-larger' },
+      ],
+      explDx: [
+        { re: /(7\s*[-−]\s*2|bigger.*smaller|大.*减.*小|反过来减)/i, m: 'smaller-from-larger' },
+      ],
+      keyIdea: {
+        re: /(borrow|regroup|12\s*[-−]\s*7|退位|借位|借一)/i,
+        label: 'regrouping: borrow a ten so the ones become 12 − 7',
+      },
+    },
+    {
+      id: 'elem-fraction-01',
+      concept: 'Comparing unit fractions',
+      stem: 'Which is bigger: <b>1/3</b> or <b>1/4</b> of the same pizza? Answer with the fraction.',
+      unit: 'write the fraction', display: '1/3',
+      accept: [{ v: 1 / 3, tol: 0.01 }],
+      work: 'Cutting into 3 pieces makes bigger pieces than cutting into 4 — so 1/3 > 1/4.',
+      wrongDx: [
+        { test: a => near(a, 0.25, 0.01), m: 'bigger-denominator-bigger' },
+      ],
+      explDx: [
+        { re: /(4\s*(>|＞|大于|is\s+bigger)|denominator.*bigger|分母.*大)/i, m: 'bigger-denominator-bigger' },
+      ],
+      keyIdea: {
+        re: /(fewer\s+pieces|bigger\s+pieces|3\s+pieces|share|份.*少|块.*大|分成\s*3)/i,
+        label: 'fewer pieces means bigger pieces — thirds beat fourths',
+      },
+    },
+    {
+      id: 'elem-decimal-01',
+      concept: 'Multiplying by a number less than 1',
+      stem: '8 × 0.5 = ?',
+      unit: 'a number', display: '4',
+      accept: [{ v: 4, tol: 0.01 }],
+      work: '×0.5 means “half of”: half of 8 is 4. Multiplying can make things smaller.',
+      wrongDx: [
+        { test: a => near(a, 16, 0.01), m: 'multiplication-always-grows' },
+        { test: a => near(a, 40, 0.01), m: 'ignores-the-decimal-point' },
+      ],
+      explDx: [
+        { re: /(multiply.*bigger|times.*more|乘.*变大|翻倍)/i, m: 'multiplication-always-grows' },
+      ],
+      keyIdea: {
+        re: /(half|0\.5.*half|一半|8\s*的一半|halv)/i,
+        label: '×0.5 means “half of 8”',
+      },
+    },
+    {
+      id: 'elem-ribbon-01',
+      concept: 'Division as “how many fit”',
+      stem: 'A ribbon is <b>12 cm</b> long. You cut it into pieces that are each <b>3 cm</b>. How many pieces do you get?',
+      unit: 'number of pieces', display: '4 pieces',
+      accept: [{ v: 4, tol: 0.01 }],
+      work: 'How many 3s fit in 12? 12 ÷ 3 = 4.',
+      wrongDx: [
+        { test: a => near(a, 9, 0.01), m: 'subtracts-instead-of-divides' },
+      ],
+      explDx: [
+        { re: /(12\s*[-−]\s*3|take\s+away|减去)/i, m: 'subtracts-instead-of-divides' },
+      ],
+      keyIdea: {
+        re: /(12\s*(÷|\/)\s*3|divid|how\s+many.*fit|groups?\s+of|除|几个\s*3)/i,
+        label: 'division asks “how many 3s fit in 12”',
+      },
+    },
+  ];
+
+  const MID_ITEMS = [
+    {
+      id: 'mid-square-01',
+      concept: 'Squaring a negative number',
+      stem: '(−3)² = ?',
+      unit: 'a number', display: '9',
+      accept: [{ v: 9, tol: 0.01 }],
+      work: '(−3)² = (−3) × (−3) = +9 — a negative times a negative is positive.',
+      wrongDx: [
+        { test: a => near(a, -9, 0.01), m: 'sign-survives-squaring' },
+      ],
+      explDx: [
+        { re: /(keep.*(minus|negative)|still\s+negative|保留负|还是负)/i, m: 'sign-survives-squaring' },
+      ],
+      keyIdea: {
+        re: /(\(?\s*[-−]3\s*\)?\s*[×x\*]\s*\(?\s*[-−]3|negative.*negative|负.*负|同号.*正|负负得正)/i,
+        label: 'squaring multiplies the negative by itself: (−3) × (−3) = +9',
+      },
+    },
+    {
+      id: 'mid-painters-01',
+      concept: 'Inverse proportion',
+      stem: 'If <b>3 painters</b> take <b>6 days</b> to paint a house, how long would <b>6 painters</b> take at the same pace?',
+      unit: 'in days', display: '3 days',
+      accept: [{ v: 3, tol: 0.01 }],
+      work: 'Total work = 3 × 6 = 18 painter-days. With 6 painters: 18 ÷ 6 = 3 days.',
+      wrongDx: [
+        { test: a => near(a, 12, 0.01), m: 'direct-for-inverse-proportion' },
+      ],
+      explDx: [
+        { re: /(double.*double|twice.*twice|成正比|人多.*天多)/i, m: 'direct-for-inverse-proportion' },
+      ],
+      keyIdea: {
+        re: /(18|painter[- ]?days|total\s+work|inverse|more.*less|half\s+the\s+time|工作量|反比|人多.*(时间|天).*少|一半)/i,
+        label: 'inverse proportion — total work is 18 painter-days',
+      },
+    },
+    {
+      id: 'mid-fracdiv-01',
+      concept: 'Dividing by a fraction',
+      stem: '1/2 ÷ 1/4 = ?',
+      unit: 'a number', display: '2',
+      accept: [{ v: 2, tol: 0.01 }],
+      work: 'How many quarters fit in a half? Two. (Or: 1/2 × 4/1 = 2.)',
+      wrongDx: [
+        { test: a => near(a, 0.125, 0.005), m: 'multiplies-instead-of-divides' },
+        { test: a => near(a, 0.5, 0.01), m: 'divides-only-one-part' },
+      ],
+      explDx: [
+        { re: /(1\/2\s*[×x\*]\s*1\/4|直接乘|分子乘分子)/i, m: 'multiplies-instead-of-divides' },
+      ],
+      keyIdea: {
+        re: /(how\s+many.*(quarter|1\/4)|flip|invert|reciprocal|×\s*4|倒数|几个四分之一|翻转)/i,
+        label: 'division asks “how many quarters fit in a half” (or multiply by the reciprocal)',
+      },
+    },
+    {
+      id: 'mid-median-01',
+      concept: 'Median vs. mean with an outlier',
+      stem: 'Five workers earn <b>30, 30, 30, 30 and 140</b> (thousand per year). What is the <b>median</b> salary, in thousands?',
+      unit: 'in thousands', display: '30',
+      accept: [{ v: 30, tol: 0.01 }],
+      work: 'Sorted: 30, 30, [30], 30, 140 — the middle value is 30. (The mean, 52, is dragged up by the outlier.)',
+      wrongDx: [
+        { test: a => near(a, 52, 0.5), m: 'mean-for-median' },
+      ],
+      explDx: [
+        { re: /(add.*divide|sum.*5|\/\s*5|平均|加起来除)/i, m: 'mean-for-median' },
+      ],
+      keyIdea: {
+        re: /(middle|sorted|order|third\s+value|中间|排序|正中)/i,
+        label: 'the median is the middle of the sorted list — outliers can’t drag it',
+      },
+    },
+    {
+      id: 'mid-distribute-01',
+      concept: 'The distributive law',
+      stem: 'If <b>x = 2</b>, what is <b>3(x + 4)</b>?',
+      unit: 'a number', display: '18',
+      accept: [{ v: 18, tol: 0.01 }],
+      work: 'Brackets first: x + 4 = 6, then 3 × 6 = 18. (Or distribute: 3x + 12 = 6 + 12.)',
+      wrongDx: [
+        { test: a => near(a, 10, 0.01), m: 'partial-distribution' },
+      ],
+      explDx: [
+        { re: /(3x\s*\+\s*4|3\s*[×x\*]\s*2\s*\+\s*4|只乘.*x|只乘第一)/i, m: 'partial-distribution' },
+      ],
+      keyIdea: {
+        re: /(bracket|parenthes|whole|both|3\s*[×x\*]\s*6|3x\s*\+\s*12|先算括号|分配|都要乘)/i,
+        label: 'the 3 multiplies the whole bracket — both the x and the 4',
+      },
+    },
+    {
+      id: 'mid-dice-01',
+      concept: 'Distributions are not uniform',
+      stem: 'You roll <b>two fair dice</b> and add them. Which total is the <b>most likely</b>?',
+      unit: 'a total from 2–12', display: '7',
+      accept: [{ v: 7, tol: 0.01 }],
+      work: '7 has the most combinations: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1 — six ways.',
+      wrongDx: [
+        { test: a => a >= 2 && a <= 12 && !near(a, 7, 0.01), m: 'uniform-sums' },
+      ],
+      explDx: [
+        { re: /(all.*(equal|same)|any.*likely|random|都一样|随机|机会相同)/i, m: 'uniform-sums' },
+      ],
+      keyIdea: {
+        re: /(six\s+ways|most\s+(ways|combinations)|1\s*\+\s*6|3\s*\+\s*4|组合.*多|方式最多|六种)/i,
+        label: 'totals differ in how many ways they can happen — 7 has six',
+      },
+    },
+  ];
+
+  const HIGH_ITEMS = [
     {
       id: 'pct-compound-01',
       concept: 'Successive percentage change',
@@ -1155,6 +1423,13 @@
     },
   ];
 
+  const BANDS = [
+    { id: 'elem', label: 'Elementary', sub: 'grades 3–5 · 小学', items: ELEM_ITEMS },
+    { id: 'mid',  label: 'Middle school', sub: 'grades 6–8 · 初中', items: MID_ITEMS },
+    { id: 'high', label: 'High school & beyond', sub: 'SAT / AP / adult · 高中+', items: HIGH_ITEMS },
+  ];
+  let ITEMS = null; // set when the learner picks a band
+
   // Tolerant numeric answer parsing: strips units/currency, handles fractions,
   // accepts English or Chinese phrasing around the number.
   function parseAnswer(raw) {
@@ -1249,7 +1524,7 @@
       if (s.gap <= -15)
         return { act: 'Build trust, then raise difficulty', det: 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge — then moves the ceiling up.' };
       if (s.acc === 100)
-        return { act: 'Raise the ceiling', det: 'Clean sweep with honest certainty. The next set interleaves harder variants of all six concepts to find the real edge of your understanding.' };
+        return { act: 'Raise the ceiling', det: 'Clean sweep with honest certainty. The next set interleaves harder variants of every concept you saw to find the real edge of your understanding.' };
       return { act: 'Scaffold the shaky ideas', det: 'The missed ideas were mostly known-unknowns — you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.' };
     },
 
@@ -1283,6 +1558,21 @@
       'gamblers-fallacy': 'expects past outcomes to push the next one (gambler’s fallacy)',
       'hot-hand': 'projects a streak into a bias (hot hand)',
       'conjunction-confusion': 'answers the probability of the whole streak, not the next toss',
+      'operational-equals': 'reads “=” as “the answer comes next” instead of a balance',
+      'perimeter-for-area': 'computes the perimeter when asked for area',
+      'adds-the-sides': 'adds the two sides instead of multiplying them',
+      'smaller-from-larger': 'always subtracts the smaller digit from the larger, ignoring regrouping',
+      'bigger-denominator-bigger': 'assumes a bigger denominator means a bigger fraction',
+      'multiplication-always-grows': 'assumes multiplying always makes numbers bigger',
+      'ignores-the-decimal-point': 'drops the decimal point and multiplies whole numbers',
+      'subtracts-instead-of-divides': 'subtracts once instead of asking how many times it fits',
+      'sign-survives-squaring': 'keeps the negative sign through squaring',
+      'direct-for-inverse-proportion': 'applies direct proportion to an inverse-proportion situation',
+      'multiplies-instead-of-divides': 'multiplies the fractions instead of dividing',
+      'divides-only-one-part': 'divides only part of the expression',
+      'mean-for-median': 'computes the mean when asked for the median',
+      'partial-distribution': 'multiplies only the first term inside the bracket',
+      'uniform-sums': 'assumes every dice total is equally likely',
     })[m] || m;
   }
 
@@ -1309,14 +1599,36 @@
     levelsEl.appendChild(b);
   });
 
-  // Pips: one per question, plus one for the report.
+  // Level (age band) picker — built once.
+  const bandEl = document.getElementById('bandPick');
+  BANDS.forEach(band => {
+    const b = document.createElement('button');
+    b.className = 'conf-level';
+    b.innerHTML = `<span class="cl-name">${band.label}</span><span class="cl-pay">${band.sub}</span>`;
+    b.addEventListener('click', () => {
+      ITEMS = band.items;
+      document.getElementById('qTotal').textContent = ITEMS.length;
+      buildPips();
+      state.idx = 0;
+      state.records = [];
+      renderItem();
+      goStage('answer');
+    });
+    bandEl.appendChild(b);
+  });
+
+  // Pips: one per question, plus one for the report (rebuilt per band).
   const pipsWrap = document.getElementById('pips');
-  for (let i = 0; i <= ITEMS.length; i++) {
-    const p = document.createElement('div');
-    p.className = 'step-pip';
-    pipsWrap.appendChild(p);
+  let pips = [];
+  function buildPips() {
+    pipsWrap.innerHTML = '';
+    for (let i = 0; i <= ITEMS.length; i++) {
+      const p = document.createElement('div');
+      p.className = 'step-pip';
+      pipsWrap.appendChild(p);
+    }
+    pips = pipsWrap.querySelectorAll('.step-pip');
   }
-  const pips = pipsWrap.querySelectorAll('.step-pip');
   function setPip(k) {
     pips.forEach((p, i) => {
       p.classList.toggle('active', i === k);
@@ -1446,12 +1758,15 @@
   document.getElementById('restart').addEventListener('click', () => {
     state.idx = 0;
     state.records = [];
-    renderItem();
-    goStage('answer');
+    ITEMS = null;
+    pipsWrap.innerHTML = '';
+    document.getElementById('qNum').textContent = '–';
+    document.getElementById('qTotal').textContent = '–';
+    goStage('band');
   });
 
-  // boot
-  renderItem();
+  // boot: the band picker stage is active by default; the session starts
+  // when a level is chosen.
 </script>
 </body>
 </html>

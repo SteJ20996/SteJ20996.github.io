@@ -804,7 +804,7 @@
         <!-- STAGE 0: pick a level -->
         <div class="stage active" id="stage-band">
           <div class="prompt-label">Before we start — whose math?</div>
-          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “a streak changes the next coin toss.”</p>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “a 25% increase undoes with a 25% decrease.” The top band runs at mid-to-upper SAT difficulty.</p>
           <div class="conf-levels" id="bandPick"></div>
         </div>
 
@@ -1309,116 +1309,113 @@
 
   const HIGH_ITEMS = [
     {
-      id: 'pct-compound-01',
-      concept: 'Successive percentage change',
-      stem: 'A jacket is marked down <b>20%</b>. At the register, an extra <b>20%</b> comes off the already-reduced price. What is the <b>total</b> discount off the original price?',
-      unit: 'in %', display: '36%',
-      accept: [{ v: 36, tol: 0.5 }, { v: 0.36, tol: 0.005 }],
-      work: '(1 − 0.20) × (1 − 0.20) = 0.80 × 0.80 = 0.64  →  a 36% total discount.',
+      id: 'sat-pctrev-01',
+      concept: 'Reversing a percent change',
+      stem: 'The price of a laptop is increased by <b>25%</b>. By what percent must the <b>new</b> price be decreased to return to the original price?',
+      unit: 'in %', display: '20%',
+      accept: [{ v: 20, tol: 0.5 }, { v: 0.2, tol: 0.005 }],
+      work: 'New price = 1.25P. Need 1.25P × (1 − d) = P → 1 − d = 1/1.25 = 0.8 → d = 20%.',
       wrongDx: [
-        { test: a => near(a, 40, 0.5) || near(a, 0.40, 0.005), m: 'additive-percentages' },
-        { test: a => near(a, 44, 0.5), m: 'over-compounding' },
-        { test: a => near(a, 4, 0.5), m: 'subtracting-percentages' },
+        { test: a => near(a, 25, 0.5) || near(a, 0.25, 0.005), m: 'symmetric-percent-change' },
       ],
       explDx: [
-        { re: /(20\s*\+\s*20|(simply|just)\s+add|相加|加起来|直接加)/i, m: 'additive-percentages' },
+        { re: /(same\s+(25|percent)|back\s+by\s+25|减.*25\s*%|一样的百分比|同样.*25)/i, m: 'symmetric-percent-change' },
       ],
       keyIdea: {
-        re: /(0\.8|80\s*%|0\.64|64\s*%|already[ -]?reduced|reduced\s+price|new\s+price|sale\s+price|multipl|compound|八折|降价后|新价|基数|乘)/i,
-        label: 'the second 20% applies to the already-reduced price (0.8 × 0.8)',
+        re: /(1\.25|1\s*\/\s*1\.25|0\.8|base\s+chang|new\s+price.*base|bigger\s+base|基数|以新价|除以\s*1\.25)/i,
+        label: 'the base changes: the decrease is measured off the larger, new price (1/1.25 = 0.8)',
       },
     },
     {
-      id: 'rate-harmonic-01',
-      concept: 'Averaging rates (time-weighted)',
-      stem: 'You drive to a city at <b>60 mph</b> and return along the same road at <b>30 mph</b>. What is your <b>average speed</b> for the whole round trip?',
-      unit: 'in mph', display: '40 mph',
-      accept: [{ v: 40, tol: 0.5 }],
-      work: 'avg = 2d ÷ (d/60 + d/30) = 2d ÷ (d/20) = 40 mph — more time is spent at 30.',
+      id: 'sat-square-01',
+      concept: 'Expanding (x + y)²',
+      stem: 'If <b>(x + y)² = 64</b> and <b>xy = 7</b>, what is the value of <b>x² + y²</b>?',
+      unit: 'a number', display: '50',
+      accept: [{ v: 50, tol: 0.01 }],
+      work: '(x + y)² = x² + 2xy + y² → 64 = x² + y² + 14 → x² + y² = 50.',
       wrongDx: [
-        { test: a => near(a, 45, 0.5), m: 'arithmetic-mean-of-rates' },
-        { test: a => near(a, 35, 2), m: 'over-correction' },
+        { test: a => near(a, 64, 0.01), m: 'squares-distribute-over-addition' },
+        { test: a => near(a, 57, 0.01), m: 'drops-half-the-cross-term' },
       ],
       explDx: [
-        { re: /(\(?\s*60\s*\+\s*30\s*\)?\s*(\/|÷)\s*2|average\s+of\s+the\s+two|两个?速度.*平均|直接平均)/i, m: 'arithmetic-mean-of-rates' },
+        { re: /(\(x\s*\+\s*y\)\s*(\^2|²)\s*=\s*x\s*(\^2|²)\s*\+\s*y|no\s+middle\s+term|直接等于|平方.*分配)/i, m: 'squares-distribute-over-addition' },
       ],
       keyIdea: {
-        re: /(time|longer|twice\s+as\s+long|harmonic|d\s*\/\s*60|d\s*\/\s*30|时间|更久|慢.*(久|长)|调和)/i,
-        label: 'average speed weights by time — the 30 mph leg takes twice as long',
+        re: /(2xy|middle\s+term|cross\s+term|expand|x²\s*\+\s*2xy|14|交叉项|展开|完全平方)/i,
+        label: 'the expansion has a cross term: (x+y)² = x² + 2xy + y², so subtract 2xy = 14',
       },
     },
     {
-      id: 'crt-batball-01',
-      concept: 'Equations vs. intuition',
-      stem: 'A bat and a ball cost <b>$1.10</b> together. The bat costs <b>$1.00 more</b> than the ball. How much is the <b>ball</b>?',
-      unit: 'in ¢ or $', display: '5¢ ($0.05)',
-      accept: [{ v: 5, tol: 0.01 }, { v: 0.05, tol: 0.001 }],
-      work: 'ball = x, bat = x + 1.00  →  2x + 1.00 = 1.10  →  x = 0.05.',
+      id: 'sat-exp-01',
+      concept: 'Exponential growth',
+      stem: 'A bacteria population <b>doubles every 3 hours</b>. If it starts at <b>500</b>, how many bacteria are there after <b>12 hours</b>?',
+      unit: 'a number', display: '8,000',
+      accept: [{ v: 8000, tol: 1 }],
+      work: '12 ÷ 3 = 4 doublings → 500 × 2⁴ = 500 × 16 = 8,000.',
       wrongDx: [
-        { test: a => near(a, 10, 0.01) || near(a, 0.10, 0.001), m: 'attribute-substitution' },
+        { test: a => near(a, 4000, 1), m: 'linear-doubling' },
+        { test: a => near(a, 2000, 1), m: 'multiplies-by-period-count' },
       ],
       explDx: [
-        { re: /(1\.10?\s*[-−–]\s*1(\.00?)?(?!\d)|直接(减|相减))/i, m: 'attribute-substitution' },
+        { re: /(500\s*[×x\*]\s*2\s*[×x\*]\s*4|2\s*[×x\*]\s*4|multiply.*by\s+8|乘以\s*8|线性)/i, m: 'linear-doubling' },
       ],
       keyIdea: {
-        re: /(x\s*\+\s*1|2x|equation|1\.05|difference|设|方程|未知数|差)/i,
-        label: 'sets up the constraint: ball + (ball + 1.00) = 1.10',
+        re: /(2\s*(\^|\*\*)\s*4|2⁴|16|four\s+(times|doublings)|doubl.*four|次方|翻.*4\s*次|指数)/i,
+        label: 'four doublings compound: ×2⁴ = ×16, not ×2×4',
       },
     },
     {
-      id: 'exp-lily-01',
-      concept: 'Exponential vs. linear growth',
-      stem: 'A patch of lily pads <b>doubles in size every day</b>. It covers the whole pond on <b>day 48</b>. On what day did it cover <b>half</b> the pond?',
-      unit: 'day number', display: 'day 47',
-      accept: [{ v: 47, tol: 0.01 }],
-      work: 'Doubling each day means half the pond is exactly one day before full: 48 − 1 = 47.',
+      id: 'sat-wavg-01',
+      concept: 'Weighted averages',
+      stem: 'A class of <b>30 students</b> has an average score of <b>84</b>. The <b>10 boys</b> average <b>78</b>. What is the average score of the <b>20 girls</b>?',
+      unit: 'a number', display: '87',
+      accept: [{ v: 87, tol: 0.01 }],
+      work: 'Total = 30 × 84 = 2520. Boys = 10 × 78 = 780. Girls = (2520 − 780) ÷ 20 = 87.',
       wrongDx: [
-        { test: a => near(a, 24, 0.5), m: 'linear-scaling' },
+        { test: a => near(a, 90, 0.01), m: 'unweighted-average-of-groups' },
       ],
       explDx: [
-        { re: /(48\s*(\/|÷)\s*2|half\s+of\s+48|48\s*的一半|时间.*一半|一半.*时间)/i, m: 'linear-scaling' },
+        { re: /(\(78\s*\+\s*x\)\s*\/\s*2|midpoint|halfway|直接平均|中点|对称)/i, m: 'unweighted-average-of-groups' },
       ],
       keyIdea: {
-        re: /(day\s+before|one\s+day|doubl|halv|48\s*[-−–]\s*1|前一天|翻倍|倍增)/i,
-        label: 'doubling means “half” is one day before “full”',
+        re: /(2520|total\s+(points|score)|30\s*[×x\*]\s*84|weight|总分|加权|人数.*不同)/i,
+        label: 'work in totals: group sizes differ, so averages must be weighted (30×84 − 10×78)',
       },
     },
     {
-      id: 'prop-machines-01',
-      concept: 'Rates and proportion',
-      stem: 'It takes <b>5 machines 5 minutes</b> to make <b>5 widgets</b>. How long would it take <b>100 machines</b> to make <b>100 widgets</b>?',
-      unit: 'in minutes', display: '5 minutes',
-      accept: [{ v: 5, tol: 0.01 }],
-      work: 'Each machine makes 1 widget in 5 minutes — 100 machines make 100 widgets in the same 5 minutes.',
+      id: 'sat-fnot-01',
+      concept: 'Function notation',
+      stem: 'Let <b>f(x) = 3x + 5</b>. If <b>f(a) = 20</b>, what is the value of <b>f(a + 2)</b>?',
+      unit: 'a number', display: '26',
+      accept: [{ v: 26, tol: 0.01 }],
+      work: 'f(a) = 20 → 3a + 5 = 20 → a = 5. Then f(7) = 3 × 7 + 5 = 26. (Or: adding 2 to x adds 3 × 2 to f.)',
       wrongDx: [
-        { test: a => near(a, 100, 0.5), m: 'pattern-matching-proportion' },
+        { test: a => near(a, 22, 0.01), m: 'adds-outside-the-function' },
       ],
       explDx: [
-        { re: /(100.*100.*100|same\s+pattern|成比例|等比例|照.?比例|类推)/i, m: 'pattern-matching-proportion' },
+        { re: /(20\s*\+\s*2|f\(a\)\s*\+\s*2|just\s+add\s+2|直接加\s*2)/i, m: 'adds-outside-the-function' },
       ],
       keyIdea: {
-        re: /(each\s+machine|per\s+machine|1\s+widget|one\s+widget|parallel|同时|每台|一台|速率|rate)/i,
-        label: 'the per-machine rate: one machine, one widget, five minutes',
+        re: /(a\s*=\s*5|f\(7\)|3\s*[×x\*]\s*7|substitut|plug|slope.*3|先(求|解)\s*a|代入|斜率)/i,
+        label: 'the +2 happens inside the function: solve a = 5, then evaluate f(7)',
       },
     },
     {
-      id: 'prob-coin-01',
-      concept: 'Independence of events',
-      stem: 'A fair coin lands <b>heads five times in a row</b>. What is the probability that the <b>next</b> toss is also heads?',
-      unit: 'in %', display: '50%',
-      accept: [{ v: 50, tol: 0.5 }, { v: 0.5, tol: 0.005 }],
-      work: 'Each toss is independent — the coin has no memory. P(heads) = 1/2 = 50%.',
+      id: 'sat-radical-01',
+      concept: 'Radical equations & extraneous roots',
+      stem: 'What is the solution of <b>√(x + 6) = x</b>?',
+      unit: 'a number', display: '3',
+      accept: [{ v: 3, tol: 0.01 }],
+      work: 'Square: x + 6 = x² → x² − x − 6 = 0 → (x − 3)(x + 2) = 0. Check both: √9 = 3 ✓, but √4 ≠ −2 — so x = 3 only.',
       wrongDx: [
-        { test: a => (a > 0 && a <= 3) || near(a, 0.015625, 0.01), m: 'conjunction-confusion' },
-        { test: a => normPct(a) < 50, m: 'gamblers-fallacy' },
-        { test: a => normPct(a) > 50, m: 'hot-hand' },
+        { test: a => near(a, -2, 0.01), m: 'keeps-extraneous-root' },
       ],
       explDx: [
-        { re: /(due|owed|its\s+turn|该出|轮到|要出反|平衡|补偿)/i, m: 'gamblers-fallacy' },
+        { re: /(both\s+(work|solutions)|two\s+solutions|x\s*=\s*3.*[-−]\s*2|两个(解|根)|都(是|成立))/i, m: 'keeps-extraneous-root' },
       ],
       keyIdea: {
-        re: /(independ|no\s+memory|each\s+(toss|flip)|separate|独立|无记忆|互不影响|每次)/i,
-        label: 'independence — past tosses do not change the next one',
+        re: /(check|substitut.*back|extraneous|reject|√.*(≥|>=|nonneg|positive)|检验|增根|舍去|代回)/i,
+        label: 'squaring can create fake roots — check each candidate in the original equation',
       },
     },
   ];
@@ -1441,7 +1438,6 @@
     return m ? parseFloat(m[0]) : null;
   }
   const near = (a, v, tol) => a !== null && Math.abs(a - v) <= tol;
-  const normPct = a => (a !== null && a <= 1 ? a * 100 : a);
 
   // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM).
   // The payoff table makes honest reporting the expected-score-maximizing
@@ -1547,17 +1543,14 @@
 
   function labelFor(m) {
     return ({
-      'additive-percentages': 'adds successive percentages instead of compounding them',
-      'over-compounding': 'overshoots when combining percentage changes',
-      'subtracting-percentages': 'treats two discounts as cancelling',
-      'arithmetic-mean-of-rates': 'averages rates by leg instead of weighting by time',
-      'over-correction': 'right instinct, but corrects without computing',
-      'attribute-substitution': 'substitutes an easy split for the stated constraint',
-      'linear-scaling': 'scales exponential growth as if it were linear',
-      'pattern-matching-proportion': 'pattern-matches the numbers instead of computing the per-machine rate',
-      'gamblers-fallacy': 'expects past outcomes to push the next one (gambler’s fallacy)',
-      'hot-hand': 'projects a streak into a bias (hot hand)',
-      'conjunction-confusion': 'answers the probability of the whole streak, not the next toss',
+      'symmetric-percent-change': 'assumes a percent change reverses with the same percent — but the base changed',
+      'squares-distribute-over-addition': 'expands (x+y)² as x²+y², dropping the cross term',
+      'drops-half-the-cross-term': 'remembers a cross term but subtracts xy instead of 2xy',
+      'linear-doubling': 'treats repeated doubling as ×2×n instead of ×2ⁿ',
+      'multiplies-by-period-count': 'multiplies by the number of periods instead of compounding',
+      'unweighted-average-of-groups': 'averages the group averages without weighting by group size',
+      'adds-outside-the-function': 'adds to the output f(a)+2 instead of the input f(a+2)',
+      'keeps-extraneous-root': 'keeps the root that squaring invented instead of checking it',
       'operational-equals': 'reads “=” as “the answer comes next” instead of a balance',
       'perimeter-for-area': 'computes the perimeter when asked for area',
       'adds-the-sides': 'adds the two sides instead of multiplying them',

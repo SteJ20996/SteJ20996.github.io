@@ -84,9 +84,28 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   cases, and heuristic-vs-human-coding agreement (Cohen's κ) as a methods contribution.
 - **Design A (instrument validity/reliability) reported inside the methods chapter.**
 
-Measurement upgrades planned for research mode: Brier score (with the 3 CBM levels as
-p = .50/.75/.92) alongside the intuitive gap; per-stage timestamps every item; expanded
-item bank (~18 items via matrix sampling — each participant answers a subset).
+**Session/measurement design (evidence-grounded, 2026-08; pending chair approval):**
+- **3 sessions × 6 items (≤25 min each), days apart** — resolves the tension between
+  test-fatigue evidence (attention collapse at ~7–9 min; open-ended + high-demand items
+  are the strongest dropout multipliers; single-session cap ≈ 6–8 items) and calibration
+  stability (per-person bias index stabilizes near ~40 judgments; 18/person via
+  Spearman-Brown ≈ .75 reliability, acceptable with attenuation reported).
+- **Primary analyses on session 1** (fullest N, no attrition bias); person-level
+  stability analyses on 3-session completers. Item order randomized per person
+  (position effects otherwise confound item comparisons).
+- **Fixed core + voluntary continuation**: causal/primary claims only on the fixed core;
+  self-selected continuation analyzed observationally (voluntary dose as a finding).
+- **Disclosure**: state full session count and honest durations upfront (expectation-
+  reality match is the strongest completion lever); avoid long-task progress bars.
+- **Brier**: CBM levels map to p = .50/.75/.92; primary index = bias (mean confidence −
+  accuracy, most robust at moderate item counts); person-level Brier secondary; Murphy
+  decomposition at GROUP level only (person-level resolution needs ~100+ items — out of
+  scope). The p-mapping is a stated methods convention, revisitable empirically.
+- **Power/N**: core N = 84 (r ≈ .30, α = .05, power = .80); Green's 104+m ≈ 108 as the
+  conservative cross-check; recruit 120–130 for attrition. Item statistics need ≥30–50
+  responses/item (gold standard 100); 120 × full 18-item coverage clears it.
+- **Timestamps**: four stages per item (read → answer → explain → certainty) + edit
+  counts, all computed locally, included in the opt-in submission payload.
 
 ## 4. Compliance decisions (agreed)
 
@@ -121,9 +140,10 @@ item bank (~18 items via matrix sampling — each participant answers a subset).
 
 ## 6. Open threads (update as they resolve)
 
-- Chair meeting: research-design questions list prepared (session structure, item count,
-  sample size, IRB path). Awaiting outcomes → then build research mode (consent +
-  questionnaire + Brier + per-stage timestamps + matrix sampling + Qualtrics handoff).
+- Chair meeting: 16-question list delivered (scope, 3×6 design, N, scales, IRB route,
+  age/recruitment, qualitative coding, timeline). Awaiting outcomes → then build
+  research mode (consent + questionnaire + Brier + per-stage timestamps + session
+  blocks + Qualtrics handoff).
 - Item bank expansion to ~18 with parallel forms; pilot for item stats.
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow.
 - Working name "Delta" is provisional; project name is SteJ Delta Project (STEJDP).

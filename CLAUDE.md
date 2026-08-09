@@ -10,6 +10,16 @@ in Leadership, Curriculum & Instruction at Westcliff University. Research lines:
 graphicacy/data visualization in math education; GenAI's impact on cognition and
 self-assessment calibration of AI-native students.
 
+**MDC paper (owner's working paper, 2026):** "Metacognitively Discordant Completion and
+the Aware Pass-Through of Non-Understanding in Generative AI Learning" — defines MDC as
+the conjunction of invested effort + formed first-person awareness that understanding has
+not occurred + releasing the completion anyway; distinguishes it from illusion/integrity/
+disengagement framings; sibling construct: Absent Cognitive Baseline; grounds a planned
+interpretative phenomenological study anchored in graphicacy. When the owner says "MDC",
+this is what they mean. PDF (Google Drive):
+https://drive.google.com/file/d/16thgXqvKipqxEdw7ifAYVzbjH6gBkakn/view — featured as a
+full-width card in the portfolio's Research section (index.html).
+
 **Live site:** https://stej20996.github.io/ (portfolio) · https://stej20996.github.io/platform.html (Delta vision page)
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
 **Working branch convention:** feature branches merged to `main` via PR (owner merges).

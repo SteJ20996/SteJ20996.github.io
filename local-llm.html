@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>local-llm 实测终端 — 本地模型跑分与对话</title>
+<meta name="description" content="一个单文件的本地大模型实测终端：接 Ollama，量首字延迟 / 生成速度 / 已生成 token / 模型加载耗时，带预设场景与思维链显示。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f5f2ed;
+    --card: #faf8f5;
+    --cream: #ebe7e0;
+    --ink: #1a1a1e;
+    --muted: #7a7570;
+    --rule: #ccc5bb;
+    --accent: #b04a32;
+    --accent-soft: rgba(176,74,50,.10);
+    --blue: #2f6bb0;
+    --green: #3f7d4e;
+    --shadow: 0 2px 24px rgba(26,26,30,.06);
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'Instrument Sans', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --log-size: 15px;
+  }
+  html[data-theme="dark"] {
+    --paper: #17171a;
+    --card: #1f1f24;
+    --cream: #26262c;
+    --ink: #e8e4dd;
+    --muted: #8e8a84;
+    --rule: #35353d;
+    --accent: #d4765f;
+    --accent-soft: rgba(212,118,95,.14);
+    --blue: #6ba3e0;
+    --green: #6faa7d;
+    --shadow: 0 2px 24px rgba(0,0,0,.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .app {
+    max-width: 1240px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: .42rem;
+    flex-wrap: wrap;
+    padding: .6rem 1rem;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .brand {
+    display: flex; align-items: center; gap: .42rem;
+    margin-right: .15rem;
+  }
+  .brand b {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: .95rem;
+    letter-spacing: -.02em;
+    color: var(--accent);
+  }
+  .brand span { font-size: .82rem; color: var(--muted); }
+  .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--rule);
+    box-shadow: 0 0 0 3px transparent;
+    transition: background .25s, box-shadow .25s;
+  }
+  .dot.on   { background: var(--green); box-shadow: 0 0 0 3px rgba(63,125,78,.16); }
+  .dot.busy { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); animation: pulse 1.1s infinite; }
+  .dot.off  { background: var(--rule); }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  .ctl, .btn, select, input[type="text"], textarea {
+    font-family: var(--sans);
+    font-size: .84rem;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    padding: .36rem .5rem;
+    line-height: 1.3;
+  }
+  select { cursor: pointer; padding-right: 1.5rem; }
+  .btn { cursor: pointer; transition: background .18s, border-color .18s, color .18s; white-space: nowrap; }
+  .btn:hover { background: var(--cream); border-color: var(--muted); }
+  .btn:active { transform: translateY(1px); }
+  .btn.icon { padding: .36rem .45rem; font-size: .88rem; }
+  .btn.danger { color: var(--accent); border-color: var(--accent); background: transparent; }
+  .btn.danger:hover { background: var(--accent-soft); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  #model { max-width: 246px; }
+  .check {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .84rem; cursor: pointer; user-select: none;
+    padding: .36rem .45rem; border: 1px solid transparent; border-radius: 7px;
+  }
+  .check:hover { background: var(--cream); }
+  .check input { accent-color: var(--accent); cursor: pointer; }
+  .spacer { flex: 1 1 auto; }
+  .group { display: inline-flex; align-items: center; gap: .3rem; }
+  .group > label { font-size: .78rem; color: var(--muted); }
+
+  /* ---------- metric cards ---------- */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: .8rem;
+    padding: .9rem 1.1rem;
+  }
+  .metric {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: .7rem .9rem .8rem;
+    box-shadow: var(--shadow);
+  }
+  .metric .k {
+    font-size: .74rem;
+    color: var(--muted);
+    letter-spacing: .02em;
+    margin-bottom: .15rem;
+  }
+  .metric .v {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.15;
+    letter-spacing: -.03em;
+    color: var(--accent);
+  }
+  .metric .v small {
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: .18rem;
+    letter-spacing: 0;
+  }
+  .metric.blue .v { color: var(--blue); }
+  .metric.dim .v { color: var(--muted); }
+
+  /* ---------- resident strip ---------- */
+  .resident {
+    display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+    padding: .45rem 1.1rem .7rem;
+    font-size: .8rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+  }
+  .resident b { font-family: var(--mono); font-weight: 500; color: var(--accent); font-size: .82rem; }
+  .resident i { font-style: normal; }
+
+  /* ---------- transcript ---------- */
+  .log {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 1.1rem 1.2rem 1.4rem;
+    min-height: 260px;
+    max-height: calc(100vh - 372px);
+    scroll-behavior: smooth;
+  }
+  .turn { margin-bottom: 1.15rem; }
+  .who {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: .3rem;
+  }
+  .turn.user .who { color: var(--muted); }
+  .body {
+    font-family: var(--mono);
+    font-size: var(--log-size);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .turn.user .body { color: var(--blue); }
+  .note {
+    font-size: .8rem;
+    color: var(--muted);
+    margin: 0 0 .9rem;
+  }
+  .note b { font-weight: 600; color: var(--ink); }
+  .note code { font-family: var(--mono); font-size: .78rem; }
+  .sys {
+    font-size: .8rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-left: .7rem;
+    border-left: 2px solid var(--rule);
+  }
+  .sys.err { color: var(--accent); border-left-color: var(--accent); }
+  .cursor {
+    display: inline-block;
+    width: .55em; height: 1.05em;
+    background: var(--accent);
+    vertical-align: text-bottom;
+    animation: blink 1s steps(2, start) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  details.think {
+    margin: 0 0 .55rem;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    background: var(--cream);
+  }
+  details.think > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: .35rem .65rem;
+    font-size: .78rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  details.think > summary::-webkit-details-marker { display: none; }
+  details.think > summary::before { content: '▸ '; }
+  details.think[open] > summary::before { content: '▾ '; }
+  details.think .body {
+    padding: 0 .65rem .55rem;
+    color: var(--muted);
+    font-size: calc(var(--log-size) - 1px);
+  }
+  .stats {
+    margin-top: .4rem;
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--muted);
+  }
+
+  /* ---------- presets ---------- */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: .4rem;
+    padding: .7rem 1.1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .chip {
+    font-family: var(--sans);
+    font-size: .8rem;
+    padding: .3rem .68rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all .16s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* ---------- composer ---------- */
+  .composer {
+    display: flex; gap: .6rem; align-items: flex-end;
+    padding: .6rem 1.1rem 1rem;
+  }
+  .composer textarea {
+    flex: 1 1 auto;
+    resize: none;
+    min-height: 44px;
+    max-height: 180px;
+    font-size: .9rem;
+    line-height: 1.5;
+    padding: .6rem .8rem;
+    border-radius: 9px;
+  }
+  .composer textarea:focus { outline: none; border-color: var(--accent); }
+  .composer .btn { padding: .62rem 1.05rem; font-size: .86rem; font-weight: 600; }
+  #send { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #send:hover:not(:disabled) { background: var(--ink); border-color: var(--ink); }
+  html[data-theme="dark"] #send { color: #17171a; }
+
+  /* ---------- help ---------- */
+  .help {
+    border-top: 1px solid var(--rule);
+    padding: .9rem 1.1rem 2rem;
+    font-size: .84rem;
+    color: var(--muted);
+  }
+  .help > summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: .84rem;
+    list-style: none;
+  }
+  .help > summary::-webkit-details-marker { display: none; }
+  .help > summary::before { content: '▸ '; color: var(--accent); }
+  .help[open] > summary::before { content: '▾ '; }
+  .help .inner { margin-top: .8rem; max-width: 76ch; }
+  .help p { margin-bottom: .7rem; }
+  .help ol, .help ul { margin: 0 0 .7rem 1.2rem; }
+  .help li { margin-bottom: .3rem; }
+  .help pre {
+    font-family: var(--mono);
+    font-size: .78rem;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: .6rem .75rem;
+    overflow-x: auto;
+    color: var(--ink);
+    margin-bottom: .7rem;
+  }
+  .help code { font-family: var(--mono); font-size: .8rem; color: var(--ink); }
+  .help a { color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric .v { font-size: 1.6rem; }
+    #model { max-width: 190px; }
+    .log { max-height: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 01 控制栏 ============ -->
+  <header class="topbar">
+    <div class="brand"><b>local-llm</b><span>实测终端</span><i class="dot off" id="dot" title="后端状态"></i></div>
+
+    <select id="backend" class="ctl" title="后端地址">
+      <option value="http://localhost:11434">Ollama · 11434</option>
+      <option value="http://127.0.0.1:11434">Ollama · 127.0.0.1</option>
+      <option value="http://localhost:1234/v1">LM Studio · 1234</option>
+      <option value="__custom">自定义…</option>
+    </select>
+
+    <select id="model" class="ctl" title="模型"><option>—</option></select>
+    <button class="btn icon" id="refresh" title="刷新模型列表">↻</button>
+
+    <select id="ctx" class="ctl" title="上下文长度 num_ctx">
+      <option value="0">上下文 · 默认</option>
+      <option value="4096">4K</option>
+      <option value="8192">8K</option>
+      <option value="16384">16K</option>
+      <option value="32768">32K</option>
+      <option value="131072">128K</option>
+    </select>
+
+    <button class="btn" id="warm" title="把模型载入显存，不生成内容">预热</button>
+    <button class="btn" id="unload" title="keep_alive=0，立刻释放显存">卸载</button>
+
+    <label class="check" title="给支持思维链的模型开 think"><input type="checkbox" id="think" /> 思考模式</label>
+
+    <span class="spacer"></span>
+
+    <span class="group">
+      <label>字号</label>
+      <button class="btn icon" id="fsdown">A−</button>
+      <button class="btn icon" id="fsup">A+</button>
+    </span>
+    <button class="btn" id="theme">◐ 主题</button>
+    <button class="btn" id="clear">清屏</button>
+  </header>
+
+  <!-- ============ 02 四个指标 ============ -->
+  <section class="metrics">
+    <div class="metric"><div class="k">TTFT 首字延迟</div><div class="v" id="m-ttft">—</div></div>
+    <div class="metric"><div class="k">生成速度</div><div class="v" id="m-tps">—</div></div>
+    <div class="metric blue"><div class="k">已生成</div><div class="v" id="m-tok">—</div></div>
+    <div class="metric dim"><div class="k">模型加载</div><div class="v" id="m-load">—</div></div>
+  </section>
+
+  <div class="resident">已驻留：<b id="res-name">—</b><i id="res-meta"></i></div>
+
+  <!-- ============ 03 对话区 ============ -->
+  <main class="log" id="log"></main>
+
+  <!-- ============ 04 预设场景 ============ -->
+  <nav class="chips" id="chips"></nav>
+
+  <!-- ============ 05 输入 ============ -->
+  <div class="composer">
+    <textarea id="input" rows="1" placeholder="输入提示词，Enter 发送，Shift+Enter 换行"></textarea>
+    <button class="btn" id="send">发送</button>
+    <button class="btn danger" id="stop" disabled>中断</button>
+  </div>
+
+  <details class="help">
+    <summary>怎么跑起来 / 这个页面在测什么</summary>
+    <div class="inner">
+      <p>整页就是一个 HTML 文件，没有构建步骤、没有后端。它直接从浏览器打 Ollama 的 HTTP 接口，所以模型、显存、算力全在你自己机器上。</p>
+      <ol>
+        <li>装 Ollama 并拉一个模型：<code>ollama pull qwen3:8b</code></li>
+        <li>让浏览器能跨域访问它（默认只允许本机进程）：</li>
+      </ol>
+      <pre># macOS
+launchctl setenv OLLAMA_ORIGINS "*" &amp;&amp; ollama serve
+
+# Linux（systemd）
+sudo systemctl edit ollama
+# 加入：
+#   [Service]
+#   Environment="OLLAMA_ORIGINS=*"
+sudo systemctl restart ollama
+
+# Windows（PowerShell）
+setx OLLAMA_ORIGINS "*"</pre>
+      <p>如果页面挂在 <code>https://</code> 上而 Ollama 在 <code>http://localhost</code>，浏览器的混合内容策略会拦下请求。这时把本文件下载到本地用 <code>file://</code> 或 <code>http://localhost</code> 打开即可。连不上时页面会自动落到<b>演示模式</b>，用一段模拟流验证界面本身。</p>
+      <p><b>四个指标分别是什么：</b></p>
+      <ul>
+        <li><b>TTFT 首字延迟</b> — 从发出请求到收到第一个 token 的墙钟时间。冷启动时它主要是模型加载，热机后主要是 prompt 预填充，所以它对输入长度敏感。</li>
+        <li><b>生成速度</b> — 优先用 Ollama 返回的 <code>eval_count / eval_duration</code>（纯解码速度，排除加载和预填充）；流式过程中先用墙钟估算。</li>
+        <li><b>已生成</b> — 解码出的 token 数（<code>eval_count</code>）；流式过程中按 chunk 估算。</li>
+        <li><b>模型加载</b> — <code>load_duration</code>。第二次跑同一模型时它应该接近 0；如果没有，说明模型被挤出了显存。</li>
+      </ul>
+      <p><b>为什么要有预设场景</b>：单条 prompt 测不出什么。短问候测冷启动，超长输入测预填充，长文生成测持续解码是否掉速（散热/降频），JSON 与表格测格式遵循，思维链场景测推理模型在正式作答前会烧掉多少 token。同一台机器上横向对比模型时，这几类要分开看。</p>
+      <p>测量口径的一点提醒：第一次跑一定慢，把它当加载耗时而不是推理速度；同一模型至少跑两遍取第二遍。</p>
+    </div>
+  </details>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------- 预设场景
+  // 每条 = 一个测试意图，不是随便的示例句。
+  var PRESETS = [
+    { id:'hello', label:'打招呼', note:'最短输入，测冷启动的 TTFT——这时候的延迟基本等于模型加载',
+      text:'你好，用两句话介绍一下你自己。' },
+    { id:'zh2en', label:'中译英', note:'短进短出，测基础指令遵循',
+      text:'把下面这句话翻译成英文，只输出译文：\n\n教育技术的价值不在于替学生完成任务，而在于让学生看见自己的理解到了哪一步。' },
+    { id:'en2th', label:'英翻泰', note:'小语种，测多语言覆盖——很多量化版本在这里明显退化',
+      text:'Translate into Thai, output the translation only:\n\nThe train leaves at a quarter past seven; please bring your passport.' },
+    { id:'code', label:'写代码', note:'测代码格式与边界条件处理',
+      text:'用 Python 写一个函数 merge_intervals(intervals)，合并重叠区间并返回排序后的结果。要求处理空输入，并附三个测试用例。' },
+    { id:'bug', label:'改 bug', note:'测能不能定位到真正的错误，而不是重写一遍',
+      text:'下面这段代码求平均值时偶尔报错，找出原因并给出最小修改：\n\ndef avg(xs):\n    total = 0\n    for x in xs:\n        total += x\n    return total / len(xs)' },
+    { id:'math', label:'数学推理', note:'看思维链，deepseek-r1 这类会先想一大段',
+      text:'一个笼子里有鸡和兔共 35 只，脚共 94 只。问鸡兔各几只？请给出推理过程。' },
+    { id:'long', label:'长文生成', note:'测持续解码会不会掉速——散热和降频都在这里现形',
+      text:'写一篇 800 字左右的短文，题目是《当计算器进入课堂之后》，讨论工具替代与能力形成的关系。' },
+    { id:'sum', label:'长文摘要', note:'长进短出，压力在预填充而不是解码',
+      text:'把下面的内容压缩成 5 条要点，每条不超过 20 字：\n\n自我评估校准指的是学习者对自身理解程度的判断与实际表现之间的一致性。研究反复发现，表现最弱的学习者往往高估自己，而表现较强的学习者会低估自己。生成式人工智能加剧了这一问题：当工具在技能形成之前就替学习者完成了任务，学习者甚至无法形成关于"我是否理解"的判断，因为没有可供参照的独立表现记录。' },
+    { id:'huge', label:'超长输入', note:'刷满上下文，单看 TTFT 的涨幅就知道预填充带宽',
+      text:'__HUGE__' },
+    { id:'json', label:'JSON 输出', note:'测结构化输出，看会不会多包一层 markdown 代码块',
+      text:'只输出一个 JSON 对象，不要任何解释和代码块标记。字段：name(string)、level(1-5 整数)、tags(字符串数组，3 个)。内容随便编，主题是"高中函数"。' },
+    { id:'table', label:'表格排版', note:'测 markdown 表格对齐与列数一致性',
+      text:'用 markdown 表格对比三种排序算法（快排、归并、堆排），列出：平均时间复杂度、最坏时间复杂度、空间复杂度、是否稳定。只输出表格。' },
+    { id:'write', label:'中文创作', note:'测中文语感，量化损失通常先在这里露出来',
+      text:'写一段 200 字以内的场景描写：雨天的午后，屋檐开始滴水，街角的猫溜进了店里。不要写成散文腔。' },
+    { id:'role', label:'角色扮演', note:'测人设保持与拒答边界',
+      text:'你现在是一位耐心的高中数学老师。学生说"我看了答案，感觉懂了，但自己做还是不会"。用不超过 150 字回应他，并给出一个可执行的动作。' }
+  ];
+
+  var HUGE_SEED = '在设计任何一个测评工具之前，先要问清楚它测的到底是什么：是知识的掌握，还是对掌握程度的判断。这两者经常被混为一谈，但它们的失效方式完全不同。';
+
+  // ---------------------------------------------------------------- 状态
+  var S = {
+    base: 'http://localhost:11434',
+    model: '',
+    ctx: 0,
+    think: false,
+    fontSize: 15,
+    theme: 'light',
+    demo: false,
+    busy: false,
+    history: []
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    dot: $('dot'), backend: $('backend'), model: $('model'), refresh: $('refresh'),
+    ctx: $('ctx'), warm: $('warm'), unload: $('unload'), think: $('think'),
+    fsdown: $('fsdown'), fsup: $('fsup'), theme: $('theme'), clear: $('clear'),
+    ttft: $('m-ttft'), tps: $('m-tps'), tok: $('m-tok'), load: $('m-load'),
+    resName: $('res-name'), resMeta: $('res-meta'),
+    log: $('log'), chips: $('chips'), input: $('input'), send: $('send'), stop: $('stop')
+  };
+
+  // ---------------------------------------------------------------- 偏好持久化
+  function loadPrefs() {
+    try {
+      var raw = localStorage.getItem('local-llm-prefs');
+      if (!raw) return;
+      var p = JSON.parse(raw);
+      if (p.base) S.base = p.base;
+      if (p.model) S.model = p.model;
+      if (p.ctx) S.ctx = p.ctx;
+      if (typeof p.think === 'boolean') S.think = p.think;
+      if (p.fontSize) S.fontSize = p.fontSize;
+      if (p.theme) S.theme = p.theme;
+    } catch (e) { /* 隐私模式下 localStorage 会抛，忽略 */ }
+  }
+  function savePrefs() {
+    try {
+      localStorage.setItem('local-llm-prefs', JSON.stringify({
+        base: S.base, model: S.model, ctx: S.ctx,
+        think: S.think, fontSize: S.fontSize, theme: S.theme
+      }));
+    } catch (e) {}
+  }
+
+  // ---------------------------------------------------------------- 小工具
+  function fmtDur(sec) {
+    if (sec == null || !isFinite(sec)) return null;
+    if (sec < 1) return { n: Math.round(sec * 1000), u: 'ms' };
+    return { n: sec.toFixed(2), u: 's' };
+  }
+  function fmtBytes(b) {
+    if (!b) return '';
+    var g = b / 1073741824;
+    return g >= 1 ? g.toFixed(1) + 'GB' : Math.round(b / 1048576) + 'MB';
+  }
+  function fmtCtx(n) {
+    if (!n) return '';
+    return n >= 1024 ? Math.round(n / 1024) + 'K ctx' : n + ' ctx';
+  }
+  function setMetric(node, value, unit) {
+    if (value === null || value === undefined) { node.textContent = '—'; return; }
+    node.innerHTML = '';
+    node.appendChild(document.createTextNode(String(value)));
+    if (unit) {
+      var s = document.createElement('small');
+      s.textContent = unit;
+      node.appendChild(s);
+    }
+  }
+  function setDot(state) { el.dot.className = 'dot ' + state; }
+  function atBottom() {
+    return el.log.scrollHeight - el.log.scrollTop - el.log.clientHeight < 60;
+  }
+  function scrollDown(force) {
+    if (force || atBottom()) el.log.scrollTop = el.log.scrollHeight;
+  }
+
+  // ---------------------------------------------------------------- 渲染
+  function sysLine(text, isErr) {
+    var d = document.createElement('div');
+    d.className = 'sys' + (isErr ? ' err' : '');
+    d.textContent = text;
+    el.log.appendChild(d);
+    scrollDown(true);
+  }
+  function noteLine(preset) {
+    var d = document.createElement('div');
+    d.className = 'note';
+    d.innerHTML = '· 场景：<b>' + preset.label + '</b> · ' + preset.note;
+    el.log.appendChild(d);
+    scrollDown(true);
+  }
+  function userTurn(text) {
+    var t = document.createElement('div');
+    t.className = 'turn user';
+    var w = document.createElement('div'); w.className = 'who'; w.textContent = '我';
+    var b = document.createElement('div'); b.className = 'body'; b.textContent = text;
+    t.appendChild(w); t.appendChild(b);
+    el.log.appendChild(t);
+    scrollDown(true);
+  }
+  // 返回一组把 token 写进去的句柄
+  function assistantTurn(modelName) {
+    var t = document.createElement('div');
+    t.className = 'turn assistant';
+    var w = document.createElement('div'); w.className = 'who'; w.textContent = modelName;
+    var think = document.createElement('details'); think.className = 'think'; think.style.display = 'none';
+    var sm = document.createElement('summary'); sm.textContent = '思维链';
+    var tb = document.createElement('div'); tb.className = 'body';
+    think.appendChild(sm); think.appendChild(tb);
+    var b = document.createElement('div'); b.className = 'body';
+    var cur = document.createElement('span'); cur.className = 'cursor';
+    b.appendChild(cur);
+    var st = document.createElement('div'); st.className = 'stats';
+    t.appendChild(w); t.appendChild(think); t.appendChild(b); t.appendChild(st);
+    el.log.appendChild(t);
+    scrollDown(true);
+
+    var textBuf = '', thinkBuf = '';
+    return {
+      pushThinking: function (s) {
+        thinkBuf += s;
+        think.style.display = '';
+        if (!think.open) think.open = true;
+        tb.textContent = thinkBuf;
+        sm.textContent = '思维链 · ' + thinkBuf.length + ' 字';
+        scrollDown();
+      },
+      push: function (s) {
+        textBuf += s;
+        if (think.open && thinkBuf) think.open = false; // 正式作答一开始就把思维链收起来
+        b.textContent = textBuf;
+        b.appendChild(cur);
+        scrollDown();
+      },
+      finish: function (line) {
+        if (cur.parentNode) cur.parentNode.removeChild(cur);
+        if (line) st.textContent = line;
+        scrollDown();
+      },
+      text: function () { return textBuf; }
+    };
+  }
+
+  // ---------------------------------------------------------------- 后端探测
+  function withTimeout(ms) {
+    var c = new AbortController();
+    setTimeout(function () { c.abort(); }, ms);
+    return c;
+  }
+
+  function probe() {
+    setDot('busy');
+    var c = withTimeout(2500);
+    return fetch(S.base + '/api/tags', { signal: c.signal })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (data) {
+        S.demo = false;
+        setDot('on');
+        fillModels((data.models || []).map(function (m) { return m.name; }));
+        refreshResident();
+        return true;
+      })
+      .catch(function () {
+        S.demo = true;
+        setDot('off');
+        fillModels(['huihui_ai/Qwen3.8-abliterated:27b-q4_K_M', 'qwen3:8b', 'deepseek-r1:14b', 'llama3.1:8b']);
+        el.resName.textContent = '演示模式';
+        el.resMeta.textContent = '· 没连上 ' + S.base + '，界面用模拟流跑';
+        return false;
+      });
+  }
+
+  function fillModels(names) {
+    el.model.innerHTML = '';
+    if (!names.length) names = ['—'];
+    names.forEach(function (n) {
+      var o = document.createElement('option');
+      o.value = n; o.textContent = n;
+      el.model.appendChild(o);
+    });
+    if (S.model && names.indexOf(S.model) >= 0) el.model.value = S.model;
+    else S.model = el.model.value;
+  }
+
+  function refreshResident() {
+    if (S.demo) return;
+    var c = withTimeout(2500);
+    fetch(S.base + '/api/ps', { signal: c.signal })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var m = (d.models || [])[0];
+        if (!m) { el.resName.textContent = '—'; el.resMeta.textContent = '· 显存里没有模型'; return; }
+        el.resName.textContent = m.name || m.model;
+        var bits = [];
+        if (m.size) bits.push(fmtBytes(m.size));
+        var ctx = m.context_length || (m.details && m.details.context_length);
+        if (ctx) bits.push(fmtCtx(ctx));
+        el.resMeta.textContent = bits.length ? ' ' + bits.join(' / ') : '';
+      })
+      .catch(function () { /* 老版本没有 /api/ps，静默 */ });
+  }
+
+  // ---------------------------------------------------------------- 生成
+  var abortCtl = null;
+  var demoTimer = null;
+
+  function setBusy(on) {
+    S.busy = on;
+    el.send.disabled = on;
+    el.stop.disabled = !on;
+    setDot(on ? 'busy' : (S.demo ? 'off' : 'on'));
+  }
+
+  function send(text, preset) {
+    if (S.busy || !text.trim()) return;
+    if (preset) noteLine(preset);
+    userTurn(text);
+    S.history.push({ role: 'user', content: text });
+    setMetric(el.ttft, null); setMetric(el.tps, null);
+    setMetric(el.tok, null); setMetric(el.load, null);
+    setBusy(true);
+    var sink = assistantTurn(S.model);
+    (S.demo ? runDemo : runOllama)(text, sink);
+  }
+
+  function runOllama(text, sink) {
+    abortCtl = new AbortController();
+    var body = {
+      model: S.model,
+      messages: S.history.slice(-20),
+      stream: true
+    };
+    if (S.think) body.think = true;
+    if (S.ctx) body.options = { num_ctx: S.ctx };
+
+    var t0 = performance.now(), tFirst = null, approx = 0;
+
+    fetch(S.base + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: abortCtl.signal
+    }).then(function (r) {
+      if (!r.ok) return r.text().then(function (t) { throw new Error('HTTP ' + r.status + ' ' + t.slice(0, 200)); });
+      var reader = r.body.getReader();
+      var dec = new TextDecoder();
+      var buf = '';
+
+      function pump() {
+        return reader.read().then(function (res) {
+          if (res.done) return;
+          buf += dec.decode(res.value, { stream: true });
+          var lines = buf.split('\n');
+          buf = lines.pop();
+          lines.forEach(function (line) {
+            if (!line.trim()) return;
+            var j;
+            try { j = JSON.parse(line); } catch (e) { return; }
+            var msg = j.message || {};
+            if (msg.thinking) {
+              if (tFirst === null) { tFirst = performance.now(); markTTFT(t0, tFirst); }
+              sink.pushThinking(msg.thinking);
+            }
+            if (msg.content) {
+              if (tFirst === null) { tFirst = performance.now(); markTTFT(t0, tFirst); }
+              sink.push(msg.content);
+              approx += 1;
+              liveRate(tFirst, approx);
+            }
+            if (j.done) finishOllama(j, sink, t0, tFirst, approx);
+          });
+          return pump();
+        });
+      }
+      return pump();
+    }).catch(function (err) {
+      sink.finish('');
+      if (err && err.name === 'AbortError') sysLine('已中断。');
+      else sysLine('请求失败：' + (err && err.message ? err.message : err) + '　（跨域被拦？见页面底部的 OLLAMA_ORIGINS 说明）', true);
+    }).then(function () {
+      setBusy(false);
+      abortCtl = null;
+      refreshResident();
+    });
+  }
+
+  function markTTFT(t0, tFirst) {
+    var d = fmtDur((tFirst - t0) / 1000);
+    setMetric(el.ttft, d.n, d.u);
+  }
+  function liveRate(tFirst, n) {
+    var secs = (performance.now() - tFirst) / 1000;
+    if (secs > .25) setMetric(el.tps, (n / secs).toFixed(1), 'tok/s');
+    setMetric(el.tok, n, 'tok');
+  }
+
+  function finishOllama(j, sink, t0, tFirst, approx) {
+    var evalCount = j.eval_count || approx;
+    var tps = (j.eval_count && j.eval_duration)
+      ? j.eval_count / (j.eval_duration / 1e9)
+      : (tFirst ? approx / ((performance.now() - tFirst) / 1000) : null);
+    setMetric(el.tok, evalCount, 'tok');
+    if (tps) setMetric(el.tps, tps.toFixed(1), 'tok/s');
+    if (j.load_duration != null) {
+      var l = fmtDur(j.load_duration / 1e9);
+      setMetric(el.load, l.n, l.u);
+    }
+    var bits = [];
+    if (j.prompt_eval_count) bits.push('输入 ' + j.prompt_eval_count + ' tok');
+    if (j.prompt_eval_count && j.prompt_eval_duration) {
+      bits.push('预填充 ' + (j.prompt_eval_count / (j.prompt_eval_duration / 1e9)).toFixed(0) + ' tok/s');
+    }
+    if (j.total_duration) bits.push('总计 ' + (j.total_duration / 1e9).toFixed(2) + 's');
+    sink.finish(bits.join('　·　'));
+    if (sink.text()) S.history.push({ role: 'assistant', content: sink.text() });
+  }
+
+  // ---------------------------------------------------------------- 演示模式
+  // 连不上后端时，用模拟流把界面本身跑通：假 TTFT + 固定 tok/s 逐字吐。
+  var DEMO_REPLY = {
+    math: {
+      think: '设鸡 x 只、兔 y 只。头数给出 x + y = 35，脚数给出 2x + 4y = 94。\n把第一式乘 2 减掉第二式，能直接消去 x。也可以用假设法：先当作全是鸡。两条路应当给出同一个答案，写出来对照一下。',
+      text: '这是一个经典的"鸡兔同笼"问题。下面给出两种推理过程，结果应当一致。\n\n### 方法一：代数方程法\n\n**1. 设定变量**\n设鸡有 x 只，兔有 y 只。\n\n**2. 列方程**\n头数：x + y = 35\n脚数：2x + 4y = 94\n\n**3. 消元**\n由第一式得 x = 35 − y，代入第二式：\n2(35 − y) + 4y = 94\n70 + 2y = 94\ny = 12，于是 x = 23。\n\n### 方法二：假设法\n\n先假设 35 只全是鸡，那么脚共有 2 × 35 = 70 只，比实际少了 94 − 70 = 24 只。\n每把一只鸡换成兔，脚数增加 2 只，所以需要换 24 ÷ 2 = 12 只。\n\n**结论：鸡 23 只，兔 12 只。**（验算：23 + 12 = 35，23×2 + 12×4 = 46 + 48 = 94 ✓）'
+    },
+    fallback: {
+      think: '先想清楚对方真正要的是什么，再决定答案的长度和结构。',
+      text: '（演示模式）当前没有连上本地后端，这段文字是页面自带的模拟流，用来验证界面、计时和指标显示是否正常。\n\n把 Ollama 跑起来并允许跨域之后，这里会换成真实模型的流式输出，上面四个指标也会变成真实测量值：首字延迟来自墙钟计时，生成速度取自 eval_count / eval_duration，模型加载取自 load_duration。\n\n具体步骤见页面底部的"怎么跑起来"。'
+    }
+  };
+
+  function runDemo(text, sink) {
+    var pick = /鸡|兔|笼/.test(text) ? DEMO_REPLY.math : DEMO_REPLY.fallback;
+    var ttft = 1100 + Math.floor(Math.random() * 260);   // 模拟冷启动首字延迟
+    var cps = 7.2 * 2.1;                                  // 约 7.2 tok/s，一个 token 按 ~2 个字符算
+    var t0 = performance.now();
+    var stopped = false;
+
+    el.stop.onclick = function () { stopped = true; };
+
+    demoTimer = setTimeout(function () {
+      markTTFT(t0, performance.now());
+      var tFirst = performance.now();
+      var thinkStr = S.think ? pick.think : '';
+      var body = pick.text;
+      var i = 0, j = 0, n = 0;
+
+      (function step() {
+        if (stopped) { sink.finish(''); sysLine('已中断。'); setBusy(false); return; }
+        if (j < thinkStr.length) {
+          sink.pushThinking(thinkStr.slice(j, j + 3));
+          j += 3;
+        } else if (i < body.length) {
+          sink.push(body.slice(i, i + 3));
+          i += 3; n += 1;
+          liveRate(tFirst, Math.round(i / 2.1));
+        } else {
+          var secs = (performance.now() - tFirst) / 1000;
+          var toks = Math.round(body.length / 2.1);
+          setMetric(el.tok, toks, 'tok');
+          setMetric(el.tps, (toks / secs).toFixed(1), 'tok/s');
+          setMetric(el.load, (ttft / 1000).toFixed(2), 's');
+          sink.finish('演示模式　·　数值为模拟值');
+          setBusy(false);
+          return;
+        }
+        demoTimer = setTimeout(step, 3000 / cps);
+      })();
+    }, ttft);
+  }
+
+  // ---------------------------------------------------------------- 预热 / 卸载
+  function keepAlive(seconds, label) {
+    if (S.demo) { sysLine(label + '：演示模式下不执行。'); return; }
+    setDot('busy');
+    fetch(S.base + '/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: S.model, keep_alive: seconds })
+    }).then(function (r) { return r.json(); })
+      .then(function (d) {
+        var l = d.load_duration != null ? fmtDur(d.load_duration / 1e9) : null;
+        if (l) setMetric(el.load, l.n, l.u);
+        sysLine(label + '完成：' + S.model + (l ? '（加载 ' + l.n + l.u + '）' : ''));
+      })
+      .catch(function (e) { sysLine(label + '失败：' + e.message, true); })
+      .then(function () { setDot(S.demo ? 'off' : 'on'); refreshResident(); });
+  }
+
+  // ---------------------------------------------------------------- 事件绑定
+  PRESETS.forEach(function (p) {
+    var b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = p.label;
+    b.dataset.id = p.id;
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(el.chips.children, function (c) { c.classList.remove('active'); });
+      b.classList.add('active');
+      var t = p.text === '__HUGE__' ? buildHuge() : p.text;
+      el.input.value = t;
+      autoGrow();
+      el.input.focus();
+      el.input.dataset.preset = p.id;
+    });
+    el.chips.appendChild(b);
+  });
+
+  function buildHuge() {
+    var out = ['下面是一段长文本，读完后用三句话总结它的核心主张。\n'];
+    for (var i = 1; i <= 40; i++) out.push('【第 ' + i + ' 段】' + HUGE_SEED);
+    return out.join('\n');
+  }
+
+  function autoGrow() {
+    el.input.style.height = 'auto';
+    el.input.style.height = Math.min(el.input.scrollHeight, 180) + 'px';
+  }
+  el.input.addEventListener('input', function () { autoGrow(); delete el.input.dataset.preset; });
+  el.input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+  });
+
+  function doSend() {
+    var text = el.input.value;
+    if (!text.trim() || S.busy) return;
+    var pid = el.input.dataset.preset;
+    var preset = pid ? PRESETS.filter(function (p) { return p.id === pid; })[0] : null;
+    el.input.value = '';
+    autoGrow();
+    delete el.input.dataset.preset;
+    Array.prototype.forEach.call(el.chips.children, function (c) { c.classList.remove('active'); });
+    send(text, preset);
+  }
+  el.send.addEventListener('click', doSend);
+
+  el.stop.addEventListener('click', function () {
+    if (abortCtl) abortCtl.abort();
+    if (demoTimer) { clearTimeout(demoTimer); demoTimer = null; }
+  });
+
+  el.backend.addEventListener('change', function () {
+    if (el.backend.value === '__custom') {
+      var v = prompt('后端地址（不带结尾斜杠）', S.base);
+      if (!v) { el.backend.value = S.base; return; }
+      S.base = v.replace(/\/+$/, '');
+      var o = document.createElement('option');
+      o.value = S.base; o.textContent = S.base;
+      el.backend.insertBefore(o, el.backend.lastElementChild);
+      el.backend.value = S.base;
+    } else {
+      S.base = el.backend.value;
+    }
+    savePrefs();
+    probe();
+  });
+
+  el.model.addEventListener('change', function () {
+    S.model = el.model.value;
+    S.history = [];
+    savePrefs();
+    sysLine('已切换模型：' + S.model + '（对话历史已清空）');
+  });
+  el.refresh.addEventListener('click', function () { probe(); });
+  el.ctx.addEventListener('change', function () { S.ctx = parseInt(el.ctx.value, 10) || 0; savePrefs(); });
+  el.think.addEventListener('change', function () { S.think = el.think.checked; savePrefs(); });
+  el.warm.addEventListener('click', function () { keepAlive('10m', '预热'); });
+  el.unload.addEventListener('click', function () { keepAlive(0, '卸载'); });
+
+  function applyFont() {
+    document.documentElement.style.setProperty('--log-size', S.fontSize + 'px');
+  }
+  el.fsdown.addEventListener('click', function () { S.fontSize = Math.max(11, S.fontSize - 1); applyFont(); savePrefs(); });
+  el.fsup.addEventListener('click', function () { S.fontSize = Math.min(24, S.fontSize + 1); applyFont(); savePrefs(); });
+
+  function applyTheme() { document.documentElement.setAttribute('data-theme', S.theme); }
+  el.theme.addEventListener('click', function () {
+    S.theme = S.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(); savePrefs();
+  });
+
+  el.clear.addEventListener('click', function () {
+    el.log.innerHTML = '';
+    S.history = [];
+    setMetric(el.ttft, null); setMetric(el.tps, null);
+    setMetric(el.tok, null); setMetric(el.load, null);
+    sysLine('已清屏，对话历史一并清空。');
+  });
+
+  // ---------------------------------------------------------------- 启动
+  loadPrefs();
+  applyTheme();
+  applyFont();
+  el.think.checked = S.think;
+  el.ctx.value = String(S.ctx);
+  var known = Array.prototype.map.call(el.backend.options, function (o) { return o.value; });
+  if (known.indexOf(S.base) < 0) {
+    var o = document.createElement('option');
+    o.value = S.base; o.textContent = S.base;
+    el.backend.insertBefore(o, el.backend.lastElementChild);
+  }
+  el.backend.value = S.base;
+
+  probe().then(function (ok) {
+    if (ok) sysLine('已连接 ' + S.base + '　·　选一个下面的场景，或者直接输入。');
+    else sysLine('没连上 ' + S.base + '，先用演示模式。真实测量需要本地跑 Ollama 并开跨域——展开页面底部的说明。');
+  });
+})();
+</script>
+</body>
+</html>

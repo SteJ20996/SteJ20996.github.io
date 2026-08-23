@@ -19,6 +19,7 @@
     --accent: #b04a32;
     --accent-soft: rgba(176,74,50,.10);
     --blue: #2f6bb0;
+    --olive: #8a7d55;
     --green: #3f7d4e;
     --shadow: 0 2px 24px rgba(26,26,30,.06);
     --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -35,6 +36,7 @@
     --accent: #d4765f;
     --accent-soft: rgba(212,118,95,.14);
     --blue: #6ba3e0;
+    --olive: #b3a678;
     --green: #6faa7d;
     --shadow: 0 2px 24px rgba(0,0,0,.35);
   }
@@ -132,11 +134,10 @@
     padding: .9rem 1.1rem;
   }
   .metric {
-    background: var(--card);
+    background: var(--cream);
     border: 1px solid var(--rule);
     border-radius: 10px;
     padding: .7rem .9rem .8rem;
-    box-shadow: var(--shadow);
   }
   .metric .k {
     font-size: .74rem;
@@ -161,6 +162,15 @@
   }
   .metric.blue .v { color: var(--blue); }
   .metric.dim .v { color: var(--muted); }
+  /* 空态不是一个"—"字符，是一根本色短杠：留白但仍然指示这一格属于哪个量 */
+  .metric .v .dash {
+    display: inline-block;
+    width: 26px; height: 3px;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: .55;
+    vertical-align: middle;
+  }
 
   /* ---------- resident strip ---------- */
   .resident {
@@ -251,6 +261,52 @@
     color: var(--muted);
   }
 
+  /* ---------- 开机横幅 + 模型目录 ---------- */
+  .boot {
+    font-family: var(--mono);
+    font-size: 1.02rem;
+    line-height: 1.9;
+    color: var(--olive);
+    letter-spacing: -.01em;
+  }
+  .cat-head {
+    font-size: .82rem;
+    color: var(--muted);
+    margin: 1.1rem 0 .5rem;
+  }
+  .cat-group {
+    font-family: var(--mono);
+    font-size: .95rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin: .9rem 0 .4rem;
+  }
+  .cat-row {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr) 14rem 3.4rem;
+    gap: .5rem;
+    align-items: start;
+    font-family: var(--mono);
+    font-size: .95rem;
+    line-height: 1.8;
+    padding: .1rem .45rem .1rem 0;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .cat-row:hover { background: var(--accent-soft); }
+  .cat-row .i { color: var(--muted); text-align: right; }
+  .cat-row .n { color: var(--ink); word-break: break-all; }
+  .cat-row .q { color: var(--olive); }
+  .cat-row .s { color: var(--accent); text-align: right; }
+  .cat-row.sel { background: var(--accent-soft); }
+  .cat-row.sel .n { color: var(--accent); font-weight: 500; }
+  @media (max-width: 760px) {
+    .cat-row { grid-template-columns: 2rem minmax(0, 1fr) 3.4rem; }
+    .cat-row .n { grid-column: 2; }
+    .cat-row .s { grid-column: 3; }
+    .cat-row .q { grid-column: 2 / 4; grid-row: 2; font-size: .8rem; line-height: 1.4; }
+  }
+
   /* ---------- presets ---------- */
   .chips {
     display: flex; flex-wrap: wrap; gap: .4rem;
@@ -282,6 +338,7 @@
     resize: none;
     min-height: 44px;
     max-height: 180px;
+    font-family: var(--mono);
     font-size: .9rem;
     line-height: 1.5;
     padding: .6rem .8rem;
@@ -292,6 +349,7 @@
   #send { background: var(--accent); color: #fff; border-color: var(--accent); }
   #send:hover:not(:disabled) { background: var(--ink); border-color: var(--ink); }
   html[data-theme="dark"] #send { color: #17171a; }
+  #send:disabled { background: var(--card); color: var(--muted); border-color: var(--rule); opacity: 1; }
 
   /* ---------- help ---------- */
   .help {
@@ -380,10 +438,10 @@
 
   <!-- ============ 02 四个指标 ============ -->
   <section class="metrics">
-    <div class="metric"><div class="k">TTFT 首字延迟</div><div class="v" id="m-ttft">—</div></div>
-    <div class="metric"><div class="k">生成速度</div><div class="v" id="m-tps">—</div></div>
-    <div class="metric blue"><div class="k">已生成</div><div class="v" id="m-tok">—</div></div>
-    <div class="metric dim"><div class="k">模型加载</div><div class="v" id="m-load">—</div></div>
+    <div class="metric"><div class="k">TTFT 首字延迟</div><div class="v" id="m-ttft"><i class="dash"></i></div></div>
+    <div class="metric"><div class="k">生成速度</div><div class="v" id="m-tps"><i class="dash"></i></div></div>
+    <div class="metric blue"><div class="k">已生成</div><div class="v" id="m-tok"><i class="dash"></i></div></div>
+    <div class="metric dim"><div class="k">模型加载</div><div class="v" id="m-load"><i class="dash"></i></div></div>
   </section>
 
   <div class="resident">已驻留：<b id="res-name">—</b><i id="res-meta"></i></div>
@@ -396,7 +454,7 @@
 
   <!-- ============ 05 输入 ============ -->
   <div class="composer">
-    <textarea id="input" rows="1" placeholder="输入提示词，Enter 发送，Shift+Enter 换行"></textarea>
+    <textarea id="input" rows="1" placeholder="敲一句要测的 prompt，回车发送"></textarea>
     <button class="btn" id="send">发送</button>
     <button class="btn danger" id="stop" disabled>中断</button>
   </div>
@@ -482,6 +540,7 @@ setx OLLAMA_ORIGINS "*"</pre>
     theme: 'light',
     demo: false,
     busy: false,
+    catalog: [],
     history: []
   };
 
@@ -534,7 +593,13 @@ setx OLLAMA_ORIGINS "*"</pre>
     return n >= 1024 ? Math.round(n / 1024) + 'K ctx' : n + ' ctx';
   }
   function setMetric(node, value, unit) {
-    if (value === null || value === undefined) { node.textContent = '—'; return; }
+    if (value === null || value === undefined) {
+      node.innerHTML = '';
+      var dash = document.createElement('i');
+      dash.className = 'dash';
+      node.appendChild(dash);
+      return;
+    }
     node.innerHTML = '';
     node.appendChild(document.createTextNode(String(value)));
     if (unit) {
@@ -625,29 +690,103 @@ setx OLLAMA_ORIGINS "*"</pre>
     return c;
   }
 
-  function probe() {
-    setDot('busy');
-    var c = withTimeout(2500);
-    return fetch(S.base + '/api/tags', { signal: c.signal })
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (data) {
-        S.demo = false;
-        setDot('on');
-        fillModels((data.models || []).map(function (m) { return m.name; }));
-        refreshResident();
-        return true;
-      })
-      .catch(function () {
-        S.demo = true;
-        setDot('off');
-        fillModels(['huihui_ai/Qwen3.8-abliterated:27b-q4_K_M', 'qwen3:8b', 'deepseek-r1:14b', 'llama3.1:8b']);
-        el.resName.textContent = '演示模式';
-        el.resMeta.textContent = '· 没连上 ' + S.base + '，界面用模拟流跑';
-        return false;
-      });
+  // 主界面把每个探到的后端的模型合并成一张目录，所以要逐个候选探一遍。
+  var BACKENDS = [
+    { base: 'http://localhost:11434', label: 'Ollama · 11434', kind: 'ollama' },
+    { base: 'http://localhost:1234/v1', label: 'LM Studio · 1234', kind: 'openai' }
+  ];
+
+  // 探不到任何后端时用它，好让主界面本身仍然可读。
+  var DEMO_CATALOG = [{
+    base: 'http://localhost:11434', label: 'Ollama · 11434（演示）', kind: 'ollama',
+    models: [
+      { name: 'hf.co/unsloth/Qwen3.8-27B-GGUF:UD-IQ2_S', meta: 'qwen35 27.3B IQ2_S', size: 9.3 },
+      { name: 'hf.co/tencent/Hy-MT2-1.8B-GGUF:Q4_K_M', meta: 'hunyuan-dense 1.79B Q4_K_M', size: 1.1 },
+      { name: 'granite4.1:8b', meta: 'granite 8.8B Q4_K_M', size: 5.3 },
+      { name: 'phi4-mini:latest', meta: 'phi3 3.8B Q4_K_M', size: 2.5 },
+      { name: 'deepseek-r1:32b', meta: 'qwen2 32.8B Q4_K_M', size: 19.9 },
+      { name: 'huihui_ai/Qwen3.8-abliterated:27b-q4_K_M', meta: 'qwen35 27.3B Q4_K_M', size: 17.7 }
+    ]
+  }];
+
+  function candidates() {
+    var list = BACKENDS.slice();
+    var bases = list.map(function (b) { return b.base; });
+    // 用户自填的后端也要探，否则它永远进不了目录
+    if (bases.indexOf(S.base) < 0) {
+      list.unshift({ base: S.base, label: S.base, kind: /\/v1\/?$/.test(S.base) ? 'openai' : 'ollama' });
+    }
+    return list;
   }
 
-  function fillModels(names) {
+  function fetchCatalog(b) {
+    var c = withTimeout(2500);
+    var url = b.base + (b.kind === 'openai' ? '/models' : '/api/tags');
+    return fetch(url, { signal: c.signal })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (d) {
+        var models;
+        if (b.kind === 'openai') {
+          // OpenAI 兼容端点只给 id，没有量化和体积
+          models = (d.data || []).map(function (m) { return { name: m.id, meta: '', size: 0 }; });
+        } else {
+          models = (d.models || []).map(function (m) {
+            var de = m.details || {};
+            return {
+              name: m.name,
+              meta: [de.family, de.parameter_size, de.quantization_level].filter(Boolean).join(' '),
+              size: m.size ? m.size / 1073741824 : 0
+            };
+          });
+        }
+        return { base: b.base, label: b.label, kind: b.kind, models: models };
+      })
+      .catch(function () { return null; });
+  }
+
+  function probe() {
+    setDot('busy');
+    return Promise.all(candidates().map(fetchCatalog)).then(function (res) {
+      var live = res.filter(function (g) { return g && g.models.length; });
+      S.demo = live.length === 0;
+      S.catalog = S.demo ? DEMO_CATALOG : live;
+      if (S.demo) {
+        setDot('off');
+        el.resName.textContent = '演示模式';
+        el.resMeta.textContent = '· 没探到本地后端，界面用模拟流跑';
+      } else {
+        setDot('on');
+        // 记住的后端这次没起来的话，落到第一个活着的
+        var stillUp = live.some(function (g) { return g.base === S.base; });
+        if (!stillUp) S.base = live[0].base;
+        syncBackendSelect();
+        refreshResident();
+      }
+      fillModels();
+      renderHome();
+      return !S.demo;
+    });
+  }
+
+  function activeGroup() {
+    for (var i = 0; i < S.catalog.length; i++) {
+      if (S.catalog[i].base === S.base) return S.catalog[i];
+    }
+    return S.catalog[0] || { models: [] };
+  }
+
+  function syncBackendSelect() {
+    var known = Array.prototype.map.call(el.backend.options, function (o) { return o.value; });
+    if (known.indexOf(S.base) < 0) {
+      var o = document.createElement('option');
+      o.value = S.base; o.textContent = S.base;
+      el.backend.insertBefore(o, el.backend.lastElementChild);
+    }
+    el.backend.value = S.base;
+  }
+
+  function fillModels() {
+    var names = activeGroup().models.map(function (m) { return m.name; });
     el.model.innerHTML = '';
     if (!names.length) names = ['—'];
     names.forEach(function (n) {
@@ -657,6 +796,75 @@ setx OLLAMA_ORIGINS "*"</pre>
     });
     if (S.model && names.indexOf(S.model) >= 0) el.model.value = S.model;
     else S.model = el.model.value;
+  }
+
+  // ---------------------------------------------------------------- 主界面
+  function bootLine(text) {
+    var d = document.createElement('div');
+    d.className = 'boot';
+    d.textContent = text;
+    el.log.appendChild(d);
+  }
+
+  function renderHome() {
+    el.log.innerHTML = '';
+    bootLine('· 本地模型实测终端 · 直接打 localhost，不经任何中间层');
+    var total = S.catalog.reduce(function (n, g) { return n + g.models.length; }, 0);
+    if (S.demo) {
+      bootLine('· 没探到后端，演示模式 · 下面是示例条目');
+    } else {
+      var who = S.catalog.map(function (g) { return g.label.split(' ·')[0].toLowerCase(); }).join(' / ');
+      bootLine('· ' + who + ' 在线，' + total + ' 个模型可用');
+    }
+    renderCatalog(total);
+    el.log.scrollTop = 0;
+  }
+
+  function renderCatalog(total) {
+    var head = document.createElement('div');
+    head.className = 'cat-head';
+    head.textContent = '可用模型 ' + total + ' 个 · 点一行直接选中（会自动切到对应后端）';
+    el.log.appendChild(head);
+
+    var n = 0;
+    S.catalog.forEach(function (g) {
+      var h = document.createElement('div');
+      h.className = 'cat-group';
+      h.textContent = g.label;
+      el.log.appendChild(h);
+
+      g.models.forEach(function (m) {
+        n += 1;
+        var row = document.createElement('div');
+        row.className = 'cat-row' + (g.base === S.base && m.name === S.model ? ' sel' : '');
+        [['i', String(n)], ['n', m.name], ['q', m.meta || ''],
+         ['s', m.size ? m.size.toFixed(1) + 'G' : '']].forEach(function (pair) {
+          var c = document.createElement('span');
+          c.className = pair[0];
+          c.textContent = pair[1];
+          row.appendChild(c);
+        });
+        row.addEventListener('click', function () { pickModel(g, m, row); });
+        el.log.appendChild(row);
+      });
+    });
+  }
+
+  function pickModel(g, m, row) {
+    var switched = g.base !== S.base;
+    S.base = g.base;
+    S.model = m.name;
+    S.history = [];
+    syncBackendSelect();
+    fillModels();
+    el.model.value = m.name;
+    savePrefs();
+    Array.prototype.forEach.call(el.log.querySelectorAll('.cat-row'), function (r) {
+      r.classList.remove('sel');
+    });
+    row.classList.add('sel');
+    if (!S.demo) refreshResident();
+    sysLine('已选中 ' + m.name + (switched ? '　·　后端切到 ' + g.label : '') + '　·　对话历史已清空。');
   }
 
   function refreshResident() {
@@ -956,11 +1164,10 @@ setx OLLAMA_ORIGINS "*"</pre>
   });
 
   el.clear.addEventListener('click', function () {
-    el.log.innerHTML = '';
     S.history = [];
     setMetric(el.ttft, null); setMetric(el.tps, null);
     setMetric(el.tok, null); setMetric(el.load, null);
-    sysLine('已清屏，对话历史一并清空。');
+    renderHome();
   });
 
   // ---------------------------------------------------------------- 启动
@@ -969,18 +1176,8 @@ setx OLLAMA_ORIGINS "*"</pre>
   applyFont();
   el.think.checked = S.think;
   el.ctx.value = String(S.ctx);
-  var known = Array.prototype.map.call(el.backend.options, function (o) { return o.value; });
-  if (known.indexOf(S.base) < 0) {
-    var o = document.createElement('option');
-    o.value = S.base; o.textContent = S.base;
-    el.backend.insertBefore(o, el.backend.lastElementChild);
-  }
-  el.backend.value = S.base;
-
-  probe().then(function (ok) {
-    if (ok) sysLine('已连接 ' + S.base + '　·　选一个下面的场景，或者直接输入。');
-    else sysLine('没连上 ' + S.base + '，先用演示模式。真实测量需要本地跑 Ollama 并开跨域——展开页面底部的说明。');
-  });
+  syncBackendSelect();
+  probe();
 })();
 </script>
 </body>

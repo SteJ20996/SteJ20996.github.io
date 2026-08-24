@@ -3,24 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Delta — Adaptive Learning that Closes the Gap · Yizhen (Stephen) Jia</title>
-<meta name="description" content="A research prototype for adaptive learning: not AI that answers your questions, but AI that diagnoses how you actually understand — from your behavior, not your self-report — and adapts difficulty, spacing, and representation to close the gap between felt and real understanding." />
+<title>Delta · Adaptive Learning that Closes the Gap · Yizhen (Stephen) Jia</title>
+<meta name="description" content="A research prototype for adaptive learning: not AI that answers your questions, but AI that diagnoses how you actually understand, from your behavior rather than your self-report, and adapts difficulty, spacing, and representation to close the gap between felt and real understanding." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --ink: #1a1a1e;
-    --paper: #f5f2ed;
-    --cream: #ebe7e0;
-    --accent: #b04a32;
-    --accent-light: #d4765f;
-    --muted: #7a7570;
-    --rule: #ccc5bb;
-    --card-bg: #faf8f5;
-    --shadow: 0 2px 24px rgba(26,26,30,.06);
-    --good: #3f7d5c;
-    --warn: #b58a1e;
+    color-scheme: dark;
+    --ink: #f0ede4;
+    --paper: #1d1c19;
+    --cream: #171613;
+    --accent: #c9a45c;
+    --accent-light: #dcbe83;
+    --muted: #a49e90;
+    --rule: #3d3a31;
+    --card-bg: #262420;
+    --shadow: 0 2px 24px rgba(0,0,0,.35);
+    --good: #72b98d;
+    --warn: #d9a83d;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,11 +43,11 @@
     z-index: 100;
     backdrop-filter: blur(16px) saturate(1.6);
     -webkit-backdrop-filter: blur(16px) saturate(1.6);
-    background: rgba(245,242,237,.82);
+    background: rgba(26,25,22,.85);
     border-bottom: 1px solid var(--rule);
     transition: box-shadow .3s;
   }
-  nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,.07); }
+  nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,.45); }
   .nav-inner {
     max-width: 1080px;
     margin: 0 auto;
@@ -130,7 +131,7 @@
   .hero-text h1 em { font-style: italic; color: var(--accent); }
   .hero-tagline {
     font-size: 1.18rem;
-    color: #3a3935;
+    color: #ddd8cc;
     margin-bottom: 1.6rem;
     max-width: 30rem;
   }
@@ -153,12 +154,12 @@
     cursor: pointer;
     border: none;
   }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #963d29; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(176,74,50,.25); }
+  .btn-primary { background: var(--accent); color: #1d1c19; }
+  .btn-primary:hover { background: #b78f45; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,164,92,.25); }
   .btn-outline { border: 1.5px solid var(--ink); color: var(--ink); background: transparent; }
   .btn-outline:hover { background: var(--ink); color: var(--paper); }
 
-  /* hero motif — Δ echoing the ∫ on the main site */
+  /* hero motif: Δ echoing the ∫ on the main site */
   .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
   .hero-graphic { width: 320px; height: 320px; position: relative; }
   .hero-graphic svg { width: 100%; height: 100%; }
@@ -194,7 +195,7 @@
   }
   .section-lede {
     font-size: 1.05rem;
-    color: #3a3935;
+    color: #ddd8cc;
     max-width: 40rem;
     margin-bottom: 2.5rem;
   }
@@ -207,7 +208,7 @@
     margin-bottom: .7rem;
     line-height: 1.3;
   }
-  .prose-block p { font-size: .98rem; color: #45443f; }
+  .prose-block p { font-size: .98rem; color: #c9c4b6; }
   .prose-block p + p { margin-top: .9rem; }
   .pull {
     font-family: 'DM Serif Display', serif;
@@ -238,7 +239,7 @@
     color: var(--warn);
     margin-bottom: .6rem;
   }
-  .callout p { font-size: .98rem; color: #45443f; }
+  .callout p { font-size: .98rem; color: #c9c4b6; }
   .callout p + p { margin-top: .8rem; }
   .callout strong { color: var(--ink); }
 
@@ -258,7 +259,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background: linear-gradient(180deg, rgba(176,74,50,.05), transparent);
+    background: linear-gradient(180deg, rgba(201,164,92,.05), transparent);
   }
   .demo-head .title {
     font-family: 'DM Serif Display', serif;
@@ -305,7 +306,7 @@
     color: var(--ink);
   }
   .option:hover { border-color: var(--accent-light); transform: translateX(2px); }
-  .option.selected { border-color: var(--accent); background: rgba(176,74,50,.06); }
+  .option.selected { border-color: var(--accent); background: rgba(201,164,92,.06); }
   .option .key {
     font-family: 'JetBrains Mono', monospace;
     font-size: .78rem;
@@ -316,9 +317,9 @@
     color: var(--muted);
     flex-shrink: 0;
   }
-  .option.selected .key { background: var(--accent); color: #fff; }
-  .option.correct { border-color: var(--good); background: rgba(63,125,92,.08); }
-  .option.wrong { border-color: var(--accent); background: rgba(176,74,50,.09); }
+  .option.selected .key { background: var(--accent); color: #1d1c19; }
+  .option.correct { border-color: var(--good); background: rgba(114,185,141,.08); }
+  .option.wrong { border-color: var(--accent); background: rgba(201,164,92,.09); }
   .option .verdict { margin-left: auto; font-size: .78rem; font-weight: 600; }
   .option.correct .verdict { color: var(--good); }
   .option.wrong .verdict { color: var(--accent); }
@@ -341,7 +342,7 @@
     transition: border-color .2s, background .2s, transform .1s;
   }
   .conf-level:hover { border-color: var(--accent-light); transform: translateY(-1px); }
-  .conf-level.selected { border-color: var(--accent); background: rgba(176,74,50,.06); }
+  .conf-level.selected { border-color: var(--accent); background: rgba(201,164,92,.06); }
   .cl-name {
     display: block;
     font-family: 'DM Serif Display', serif;
@@ -422,7 +423,7 @@
   .report-item.correct .mark { color: var(--good); }
   .report-item.wrong .mark { color: var(--accent); }
   .ri-meta { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--muted); }
-  .ri-line { font-size: .86rem; color: #45443f; margin-top: .3rem; }
+  .ri-line { font-size: .86rem; color: #c9c4b6; margin-top: .3rem; }
   .ri-line b { color: var(--ink); }
   .ri-work { font-family: 'JetBrains Mono', monospace; font-size: .74rem; color: var(--muted); margin-top: .45rem; }
   .ri-tag {
@@ -434,8 +435,8 @@
     border-radius: 4px;
     vertical-align: middle;
   }
-  .ri-tag.ok { background: rgba(63,125,92,.12); color: var(--good); }
-  .ri-tag.miss { background: rgba(176,74,50,.1); color: var(--accent); }
+  .ri-tag.ok { background: rgba(114,185,141,.12); color: var(--good); }
+  .ri-tag.miss { background: rgba(201,164,92,.1); color: var(--accent); }
 
   .demo-actions { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
   .demo-btn {
@@ -443,8 +444,8 @@
     font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer;
     transition: all .2s;
   }
-  .demo-btn.primary { background: var(--accent); color: #fff; }
-  .demo-btn.primary:hover:not(:disabled) { background: #963d29; transform: translateY(-1px); }
+  .demo-btn.primary { background: var(--accent); color: #1d1c19; }
+  .demo-btn.primary:hover:not(:disabled) { background: #b78f45; transform: translateY(-1px); }
   .demo-btn.primary:disabled { opacity: .4; cursor: not-allowed; }
   .demo-btn.ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--rule); }
   .demo-btn.ghost:hover { color: var(--ink); border-color: var(--ink); }
@@ -476,13 +477,13 @@
   }
   .gap-headline.blindspot { color: var(--accent); }
   .gap-headline.calibrated { color: var(--good); }
-  .diag { font-size: .96rem; color: #45443f; margin-bottom: 1rem; }
+  .diag { font-size: .96rem; color: #c9c4b6; margin-bottom: 1rem; }
   .diag b { color: var(--ink); }
   .work {
     font-family: 'JetBrains Mono', monospace;
     font-size: .85rem;
-    background: var(--ink);
-    color: #f0ede6;
+    background: #121110;
+    color: #d9d4c8;
     padding: .7rem .9rem;
     border-radius: 7px;
     margin-bottom: 1.2rem;
@@ -494,7 +495,7 @@
     border: 1px dashed var(--accent-light);
     border-radius: 10px;
     padding: 1.1rem 1.3rem;
-    background: rgba(176,74,50,.04);
+    background: rgba(201,164,92,.04);
     margin-bottom: 1.2rem;
   }
   .mirror h4 {
@@ -504,7 +505,7 @@
     display: flex; align-items: center; gap: .5rem;
   }
   .mirror ul { list-style: none; display: grid; gap: .5rem; }
-  .mirror li { font-size: .9rem; color: #45443f; display: flex; gap: .55rem; align-items: flex-start; }
+  .mirror li { font-size: .9rem; color: #c9c4b6; display: flex; gap: .55rem; align-items: flex-start; }
   .mirror li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
   .mirror li b { color: var(--ink); }
 
@@ -516,7 +517,7 @@
   }
   .nextstep .k { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
   .nextstep .act { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: .3rem; }
-  .nextstep .det { font-size: .9rem; color: #45443f; }
+  .nextstep .det { font-size: .9rem; color: #c9c4b6; }
 
   .seam-note {
     margin-top: 1.4rem;
@@ -548,7 +549,7 @@
     margin-bottom: .8rem;
   }
   .loop-step h4 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: .5rem; line-height: 1.25; }
-  .loop-step p { font-size: .86rem; color: #55534e; line-height: 1.55; }
+  .loop-step p { font-size: .86rem; color: #b0aa9c; line-height: 1.55; }
   .loop-step::after {
     content: '→';
     position: absolute;
@@ -593,7 +594,7 @@
     color: var(--muted);
     margin-bottom: .7rem;
   }
-  .dim p { font-size: .9rem; color: #55534e; }
+  .dim p { font-size: .9rem; color: #b0aa9c; }
 
   /* ---- CONTRACT ---- */
   .contract { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
@@ -607,7 +608,7 @@
   .contract-col.asks h4 { color: var(--accent); }
   .contract-col.gives h4 { color: var(--good); }
   .contract-col ul { list-style: none; display: grid; gap: .8rem; }
-  .contract-col li { font-size: .94rem; color: #45443f; display: flex; gap: .6rem; align-items: flex-start; }
+  .contract-col li { font-size: .94rem; color: #c9c4b6; display: flex; gap: .6rem; align-items: flex-start; }
   .contract-col li::before { font-weight: 700; flex-shrink: 0; }
   .contract-col.asks li::before { content: '↑'; color: var(--accent); }
   .contract-col.gives li::before { content: '✓'; color: var(--good); }
@@ -633,9 +634,9 @@
     text-transform: uppercase; vertical-align: middle; margin-left: .6rem;
     padding: .15rem .5rem; border-radius: 4px;
   }
-  .badge.now { background: rgba(63,125,92,.15); color: var(--good); }
-  .badge.next { background: rgba(176,74,50,.12); color: var(--accent); }
-  .rm-item p { font-size: .92rem; color: #55534e; }
+  .badge.now { background: rgba(114,185,141,.15); color: var(--good); }
+  .badge.next { background: rgba(201,164,92,.12); color: var(--accent); }
+  .rm-item p { font-size: .92rem; color: #b0aa9c; }
   .rm-item code {
     font-family: 'JetBrains Mono', monospace; font-size: .82rem;
     background: var(--cream); padding: .1rem .35rem; border-radius: 4px; color: var(--accent);
@@ -699,8 +700,8 @@
     <div class="hero-text reveal">
       <div class="eyebrow">Research Prototype · Working name: Delta</div>
       <h1>Learning that closes the <em>gap</em>.</h1>
-      <p class="hero-tagline">Not an AI that answers your questions — an AI that figures out <em>how you actually understand</em>, from what you do, not what you say.</p>
-      <p class="hero-sub">Most tutors react to what you ask. But the hardest part of learning is that you often can't tell what you don't understand. Delta is built to find that blind spot — and it asks real effort of you, because effort is exactly where the signal lives.</p>
+      <p class="hero-tagline">Not an AI that answers your questions, but an AI that figures out <em>how you actually understand</em>, from what you do, not what you say.</p>
+      <p class="hero-sub">Most tutors react to what you ask. But the hardest part of learning is that you often can't tell what you don't understand. Delta is built to find that blind spot, and it asks real effort of you, because effort is exactly where the signal lives.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#demo">Try the live demo</a>
         <a class="btn btn-outline" href="#gap">Read the idea</a>
@@ -715,7 +716,7 @@
           <g class="orbit-1"><circle cx="236" cy="160" r="5" class="dot" opacity=".9" /></g>
           <g class="orbit-2"><circle cx="272" cy="160" r="4" class="dot" opacity=".6" /></g>
           <g class="orbit-3"><circle cx="306" cy="160" r="3" class="dot" opacity=".4" /></g>
-          <text x="160" y="182" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="72" fill="#b04a32" opacity=".9">&#916;</text>
+          <text x="160" y="182" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="72" fill="#c9a45c" opacity=".9">&#916;</text>
         </svg>
       </div>
     </div>
@@ -726,14 +727,14 @@
 <div class="divider"><hr /></div>
 <section id="gap">
   <div class="reveal">
-    <p class="section-label">01 — The Problem</p>
+    <p class="section-label">01 · The Problem</p>
     <h2 class="section-title">You are a poor judge of your own understanding.</h2>
-    <p class="section-lede">This isn't a criticism — it's a well-documented feature of how minds work. And it's the single biggest thing today's AI tutors miss.</p>
+    <p class="section-lede">This isn't a criticism; it's a well-documented feature of how minds work. And it's the single biggest thing today's AI tutors miss.</p>
   </div>
   <div class="prose-grid reveal">
     <div class="prose-block">
       <h3>The self-report trap</h3>
-      <p>Current AI tools are reactive: they answer the question you thought to ask. But learners are systematically miscalibrated — we routinely feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's why "just tell the AI what you need" quietly fails. You can't request help with a gap you can't see.</p>
+      <p>Current AI tools are reactive: they answer the question you thought to ask. But learners are systematically miscalibrated: we routinely feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's why "just tell the AI what you need" quietly fails. You can't request help with a gap you can't see.</p>
       <p>A student can describe their goals. What they usually can't do is name the specific idea that's silently broken, or notice that a method <em>feels</em> like it's working while producing almost no durable learning.</p>
     </div>
     <div class="prose-block">
@@ -748,19 +749,19 @@
 <div class="divider"><hr /></div>
 <section id="effort">
   <div class="reveal">
-    <p class="section-label">02 — The Counterintuitive Core</p>
+    <p class="section-label">02 · The Counterintuitive Core</p>
     <h2 class="section-title">Effort isn't the price. It's the mechanism.</h2>
-    <p class="section-lede">Delta deliberately asks more of you than a chatbot does. That's not a rough edge to apologize for — it's the whole point, and there's four decades of research behind it.</p>
+    <p class="section-lede">Delta deliberately asks more of you than a chatbot does. That's not a rough edge to apologize for; it's the whole point, and there's four decades of research behind it.</p>
   </div>
   <div class="prose-grid reveal">
     <div class="prose-block">
       <h3>Desirable difficulties</h3>
-      <p>Robert Bjork's research shows something unsettling: the study methods that <em>feel</em> effortful and slow — retrieval practice, spacing, interleaving — produce the most durable learning. The ones that feel smooth and easy — rereading, highlighting, watching a clear explanation — produce almost none.</p>
+      <p>Robert Bjork's research shows something unsettling: the study methods that <em>feel</em> effortful and slow (retrieval practice, spacing, interleaving) produce the most durable learning. The ones that feel smooth and easy (rereading, highlighting, watching a clear explanation) produce almost none.</p>
       <p>This is precisely <b>why students can't self-select well.</b> Left alone, they optimize for the <em>feeling</em> of fluency, not for real retention. Delta optimizes for the thing that lasts, even when it feels harder in the moment.</p>
     </div>
     <div class="prose-block">
       <h3>Effort is the signal</h3>
-      <p>Every effortful act — attempting before being told, committing to an answer, predicting your own confidence, explaining your reasoning — does double duty. It <em>builds</em> stronger memory, and it <em>emits</em> the behavioral data Delta needs to model you accurately.</p>
+      <p>Every effortful act (attempting before being told, committing to an answer, predicting your own confidence, explaining your reasoning) does double duty. It <em>builds</em> stronger memory, and it <em>emits</em> the behavioral data Delta needs to model you accurately.</p>
       <p>A passive tool learns nothing about you. A tool that makes you commit learns everything it needs to adapt.</p>
     </div>
   </div>
@@ -770,15 +771,15 @@
 <div class="divider"><hr /></div>
 <section id="honest">
   <div class="reveal">
-    <p class="section-label">03 — The Honest Part</p>
-    <h2 class="section-title">What "adaptive" does — and doesn't — mean.</h2>
+    <p class="section-label">03 · The Honest Part</p>
+    <h2 class="section-title">What "adaptive" does, and doesn't, mean.</h2>
     <p class="section-lede">Plenty of edtech promises to match your "learning style." We're deliberately not doing that, because the evidence says it doesn't work.</p>
   </div>
   <div class="reveal">
     <div class="callout">
       <div class="tag">⚠ Where most "adaptive" claims break</div>
-      <p>The popular idea of fixed <strong>learning styles</strong> — that you're a "visual," "auditory," or "kinesthetic" learner and should be taught to match — has been repeatedly tested and <strong>found not to hold up</strong>. Matching instruction to a self-reported style doesn't improve outcomes. Building a product on it would be building on sand.</p>
-      <p>So Delta doesn't try to guess <em>what kind of person</em> you are. It adapts to something real and measurable instead: <strong>your understanding state, right now, on this specific idea</strong> — inferred from evidence, updated every step. That's the version of "adaptive" that has actual science under it.</p>
+      <p>The popular idea of fixed <strong>learning styles</strong>, the idea that you're a "visual," "auditory," or "kinesthetic" learner and should be taught to match, has been repeatedly tested and <strong>found not to hold up</strong>. Matching instruction to a self-reported style doesn't improve outcomes. Building a product on it would be building on sand.</p>
+      <p>So Delta doesn't try to guess <em>what kind of person</em> you are. It adapts to something real and measurable instead: <strong>your understanding state, right now, on this specific idea</strong>, inferred from evidence, updated every step. That's the version of "adaptive" that has actual science under it.</p>
     </div>
   </div>
 </section>
@@ -787,9 +788,9 @@
 <div class="divider"><hr /></div>
 <section id="demo">
   <div class="reveal">
-    <p class="section-label">04 — Live Demo</p>
+    <p class="section-label">04 · Live Demo</p>
     <h2 class="section-title">The Calibration Mirror.</h2>
-    <p class="section-lede">Pick your level — elementary, middle, or high school &amp; beyond — then six short-answer problems tuned to the misconceptions that actually live at that age. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty — because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
+    <p class="section-lede">Pick your level (elementary, middle, or high school &amp; beyond), then six short-answer problems tuned to the misconceptions that actually live at that age. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty, because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
   </div>
 
   <div class="demo-wrap reveal">
@@ -803,19 +804,19 @@
 
         <!-- STAGE 0: pick a level -->
         <div class="stage active" id="stage-band">
-          <div class="prompt-label">Before we start — whose math?</div>
-          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age — from “the equals sign means the answer comes next” to “two machines’ times add instead of their rates.” The top band runs at the hard end of SAT math: long, multi-step problems where the reasoning chain is the whole game.</p>
+          <div class="prompt-label">Before we start: whose math?</div>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">Same mirror, different math. Each level has six problems tuned to the misconceptions that actually live at that age, from “the equals sign means the answer comes next” to “two machines’ times add instead of their rates.” The top band runs at the hard end of SAT math: long, multi-step problems where the reasoning chain is the whole game.</p>
           <div class="conf-levels" id="bandPick"></div>
         </div>
 
         <!-- STAGE 1: answer + reasoning -->
         <div class="stage" id="stage-answer">
-          <div class="prompt-label" id="answerLabel">Question 1 of 6 — Answer, then show your thinking</div>
+          <div class="prompt-label" id="answerLabel">Question 1 of 6 · Answer, then show your thinking</div>
           <p class="stem" id="stem"></p>
           <label class="field-label" for="ansInput">Your answer <span id="unitHint" style="text-transform:none;letter-spacing:0;"></span></label>
           <input class="ans-input" id="ansInput" type="text" inputmode="decimal" autocomplete="off" />
-          <label class="field-label" for="explInput">In a sentence or two — why?</label>
-          <textarea class="explain-box" id="explInput" rows="3" placeholder="Sketch your reasoning — a formula, a sentence, English or 中文, whatever shows how you got there."></textarea>
+          <label class="field-label" for="explInput">In a sentence or two: why?</label>
+          <textarea class="explain-box" id="explInput" rows="3" placeholder="Sketch your reasoning: a formula, a sentence, English or 中文, whatever shows how you got there."></textarea>
           <div class="demo-actions" style="margin-top:1.2rem;">
             <button class="demo-btn primary" id="toConf" disabled>Next: rate your certainty →</button>
           </div>
@@ -823,8 +824,8 @@
 
         <!-- STAGE 2: certainty -->
         <div class="stage" id="stage-conf">
-          <div class="prompt-label" id="confLabel">Question 1 of 6 — How sure are you, honestly?</div>
-          <p class="stem" style="font-size:1rem;color:var(--muted);">The marking follows certainty-based marking (Gardner-Medwin): a confident miss costs far more than an honest guess, so <b>honesty is your best strategy</b> — overclaiming and sandbagging both lose points on average.</p>
+          <div class="prompt-label" id="confLabel">Question 1 of 6 · How sure are you, honestly?</div>
+          <p class="stem" style="font-size:1rem;color:var(--muted);">The marking follows certainty-based marking (Gardner-Medwin): a confident miss costs far more than an honest guess, so <b>honesty is your best strategy</b>: overclaiming and sandbagging both lose points on average.</p>
           <div class="conf-levels" id="confLevels"></div>
           <div class="demo-actions">
             <button class="demo-btn ghost" id="backAns">← Change answer</button>
@@ -834,7 +835,7 @@
 
         <!-- STAGE 3: full-session report -->
         <div class="stage" id="stage-report">
-          <div class="prompt-label">Your report — the whole session, analyzed together</div>
+          <div class="prompt-label">Your report: the whole session, analyzed together</div>
 
           <div class="gap-viz">
             <div class="gap-title">Claimed vs. real, across the session</div>
@@ -842,12 +843,12 @@
               <div class="gap-bar-row">
                 <span class="lab">Avg. certainty</span>
                 <div class="gap-track"><div class="gap-fill conf" id="sFillConf"></div></div>
-                <span class="gap-num" id="sNumConf">—</span>
+                <span class="gap-num" id="sNumConf">…</span>
               </div>
               <div class="gap-bar-row">
                 <span class="lab">Actual accuracy</span>
                 <div class="gap-track"><div class="gap-fill truth" id="sFillAcc"></div></div>
-                <span class="gap-num" id="sNumAcc">—</span>
+                <span class="gap-num" id="sNumAcc">…</span>
               </div>
             </div>
           </div>
@@ -858,7 +859,7 @@
           <div id="reportItems"></div>
 
           <div class="mirror">
-            <h4>&#916; Your learner model — built from this session</h4>
+            <h4>&#916; Your learner model, built from this session</h4>
             <ul id="sMirrorList"></ul>
           </div>
 
@@ -873,7 +874,7 @@
           </div>
 
           <p class="seam-note">
-            <b>Preview note.</b> Everything above runs in your browser — no model, no network, no data leaves this page. Numeric answers are graded exactly by a tolerant parser; your written explanations are scanned by a small, transparent <b>keyword heuristic</b> standing in for the real grader. That is the seam: in Phase 1, the engine's <b>diagnose()</b>, <b>updateModel()</b> and <b>nextStep()</b> route through a Claude model that reads your actual prose — grading partial understanding, catching misconceptions nobody pre-enumerated, and asking a Socratic follow-up. The interface is already model-agnostic in the code below.
+            <b>Preview note.</b> Everything above runs in your browser: no model, no network, no data leaves this page. Numeric answers are graded exactly by a tolerant parser; your written explanations are scanned by a small, transparent <b>keyword heuristic</b> standing in for the real grader. That is the seam: in Phase 1, the engine's <b>diagnose()</b>, <b>updateModel()</b> and <b>nextStep()</b> route through a Claude model that reads your actual prose: grading partial understanding, catching misconceptions nobody pre-enumerated, and asking a Socratic follow-up. The interface is already model-agnostic in the code below.
           </p>
         </div>
 
@@ -886,15 +887,15 @@
 <div class="divider"><hr /></div>
 <section id="loop">
   <div class="reveal">
-    <p class="section-label">05 — How It Works</p>
+    <p class="section-label">05 · How It Works</p>
     <h2 class="section-title">A four-step loop that never stops adapting.</h2>
-    <p class="section-lede">Each pass through the loop sharpens the model of you — and the loop itself is the intervention.</p>
+    <p class="section-lede">Each pass through the loop sharpens the model of you, and the loop itself is the intervention.</p>
   </div>
   <div class="loop reveal">
     <div class="loop-step">
       <div class="num">STEP 01</div>
       <h4>Effortful diagnosis</h4>
-      <p>You attempt, commit, and predict your own confidence — before any hint. This surfaces the calibration gap you can't see on your own.</p>
+      <p>You attempt, commit, and predict your own confidence, before any hint. This surfaces the calibration gap you can't see on your own.</p>
     </div>
     <div class="loop-step">
       <div class="num">STEP 02</div>
@@ -904,12 +905,12 @@
     <div class="loop-step">
       <div class="num">STEP 03</div>
       <h4>Adapt the next step</h4>
-      <p>It chooses your next move — harder variant, a scaffold, a different representation, or a spaced re-test — to keep you in productive struggle.</p>
+      <p>It chooses your next move (harder variant, a scaffold, a different representation, or a spaced re-test) to keep you in productive struggle.</p>
     </div>
     <div class="loop-step">
       <div class="num">STEP 04</div>
       <h4>Hold up the mirror</h4>
-      <p>It shows you what it learned about you. Making the model visible is itself the metacognition training — you learn to see your own gaps.</p>
+      <p>It shows you what it learned about you. Making the model visible is itself the metacognition training: you learn to see your own gaps.</p>
     </div>
   </div>
 </section>
@@ -918,8 +919,8 @@
 <div class="divider"><hr /></div>
 <section id="dims">
   <div class="reveal">
-    <p class="section-label">06 — What It Adapts On</p>
-    <h2 class="section-title">Four real dimensions — each with evidence behind it.</h2>
+    <p class="section-label">06 · What It Adapts On</p>
+    <h2 class="section-title">Four real dimensions, each with evidence behind it.</h2>
     <p class="section-lede">Instead of guessing a personality type, Delta adapts along axes that are measurable and known to matter.</p>
   </div>
   <div class="dims reveal">
@@ -927,13 +928,13 @@
       <span class="glyph">&#8593;&#8595;</span>
       <h4>Difficulty</h4>
       <div class="basis">Basis · Zone of proximal development</div>
-      <p>Keep every item just past what you can already do alone — hard enough to require real thinking, not so hard you stall. Too easy teaches nothing; too hard teaches nothing.</p>
+      <p>Keep every item just past what you can already do alone: hard enough to require real thinking, not so hard you stall. Too easy teaches nothing; too hard teaches nothing.</p>
     </div>
     <div class="dim">
       <span class="glyph">&#9663;</span>
       <h4>Misconceptions</h4>
       <div class="basis">Basis · Diagnostic assessment</div>
-      <p>Wrong answers aren't just wrong — they encode <em>which</em> mental model produced them. Delta targets the specific broken idea, not the surface mistake.</p>
+      <p>Wrong answers aren't just wrong; they encode <em>which</em> mental model produced them. Delta targets the specific broken idea, not the surface mistake.</p>
     </div>
     <div class="dim">
       <span class="glyph">&#8734;</span>
@@ -945,7 +946,7 @@
       <span class="glyph">&#8721;</span>
       <h4>Representation</h4>
       <div class="basis">Basis · Multiple external representations</div>
-      <p>When one framing doesn't land, it tries another — symbolic, visual, numeric, worked example — and remembers which one unlocked <em>this</em> idea for <em>you</em>.</p>
+      <p>When one framing doesn't land, it tries another (symbolic, visual, numeric, worked example) and remembers which one unlocked <em>this</em> idea for <em>you</em>.</p>
     </div>
   </div>
 </section>
@@ -954,15 +955,15 @@
 <div class="divider"><hr /></div>
 <section id="contract">
   <div class="reveal">
-    <p class="section-label">07 — The Contract</p>
+    <p class="section-label">07 · The Contract</p>
     <h2 class="section-title">An honest deal with the learner.</h2>
-    <p class="section-lede">Delta is demanding by design. Here's exactly what it asks — and exactly what it gives back.</p>
+    <p class="section-lede">Delta is demanding by design. Here's exactly what it asks, and exactly what it gives back.</p>
   </div>
   <div class="contract reveal">
     <div class="contract-col asks">
       <h4>What it asks of you</h4>
       <ul>
-        <li>Attempt before you're told the answer — every time.</li>
+        <li>Attempt before you're told the answer, every time.</li>
         <li>Commit to a response instead of staying vague.</li>
         <li>Predict your own confidence, honestly.</li>
         <li>Explain your reasoning, not just your answer.</li>
@@ -972,7 +973,7 @@
     <div class="contract-col gives">
       <h4>What it gives back</h4>
       <ul>
-        <li>A map of what you actually know — not what you feel you know.</li>
+        <li>A map of what you actually know, not what you feel you know.</li>
         <li>Time spent only on the ideas that are truly shaky.</li>
         <li>Learning that survives past the test, not just to it.</li>
         <li>Growing metacognition: you learn to see your own gaps.</li>
@@ -986,7 +987,7 @@
 <div class="divider"><hr /></div>
 <section id="homework">
   <div class="reveal">
-    <p class="section-label">08 — Coming Next</p>
+    <p class="section-label">08 · Coming Next</p>
     <h2 class="section-title">Your own homework is the best question bank.</h2>
     <p class="section-lede">The demo above uses curated problems. The real version starts from the problems you already have: photograph tonight's worksheet, and Delta turns it into a mirror session.</p>
   </div>
@@ -994,23 +995,23 @@
     <div class="loop-step">
       <div class="num">STEP 01</div>
       <h4>Snap the page</h4>
-      <p>A phone photo of the worksheet, the textbook page, or a marked-up test — messy handwriting included.</p>
+      <p>A phone photo of the worksheet, the textbook page, or a marked-up test, messy handwriting included.</p>
     </div>
     <div class="loop-step">
       <div class="num">STEP 02</div>
       <h4>Delta reads the problems</h4>
-      <p>A vision-capable Claude model extracts each problem, classifies its concept, and drafts its misconception map — the same metadata the curated items above carry.</p>
+      <p>A vision-capable Claude model extracts each problem, classifies its concept, and drafts its misconception map: the same metadata the curated items above carry.</p>
     </div>
     <div class="loop-step">
       <div class="num">STEP 03</div>
       <h4>The mirror runs on each</h4>
-      <p>Problem by problem: your answer, your reasoning, your certainty — then the full report. Not “here's the solution,” but “here's what you understand.”</p>
+      <p>Problem by problem: your answer, your reasoning, your certainty, then the full report. Not “here's the solution,” but “here's what you understand.”</p>
     </div>
   </div>
   <div class="reveal" style="margin-top:2.2rem;">
     <div class="callout">
       <div class="tag">⚠ Why this isn't live yet</div>
-      <p>Reading photographed homework requires a vision model — there is no honest rule-based stand-in for it. It ships with <strong>Phase 1</strong>, when Claude moves behind the seam; the flow above is the design contract for that work.</p>
+      <p>Reading photographed homework requires a vision model; there is no honest rule-based stand-in for it. It ships with <strong>Phase 1</strong>, when Claude moves behind the seam; the flow above is the design contract for that work.</p>
       <p>And the inversion is the whole point: photo-solver apps use your homework to <strong>hand you answers</strong>; Delta uses the same photo to <strong>map your understanding</strong>. Same input, opposite theory of learning.</p>
     </div>
   </div>
@@ -1020,32 +1021,32 @@
 <div class="divider"><hr /></div>
 <section id="roadmap">
   <div class="reveal">
-    <p class="section-label">09 — Roadmap</p>
+    <p class="section-label">09 · Roadmap</p>
     <h2 class="section-title">From rule-based seed to model-in-the-loop.</h2>
     <p class="section-lede">This page is the seed. The architecture is designed so the intelligence can be upgraded without rebuilding the loop.</p>
   </div>
   <div class="roadmap reveal">
     <div class="rm-item">
       <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 0 — this page</div>
+      <div class="rm-phase">Phase 0 · this page</div>
       <h4>The vision &amp; a working seam <span class="badge now">You are here</span></h4>
-      <p>The idea, the science, and a live rule-based demo of the calibration loop. The adaptive engine already exposes a clean, model-agnostic interface — <code>diagnose</code>, <code>updateModel</code>, <code>nextStep</code> — so the logic and the intelligence are cleanly separated.</p>
+      <p>The idea, the science, and a live rule-based demo of the calibration loop. The adaptive engine already exposes a clean, model-agnostic interface (<code>diagnose</code>, <code>updateModel</code>, <code>nextStep</code>), so the logic and the intelligence are cleanly separated.</p>
     </div>
     <div class="rm-item future">
       <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 1 — model in the loop</div>
+      <div class="rm-phase">Phase 1 · model in the loop</div>
       <h4>Claude behind the seam <span class="badge next">Next</span></h4>
-      <p>Route those three functions through a Claude model: natural-language diagnosis of <em>why</em> you erred, a Socratic follow-up question, and items authored on demand to target your exact gap — over any subject, not a fixed question bank. This is also where photographed homework (above) becomes a live input: a vision model reads the page and feeds each problem into the same loop.</p>
+      <p>Route those three functions through a Claude model: natural-language diagnosis of <em>why</em> you erred, a Socratic follow-up question, and items authored on demand to target your exact gap, over any subject, not a fixed question bank. This is also where photographed homework (above) becomes a live input: a vision model reads the page and feeds each problem into the same loop.</p>
     </div>
     <div class="rm-item future">
       <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 2 — persistent learner model</div>
+      <div class="rm-phase">Phase 2 · persistent learner model</div>
       <h4>Memory across sessions</h4>
-      <p>A durable model of each learner — mastery, misconceptions, and personal spacing schedule — that persists between sessions and drives long-horizon adaptation and spaced retrieval.</p>
+      <p>A durable model of each learner (mastery, misconceptions, and personal spacing schedule) that persists between sessions and drives long-horizon adaptation and spaced retrieval.</p>
     </div>
     <div class="rm-item future">
       <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 3 — study &amp; evidence</div>
+      <div class="rm-phase">Phase 3 · study &amp; evidence</div>
       <h4>Does it actually work?</h4>
       <p>Measure the thing that matters: does calibration improve, and does learning last? A natural fit for the graphicacy and GenAI-and-cognition research this project grows out of.</p>
     </div>
@@ -1067,7 +1068,7 @@
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  ADAPTIVE ENGINE  (v0 — rule-based)
+  //  ADAPTIVE ENGINE  (v0, rule-based)
   //
   //  RESERVED SEAM. This object is the only thing that "understands" the
   //  learner. It is intentionally model-agnostic so the intelligence can be
@@ -1098,7 +1099,7 @@
       ],
       keyIdea: {
         re: /(both\s+sides|balance|same\s+(amount|value)|12.*=.*12|两边|相等|平衡|一样多)/i,
-        label: 'the equals sign balances both sides — it is not “the answer comes next”',
+        label: 'the equals sign balances both sides; it is not “the answer comes next”',
       },
     },
     {
@@ -1144,7 +1145,7 @@
       stem: 'Which is bigger: <b>1/3</b> or <b>1/4</b> of the same pizza? Answer with the fraction.',
       unit: 'write the fraction', display: '1/3',
       accept: [{ v: 1 / 3, tol: 0.01 }],
-      work: 'Cutting into 3 pieces makes bigger pieces than cutting into 4 — so 1/3 > 1/4.',
+      work: 'Cutting into 3 pieces makes bigger pieces than cutting into 4, so 1/3 > 1/4.',
       wrongDx: [
         { test: a => near(a, 0.25, 0.01), m: 'bigger-denominator-bigger' },
       ],
@@ -1153,7 +1154,7 @@
       ],
       keyIdea: {
         re: /(fewer\s+pieces|bigger\s+pieces|3\s+pieces|share|份.*少|块.*大|分成\s*3)/i,
-        label: 'fewer pieces means bigger pieces — thirds beat fourths',
+        label: 'fewer pieces means bigger pieces: thirds beat fourths',
       },
     },
     {
@@ -1202,7 +1203,7 @@
       stem: '(−3)² = ?',
       unit: 'a number', display: '9',
       accept: [{ v: 9, tol: 0.01 }],
-      work: '(−3)² = (−3) × (−3) = +9 — a negative times a negative is positive.',
+      work: '(−3)² = (−3) × (−3) = +9; a negative times a negative is positive.',
       wrongDx: [
         { test: a => near(a, -9, 0.01), m: 'sign-survives-squaring' },
       ],
@@ -1229,7 +1230,7 @@
       ],
       keyIdea: {
         re: /(18|painter[- ]?days|total\s+work|inverse|more.*less|half\s+the\s+time|工作量|反比|人多.*(时间|天).*少|一半)/i,
-        label: 'inverse proportion — total work is 18 painter-days',
+        label: 'inverse proportion: total work is 18 painter-days',
       },
     },
     {
@@ -1257,7 +1258,7 @@
       stem: 'Five workers earn <b>30, 30, 30, 30 and 140</b> (thousand per year). What is the <b>median</b> salary, in thousands?',
       unit: 'in thousands', display: '30',
       accept: [{ v: 30, tol: 0.01 }],
-      work: 'Sorted: 30, 30, [30], 30, 140 — the middle value is 30. (The mean, 52, is dragged up by the outlier.)',
+      work: 'Sorted: 30, 30, [30], 30, 140: the middle value is 30. (The mean, 52, is dragged up by the outlier.)',
       wrongDx: [
         { test: a => near(a, 52, 0.5), m: 'mean-for-median' },
       ],
@@ -1266,7 +1267,7 @@
       ],
       keyIdea: {
         re: /(middle|sorted|order|third\s+value|中间|排序|正中)/i,
-        label: 'the median is the middle of the sorted list — outliers can’t drag it',
+        label: 'the median is the middle of the sorted list; outliers can’t drag it',
       },
     },
     {
@@ -1284,7 +1285,7 @@
       ],
       keyIdea: {
         re: /(bracket|parenthes|whole|both|3\s*[×x\*]\s*6|3x\s*\+\s*12|先算括号|分配|都要乘)/i,
-        label: 'the 3 multiplies the whole bracket — both the x and the 4',
+        label: 'the 3 multiplies the whole bracket: both the x and the 4',
       },
     },
     {
@@ -1293,7 +1294,7 @@
       stem: 'You roll <b>two fair dice</b> and add them. Which total is the <b>most likely</b>?',
       unit: 'a total from 2–12', display: '7',
       accept: [{ v: 7, tol: 0.01 }],
-      work: '7 has the most combinations: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1 — six ways.',
+      work: '7 has the most combinations: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1: six ways.',
       wrongDx: [
         { test: a => a >= 2 && a <= 12 && !near(a, 7, 0.01), m: 'uniform-sums' },
       ],
@@ -1302,7 +1303,7 @@
       ],
       keyIdea: {
         re: /(six\s+ways|most\s+(ways|combinations)|1\s*\+\s*6|3\s*\+\s*4|组合.*多|方式最多|六种)/i,
-        label: 'totals differ in how many ways they can happen — 7 has six',
+        label: 'totals differ in how many ways they can happen: 7 has six',
       },
     },
   ];
@@ -1311,7 +1312,7 @@
     {
       id: 'sat-meanlist-01',
       concept: 'Working in totals (mean manipulation)',
-      stem: 'A teacher recorded the quiz scores of <b>20 students</b>; the mean score was <b>82</b>. Checking the roster, she found that two of those scores — <b>58</b> and <b>62</b> — belonged to students from another class, so she removed them from the data set. She then added the score of one student who took a make-up quiz. The mean of the resulting <b>19 scores</b> is <b>85</b>. What score did the make-up student earn?',
+      stem: 'A teacher recorded the quiz scores of <b>20 students</b>; the mean score was <b>82</b>. Checking the roster, she found that two of those scores, <b>58</b> and <b>62</b>, belonged to students from another class, so she removed them from the data set. She then added the score of one student who took a make-up quiz. The mean of the resulting <b>19 scores</b> is <b>85</b>. What score did the make-up student earn?',
       unit: 'a number', display: '95',
       accept: [{ v: 95, tol: 0.01 }],
       work: 'Totals, not averages: 20×82 = 1640. Remove 58+62 → 1520 (18 scores). New total must be 19×85 = 1615 → make-up = 1615 − 1520 = 95.',
@@ -1352,7 +1353,7 @@
       stem: 'The population of a town is modeled by <span style="font-family:\'JetBrains Mono\',monospace;">P(t) = 8,000(1.21)<sup>t/2</sup></span>, where t is the number of years from now. According to the model, by what <b>percent</b> does the population increase <b>each year</b>?',
       unit: 'in %', display: '10%',
       accept: [{ v: 10, tol: 0.1 }, { v: 0.1, tol: 0.001 }],
-      work: 'Per year the factor is (1.21)^(1/2) = √1.21 = 1.1 — a 10% increase each year. (Check: 1.1 × 1.1 = 1.21 over two years.)',
+      work: 'Per year the factor is (1.21)^(1/2) = √1.21 = 1.1, a 10% increase each year. (Check: 1.1 × 1.1 = 1.21 over two years.)',
       wrongDx: [
         { test: a => near(a, 10.5, 0.1), m: 'divides-the-percent-linearly' },
         { test: a => near(a, 21, 0.1), m: 'reads-rate-per-year' },
@@ -1362,13 +1363,13 @@
       ],
       keyIdea: {
         re: /(square\s+root|sqrt|√|1\.21\s*\^?\s*\(?\s*1\s*\/\s*2|1\.1\b|开(平)?方|根号|平方根)/i,
-        label: 'percent growth compounds — take the square root of 1.21 (=1.1), don’t halve the 21%',
+        label: 'percent growth compounds: take the square root of 1.21 (=1.1), don’t halve the 21%',
       },
     },
     {
       id: 'sat-mixture-01',
       concept: 'Mixture by replacement',
-      stem: 'A tank contains <b>12 liters</b> of a <b>25%</b> acid solution. A technician drains some of the solution and <b>replaces it with pure acid</b>, so that the tank again holds 12 liters — now a <b>40%</b> acid solution. How many <b>liters</b> did the technician replace?',
+      stem: 'A tank contains <b>12 liters</b> of a <b>25%</b> acid solution. A technician drains some of the solution and <b>replaces it with pure acid</b>, so that the tank again holds 12 liters, now a <b>40%</b> acid solution. How many <b>liters</b> did the technician replace?',
       unit: 'in liters', display: '2.4',
       accept: [{ v: 2.4, tol: 0.05 }],
       work: 'Let x be the liters replaced. Acid after: 0.25(12 − x) + 1.00x = 0.40 × 12 → 3 + 0.75x = 4.8 → x = 2.4.',
@@ -1456,7 +1457,7 @@
   const AdaptiveEngine = {
     // Diagnose one constructed response: the numeric answer is graded exactly;
     // the written explanation is scanned by a transparent keyword heuristic.
-    // (Phase 1: Claude reads the prose itself — partial credit, unanticipated
+    // (Phase 1: Claude reads the prose itself: partial credit, unanticipated
     // misconceptions, and a Socratic follow-up.)
     diagnose(item, raw, expl, level, behavior) {
       const val = parseAnswer(raw);
@@ -1499,20 +1500,20 @@
       const s = this.summarize(records);
       const rows = [];
       rows.push(['Accuracy', `<b>${s.nRight} of ${s.n}</b> correct · score <b>${s.score}</b> of ${s.maxScore} under honesty-aligned marking.`]);
-      rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b> — priority signal.`
-               : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b> — trust needs building.`
-               : `Within <b>${Math.abs(s.gap)} points</b> of reality — well calibrated.`]);
+      rows.push(['Calibration', s.gap >= 15 ? `Runs <b>${s.gap} points overconfident</b>, a priority signal.`
+               : s.gap <= -15 ? `Runs <b>${Math.abs(s.gap)} points underconfident</b>, so trust needs building.`
+               : `Within <b>${Math.abs(s.gap)} points</b> of reality: well calibrated.`]);
       const mis = [...new Set(records.filter(r => r.misconception).map(r => labelFor(r.misconception)))];
       rows.push(['Misconceptions', mis.length ? mis.map(m => `<b>${m}</b>`).join('; ') + '.' : 'None detected in this set.']);
       const shaky = records.filter(r => r.correct && !r.keyIdeaPresent).length;
       rows.push(['Explanations', shaky
-               ? `<b>${shaky} correct answer(s)</b> came with explanations that didn't show the key idea — right results on unshown reasoning get re-tested, not credited.`
-               : `Your explanations tracked your answers — reasoning and results agree.`]);
+               ? `<b>${shaky} correct answer(s)</b> came with explanations that didn't show the key idea; right results on unshown reasoning get re-tested, not credited.`
+               : `Your explanations tracked your answers: reasoning and results agree.`]);
       const inc = records.filter(r => r.inconsistent);
       rows.push(['Behavior', inc.length
-               ? `Stated certainty and behavior <b>disagreed on ${inc.length} of ${s.n}</b> — the disagreement is itself diagnostic.`
-               : `Stated certainty and behavior <b>agreed throughout</b> — a trustworthy signal.`]);
-      rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b> — each on its own clock.`]);
+               ? `Stated certainty and behavior <b>disagreed on ${inc.length} of ${s.n}</b>; the disagreement is itself diagnostic.`
+               : `Stated certainty and behavior <b>agreed throughout</b>, a trustworthy signal.`]);
+      rows.push(['Spacing', `Missed ideas return in <b>~2 days</b>; held ones in <b>~5</b>, each on its own clock.`]);
       return rows;
     },
 
@@ -1521,12 +1522,12 @@
     nextStep(records) {
       const s = this.summarize(records);
       if (s.blind.length)
-        return { act: 'Target the blind spots first', det: 'The certain-and-wrong ideas come first: strip the story, isolate each broken concept, re-test after a gap. Everything else waits — fixing an invisible error beats polishing a visible skill.' };
+        return { act: 'Target the blind spots first', det: 'The certain-and-wrong ideas come first: strip the story, isolate each broken concept, re-test after a gap. Everything else waits: fixing an invisible error beats polishing a visible skill.' };
       if (s.gap <= -15)
-        return { act: 'Build trust, then raise difficulty', det: 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge — then moves the ceiling up.' };
+        return { act: 'Build trust, then raise difficulty', det: 'Accuracy is there but confidence lags. Delta re-surfaces what you got right until predicted and actual converge, then moves the ceiling up.' };
       if (s.acc === 100)
         return { act: 'Raise the ceiling', det: 'Clean sweep with honest certainty. The next set interleaves harder variants of every concept you saw to find the real edge of your understanding.' };
-      return { act: 'Scaffold the shaky ideas', det: 'The missed ideas were mostly known-unknowns — you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.' };
+      return { act: 'Scaffold the shaky ideas', det: 'The missed ideas were mostly known-unknowns: you sensed them. Delta breaks each into smaller steps and rebuilds to full difficulty.' };
     },
 
     // Aggregate a session into a calibration profile. (Phase 1: Claude narrates it.)
@@ -1603,7 +1604,7 @@
     levelsEl.appendChild(b);
   });
 
-  // Level (age band) picker — built once.
+  // Level (age band) picker, built once.
   const bandEl = document.getElementById('bandPick');
   BANDS.forEach(band => {
     const b = document.createElement('button');
@@ -1657,8 +1658,8 @@
   function renderItem() {
     const item = currentItem();
     const qLabel = `Question ${state.idx + 1} of ${ITEMS.length}`;
-    document.getElementById('answerLabel').textContent = `${qLabel} — Answer, then show your thinking`;
-    document.getElementById('confLabel').textContent = `${qLabel} — How sure are you, honestly?`;
+    document.getElementById('answerLabel').textContent = `${qLabel} · Answer, then show your thinking`;
+    document.getElementById('confLabel').textContent = `${qLabel} · How sure are you, honestly?`;
     document.getElementById('stem').innerHTML = item.stem;
     document.getElementById('unitHint').textContent = `(${item.unit})`;
     document.getElementById('qNum').textContent = state.idx + 1;
@@ -1675,7 +1676,7 @@
   document.getElementById('toConf').addEventListener('click', () => goStage('conf'));
   document.getElementById('backAns').addEventListener('click', () => goStage('answer'));
 
-  // Lock in the item silently — no feedback until the whole session is done,
+  // Lock in the item silently: no feedback until the whole session is done,
   // so later questions stay uncontaminated by earlier reveals.
   document.getElementById('lockIn').addEventListener('click', () => {
     const behavior = { tTotal: (performance.now() - state.tShown) / 1000 };
@@ -1708,17 +1709,17 @@
     const h = document.getElementById('sHeadline');
     const d = document.getElementById('sDiag');
     if (s.gap >= 15) {
-      h.textContent = `You claimed ~${s.avgConf}% — you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
+      h.textContent = `You claimed ~${s.avgConf}%; you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
       h.className = 'gap-headline blindspot';
-      d.innerHTML = `This is the most common profile — and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b> — the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking — inflated certainty is exactly what it prices in.`;
+      d.innerHTML = `This is the most common profile, and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b>, the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking; inflated certainty is exactly what it prices in.`;
     } else if (s.gap <= -15) {
-      h.textContent = `You scored ${s.acc}% but only claimed ~${s.avgConf}% — you know more than you trust.`;
+      h.textContent = `You scored ${s.acc}% but only claimed ~${s.avgConf}%; you know more than you trust.`;
       h.className = 'gap-headline';
-      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but filed as guesses</b> — Delta re-tests those to convert them into trusted knowledge. ` : ''}You left points on the table: <b>${s.score} of ${s.maxScore}</b> — sandbagging is priced in too.`;
+      d.innerHTML = `Underconfidence has a real cost too: it makes you re-study what you already know and abandon correct reasoning under pressure. ${s.lucky.length ? `<b>${s.lucky.length} answer(s) were right but filed as guesses</b>; Delta re-tests those to convert them into trusted knowledge. ` : ''}You left points on the table: <b>${s.score} of ${s.maxScore}</b>; sandbagging is priced in too.`;
     } else {
-      h.textContent = `Claimed ~${s.avgConf}%, scored ${s.acc}% — your calibration is close.`;
+      h.textContent = `Claimed ~${s.avgConf}%, scored ${s.acc}%; your calibration is close.`;
       h.className = 'gap-headline calibrated';
-      d.innerHTML = `Well-calibrated learners are rare — and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} certain-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking.`;
+      d.innerHTML = `Well-calibrated learners are rare, and it's a skill, not a trait. ${s.blind.length ? `Still, <b>${s.blind.length} certain-and-wrong answer(s)</b> slipped through, and those get priority. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking.`;
     }
 
     // Per-item breakdown.
@@ -1731,7 +1732,7 @@
         <span class="ri-title"><span class="mark">${r.correct ? '✓' : '✗'}</span> Q${i + 1} · ${r.concept}</span>
         <span class="ri-meta">claimed ${r.level.label} · ${r.marks > 0 ? '+' + r.marks : r.marks} · ${fmtSec(r.behavior.tTotal)}</span>
       </div>`;
-      html += `<div class="ri-line">Your answer: <b>${escapeHtml(r.raw) || '—'}</b> → correct: <b>${r.item.display}</b>${r.unparsed ? ' <span class="ri-tag miss">couldn’t read a number — Phase 1 Claude parses any format</span>' : ''}</div>`;
+      html += `<div class="ri-line">Your answer: <b>${escapeHtml(r.raw) || '…'}</b> → correct: <b>${r.item.display}</b>${r.unparsed ? ' <span class="ri-tag miss">couldn’t read a number; Phase 1 Claude parses any format</span>' : ''}</div>`;
       if (r.misconception) {
         html += `<div class="ri-line">Misconception (${r.source}): <b>${labelFor(r.misconception)}</b></div>`;
       }
@@ -1739,7 +1740,7 @@
         ? `<span class="ri-tag ok">key idea shown</span> ${r.item.keyIdea.label}`
         : `<span class="ri-tag miss">key idea not found</span> ${r.item.keyIdea.label}`}</div>`;
       if (r.behaviorNote) {
-        html += `<div class="ri-line">Behavior: ${r.behaviorNote} — the disagreement is itself a signal.</div>`;
+        html += `<div class="ri-line">Behavior: ${r.behaviorNote}; the disagreement is itself a signal.</div>`;
       }
       html += `<div class="ri-work">${r.item.work}</div>`;
       div.innerHTML = html;

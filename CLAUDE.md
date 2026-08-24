@@ -175,6 +175,17 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   Fonts are shared across all systems; the section-numbering pattern continues.
 - Owner copy rules (2026-08-24): no em dashes anywhere in site copy (en-dash ranges like
   K–8 are tolerated); no phone number publicly listed on the site.
+- Research-wording rules (2026-08-24, owner's 99-guideline revision doc, delta#13).
+  Site self-description must not pre-state study conclusions: process wording only
+  (banned in自述: "misjudge", "often wrongly", "poor judge"-style assertions about
+  learners; use "come to judge" / "experience judging"). "AI-native" and first-cohort
+  claims are retired from site copy; published paper titles, subtitles, abstracts and
+  citations are historical text, verbatim, never edited. The prototype "estimates"
+  understanding, never "diagnoses"; no behavior-vs-self-report opposition anywhere on
+  the site (the dissertation itself is interview/self-report research). "calibration"
+  stays out of the dissertation research-line description (the study measures perceived
+  understanding, not calibration accuracy) but remains valid inside the Delta product
+  context (Calibration Mirror, CBM machinery).
 - Bilingual (EN/中文) heuristics for anything that reads student text.
 - Item traps must map to *named*, literature-plausible misconceptions.
 - Test every demo change end-to-end in headless Chromium (Playwright at
@@ -196,6 +207,14 @@ retitled `delta#1`–`delta#8`; PR #9 is `llm#1`. Before opening a new PR, find 
 GitHub's. A new project line starts its own counter at 1.
 
 ## 6. Open threads (update as they resolve)
+
+- Field-period rules from the 99-guideline doc (recorded now, execute at IRB package
+  stage): recruitment page as a standalone /study.html with experience-near language
+  only (no ACB/MDC/baseline/discordant/misjudge/calibration/integrity/cheating terms);
+  during fieldwork, no prominent homepage link to it and no paper/prototype links from
+  it; no signup form, interest list, or email collection anywhere before IRB approval;
+  participants' residual exposure to the site is not probed in interviews, it goes to
+  the reflexivity log and limitations.
 
 - Chair meeting: 16-question list delivered (scope, 3×6 design, N, scales, IRB route,
   age/recruitment, qualitative coding, timeline). Awaiting outcomes → then build

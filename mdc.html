@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Metacognitively Discordant Completion (MDC): effort invested, non-understanding known first-hand, completion released anyway. Preprint by Yizhen Jia." />
+<title>Metacognitively Discordant Completion · Yizhen Jia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #16181e;
+    --paper: #f3f4f6;
+    --cream: #dfe1e6;
+    --accent: #31548e;
+    --accent-light: #6d8cbf;
+    --muted: #737a86;
+    --rule: #c6cad2;
+    --card-bg: #fafbfc;
+    --shadow: 0 6px 40px rgba(22,24,30,.10);
+    --body: #454a54;
+    --ink-hover: #1f2430;
+    --inv-muted: #8b93a2;
+    --inv-body: #aeb5c2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 18px;
+  }
+  .sheet {
+    min-height: calc(100dvh - 36px);
+    max-width: 1500px;
+    margin: 0 auto;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .band { display: flex; flex-wrap: wrap; gap: 1px; }
+  .band-a { flex: 1; }
+  .band-a > .abstract { flex: 1.7 1 24rem; min-width: 0; }
+  .band-a > .construct { flex: 1 1 17rem; min-width: 0; }
+  .band-b > * { flex: 1 1 16rem; min-width: 0; }
+
+  .tile { background: var(--paper); padding: 1rem 1.2rem; position: relative; transition: background .25s; }
+  .tile:hover { background: var(--card-bg); }
+  .tile-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .58rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .65rem;
+  }
+  .tile-label b { color: var(--accent); font-weight: 500; }
+
+  .mast { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.2rem 1.8rem; }
+  .backlink {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: .6rem;
+  }
+  .backlink:hover { color: var(--accent); }
+  .mast-over {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .45rem;
+  }
+  .mast h1 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    max-width: 30ch;
+  }
+  .mast-by { margin-top: .55rem; font-size: .82rem; color: var(--muted); }
+  .mast-by b { color: var(--ink); font-weight: 600; }
+  .mast-art { flex-shrink: 0; width: clamp(96px, 10vw, 136px); height: clamp(96px, 10vw, 136px); }
+  .mast-art svg { width: 100%; height: 100%; }
+  .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .dot { fill: var(--accent); }
+
+  .tile h3 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    margin-bottom: .5rem;
+  }
+  .tile p { font-size: .8rem; color: var(--body); }
+  .abstract p { font-size: .84rem; line-height: 1.65; }
+  .abstract p + p { margin-top: .7rem; }
+
+  .klist { list-style: none; }
+  .klist li { padding: .55rem 0; border-bottom: 1px dashed var(--rule); font-size: .78rem; color: var(--body); }
+  .klist li:last-child { border-bottom: none; }
+  .klist b {
+    display: block; font-weight: 600; color: var(--ink); font-size: .8rem;
+  }
+  .klist .knum {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .58rem; color: var(--accent); letter-spacing: .1em;
+  }
+
+  .arrowlink {
+    display: inline-flex; align-items: center; gap: .4rem;
+    margin-top: .55rem; margin-right: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 500;
+    color: var(--accent); text-decoration: none;
+  }
+  .arrowlink:hover { text-decoration: underline; }
+  .arrowlink.sub { color: var(--muted); }
+
+  .cite {
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .66rem; line-height: 1.6;
+    color: var(--body);
+    background: var(--card-bg);
+    border: 1px dashed var(--rule);
+    padding: .6rem .7rem;
+    border-radius: 6px;
+    word-break: break-word;
+  }
+
+  .foot {
+    position: sticky; bottom: 0; z-index: 40;
+    border-top: 1px solid var(--rule); margin-top: -1px;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: .6rem 1.6rem;
+    padding: .6rem 1.8rem .6rem 6.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .04em;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .foot a { color: var(--ink); text-decoration: none; }
+  .foot a:hover { color: var(--accent); }
+  .foot .copy { color: var(--muted); }
+
+  .zoomer { position: fixed; left: 26px; bottom: 9px; z-index: 50; display: flex; gap: 6px; }
+  .zoomer button {
+    width: 30px; height: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1;
+    color: var(--ink);
+    background: rgba(243,244,246,.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .zoomer button:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (min-width: 861px) and (max-height: 820px) {
+    html { font-size: 13.5px; }
+    body { padding: 12px; }
+    .sheet { min-height: calc(100dvh - 24px); }
+    .tile { padding: .7rem .95rem; }
+    .mast { padding: .8rem 1.4rem; }
+    .mast-art { width: 84px; height: 84px; }
+  }
+  @media (max-width: 860px) {
+    body { padding: 12px; }
+    .zoomer { display: none; }
+    .sheet { min-height: 0; }
+    .mast { padding: 1.3rem 1.3rem; }
+    .mast-art { width: 84px; height: 84px; }
+    .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<main class="sheet">
+
+  <header class="tile mast">
+    <div>
+      <a class="backlink" href="index.html">← Yizhen (Stephen) Jia</a>
+      <p class="mast-over">Preprint · 2026</p>
+      <h1>Metacognitively Discordant Completion and the Aware Pass&#8209;Through of Non&#8209;Understanding in Generative AI Learning</h1>
+      <p class="mast-by"><b>Yizhen Jia</b> · College of Education, Westcliff University</p>
+    </div>
+    <div class="mast-art" aria-hidden="true">
+      <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="170" cy="170" r="80" class="ring" stroke-dasharray="4 8" />
+        <circle cx="170" cy="170" r="120" class="ring" stroke-dasharray="6 10" />
+        <circle cx="170" cy="170" r="155" class="ring" stroke-dasharray="3 12" />
+        <circle cx="250" cy="170" r="5" class="dot" opacity=".9" />
+        <circle cx="120" cy="60" r="4" class="dot" opacity=".6" />
+        <text x="170" y="192" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="64" style="fill:var(--accent)" opacity=".85">≠</text>
+      </svg>
+    </div>
+  </header>
+
+  <div class="band band-a">
+
+    <section class="tile abstract">
+      <p class="tile-label"><b>01</b> · Abstract</p>
+      <p>Generative AI lets a learner submit correct, complete work while knowing that understanding has not arrived, a state this paper names. Metacognitively discordant completion (MDC) is the experiential state of a learner who has invested cognitive effort in an academic task, who holds a formed, first-person awareness that understanding has not occurred, judged against the learner's own operative standard, and who releases the completion anyway. The conjunction of the three conditions is the construct, and the paper argues that no existing literature holds the three together under one name.</p>
+      <p>The argument proceeds by inheritance and by boundary. Metacognition research supplies the verdict machinery and the judgment economy of answer release. A pre-AI genealogy across five literatures establishes that the dissociation between completing and understanding is old. Four cuts separate the construct from withdrawn effort, justification discourse, fluency illusions, and preprint-stage constructs. A sibling construct, the Absent Cognitive Baseline, marks the case where no verdict can form, and frameworks from epistemic akrasia to academic dishonesty are each engaged on the one element they lack.</p>
+      <p>The technology's part is amplification, not invention, a framing credited to the field. Evidence questions are assigned to a planned interpretative phenomenological study with graphicacy as the anchoring domain.</p>
+    </section>
+
+    <section class="tile construct">
+      <p class="tile-label"><b>02</b> · The Three Conditions</p>
+      <h3>All three, together, are MDC</h3>
+      <ul class="klist">
+        <li><span class="knum">I</span><b>Effort invested</b>Real cognitive work went into the task. The evening's effort is visible in the chat log.</li>
+        <li><span class="knum">II</span><b>Non-understanding known</b>A formed, first-person verdict that understanding has not occurred, judged by the learner's own standard.</li>
+        <li><span class="knum">III</span><b>Completion released anyway</b>The work is submitted with that verdict intact.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <div class="band band-b">
+
+    <section class="tile">
+      <p class="tile-label"><b>03</b> · What MDC Is Not</p>
+      <h3>Three families, three misses</h3>
+      <p>The illusion family says the learner believes understanding happened, yet here the learner already has the truth. The integrity family says a rule was broken, yet no rule was broken. The disengagement family says effort was withdrawn, yet the effort is real. MDC is the state all three frames miss.</p>
+    </section>
+
+    <section class="tile">
+      <p class="tile-label"><b>04</b> · Read &amp; Cite</p>
+      <h3>Preprint, PDF available</h3>
+      <a class="arrowlink" href="https://drive.google.com/file/d/16thgXqvKipqxEdw7ifAYVzbjH6gBkakn/view" target="_blank" rel="noopener">→ Read the paper (PDF)</a>
+      <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv listing</a>
+      <div class="cite">Jia, Y. (2026). Metacognitively discordant completion and the aware pass-through of non-understanding in generative AI learning. EdArXiv preprint.</div>
+    </section>
+
+    <section class="tile">
+      <p class="tile-label"><b>05</b> · Related</p>
+      <h3>The sibling construct</h3>
+      <p>MDC names the case where the verdict forms and the work is released anyway. Its sibling, the Absent Cognitive Baseline, marks the case where no verdict can form at all. Both motivate Delta, a prototype that reads understanding from behavior.</p>
+      <a class="arrowlink" href="acb.html">→ ACB paper</a>
+      <a class="arrowlink sub" href="platform.html">Delta prototype</a>
+    </section>
+
+  </div>
+
+  <footer class="tile foot">
+    <div class="foot-links">
+      <a href="index.html">← Home</a>
+      <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
+      <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <span class="copy">© 2026 Yizhen (Stephen) Jia</span>
+  </footer>
+
+</main>
+
+<div class="zoomer" aria-label="Zoom">
+  <button id="zout" aria-label="Zoom out" title="Zoom out">−</button>
+  <button id="zin" aria-label="Zoom in" title="Zoom in">+</button>
+</div>
+
+<script>
+  (function () {
+    var z = 1, MIN = 0.8, MAX = 1.6, STEP = 0.2;
+    try { z = parseFloat(localStorage.getItem('yj-zoom')) || 1; } catch (e) {}
+    function apply() {
+      if (Math.abs(z - 1) < 0.01) document.documentElement.style.fontSize = '';
+      else document.documentElement.style.fontSize = (16 * z) + 'px';
+      try { localStorage.setItem('yj-zoom', z); } catch (e) {}
+    }
+    document.getElementById('zin').addEventListener('click', function () { z = Math.min(MAX, +(z + STEP).toFixed(2)); apply(); });
+    document.getElementById('zout').addEventListener('click', function () { z = Math.max(MIN, +(z - STEP).toFixed(2)); apply(); });
+    apply();
+  })();
+</script>
+</body>
+</html>

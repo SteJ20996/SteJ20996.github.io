@@ -18,8 +18,8 @@ linked to EdArXiv preprints):**
   not occurred + releasing the completion anyway; distinguishes it from illusion/
   integrity/disengagement framings; grounds a planned interpretative phenomenological
   study anchored in graphicacy. When the owner says "MDC", this is what they mean.
-  Preprint: https://osf.io/preprints/edarxiv/wzjxf_v1 (v1 still pending moderation as
-  of 2026-08-09 — link may 404 for the public until approved). Drive PDF backup:
+  Preprint (live, moderation accepted 2026-08-24): https://osf.io/preprints/edarxiv/wzjxf_v1
+  DOI: https://doi.org/10.35542/osf.io/wzjxf_v1 · Drive PDF backup:
   https://drive.google.com/file/d/16thgXqvKipqxEdw7ifAYVzbjH6gBkakn/view
 - **ACB** — "The Absent Cognitive Baseline: Theorizing a Structural Gap in AI-Native
   College Students' Academic Self-Assessment" (Jia & Jiarui Xu). MDC's sibling

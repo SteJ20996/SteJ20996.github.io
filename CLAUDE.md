@@ -33,6 +33,12 @@ linked to EdArXiv preprints):**
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
 **Working branch convention:** feature branches merged to `main` via PR (owner merges).
 
+**Two project lines share this repo.** Everything below describes the *Delta* line
+(`index.html`, `platform.html`, this file). The repo also hosts an unrelated line —
+`local-llm.html`, a single-file local-model benchmarking terminal that talks to Ollama
+from the browser. It shares only the design system; no code, no research framing, no
+compliance surface. Do not fold the two together when reasoning about either.
+
 ---
 
 ## 1. Vision (what Delta is)
@@ -156,6 +162,17 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   to bust cache).
 - Commit style: descriptive multi-paragraph messages explaining the pedagogy/method
   rationale, not just the diff.
+
+**Work references (adopted 2026-08-24).** GitHub's PR/Issue counter is repo-global and
+cannot be reset or namespaced, so it is an internal serial only — never a work reference.
+The canonical reference is `<line>#<n>`, counted separately per project line:
+- `delta#n` — the Delta line (`index.html`, `platform.html`, `CLAUDE.md`)
+- `llm#n` — the local-llm terminal line (`local-llm.html`)
+
+Every PR title carries its reference as a `[line#n]` prefix. Already assigned: PRs #1–#8
+retitled `delta#1`–`delta#8`; PR #9 is `llm#1`. Before opening a new PR, find the highest
+`[<line>#n]` used on that line and increment it — do **not** derive the number from
+GitHub's. A new project line starts its own counter at 1.
 
 ## 6. Open threads (update as they resolve)
 

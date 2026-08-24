@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Delta · Adaptive Learning that Closes the Gap · Yizhen (Stephen) Jia</title>
-<meta name="description" content="A research prototype for adaptive learning: not AI that answers your questions, but AI that diagnoses how you actually understand, from your behavior rather than your self-report, and adapts difficulty, spacing, and representation to close the gap between felt and real understanding." />
+<meta name="description" content="A research prototype for adaptive learning: not AI that answers your questions, but AI that estimates how you actually understand from your behavior, and adapts difficulty, spacing, and representation to close the gap between felt and real understanding." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -466,7 +466,7 @@
       <a class="backlink" href="index.html">← Yizhen (Stephen) Jia</a>
       <p class="mast-over">Research Prototype · Working Name: Delta</p>
       <h1>Learning that closes the <em>gap</em>.</h1>
-      <p class="mast-tag">Not an AI that answers your questions, but an AI that figures out how you actually understand, from what you do, not what you say.</p>
+      <p class="mast-tag">Not an AI that answers your questions, but an AI that estimates how you actually understand, from what you do.</p>
       <a class="arrowlink" href="#demo">→ Try the live demo</a>
     </div>
     <div class="mast-art" aria-hidden="true">
@@ -487,8 +487,8 @@
 
     <section class="tile" id="gap">
       <p class="tile-label"><b>01</b> · The Gap</p>
-      <h3>You are a poor judge of your own understanding</h3>
-      <p>Learners are systematically miscalibrated: we routinely feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's the single biggest thing today's AI tutors miss. They answer the question you thought to ask, and you can't request help with a gap you can't see.</p>
+      <h3>How good a judge are you of your own understanding?</h3>
+      <p>A long line of research suggests learners are often miscalibrated: we can feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's the single biggest thing today's AI tutors miss. They answer the question you thought to ask, and you can't request help with a gap you can't see.</p>
     </section>
 
     <section class="tile" id="effort">
@@ -1352,7 +1352,7 @@
     if (s.gap >= 15) {
       h.textContent = `You claimed ~${s.avgConf}%; you scored ${s.acc}%. That's ${s.gap} points of overconfidence.`;
       h.className = 'gap-headline blindspot';
-      d.innerHTML = `This is the most common profile, and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b>, the blind-spot cell that self-report can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking; inflated certainty is exactly what it prices in.`;
+      d.innerHTML = `This is the most common profile, and the most dangerous one, because it <b>feels like competence</b>. ${s.blind.length ? `<b>${s.blind.length} of your ${s.n} answers were certain-and-wrong</b>, the blind-spot cell that self-report alone can never surface. ` : ''}You finished at <b>${s.score} of ${s.maxScore}</b> under honesty-aligned marking; inflated certainty is exactly what it prices in.`;
     } else if (s.gap <= -15) {
       h.textContent = `You scored ${s.acc}% but only claimed ~${s.avgConf}%; you know more than you trust.`;
       h.className = 'gap-headline';

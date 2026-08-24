@@ -166,6 +166,10 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
   zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC).
+  Exception (2026-08-24, delta#12, owner settled here after trying all-white-gold and
+  all-black-gold): the homepage's Δ·Prototype tile alone is hardcoded to platform.html's
+  black-gold (tile #1d1c19, text #f0ede4, brass #c9a45c) as a theme preview of the
+  Delta page; the rest of the portfolio stays graphite-indigo.
   `platform.html` uses the black-gold dark system (see section 2, delta#11);
   `local-llm.html` keeps the original warm-paper terracotta system.
   Fonts are shared across all systems; the section-numbering pattern continues.

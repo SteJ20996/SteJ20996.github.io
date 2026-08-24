@@ -132,19 +132,20 @@
   .res-line b { display: block; font-weight: 600; font-size: .8rem; }
   .res-line span { color: var(--muted); font-size: .73rem; }
 
-  /* Delta tile */
-  .delta { background: var(--ink); color: var(--paper); overflow: hidden; display: block; text-decoration: none; }
-  .delta:hover { background: var(--ink-hover); }
-  .delta .tile-label { color: var(--inv-muted); }
-  .delta h3 { color: var(--paper); }
-  .delta p { color: var(--inv-body); }
+  /* Delta tile: black-gold, matching platform.html's theme */
+  .delta { background: #1d1c19; color: #f0ede4; overflow: hidden; display: block; text-decoration: none; }
+  .delta:hover { background: #262420; }
+  .delta .tile-label { color: #a49e90; }
+  .delta .tile-label b { color: #c9a45c; }
+  .delta h3 { color: #f0ede4; }
+  .delta p { color: #b8b4a9; }
   .delta .glyph {
     position: absolute; right: .3rem; bottom: -1.4rem;
     font-family: 'DM Serif Display', serif;
-    font-size: 6.2rem; line-height: 1; color: var(--accent-light); opacity: .45;
+    font-size: 6.2rem; line-height: 1; color: #c9a45c; opacity: .45;
     pointer-events: none;
   }
-  .delta .arrowlink { color: var(--accent-light); }
+  .delta .arrowlink { color: #c9a45c; }
 
   /* Paper tiles */
   .paper .ptag {

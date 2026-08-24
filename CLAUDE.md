@@ -66,10 +66,13 @@ Core principles (all deliberate, all defended on the page):
 
 ## 2. Product state (platform.html)
 
-Single self-contained page in the original warm-paper design system (DM Serif Display /
-Instrument Sans / JetBrains Mono; paper #f5f2ed, ink #1a1a1e, accent #b04a32; Δ motif
-echoing the portfolio's ∫). Since the 2026-08-24 portfolio redesign this system is no
-longer shared with the portfolio pages (see Working agreements). All logic in-browser; **no data leaves the page** (a stated
+Single self-contained page, since 2026-08-24 (delta#11) a compact bento sheet (~2
+screens at default zoom, was ~10 screens of long scroll) in the black-gold dark system:
+charcoal ground #1d1c19, bright warm text #f0ede4, brass accent #c9a45c, cards #262420,
+rules #3d3a31, good #72b98d, warn #d9a83d; fonts unchanged (DM Serif Display /
+Instrument Sans / JetBrains Mono); Δ motif echoing the portfolio's ∫. Accent buttons
+carry near-black text on gold (white-on-gold fails contrast); the .work code block is
+darker than its card (#121110) rather than ink-inverted. All logic in-browser; **no data leaves the page** (a stated
 compliance asset).
 
 The Calibration Mirror demo:
@@ -94,10 +97,13 @@ The Calibration Mirror demo:
 - Explanation analysis = transparent bilingual keyword heuristic, explicitly labeled a
   stand-in for the Phase-1 Claude grader.
 
-Page sections: 01 problem → 02 effort → 03 honest caveat (learning styles) → 04 demo →
-05 loop → 06 dimensions → 07 contract → 08 homework-photo concept (Phase 1 design
-contract) → 09 roadmap (Phase 0 done; 1: Claude behind the seam + homework photos;
-2: persistent learner model; 3: study & evidence).
+Page structure: masthead (Δ orbit art, back link) → tile band 01 problem / 02 effort /
+03 honest caveat (learning styles) → 04 demo tile (the interactive card, engine and
+markup untouched by the redesign) → tile band 05 loop / 06 dimensions / 07 contract →
+band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 done;
+1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
+evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
+hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
 
 ## 3. Dissertation linkage (the research framework)
 
@@ -160,8 +166,9 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
   zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC).
-  `platform.html` and `local-llm.html` keep the original warm-paper terracotta system.
-  Fonts are shared across both systems; the section-numbering pattern continues.
+  `platform.html` uses the black-gold dark system (see section 2, delta#11);
+  `local-llm.html` keeps the original warm-paper terracotta system.
+  Fonts are shared across all systems; the section-numbering pattern continues.
 - Owner copy rules (2026-08-24): no em dashes anywhere in site copy (en-dash ranges like
   K–8 are tolerated); no phone number publicly listed on the site.
 - Bilingual (EN/中文) heuristics for anything that reads student text.
@@ -191,7 +198,5 @@ GitHub's. A new project line starts its own counter at 1.
   research mode (consent + questionnaire + Brier + per-stage timestamps + session
   blocks + Qualtrics handoff).
 - Item bank expansion to ~18 with parallel forms; pilot for item stats.
-- 丙 pending: whether to restyle `platform.html` into the indigo bento system (owner
-  deferred on 2026-08-24; if approved, do it as its own PR).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow.
 - Working name "Delta" is provisional; project name is SteJ Delta Project (STEJDP).

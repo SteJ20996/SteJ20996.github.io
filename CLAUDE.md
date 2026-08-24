@@ -66,7 +66,8 @@ Core principles (all deliberate, all defended on the page):
 
 ## 2. Product state (platform.html)
 
-Single self-contained page in the black-gold dark system since 2026-08-24 (delta#11):
+Single self-contained page, since 2026-08-24 (delta#11) a compact bento sheet (~2
+screens at default zoom, was ~10 screens of long scroll) in the black-gold dark system:
 charcoal ground #1d1c19, bright warm text #f0ede4, brass accent #c9a45c, cards #262420,
 rules #3d3a31, good #72b98d, warn #d9a83d; fonts unchanged (DM Serif Display /
 Instrument Sans / JetBrains Mono); Δ motif echoing the portfolio's ∫. Accent buttons
@@ -96,10 +97,13 @@ The Calibration Mirror demo:
 - Explanation analysis = transparent bilingual keyword heuristic, explicitly labeled a
   stand-in for the Phase-1 Claude grader.
 
-Page sections: 01 problem → 02 effort → 03 honest caveat (learning styles) → 04 demo →
-05 loop → 06 dimensions → 07 contract → 08 homework-photo concept (Phase 1 design
-contract) → 09 roadmap (Phase 0 done; 1: Claude behind the seam + homework photos;
-2: persistent learner model; 3: study & evidence).
+Page structure: masthead (Δ orbit art, back link) → tile band 01 problem / 02 effort /
+03 honest caveat (learning styles) → 04 demo tile (the interactive card, engine and
+markup untouched by the redesign) → tile band 05 loop / 06 dimensions / 07 contract →
+band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 done;
+1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
+evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
+hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
 
 ## 3. Dissertation linkage (the research framework)
 

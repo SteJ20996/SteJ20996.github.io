@@ -36,191 +36,104 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ---- NAV ---- */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    backdrop-filter: blur(16px) saturate(1.6);
-    -webkit-backdrop-filter: blur(16px) saturate(1.6);
-    background: rgba(26,25,22,.85);
-    border-bottom: 1px solid var(--rule);
-    transition: box-shadow .3s;
-  }
-  nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,.45); }
-  .nav-inner {
-    max-width: 1080px;
+  /* ---- COMPACT SHEET CHASSIS ---- */
+  html { font-size: 16px; }
+  body { background: var(--cream); padding: 18px; }
+  .sheet {
+    min-height: calc(100dvh - 36px);
+    max-width: 1500px;
     margin: 0 auto;
-    padding: .85rem 2rem;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 1px;
   }
-  .nav-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.15rem;
-    letter-spacing: -.02em;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
-  .nav-links a {
-    font-size: .82rem;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--muted);
-    transition: color .25s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; left: 0;
-    width: 0; height: 2px;
-    background: var(--accent);
-    transition: width .3s cubic-bezier(.4,0,.2,1);
-  }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-links a:hover::after { width: 100%; }
-  .nav-back {
+  .band { display: flex; flex-wrap: wrap; gap: 1px; }
+  .band-a > * { flex: 1 1 18rem; min-width: 0; }
+  .band-b > * { flex: 1 1 17rem; min-width: 0; }
+  .band-c > * { flex: 1 1 24rem; min-width: 0; }
+  .tile { background: var(--paper); padding: 1.05rem 1.3rem; position: relative; transition: background .25s; }
+  .tile:hover { background: #201f1b; }
+  .tile-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: .72rem !important;
-    text-transform: none !important;
-    letter-spacing: .02em !important;
+    font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .6rem;
   }
+  .tile-label b { color: var(--accent); font-weight: 500; }
+  .tile h3 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.08rem; line-height: 1.25; margin-bottom: .45rem; color: var(--ink); }
+  .tile > p { font-size: .8rem; color: #c9c4b6; }
+  .tile > p + p { margin-top: .6rem; }
+  .tile .lede { font-size: .8rem; color: #b0aa9c; max-width: 90ch; margin-bottom: 1rem; }
 
-  /* ---- HERO ---- */
-  .hero {
-    padding: 10rem 2rem 4rem;
-    max-width: 1080px;
-    margin: 0 auto;
-    position: relative;
-  }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1.15fr .85fr;
-    gap: 3.5rem;
-    align-items: center;
-  }
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .72rem;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-  }
-  .eyebrow::before {
-    content: '';
-    width: 26px; height: 1.5px;
-    background: var(--accent);
-  }
-  .hero-text h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3.5rem;
-    line-height: 1.08;
-    letter-spacing: -.03em;
-    margin-bottom: 1.2rem;
-  }
-  .hero-text h1 em { font-style: italic; color: var(--accent); }
-  .hero-tagline {
-    font-size: 1.18rem;
-    color: #ddd8cc;
-    margin-bottom: 1.6rem;
-    max-width: 30rem;
-  }
-  .hero-sub {
-    font-size: .95rem;
-    color: var(--muted);
-    max-width: 30rem;
-    margin-bottom: 2rem;
-  }
-  .hero-cta { display: inline-flex; gap: 1rem; flex-wrap: wrap; }
-  .btn {
+  .mast { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem 1.8rem; }
+  .backlink {
     display: inline-block;
-    padding: .7rem 1.6rem;
-    border-radius: 6px;
-    font-size: .85rem;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-decoration: none;
-    transition: all .25s cubic-bezier(.4,0,.2,1);
-    cursor: pointer;
-    border: none;
-  }
-  .btn-primary { background: var(--accent); color: #1d1c19; }
-  .btn-primary:hover { background: #b78f45; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,164,92,.25); }
-  .btn-outline { border: 1.5px solid var(--ink); color: var(--ink); background: transparent; }
-  .btn-outline:hover { background: var(--ink); color: var(--paper); }
-
-  /* hero motif: Δ echoing the ∫ on the main site */
-  .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
-  .hero-graphic { width: 320px; height: 320px; position: relative; }
-  .hero-graphic svg { width: 100%; height: 100%; }
-  .ring { fill: none; stroke-width: 1.2; }
-  .ring-1 { stroke: var(--rule); }
-  .ring-2 { stroke: var(--accent-light); opacity: .5; }
-  .ring-3 { stroke: var(--accent); opacity: .3; }
-  .dot { fill: var(--accent); }
-  @keyframes orbit1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes orbit2 { from { transform: rotate(120deg); } to { transform: rotate(480deg); } }
-  @keyframes orbit3 { from { transform: rotate(240deg); } to { transform: rotate(600deg); } }
-  .orbit-1 { animation: orbit1 20s linear infinite; transform-origin: 160px 160px; }
-  .orbit-2 { animation: orbit2 28s linear infinite; transform-origin: 160px 160px; }
-  .orbit-3 { animation: orbit3 24s linear infinite; transform-origin: 160px 160px; }
-
-  /* ---- SECTION SHARED ---- */
-  section { max-width: 1080px; margin: 0 auto; padding: 4.5rem 2rem; }
-  .section-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: .72rem;
-    font-weight: 500;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: .6rem;
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; margin-bottom: .6rem;
   }
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.2rem;
-    letter-spacing: -.02em;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-  .section-lede {
-    font-size: 1.05rem;
-    color: #ddd8cc;
-    max-width: 40rem;
-    margin-bottom: 2.5rem;
-  }
+  .backlink:hover { color: var(--accent); }
+  .mast-over { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: .45rem; }
+  .mast h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(1.9rem, 3.1vw, 2.7rem); line-height: 1.08; letter-spacing: -.01em; }
+  .mast h1 em { font-style: italic; color: var(--accent); }
+  .mast-tag { margin-top: .55rem; font-size: .84rem; color: var(--muted); max-width: 60ch; }
+  .mast-art { flex-shrink: 0; width: clamp(96px, 10vw, 140px); height: clamp(96px, 10vw, 140px); }
+  .mast-art svg { width: 100%; height: 100%; }
+  .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .dot { fill: var(--accent); }
 
-  /* ---- PROBLEM / PRINCIPLE PROSE ---- */
-  .prose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-  .prose-block h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.35rem;
-    margin-bottom: .7rem;
-    line-height: 1.3;
+  .klist { list-style: none; }
+  .klist li { padding: .5rem 0; border-bottom: 1px dashed var(--rule); font-size: .76rem; color: #b0aa9c; }
+  .klist li:last-child { border-bottom: none; }
+  .klist b { display: block; font-weight: 600; color: #ddd8cc; font-size: .78rem; }
+  .klist .knum { font-family: 'JetBrains Mono', monospace; font-size: .56rem; color: var(--accent); letter-spacing: .1em; }
+  .duo { display: flex; gap: 1.4rem; }
+  .duo > div { flex: 1; min-width: 0; }
+  .duo h4 { font-size: .72rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .35rem; font-family: 'JetBrains Mono', monospace; }
+  .duo ul { list-style: none; }
+  .duo li { font-size: .74rem; color: #b0aa9c; padding: .22rem 0; border-bottom: 1px dashed var(--rule); }
+  .duo li:last-child { border-bottom: none; }
+
+  .arrowlink {
+    display: inline-flex; align-items: center; gap: .4rem;
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 500;
+    color: var(--accent); text-decoration: none;
   }
-  .prose-block p { font-size: .98rem; color: #c9c4b6; }
-  .prose-block p + p { margin-top: .9rem; }
-  .pull {
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-    font-size: 1.5rem;
-    line-height: 1.4;
+  .arrowlink:hover { text-decoration: underline; }
+
+  .foot {
+    position: sticky; bottom: 0; z-index: 40;
+    border-top: 1px solid var(--rule); margin-top: -1px;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: .6rem 1.6rem;
+    padding: .6rem 1.8rem .6rem 6.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .04em;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .foot a { color: var(--ink); text-decoration: none; }
+  .foot a:hover { color: var(--accent); }
+  .foot .copy { color: var(--muted); }
+
+  .zoomer { position: fixed; left: 26px; bottom: 9px; z-index: 50; display: flex; gap: 6px; }
+  .zoomer button {
+    width: 30px; height: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1;
     color: var(--ink);
-    border-left: 3px solid var(--accent);
-    padding: .3rem 0 .3rem 1.4rem;
-    margin: 1rem 0;
+    background: rgba(29,28,25,.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s;
   }
-  .pull span { color: var(--accent); }
+  .zoomer button:hover { color: var(--accent); border-color: var(--accent); }
 
   /* ---- CALLOUT (honest caveat) ---- */
   .callout {
@@ -530,269 +443,72 @@
   }
   .seam-note b { color: var(--accent); }
 
-  /* ---- LOOP ---- */
-  .loop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; counter-reset: step; }
-  .loop-step {
-    background: var(--card-bg);
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 1.6rem 1.3rem;
-    position: relative;
-    transition: transform .3s, box-shadow .3s;
-  }
-  .loop-step:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-  .loop-step .num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .72rem;
-    color: var(--accent);
-    letter-spacing: .1em;
-    margin-bottom: .8rem;
-  }
-  .loop-step h4 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: .5rem; line-height: 1.25; }
-  .loop-step p { font-size: .86rem; color: #b0aa9c; line-height: 1.55; }
-  .loop-step::after {
-    content: '→';
-    position: absolute;
-    right: -.95rem; top: 50%;
-    transform: translateY(-50%);
-    color: var(--accent);
-    font-size: 1.1rem;
-    z-index: 2;
-  }
-  .loop-step:last-child::after {
-    content: '↺';
-    right: 50%;
-    top: auto; bottom: -2.2rem;
-    transform: translateX(50%);
-  }
-  .flow3 { grid-template-columns: repeat(3, 1fr); }
-  .flow3 .loop-step:last-child::after { content: none; }
-
-  /* ---- DIMENSIONS ---- */
-  .dims { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
-  .dim {
-    background: var(--card-bg);
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 1.6rem 1.7rem;
-    transition: transform .3s, box-shadow .3s;
-  }
-  .dim:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-  .dim .glyph {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: var(--accent);
-    margin-bottom: .5rem;
-    display: block;
-  }
-  .dim h4 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; margin-bottom: .4rem; }
-  .dim .basis {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .66rem;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: .7rem;
-  }
-  .dim p { font-size: .9rem; color: #b0aa9c; }
-
-  /* ---- CONTRACT ---- */
-  .contract { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
-  .contract-col { padding: 2rem; }
-  .contract-col.asks { background: var(--card-bg); border-right: 1px solid var(--rule); }
-  .contract-col h4 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .contract-col.asks h4 { color: var(--accent); }
-  .contract-col.gives h4 { color: var(--good); }
-  .contract-col ul { list-style: none; display: grid; gap: .8rem; }
-  .contract-col li { font-size: .94rem; color: #c9c4b6; display: flex; gap: .6rem; align-items: flex-start; }
-  .contract-col li::before { font-weight: 700; flex-shrink: 0; }
-  .contract-col.asks li::before { content: '↑'; color: var(--accent); }
-  .contract-col.gives li::before { content: '✓'; color: var(--good); }
-
-  /* ---- ROADMAP ---- */
-  .roadmap { position: relative; padding-left: 2.5rem; }
-  .roadmap::before {
-    content: ''; position: absolute; left: 0; top: .4rem; bottom: .4rem;
-    width: 2px; background: linear-gradient(to bottom, var(--accent), var(--rule)); border-radius: 2px;
-  }
-  .rm-item { position: relative; padding-bottom: 2.2rem; }
-  .rm-item:last-child { padding-bottom: 0; }
-  .rm-dot {
-    position: absolute; left: -2.62rem; top: .3rem;
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent); border: 2px solid var(--paper); box-shadow: 0 0 0 3px var(--accent);
-  }
-  .rm-item.future .rm-dot { background: var(--paper); box-shadow: 0 0 0 2px var(--rule); }
-  .rm-phase { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
-  .rm-item h4 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: .35rem; }
-  .rm-item h4 .badge {
-    font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .05em;
-    text-transform: uppercase; vertical-align: middle; margin-left: .6rem;
-    padding: .15rem .5rem; border-radius: 4px;
-  }
-  .badge.now { background: rgba(114,185,141,.15); color: var(--good); }
-  .badge.next { background: rgba(201,164,92,.12); color: var(--accent); }
-  .rm-item p { font-size: .92rem; color: #b0aa9c; }
-  .rm-item code {
-    font-family: 'JetBrains Mono', monospace; font-size: .82rem;
-    background: var(--cream); padding: .1rem .35rem; border-radius: 4px; color: var(--accent);
-  }
-
-  /* ---- FOOTER ---- */
-  footer {
-    border-top: 1px solid var(--rule);
-    text-align: center;
-    padding: 2.5rem 2rem;
-    font-size: .78rem;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: .03em;
-  }
-  footer a { color: var(--accent); text-decoration: none; }
-
-  .divider { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
-  .divider hr { border: none; height: 1px; background: var(--rule); }
-
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
   /* ---- MOBILE ---- */
-  @media (max-width: 820px) {
-    html { font-size: 15px; }
-    .hero { padding: 8rem 1.2rem 3rem; }
-    .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .hero-text h1 { font-size: 2.6rem; }
-    .hero-visual { order: -1; }
-    .hero-graphic { width: 220px; height: 220px; }
-    .prose-grid, .dims, .contract, .conf-levels { grid-template-columns: 1fr; }
-    .contract-col.asks { border-right: none; border-bottom: 1px solid var(--rule); }
-    .loop { grid-template-columns: 1fr; }
-    .loop-step::after { content: '↓'; right: 50%; top: auto; bottom: -1rem; transform: translateX(50%); }
-    .loop-step:last-child::after { content: '↺'; bottom: -1.6rem; }
-    .nav-links { gap: 1rem; }
-    .nav-links li:not(.keep) { display: none; }
+  @media (max-width: 860px) {
+    body { padding: 12px; }
+    .zoomer { display: none; }
+    .sheet { min-height: 0; }
+    .mast { padding: 1.3rem 1.3rem; }
+    .mast-art { width: 88px; height: 88px; }
+    .duo { flex-direction: column; gap: 1rem; }
+    .conf-levels { grid-template-columns: 1fr; }
+    .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">YJ<span>.</span></a>
-    <ul class="nav-links">
-      <li><a href="#gap">The Gap</a></li>
-      <li><a href="#demo">Live Demo</a></li>
-      <li><a href="#loop">The Loop</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
-      <li class="keep"><a class="nav-back" href="index.html">← Back to portfolio</a></li>
-    </ul>
-  </div>
-</nav>
+<main class="sheet">
 
-<!-- HERO -->
-<header class="hero">
-  <div class="hero-grid">
-    <div class="hero-text reveal">
-      <div class="eyebrow">Research Prototype · Working name: Delta</div>
+  <!-- Masthead -->
+  <header class="tile mast">
+    <div>
+      <a class="backlink" href="index.html">← Yizhen (Stephen) Jia</a>
+      <p class="mast-over">Research Prototype · Working Name: Delta</p>
       <h1>Learning that closes the <em>gap</em>.</h1>
-      <p class="hero-tagline">Not an AI that answers your questions, but an AI that figures out <em>how you actually understand</em>, from what you do, not what you say.</p>
-      <p class="hero-sub">Most tutors react to what you ask. But the hardest part of learning is that you often can't tell what you don't understand. Delta is built to find that blind spot, and it asks real effort of you, because effort is exactly where the signal lives.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#demo">Try the live demo</a>
-        <a class="btn btn-outline" href="#gap">Read the idea</a>
-      </div>
+      <p class="mast-tag">Not an AI that answers your questions, but an AI that figures out how you actually understand, from what you do, not what you say.</p>
+      <a class="arrowlink" href="#demo">→ Try the live demo</a>
     </div>
-    <div class="hero-visual reveal">
-      <div class="hero-graphic">
-        <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="160" cy="160" r="76" class="ring ring-1" stroke-dasharray="4 8" />
-          <circle cx="160" cy="160" r="112" class="ring ring-2" stroke-dasharray="6 10" />
-          <circle cx="160" cy="160" r="146" class="ring ring-3" stroke-dasharray="3 12" />
-          <g class="orbit-1"><circle cx="236" cy="160" r="5" class="dot" opacity=".9" /></g>
-          <g class="orbit-2"><circle cx="272" cy="160" r="4" class="dot" opacity=".6" /></g>
-          <g class="orbit-3"><circle cx="306" cy="160" r="3" class="dot" opacity=".4" /></g>
-          <text x="160" y="182" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="72" fill="#c9a45c" opacity=".9">&#916;</text>
-        </svg>
-      </div>
+    <div class="mast-art" aria-hidden="true">
+      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="160" cy="160" r="76" class="ring" stroke-dasharray="4 8" />
+        <circle cx="160" cy="160" r="112" class="ring" stroke-dasharray="6 10" />
+        <circle cx="160" cy="160" r="146" class="ring" stroke-dasharray="3 12" />
+        <circle cx="236" cy="160" r="5" class="dot" opacity=".9" />
+        <circle cx="112" cy="56" r="4" class="dot" opacity=".6" />
+        <circle cx="56" cy="236" r="3" class="dot" opacity=".4" />
+        <text x="160" y="182" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="72" fill="#c9a45c" opacity=".9">&#916;</text>
+      </svg>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- THE GAP -->
-<div class="divider"><hr /></div>
-<section id="gap">
-  <div class="reveal">
-    <p class="section-label">01 · The Problem</p>
-    <h2 class="section-title">You are a poor judge of your own understanding.</h2>
-    <p class="section-lede">This isn't a criticism; it's a well-documented feature of how minds work. And it's the single biggest thing today's AI tutors miss.</p>
-  </div>
-  <div class="prose-grid reveal">
-    <div class="prose-block">
-      <h3>The self-report trap</h3>
-      <p>Current AI tools are reactive: they answer the question you thought to ask. But learners are systematically miscalibrated: we routinely feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's why "just tell the AI what you need" quietly fails. You can't request help with a gap you can't see.</p>
-      <p>A student can describe their goals. What they usually can't do is name the specific idea that's silently broken, or notice that a method <em>feels</em> like it's working while producing almost no durable learning.</p>
-    </div>
-    <div class="prose-block">
-      <h3>Where Delta lives</h3>
-      <p>Delta closes the loop by watching <em>behavior</em> instead of trusting <em>self-report</em>. It infers your understanding from how you actually answer, what you're confident about, what you get wrong, and how fast that knowledge decays.</p>
-      <div class="pull">The goal isn't to answer your question. It's to find the <span>question you didn't know to ask.</span></div>
-    </div>
-  </div>
-</section>
+  <!-- Concepts -->
+  <div class="band band-a">
 
-<!-- EFFORT AS FEATURE -->
-<div class="divider"><hr /></div>
-<section id="effort">
-  <div class="reveal">
-    <p class="section-label">02 · The Counterintuitive Core</p>
-    <h2 class="section-title">Effort isn't the price. It's the mechanism.</h2>
-    <p class="section-lede">Delta deliberately asks more of you than a chatbot does. That's not a rough edge to apologize for; it's the whole point, and there's four decades of research behind it.</p>
-  </div>
-  <div class="prose-grid reveal">
-    <div class="prose-block">
-      <h3>Desirable difficulties</h3>
-      <p>Robert Bjork's research shows something unsettling: the study methods that <em>feel</em> effortful and slow (retrieval practice, spacing, interleaving) produce the most durable learning. The ones that feel smooth and easy (rereading, highlighting, watching a clear explanation) produce almost none.</p>
-      <p>This is precisely <b>why students can't self-select well.</b> Left alone, they optimize for the <em>feeling</em> of fluency, not for real retention. Delta optimizes for the thing that lasts, even when it feels harder in the moment.</p>
-    </div>
-    <div class="prose-block">
-      <h3>Effort is the signal</h3>
-      <p>Every effortful act (attempting before being told, committing to an answer, predicting your own confidence, explaining your reasoning) does double duty. It <em>builds</em> stronger memory, and it <em>emits</em> the behavioral data Delta needs to model you accurately.</p>
-      <p>A passive tool learns nothing about you. A tool that makes you commit learns everything it needs to adapt.</p>
-    </div>
-  </div>
-</section>
+    <section class="tile" id="gap">
+      <p class="tile-label"><b>01</b> · The Gap</p>
+      <h3>You are a poor judge of your own understanding</h3>
+      <p>Learners are systematically miscalibrated: we routinely feel we've understood something we haven't. Psychologists call this <b>metacognitive miscalibration</b>, and it's the single biggest thing today's AI tutors miss. They answer the question you thought to ask, and you can't request help with a gap you can't see.</p>
+    </section>
 
-<!-- HONEST CAVEAT -->
-<div class="divider"><hr /></div>
-<section id="honest">
-  <div class="reveal">
-    <p class="section-label">03 · The Honest Part</p>
-    <h2 class="section-title">What "adaptive" does, and doesn't, mean.</h2>
-    <p class="section-lede">Plenty of edtech promises to match your "learning style." We're deliberately not doing that, because the evidence says it doesn't work.</p>
-  </div>
-  <div class="reveal">
-    <div class="callout">
-      <div class="tag">⚠ Where most "adaptive" claims break</div>
-      <p>The popular idea of fixed <strong>learning styles</strong>, the idea that you're a "visual," "auditory," or "kinesthetic" learner and should be taught to match, has been repeatedly tested and <strong>found not to hold up</strong>. Matching instruction to a self-reported style doesn't improve outcomes. Building a product on it would be building on sand.</p>
-      <p>So Delta doesn't try to guess <em>what kind of person</em> you are. It adapts to something real and measurable instead: <strong>your understanding state, right now, on this specific idea</strong>, inferred from evidence, updated every step. That's the version of "adaptive" that has actual science under it.</p>
-    </div>
-  </div>
-</section>
+    <section class="tile" id="effort">
+      <p class="tile-label"><b>02</b> · The Core</p>
+      <h3>Effort is the mechanism, not the price</h3>
+      <p>Four decades of research on <b>desirable difficulties</b> (Bjork) show that methods which feel effortful (retrieval, spacing, interleaving) produce the most durable learning, while smooth ones produce almost none. Every effortful act here does double duty: it builds stronger memory, and it emits the behavioral data Delta needs to model you accurately.</p>
+    </section>
 
-<!-- LIVE DEMO -->
-<div class="divider"><hr /></div>
-<section id="demo">
-  <div class="reveal">
-    <p class="section-label">04 · Live Demo</p>
-    <h2 class="section-title">The Calibration Mirror.</h2>
-    <p class="section-lede">Pick your level (elementary, middle, or high school &amp; beyond), then six short-answer problems tuned to the misconceptions that actually live at that age. For every one you'll write an answer, briefly explain your reasoning, and rate your certainty, because <em>how</em> you think is more diagnostic than <em>what</em> you'd pick from a list. And no feedback until the end: keeping the mirror silent during the test is what keeps the later questions honest. Then Delta analyzes the whole session at once.</p>
+    <section class="tile" id="honest">
+      <p class="tile-label"><b>03</b> · The Honest Part</p>
+      <h3>What "adaptive" does, and doesn't, mean</h3>
+      <p>Fixed <b>learning styles</b> (visual, auditory, kinesthetic) have been repeatedly tested and found not to hold up, so Delta never guesses what kind of person you are. It adapts to something measurable instead: your understanding state, right now, on this specific idea, inferred from evidence and updated every step.</p>
+    </section>
+
   </div>
 
+  <section class="tile" id="demo">
+    <p class="tile-label"><b>04</b> · Live Demo</p>
+    <h3>The Calibration Mirror</h3>
+    <p class="lede">Pick your level, then six short-answer problems tuned to the misconceptions of that age. For each one: an answer, a one-line explanation, and your certainty. No feedback until the end, because a silent mirror keeps the later questions honest; then the whole session is analyzed at once.</p>
   <div class="demo-wrap reveal">
     <div class="demo">
       <div class="demo-head">
@@ -883,189 +599,114 @@
   </div>
 </section>
 
-<!-- THE LOOP -->
-<div class="divider"><hr /></div>
-<section id="loop">
-  <div class="reveal">
-    <p class="section-label">05 · How It Works</p>
-    <h2 class="section-title">A four-step loop that never stops adapting.</h2>
-    <p class="section-lede">Each pass through the loop sharpens the model of you, and the loop itself is the intervention.</p>
-  </div>
-  <div class="loop reveal">
-    <div class="loop-step">
-      <div class="num">STEP 01</div>
-      <h4>Effortful diagnosis</h4>
-      <p>You attempt, commit, and predict your own confidence, before any hint. This surfaces the calibration gap you can't see on your own.</p>
-    </div>
-    <div class="loop-step">
-      <div class="num">STEP 02</div>
-      <h4>Build the model</h4>
-      <p>Delta updates a live learner model from your behavior: which ideas are shaky, which misconceptions you hold, how fast knowledge is decaying.</p>
-    </div>
-    <div class="loop-step">
-      <div class="num">STEP 03</div>
-      <h4>Adapt the next step</h4>
-      <p>It chooses your next move (harder variant, a scaffold, a different representation, or a spaced re-test) to keep you in productive struggle.</p>
-    </div>
-    <div class="loop-step">
-      <div class="num">STEP 04</div>
-      <h4>Hold up the mirror</h4>
-      <p>It shows you what it learned about you. Making the model visible is itself the metacognition training: you learn to see your own gaps.</p>
-    </div>
-  </div>
-</section>
+<!-- Loop / dimensions / contract -->
+  <div class="band band-b">
 
-<!-- DIMENSIONS -->
-<div class="divider"><hr /></div>
-<section id="dims">
-  <div class="reveal">
-    <p class="section-label">06 · What It Adapts On</p>
-    <h2 class="section-title">Four real dimensions, each with evidence behind it.</h2>
-    <p class="section-lede">Instead of guessing a personality type, Delta adapts along axes that are measurable and known to matter.</p>
-  </div>
-  <div class="dims reveal">
-    <div class="dim">
-      <span class="glyph">&#8593;&#8595;</span>
-      <h4>Difficulty</h4>
-      <div class="basis">Basis · Zone of proximal development</div>
-      <p>Keep every item just past what you can already do alone: hard enough to require real thinking, not so hard you stall. Too easy teaches nothing; too hard teaches nothing.</p>
-    </div>
-    <div class="dim">
-      <span class="glyph">&#9663;</span>
-      <h4>Misconceptions</h4>
-      <div class="basis">Basis · Diagnostic assessment</div>
-      <p>Wrong answers aren't just wrong; they encode <em>which</em> mental model produced them. Delta targets the specific broken idea, not the surface mistake.</p>
-    </div>
-    <div class="dim">
-      <span class="glyph">&#8734;</span>
-      <h4>Spacing</h4>
-      <div class="basis">Basis · Spaced retrieval &amp; forgetting curves</div>
-      <p>It re-surfaces each idea right as you're about to forget it, converting fragile short-term recall into durable long-term memory.</p>
-    </div>
-    <div class="dim">
-      <span class="glyph">&#8721;</span>
-      <h4>Representation</h4>
-      <div class="basis">Basis · Multiple external representations</div>
-      <p>When one framing doesn't land, it tries another (symbolic, visual, numeric, worked example) and remembers which one unlocked <em>this</em> idea for <em>you</em>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- CONTRACT -->
-<div class="divider"><hr /></div>
-<section id="contract">
-  <div class="reveal">
-    <p class="section-label">07 · The Contract</p>
-    <h2 class="section-title">An honest deal with the learner.</h2>
-    <p class="section-lede">Delta is demanding by design. Here's exactly what it asks, and exactly what it gives back.</p>
-  </div>
-  <div class="contract reveal">
-    <div class="contract-col asks">
-      <h4>What it asks of you</h4>
-      <ul>
-        <li>Attempt before you're told the answer, every time.</li>
-        <li>Commit to a response instead of staying vague.</li>
-        <li>Predict your own confidence, honestly.</li>
-        <li>Explain your reasoning, not just your answer.</li>
-        <li>Come back for the spaced re-tests, even when it feels done.</li>
+    <section class="tile" id="loop">
+      <p class="tile-label"><b>05</b> · How It Works</p>
+      <h3>A four-step loop that never stops</h3>
+      <ul class="klist">
+        <li><span class="knum">01</span><b>Effortful diagnosis</b>You attempt, commit, and predict your confidence, before any hint.</li>
+        <li><span class="knum">02</span><b>Build the model</b>Your behavior updates a live learner model: shaky ideas, misconceptions, decay.</li>
+        <li><span class="knum">03</span><b>Adapt the next step</b>A harder variant, a scaffold, a new representation, or a spaced re-test.</li>
+        <li><span class="knum">04</span><b>Hold up the mirror</b>Delta shows you what it inferred; seeing the model is itself the training.</li>
       </ul>
-    </div>
-    <div class="contract-col gives">
-      <h4>What it gives back</h4>
-      <ul>
-        <li>A map of what you actually know, not what you feel you know.</li>
-        <li>Time spent only on the ideas that are truly shaky.</li>
-        <li>Learning that survives past the test, not just to it.</li>
-        <li>Growing metacognition: you learn to see your own gaps.</li>
-        <li>A tutor that adapts to you instead of the average student.</li>
+    </section>
+
+    <section class="tile" id="dims">
+      <p class="tile-label"><b>06</b> · What It Adapts On</p>
+      <h3>Four evidence-based dimensions</h3>
+      <ul class="klist">
+        <li><span class="knum">&#8593;&#8595; ZPD</span><b>Difficulty</b>Every item sits just past what you can already do alone.</li>
+        <li><span class="knum">&#9663; DIAGNOSTIC</span><b>Misconceptions</b>Wrong answers encode which broken mental model produced them.</li>
+        <li><span class="knum">&#8734; FORGETTING CURVES</span><b>Spacing</b>Each idea returns right as you're about to forget it.</li>
+        <li><span class="knum">&#8721; REPRESENTATIONS</span><b>Representation</b>Symbolic, visual, numeric, worked example: it remembers which one unlocks you.</li>
       </ul>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- HOMEWORK (coming) -->
-<div class="divider"><hr /></div>
-<section id="homework">
-  <div class="reveal">
-    <p class="section-label">08 · Coming Next</p>
-    <h2 class="section-title">Your own homework is the best question bank.</h2>
-    <p class="section-lede">The demo above uses curated problems. The real version starts from the problems you already have: photograph tonight's worksheet, and Delta turns it into a mirror session.</p>
-  </div>
-  <div class="loop flow3 reveal">
-    <div class="loop-step">
-      <div class="num">STEP 01</div>
-      <h4>Snap the page</h4>
-      <p>A phone photo of the worksheet, the textbook page, or a marked-up test, messy handwriting included.</p>
-    </div>
-    <div class="loop-step">
-      <div class="num">STEP 02</div>
-      <h4>Delta reads the problems</h4>
-      <p>A vision-capable Claude model extracts each problem, classifies its concept, and drafts its misconception map: the same metadata the curated items above carry.</p>
-    </div>
-    <div class="loop-step">
-      <div class="num">STEP 03</div>
-      <h4>The mirror runs on each</h4>
-      <p>Problem by problem: your answer, your reasoning, your certainty, then the full report. Not “here's the solution,” but “here's what you understand.”</p>
-    </div>
-  </div>
-  <div class="reveal" style="margin-top:2.2rem;">
-    <div class="callout">
-      <div class="tag">⚠ Why this isn't live yet</div>
-      <p>Reading photographed homework requires a vision model; there is no honest rule-based stand-in for it. It ships with <strong>Phase 1</strong>, when Claude moves behind the seam; the flow above is the design contract for that work.</p>
-      <p>And the inversion is the whole point: photo-solver apps use your homework to <strong>hand you answers</strong>; Delta uses the same photo to <strong>map your understanding</strong>. Same input, opposite theory of learning.</p>
-    </div>
-  </div>
-</section>
+    <section class="tile" id="contract">
+      <p class="tile-label"><b>07</b> · The Contract</p>
+      <h3>An honest deal with the learner</h3>
+      <div class="duo">
+        <div>
+          <h4>It asks</h4>
+          <ul>
+            <li>Attempt before you're told, every time</li>
+            <li>Commit instead of staying vague</li>
+            <li>Predict your confidence, honestly</li>
+            <li>Explain your reasoning</li>
+            <li>Return for the spaced re-tests</li>
+          </ul>
+        </div>
+        <div>
+          <h4>It gives</h4>
+          <ul>
+            <li>A map of what you actually know</li>
+            <li>Time spent only on shaky ideas</li>
+            <li>Learning that survives past the test</li>
+            <li>Metacognition: you learn to see your gaps</li>
+            <li>A tutor that adapts to you, not the average</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-<!-- ROADMAP -->
-<div class="divider"><hr /></div>
-<section id="roadmap">
-  <div class="reveal">
-    <p class="section-label">09 · Roadmap</p>
-    <h2 class="section-title">From rule-based seed to model-in-the-loop.</h2>
-    <p class="section-lede">This page is the seed. The architecture is designed so the intelligence can be upgraded without rebuilding the loop.</p>
   </div>
-  <div class="roadmap reveal">
-    <div class="rm-item">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 0 · this page</div>
-      <h4>The vision &amp; a working seam <span class="badge now">You are here</span></h4>
-      <p>The idea, the science, and a live rule-based demo of the calibration loop. The adaptive engine already exposes a clean, model-agnostic interface (<code>diagnose</code>, <code>updateModel</code>, <code>nextStep</code>), so the logic and the intelligence are cleanly separated.</p>
-    </div>
-    <div class="rm-item future">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 1 · model in the loop</div>
-      <h4>Claude behind the seam <span class="badge next">Next</span></h4>
-      <p>Route those three functions through a Claude model: natural-language diagnosis of <em>why</em> you erred, a Socratic follow-up question, and items authored on demand to target your exact gap, over any subject, not a fixed question bank. This is also where photographed homework (above) becomes a live input: a vision model reads the page and feeds each problem into the same loop.</p>
-    </div>
-    <div class="rm-item future">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 2 · persistent learner model</div>
-      <h4>Memory across sessions</h4>
-      <p>A durable model of each learner (mastery, misconceptions, and personal spacing schedule) that persists between sessions and drives long-horizon adaptation and spaced retrieval.</p>
-    </div>
-    <div class="rm-item future">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">Phase 3 · study &amp; evidence</div>
-      <h4>Does it actually work?</h4>
-      <p>Measure the thing that matters: does calibration improve, and does learning last? A natural fit for the graphicacy and GenAI-and-cognition research this project grows out of.</p>
-    </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  &copy; 2026 Yizhen (Stephen) Jia &middot; Delta is an early research prototype &middot; <a href="index.html">Back to portfolio</a>
-</footer>
+  <!-- Homework photos / roadmap -->
+  <div class="band band-c">
+
+    <section class="tile" id="homework">
+      <p class="tile-label"><b>08</b> · Coming Next</p>
+      <h3>Your own homework is the best question bank</h3>
+      <p>The demo uses curated problems; the real version starts from a phone photo of tonight's worksheet, messy handwriting included. A vision-capable Claude model extracts each problem and drafts its misconception map, then the mirror runs on every one: your answer, your reasoning, your certainty, the full report.</p>
+      <p>The inversion is the whole point: photo-solver apps use your homework to <b>hand you answers</b>; Delta uses the same photo to <b>map your understanding</b>. It ships with Phase 1, because there is no honest rule-based stand-in for reading a photo.</p>
+    </section>
+
+    <section class="tile" id="roadmap">
+      <p class="tile-label"><b>09</b> · Roadmap</p>
+      <h3>From rule-based seed to model in the loop</h3>
+      <ul class="klist">
+        <li><span class="knum">PHASE 0 · YOU ARE HERE</span><b>The vision &amp; a working seam</b>This page: a live rule-based demo behind a clean, model-agnostic interface (diagnose, updateModel, nextStep).</li>
+        <li><span class="knum">PHASE 1</span><b>Claude behind the seam</b>Prose diagnosis of why you erred, Socratic follow-ups, items authored on demand; homework photos go live.</li>
+        <li><span class="knum">PHASE 2</span><b>Persistent learner model</b>Mastery, misconceptions, and personal spacing that persist between sessions.</li>
+        <li><span class="knum">PHASE 3</span><b>Study &amp; evidence</b>Does calibration improve, and does the learning last?</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- Contact strip -->
+  <footer class="tile foot">
+    <div class="foot-links">
+      <a href="index.html">← Portfolio</a>
+      <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
+      <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <span class="copy">© 2026 Yizhen (Stephen) Jia · Delta is an early research prototype</span>
+  </footer>
+
+</main>
+
+<div class="zoomer" aria-label="Zoom">
+  <button id="zout" aria-label="Zoom out" title="Zoom out">−</button>
+  <button id="zin" aria-label="Zoom in" title="Zoom in">+</button>
+</div>
 
 <script>
-  // ── Navbar shadow + reveal-on-scroll (shared with main site) ──────────────
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // ── Zoom control (shared convention with the portfolio pages) ─────────────
+  (function () {
+    var z = 1, MIN = 0.8, MAX = 1.6, STEP = 0.2;
+    try { z = parseFloat(localStorage.getItem('yj-zoom')) || 1; } catch (e) {}
+    function apply() {
+      if (Math.abs(z - 1) < 0.01) document.documentElement.style.fontSize = '';
+      else document.documentElement.style.fontSize = (16 * z) + 'px';
+      try { localStorage.setItem('yj-zoom', z); } catch (e) {}
+    }
+    document.getElementById('zin').addEventListener('click', function () { z = Math.min(MAX, +(z + STEP).toFixed(2)); apply(); });
+    document.getElementById('zout').addEventListener('click', function () { z = Math.max(MIN, +(z - STEP).toFixed(2)); apply(); });
+    apply();
+  })();
 
   // ══════════════════════════════════════════════════════════════════════════
   //  ADAPTIVE ENGINE  (v0, rule-based)

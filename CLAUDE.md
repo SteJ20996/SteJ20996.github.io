@@ -7,8 +7,9 @@ updated when major decisions change.
 
 **Owner:** Yizhen (Stephen) Jia — math educator (SAT/AP Calculus instructor), EdD student
 in Leadership, Curriculum & Instruction at Westcliff University. Research lines:
-graphicacy/data visualization in math education; GenAI's impact on cognition and
-self-assessment calibration of AI-native students.
+graphicacy/data visualization in math education; how college students who grew up with
+generative AI experience judging their own understanding (the dissertation line,
+qualitative/IPA only; see section 3).
 
 **Owner's papers (both featured as cards in the portfolio's Research section, both
 linked to EdArXiv preprints):**
@@ -107,55 +108,75 @@ hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is in
 
 ## 3. Dissertation linkage (the research framework)
 
-Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
-- **Primary: Design B (descriptive/correlational).** RQ family: how calibrated are
-  AI-native college students in math problem solving (claimed certainty vs actual
-  performance); does self-reported GenAI usage correlate with calibration accuracy?
-- **Qualitative strand: Design D.** The written explanations are codable reasoning
-  traces (misconception taxonomy = codebook seed). Case studies, extreme-calibration
-  cases, and heuristic-vs-human-coding agreement (Cohen's κ) as a methods contribution.
-- **Design A (instrument validity/reliability) reported inside the methods chapter.**
+**Decision (owner, 2026-09-06): the dissertation is a qualitative study only.** The
+2026-08 quantitative design (descriptive/correlational, Delta as measurement instrument,
+3 sessions x 6 items, CBM-to-Brier mapping, bias index, power and N targets, item
+statistics, per-stage timestamps) is withdrawn. Do not revive it, do not use it as a
+spec, and do not build research-mode data collection for it. Delta's CBM and report
+machinery stay product features only.
 
-**Session/measurement design (evidence-grounded, 2026-08; pending chair approval):**
-- **3 sessions × 6 items (≤25 min each), days apart** — resolves the tension between
-  test-fatigue evidence (attention collapse at ~7–9 min; open-ended + high-demand items
-  are the strongest dropout multipliers; single-session cap ≈ 6–8 items) and calibration
-  stability (per-person bias index stabilizes near ~40 judgments; 18/person via
-  Spearman-Brown ≈ .75 reliability, acceptable with attenuation reported).
-- **Primary analyses on session 1** (fullest N, no attrition bias); person-level
-  stability analyses on 3-session completers. Item order randomized per person
-  (position effects otherwise confound item comparisons).
-- **Fixed core + voluntary continuation**: causal/primary claims only on the fixed core;
-  self-selected continuation analyzed observationally (voluntary dose as a finding).
-- **Disclosure**: state full session count and honest durations upfront (expectation-
-  reality match is the strongest completion lever); avoid long-task progress bars.
-- **Brier**: CBM levels map to p = .50/.75/.92; primary index = bias (mean confidence −
-  accuracy, most robust at moderate item counts); person-level Brier secondary; Murphy
-  decomposition at GROUP level only (person-level resolution needs ~100+ items — out of
-  scope). The p-mapping is a stated methods convention, revisitable empirically.
-- **Power/N**: core N = 84 (r ≈ .30, α = .05, power = .80); Green's 104+m ≈ 108 as the
-  conservative cross-check; recruit 120–130 for attrition. Item statistics need ≥30–50
-  responses/item (gold standard 100); 120 × full 18-item coverage clears it.
-- **Timestamps**: four stages per item (read → answer → explain → certainty) + edit
-  counts, all computed locally, included in the opt-in submission payload.
+- **Design: interpretative phenomenological analysis (IPA)**, the empirical path both
+  preprints propose. Idiographic case-by-case analysis first, then cross-case themes;
+  double hermeneutic; claims stay idiographic with modest transferability.
+- **Phenomenon:** how undergraduate students who completed most of their secondary
+  schooling with generative AI available experience judging their own understanding of
+  mathematical work completed with AI assistance. Three foci: the moment of releasing
+  work as complete (MDC condition III), what they draw on to tell whether understanding
+  occurred (ACB reference points), and sense-making of episodes where work was released
+  without understanding (MDC condition II). ACB's struggle dimension is an optional
+  fourth focus. ACB's "unknowability" is a limit case: it cannot be reported
+  retrospectively, which is why the elicitation session below exists.
+- **Delta's role: pre-interview elicitation stimulus, not an instrument.** A
+  researcher-administered, offline six-item session (answer, written explanation,
+  certainty choice) gives every participant a fresh, concrete episode; the interview
+  uses the participant's own explanation text and certainty choices as stimulated-recall
+  prompts. Nothing from the session is analyzed quantitatively. If the chair keeps
+  MDC's graphicacy anchor, the session uses a graphicacy task set instead of Delta's
+  arithmetic/algebra bands (open thread, section 6). Fallback if the chair declines a
+  task session: retrospective interviews about remembered coursework episodes.
+- **Sample:** one homogeneous slice (single institution, lower-division, one required
+  quantitative course, self-reported frequent GenAI use during high school), single-digit
+  N per professional-doctorate IPA convention (confirm against Smith, Flowers & Larkin),
+  none of the owner's own students. The ACB moderating variables (use, learner,
+  environment) are described as case context, never treated as variables.
+- **Frameworks:** theoretical = metacognitive monitoring and control (Nelson & Narens;
+  Koriat's cue utilization; Winne & Hadwin SRL); conceptual = ACB and MDC as sensitizing
+  concepts, declared as fore-structures and bracketed, with active negative-case search,
+  a reflexivity log, and an audit trail so the constructs can be disconfirmed.
+- **Research questions (draft, pending chair):** central RQ on the experience of judging
+  one's understanding of AI-assisted work; RQ1 the release decision; RQ2 reference points
+  drawn on; RQ3 sense-making of releasing work known not to be understood; RQ4
+  (optional) effort and difficulty. Full wording, problem statement, and purpose
+  statement in the review artifact linked in section 6.
+- **Glossary v1 (freeze after chair):** "verdict" / "judging one's understanding" in the
+  dissertation; "perceived understanding" only when engaging literature; "calibration"
+  only in the literature review and the Delta product; "self-assessment" and "AI-native"
+  only as historical text in the ACB title; Delta "estimates", never "diagnoses".
 
-## 4. Compliance decisions (agreed)
+## 4. Compliance decisions (agreed; re-derived for the qualitative design 2026-09-06)
 
 - **IRB approval from Westcliff BEFORE any data collection**; owner contacts chair/adviser
-  to start. CITI training likely required. Expect exempt/expedited (anonymous, minimal
-  risk, educational).
-- Participant age for the study: **undecided**, but architecture must keep the study
-  fully anonymous; participants self-select the age band truthfully. If minors are ever
-  included: parental consent + assent, COPPA (<13), FERPA/state laws if via schools —
-  heavy; the lighter default is 18+ college students (matches the GenAI research line).
-- **No recruiting the owner's own students** (power-dynamics/coercion).
-- Data path: **research mode is opt-in** — consent screen → background questionnaire →
-  test → explicit "submit my anonymized session" action. Nothing collected without it.
-- **Dissertation phase: Qualtrics/Google-Forms as the data sink** (no custom backend,
-  IRB-familiar). **Product phase: migrate to Cloudflare Worker** (same worker later
-  proxies the Claude API for Phase 1).
-- No PII, no IP logging, random session IDs; consent discloses that anonymous data
-  cannot be withdrawn after submission.
+  to start. CITI training likely required. Expect exempt/expedited (interviews with
+  adults on educational topics, minimal risk); confirm the category once the
+  task-anchored session is in the protocol.
+- Participants: **18+ undergraduates only**, which follows from the IPA population; no
+  minors. Interview data are confidential rather than anonymous: pseudonyms, recordings
+  and transcripts stored per IRB, consent states the point after which withdrawal is no
+  longer possible (once transcripts are de-identified and merged into analysis, or as
+  IRB specifies).
+- **No recruiting the owner's own students** (power-dynamics/coercion); recruit through
+  a partner site (a department, course, or learning center the owner does not teach in).
+- Data path for the dissertation: **none through the site.** No research mode, no
+  questionnaire, no submission button, no Qualtrics/Forms sink. The elicitation task is
+  researcher-administered (offline copy of Delta or a printed task set), nothing leaves
+  the page, and the participant's written explanations and certainty choices are kept
+  only as interview material under the same consent as the recording.
+- The former quantitative pipeline (opt-in research mode, background questionnaire,
+  Brier and per-stage timestamps, session blocks, Qualtrics handoff) is withdrawn with
+  the quantitative design. A Cloudflare Worker remains a **product-phase** item only,
+  for the Phase 1 Claude proxy; it is not a research data sink.
+- Site-side rules stand: no PII, no IP logging, no signup or interest lists before IRB
+  approval; field-period rules in section 6.
 
 ## 5. Working agreements
 
@@ -216,23 +237,18 @@ GitHub's. A new project line starts its own counter at 1.
 
 ## 6. Open threads (update as they resolve)
 
-- **Dissertation framing fork (found 2026-09-06, unresolved; decide with chair).** Section
-  3 above still records the 2026-08 quantitative design (Delta as instrument, 3x6 sessions,
-  CBM/Brier, N 84-130), while the prospectus wording adopted in delta#13 (2026-08-24) and
-  both preprints point to an IPA interview study of how students experience judging their
-  own understanding (perceived understanding, not calibration accuracy; no behavior-vs-
-  self-report stance). The two are different dissertations (epistemology, sampling, IRB
-  package). Full review, with drafts of problem statement, purpose, frameworks, and RQs,
-  verified 2025-2026 literature, and the questions for the chair:
+- **Dissertation design: qualitative only (owner's decision, recorded 2026-09-06).** The
+  2026-08 quantitative design is withdrawn (section 3). Remaining decisions, all with
+  the chair: (1) the task-anchored elicitation session and its IRB category; (2) sample
+  slice, size, and partner site; (3) graphicacy task set versus general math items for
+  the elicitation; (4) wording of the GenAI-use-history sampling criterion; (5) whether
+  the committee accepts the owner's own constructs as declared-and-bracketed
+  fore-structures or wants a second analyst; (6) freezing the glossary. Full review with
+  drafts (problem statement, purpose, frameworks, RQs), verified 2025-2026 literature,
+  timeline, and the chair questions:
   https://claude.ai/code/artifact/e325b227-a6c4-4a43-bf64-d0574e3f5eb0 (private artifact).
-  Review's recommendation: IPA-primary with a task-anchored elicitation session (Delta or
-  a graphicacy task set as pre-interview stimulus, not as instrument); explanatory
-  sequential mixed methods only if the chair requires numbers. Until the chair decides,
-  treat section 3 as the quantitative fork's spec, not as the dissertation. After the
-  decision: rewrite section 3, freeze the glossary (verdict / judging understanding in the
-  dissertation; calibration only in literature and the Delta product), and record Delta's
-  role and the sampling criterion (self-reported GenAI use during high school, replacing
-  the retired cohort label).
+  The earlier 16-question chair list was written for the withdrawn design (3x6 sessions,
+  N, scales); replace it with the questions above before the meeting.
 
 - Field-period rules from the 99-guideline doc (recorded now, execute at IRB package
   stage): recruitment page as a standalone /study.html with experience-near language
@@ -242,10 +258,10 @@ GitHub's. A new project line starts its own counter at 1.
   participants' residual exposure to the site is not probed in interviews, it goes to
   the reflexivity log and limitations.
 
-- Chair meeting: 16-question list delivered (scope, 3×6 design, N, scales, IRB route,
-  age/recruitment, qualitative coding, timeline). Awaiting outcomes → then build
-  research mode (consent + questionnaire + Brier + per-stage timestamps + session
-  blocks + Qualtrics handoff).
-- Item bank expansion to ~18 with parallel forms; pilot for item stats.
+- Elicitation task set: if the chair keeps the graphicacy anchor, build a six-item
+  graphicacy task set (graph construction and reading, with written explanation and a
+  certainty choice) for the pre-interview session; Delta's current bands have no graph
+  items. Item statistics, parallel forms, and item-bank expansion are product-line
+  concerns only and no longer a dissertation need.
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow.
 - Working name "Delta" is provisional; project name is SteJ Delta Project (STEJDP).

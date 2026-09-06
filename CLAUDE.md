@@ -194,6 +194,14 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   to bust cache).
 - Commit style: descriptive multi-paragraph messages explaining the pedagogy/method
   rationale, not just the diff.
+- Research skills (installed 2026-09-06): HKUSTDial's Supervisor-Skills live under
+  `.claude/skills/` (12 skills, CC BY-NC-SA 4.0, provenance in `.claude/skills/README.md`).
+  For the dissertation and the education papers use the non-STEM routes: `idea-evaluator`
+  (references/domain-evaluation-frameworks.md, empirical-social-science weighting),
+  `tech-paper-template` for the logic chain, `paper-writer` / `paper-polish` for prose,
+  `deep-research` for literature sweeps, `pre-submission-reviewer` before any submission.
+  The STEM-specific advice in those skills (baselines, ablations, leaderboards) does not
+  transfer; do not apply it to the research line.
 
 **Work references (adopted 2026-08-24).** GitHub's PR/Issue counter is repo-global and
 cannot be reset or namespaced, so it is an internal serial only — never a work reference.
@@ -207,6 +215,24 @@ retitled `delta#1`–`delta#8`; PR #9 is `llm#1`. Before opening a new PR, find 
 GitHub's. A new project line starts its own counter at 1.
 
 ## 6. Open threads (update as they resolve)
+
+- **Dissertation framing fork (found 2026-09-06, unresolved; decide with chair).** Section
+  3 above still records the 2026-08 quantitative design (Delta as instrument, 3x6 sessions,
+  CBM/Brier, N 84-130), while the prospectus wording adopted in delta#13 (2026-08-24) and
+  both preprints point to an IPA interview study of how students experience judging their
+  own understanding (perceived understanding, not calibration accuracy; no behavior-vs-
+  self-report stance). The two are different dissertations (epistemology, sampling, IRB
+  package). Full review, with drafts of problem statement, purpose, frameworks, and RQs,
+  verified 2025-2026 literature, and the questions for the chair:
+  https://claude.ai/code/artifact/e325b227-a6c4-4a43-bf64-d0574e3f5eb0 (private artifact).
+  Review's recommendation: IPA-primary with a task-anchored elicitation session (Delta or
+  a graphicacy task set as pre-interview stimulus, not as instrument); explanatory
+  sequential mixed methods only if the chair requires numbers. Until the chair decides,
+  treat section 3 as the quantitative fork's spec, not as the dissertation. After the
+  decision: rewrite section 3, freeze the glossary (verdict / judging understanding in the
+  dissertation; calibration only in literature and the Delta product), and record Delta's
+  role and the sampling criterion (self-reported GenAI use during high school, replacing
+  the retired cohort label).
 
 - Field-period rules from the 99-guideline doc (recorded now, execute at IRB package
   stage): recruitment page as a standalone /study.html with experience-near language

@@ -6,9 +6,12 @@ framework defined in this file. This file is the project's persistent memory; ke
 updated when major decisions change.
 
 **Owner:** Yizhen (Stephen) Jia — math educator (SAT/AP Calculus instructor), EdD student
-in Leadership, Curriculum & Instruction at Westcliff University. Research lines:
-graphicacy/data visualization in math education; GenAI's impact on cognition and
-self-assessment calibration of AI-native students.
+in Leadership, Curriculum & Instruction at Westcliff University. Research lines: the
+main cluster is GenAI's cognitive effects on learning (dissertation: how adult first-year
+undergraduates judge that GenAI-assisted mathematics work is ready to submit; see §3);
+graphicacy/data visualization as a tool for externalizing understanding, including a
+PRISMA-ScR scoping review (Graphicacy × GenAI × Education) that doubles as Chapter 2.
+"AI-native", "first generation", and similar cohort labels are retired everywhere.
 
 **Owner's papers (both featured as cards in the portfolio's Research section, both
 linked to EdArXiv preprints):**
@@ -26,8 +29,9 @@ linked to EdArXiv preprints):**
   construct: the case where a tool did the work before the skill formed, so no verdict
   about understanding can issue at all. Three dimensions: unknowability, false
   calibration, de-normalization of struggle; moderating-variable model (use/learner/
-  environment-level); IPA proposed as the empirical path. Submitted to IJETHE
-  (2026-06). Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
+  environment-level); IPA proposed as the empirical path. Submitted to Postdigital Science and
+  Education (2026-06-02; the site says "under journal review", never the venue).
+  Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
 **Live site:** https://stej20996.github.io/ (portfolio) · https://stej20996.github.io/platform.html (Delta vision page)
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
@@ -43,10 +47,12 @@ compliance surface. Do not fold the two together when reasoning about either.
 
 ## 1. Vision (what Delta is)
 
-An adaptive learning platform whose thesis is: **students are poor judges of their own
-understanding (metacognitive miscalibration), so an AI tutor must diagnose understanding
-from BEHAVIOR, not self-report** — and adapt difficulty, spacing, and representation to
-close the gap between *felt* and *real* understanding.
+An adaptive learning platform whose working thesis is: **the feeling of understanding
+and actual understanding often come apart (the metacognitive-miscalibration literature),
+so a tutor should estimate understanding from what the learner does and adapt**
+difficulty, spacing, and representation to close the gap between *felt* and *real*
+understanding. This is a product stance. It stays out of the dissertation's voice
+(§3, §5 wording rules) and the site never phrases it as behavior-versus-self-report.
 
 Core principles (all deliberate, all defended on the page):
 - **Effort is the mechanism, not the price** (Bjork's desirable difficulties): retrieval,
@@ -107,55 +113,70 @@ hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is in
 
 ## 3. Dissertation linkage (the research framework)
 
-Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
-- **Primary: Design B (descriptive/correlational).** RQ family: how calibrated are
-  AI-native college students in math problem solving (claimed certainty vs actual
-  performance); does self-reported GenAI usage correlate with calibration accuracy?
-- **Qualitative strand: Design D.** The written explanations are codable reasoning
-  traces (misconception taxonomy = codebook seed). Case studies, extreme-calibration
-  cases, and heuristic-vs-human-coding agreement (Cohen's κ) as a methods contribution.
-- **Design A (instrument validity/reliability) reported inside the methods chapter.**
+**Source of truth:** the owner's handoff document "学位论文进展总览 / Dissertation Status
+Handoff" (dated 2026-09-08, supplied 2026-09-09; kept by the owner, not in this repo).
+It supersedes everything recorded here before it: the 2026-08 quantitative design
+(withdrawn 2026-09-06, never to be referenced again) and the 2026-09-06 "Delta as
+elicitation stimulus" option (superseded: the interview design closed as purely
+retrospective). Consult the handoff, or ask the owner, before touching any research
+wording.
 
-**Session/measurement design (evidence-grounded, 2026-08; pending chair approval):**
-- **3 sessions × 6 items (≤25 min each), days apart** — resolves the tension between
-  test-fatigue evidence (attention collapse at ~7–9 min; open-ended + high-demand items
-  are the strongest dropout multipliers; single-session cap ≈ 6–8 items) and calibration
-  stability (per-person bias index stabilizes near ~40 judgments; 18/person via
-  Spearman-Brown ≈ .75 reliability, acceptable with attenuation reported).
-- **Primary analyses on session 1** (fullest N, no attrition bias); person-level
-  stability analyses on 3-session completers. Item order randomized per person
-  (position effects otherwise confound item comparisons).
-- **Fixed core + voluntary continuation**: causal/primary claims only on the fixed core;
-  self-selected continuation analyzed observationally (voluntary dose as a finding).
-- **Disclosure**: state full session count and honest durations upfront (expectation-
-  reality match is the strongest completion lever); avoid long-task progress bars.
-- **Brier**: CBM levels map to p = .50/.75/.92; primary index = bias (mean confidence −
-  accuracy, most robust at moderate item counts); person-level Brier secondary; Murphy
-  decomposition at GROUP level only (person-level resolution needs ~100+ items — out of
-  scope). The p-mapping is a stated methods convention, revisitable empirically.
-- **Power/N**: core N = 84 (r ≈ .30, α = .05, power = .80); Green's 104+m ≈ 108 as the
-  conservative cross-check; recruit 120–130 for attrition. Item statistics need ≥30–50
-  responses/item (gold standard 100); 120 × full 18-item coverage clears it.
-- **Timestamps**: four stages per item (read → answer → explain → certainty) + edit
-  counts, all computed locally, included in the opt-in submission payload.
+- **Delta is not part of the dissertation.** It is the product line only: no instrument
+  role, no elicitation task, no research mode, no questionnaire, no data sink. The site
+  must never suggest otherwise.
+- **Working title (provisional, 2026-09-01):** "How Adult First-Year Undergraduates Judge
+  That GenAI-Assisted Mathematics Work Is Ready to Submit" (no colon; whether to restore
+  "whether" in title and central RQ is an open decision).
+- **Phenomenon:** deciding whether GenAI-assisted mathematics work is ready to submit.
+  "authorizing / release decision" is a post-analysis researcher metaphor and never
+  appears in titles, RQs, recruitment, or coding.
+- **Design:** interpretative phenomenological analysis (Smith, Flowers & Larkin, 2022);
+  purely retrospective interviews, remote, audio only; optional participant-led,
+  show-only artifact elicitation (nothing retained, nothing recorded, no account or LMS
+  access, no files). Two contrasting task contexts (geometry proof, statistics
+  interpretation), explicitly not comparison groups. Graphicacy is a tool for
+  externalizing understanding, not the object of study.
+- **Population:** adults (18+), high-school class of 2026, first-time degree-seeking
+  undergraduates entering fall 2026, described as a cohort whose secondary-school years
+  substantially overlapped with publicly available GenAI. Excludes high-school students
+  and anyone the owner has ever taught. If timing slips, the label becomes "Fall 2026
+  entering cohort"; never a younger class.
+- **Pipeline:** screen roughly 40–60 → consent about 15 → complete and analyze 12–14 →
+  committed reporting floor 8–12; every completed interview is analyzed, no typicality
+  selection.
+- **Construct discipline:** ACB and MDC never appear in RQs, recruitment materials, or
+  coding labels; findings are written in experiential language; theory talk is confined
+  to Chapter 5; the two preprints are mention-tier only. Time-layer rule: write "came to
+  see the earlier submission as not understood", never "had not understood". Nothing in
+  the study tests anyone's current understanding.
+- **Problem statement:** organized as two issues (Adu & Miles, 2023 alignment): (1) the
+  judgment students make at submission is undescribed; (2) the place of their own
+  understanding in that judgment is assumed, not examined. Binds to two purpose
+  objectives and two research questions.
+- **Five distinctions held without presuming separation:** artifact correctness ≠
+  completeness ≠ personal understanding ≠ independent reproducibility ≠ readiness to
+  submit.
+- **Timeline (coarse):** prospectus course through late October 2026; department review
+  up to six weeks; chair assigned; proposal defense before IRB (the chair submits IRB);
+  interviews likely spring/summer 2027; defense deadline December 2027.
 
-## 4. Compliance decisions (agreed)
+## 4. Compliance decisions (re-derived for the qualitative design)
 
-- **IRB approval from Westcliff BEFORE any data collection**; owner contacts chair/adviser
-  to start. CITI training likely required. Expect exempt/expedited (anonymous, minimal
-  risk, educational).
-- Participant age for the study: **undecided**, but architecture must keep the study
-  fully anonymous; participants self-select the age band truthfully. If minors are ever
-  included: parental consent + assent, COPPA (<13), FERPA/state laws if via schools —
-  heavy; the lighter default is 18+ college students (matches the GenAI research line).
-- **No recruiting the owner's own students** (power-dynamics/coercion).
-- Data path: **research mode is opt-in** — consent screen → background questionnaire →
-  test → explicit "submit my anonymized session" action. Nothing collected without it.
-- **Dissertation phase: Qualtrics/Google-Forms as the data sink** (no custom backend,
-  IRB-familiar). **Product phase: migrate to Cloudflare Worker** (same worker later
-  proxies the Claude API for Phase 1).
-- No PII, no IP logging, random session IDs; consent discloses that anonymous data
-  cannot be withdrawn after submission.
+- Order of operations: prospectus → department review → chair → proposal defense →
+  IRB submission by the chair → IRB approval → only then any recruitment. **Nothing that
+  resembles recruitment, an interest list, or a signup may appear on the site before IRB
+  approval.**
+- Human-subjects and RCR training completed 2024-10, valid to 2027-10-05; a refresher is
+  planned if data collection runs past that date.
+- No recruiting or interviewing anyone the owner has ever taught (methodological reason
+  first: such a sample would not resemble real cases; power-dynamics protection second).
+- Adults only; no minors, no high-school students.
+- Artifact elicitation: participant-led, optional, show-only; the researcher keeps
+  nothing; no prompts, assignments, feedback, or grades collected; no permissibility
+  questions; refusal to show is never data; displayed material never enters the audio.
+- Participant data are handled with GenAI fully excluded.
+- The former opt-in research mode / questionnaire / Qualtrics / Cloudflare data path is
+  withdrawn with the quantitative design. The site collects nothing and must stay that way.
 
 ## 5. Working agreements
 
@@ -186,6 +207,14 @@ Delta is the dissertation's **instrument**, not an illustration. Agreed frame:
   stays out of the dissertation research-line description (the study measures perceived
   understanding, not calibration accuracy) but remains valid inside the Delta product
   context (Calibration Mirror, CBM machinery).
+- Plain-language rule for all site copy (2026-09-09, delta#14, at the owner's request):
+  write for a general reader. A technical term appears only next to an everyday
+  explanation (e.g. the scoring is described plainly, then "the method is called
+  certainty-based marking" in parentheses). Adopted from the owner's 99 writing rules for
+  site use: no "rather than" (say it plainly or use "instead of"), short everyday words
+  over Latinate ones, one idea per sentence, no em dashes. The demo's report strings and
+  button labels count as site copy; the engine's item labels and key-idea labels are
+  content and may keep mathematical vocabulary.
 - Bilingual (EN/中文) heuristics for anything that reads student text.
 - Item traps must map to *named*, literature-plausible misconceptions.
 - Test every demo change end-to-end in headless Chromium (Playwright at
@@ -216,10 +245,16 @@ GitHub's. A new project line starts its own counter at 1.
   participants' residual exposure to the site is not probed in interviews, it goes to
   the reflexivity log and limitations.
 
-- Chair meeting: 16-question list delivered (scope, 3×6 design, N, scales, IRB route,
-  age/recruitment, qualitative coding, timeline). Awaiting outcomes → then build
-  research mode (consent + questionnaire + Brier + per-stage timestamps + session
-  blocks + Qualtrics handoff).
-- Item bank expansion to ~18 with parallel forms; pilot for item stats.
+- Dissertation pending decisions live in the owner's handoff document (§10 there, 16
+  items as of 2026-09-08: title/RQ "whether", compressing to two RQs, purpose rewrite,
+  interview window, eligibility details, GenAI-involvement threshold, geometry/statistics
+  balance, ACB/MDC naming in the framework week, Chapter 2 lineage, perceived vs
+  demonstrated understanding, IRB confirmations, protocol consistency, and several
+  editing items). None of them touch the site.
+- Unmerged branch `claude/supervisor-skills-thesis-setup-i01ig8` (2026-09-06) carries a
+  CLAUDE.md rewrite that the 2026-09-08 handoff has since superseded, plus roughly 15k
+  lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
+  or drop.
+- Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow.
 - Working name "Delta" is provisional; project name is SteJ Delta Project (STEJDP).

@@ -60,7 +60,7 @@ Core principles (all deliberate, all defended on the page):
   and emits diagnostic data.
 - **No "learning styles"**: the popular visual/auditory/kinesthetic framing is debunked;
   Delta adapts on evidence-based axes instead (difficulty/ZPD, misconceptions, spacing,
-  representation).
+  representation, and — decided 2026-09-22 — help-seeking profile; see §1a).
 - **The mirror is the intervention**: showing the learner what the system inferred about
   them (calibration gap, misconceptions, behavior-report disagreement) is itself the
   metacognitive training.
@@ -68,7 +68,57 @@ Core principles (all deliberate, all defended on the page):
   interface (`diagnose()` / `updateModel()` / `nextStep()`) is the documented seam where a
   Claude model drops in at Phase 1. Never fake AI; never hide what is heuristic.
 - **Positioning inversion vs photo-solver apps**: they use your homework to hand you
-  answers; Delta uses the same input to map your understanding.
+  answers; Delta uses the same input to map your understanding. In help-seeking terms:
+  photo-solvers are executive help-seeking machines; Delta trains instrumental
+  help-seeking.
+
+### 1a. Product direction: metacognitive AI-use training (decided 2026-09-22)
+
+Delta teaches students to use AI **to understand** rather than **to complete**. It is
+the product-side response to the two states the owner's papers name (ACB: no baseline
+ever formed; MDC: baseline read and overridden). Candidate tagline: *"learn to use AI
+without losing the baseline."* **This is a product direction only.** Delta has no role
+in the dissertation (§3); any empirical test of this direction is a separate,
+post-dissertation study, and nothing about it may appear on the site as research,
+recruitment, or data collection (§4).
+
+What it is NOT: generic AI literacy or prompt-engineering instruction. That market is
+crowded, dates fast, and teaches "better AI output," not "better human learning." Any
+drift toward prompt tips is a drift away from the thesis.
+
+Theoretical spine (use these names, not invented ones):
+- **Instrumental vs. executive help-seeking** (Nelson-Le Gall, 1981; Karabenick's
+  scales): asking for help so you can do it yourself vs. asking for the answer. Executive
+  help-seeking with GenAI is the behavioral pathway into ACB and MDC.
+- **Help Tutor lineage** (Aleven, McLaren, Roll & Koedinger, 2006; Roll et al., 2011):
+  metacognitive help-seeking is trainable inside an intelligent tutoring system and
+  transfers. Delta's contribution is porting this to GenAI, where "help" can produce the
+  whole finished product (the ACB argument for why GenAI differs from every prior tool).
+- **Bastani et al., "Generative AI Can Harm Learning" (PNAS, 2025)**: unrestricted GPT
+  access lowered exam performance; a hint-only GPT Tutor largely removed the harm. Same
+  AI, different use, reversed outcome — the empirical anchor for teaching the *use*.
+
+Two product phases:
+- **Phase 1 (Claude behind the seam).** Items get an "Ask AI" affordance whose *help
+  type* is logged in the browser as part of the behavioral channel: answer / hint /
+  check my reasoning / explain a concept. The rule "try first, then ask" is scaffolded
+  and its adherence shown back. The mirror gains an AI-use panel: help pattern vs.
+  stated certainty vs. transfer outcome, so the learner sees the two states on their
+  own data. Still no data leaves the page.
+- **Phase 2.** Help-seeking profile becomes the fifth adaptation axis. Habitual
+  answer-seekers get hint-only / Socratic mode; healthy instrumental help-seekers earn
+  fuller assistance (gradual release as calibration and help-seeking improve). The
+  learner's self-regulation becomes an input to the system's adaptation.
+
+Void: the 2026-09-22 conversation first drafted a "Layer 0" (help-seeking items in a
+study questionnaire, plus a correlational RQ). It was written against the withdrawn
+2026-08 quantitative design and is dropped; do not re-propose it.
+
+Site-copy constraints when this reaches platform.html (all from §5): plain language for
+a general reader ("ask for a hint before an answer", not "instrumental help-seeking",
+which may appear only in parentheses next to the plain version); no em dashes; the
+prototype "estimates"/"shows", never "diagnoses"; no "AI-native"; no
+behavior-vs-self-report opposition; nothing that reads as a study or a signup.
 
 ## 2. Product state (platform.html)
 
@@ -110,6 +160,9 @@ band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 d
 1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
 evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
 hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
+**Not yet on the page:** the §1a direction (help-seeking as a fifth dimension in tile
+06; help-type logging + AI-use mirror panel under Phase 1 and gradual release under
+Phase 2 in tile 09). The page still describes the four-axis version.
 
 ## 3. Dissertation linkage (the research framework)
 
@@ -256,5 +309,9 @@ GitHub's. A new project line starts its own counter at 1.
   lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
   or drop.
 - Item bank expansion (product line only; no study statistics attached).
-- Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow.
+- Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
+  help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
+- §1a follow-up: update platform.html tiles 06 and 09 to the five-axis version and the
+  help-seeking roadmap, under the §1a site-copy constraints. Product line only; the
+  portfolio's research tiles do not mention Delta as part of any study.
 - Working name "Delta" is provisional; project name is SteJ Delta Project (STEJDP).

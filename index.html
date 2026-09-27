@@ -146,6 +146,10 @@
     pointer-events: none;
   }
   .delta .arrowlink { color: #c9a45c; }
+  /* The demo link's overlay keeps the whole tile clickable; Graph Lab sits above it. */
+  .delta .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
+  .delta .arrowlink.sub { position: relative; z-index: 1; color: #a49e90; }
+  .delta .arrowlink.sub:hover { color: #c9a45c; }
 
   /* Paper tiles */
   .paper .ptag {
@@ -288,13 +292,14 @@
       </ul>
     </section>
 
-    <a class="tile delta" href="platform.html">
+    <section class="tile delta">
       <p class="tile-label"><b>Δ</b> · Prototype</p>
       <h3>Delta · The Calibration Mirror</h3>
-      <p>A prototype tutor that works out what you understand from how you work, then adjusts what comes next.</p>
-      <span class="arrowlink">→ Try the demo</span>
+      <p>A prototype tutor that works out what you understand from how you work, then adjusts what comes next. Graph Lab adds tables, charts and geometry figures.</p>
+      <a class="arrowlink main" href="platform.html">→ Try the demo</a>
+      <a class="arrowlink sub" href="graphs.html">Graph Lab</a>
       <span class="glyph">Δ</span>
-    </a>
+    </section>
 
   </div>
 

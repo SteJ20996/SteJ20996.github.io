@@ -33,8 +33,8 @@ linked to EdArXiv preprints):**
   Education (2026-06-02; the site says "under journal review", never the venue).
   Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
-**Scoping review (Chapter 2) and its page (added 2026-09-27; owner approved it on
-2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
+**Scoping review (Chapter 2) and its page (added 2026-09-27, live since PR #18 /
+delta#17; owner approved it on 2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
 2026-06-15, via `review/data/review.json` `version` / `as_of_approx`):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
 Emerging Three-Way Intersection in Education" (Jia & Xu; R1 Jia, R2 Xu). Protocol
 registered on OSF 2026-05-26: https://osf.io/s8ebf/ (five RQs; RQ3, construct
@@ -325,7 +325,10 @@ wording.
   Exception (2026-08-24, delta#12, owner settled here after trying all-white-gold and
   all-black-gold): the homepage's Δ·Prototype tile alone is hardcoded to platform.html's
   black-gold (tile #1d1c19, text #f0ede4, brass #c9a45c) as a theme preview of the
-  Delta page; the rest of the portfolio stays graphite-indigo.
+  Delta page; the rest of the portfolio stays graphite-indigo. Since 2026-09-27 that tile
+  is a `<section>`, not an `<a>`: its "→ Try the demo" link stretches an overlay over the
+  whole tile (so any click still opens platform.html) and a smaller "Graph Lab" link sits
+  above the overlay, one level down, like the papers' EdArXiv links.
   `platform.html` uses the black-gold dark system (see section 2, delta#11);
   `local-llm.html` keeps the original warm-paper terracotta system.
   Fonts are shared across all systems; the section-numbering pattern continues.
@@ -402,8 +405,9 @@ GitHub's. A new project line starts its own counter at 1.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
-- §1b: Graph Lab (`graphs.html`) has the tables room (both directions), statistics
-  charts and geometry figures, linked from platform.html tile 04 (2026-09-27). Next, per
+- §1b: Graph Lab (`graphs.html`, live since PR #18) has the tables room (both
+  directions), statistics charts and geometry figures, linked from platform.html tile 04
+  and, as a secondary link, from the homepage Δ tile (2026-09-27). Next, per
   the tile 07 coverage map: make a chart (drag a box plot or histogram), catch a
   misleading table, catch a misleading figure; more items per slip (each report already
   names the follow-up); row-versus-column percentages; a combined build-then-read task.

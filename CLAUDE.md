@@ -33,8 +33,9 @@ linked to EdArXiv preprints):**
   Education (2026-06-02; the site says "under journal review", never the venue).
   Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
-**Scoping review (Chapter 2) and its page (added 2026-09-27, unmerged, awaiting owner
-review):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
+**Scoping review (Chapter 2) and its page (added 2026-09-27; owner approved it on
+2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
+2026-06-15, via `review/data/review.json` `version` / `as_of_approx`):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
 Emerging Three-Way Intersection in Education" (Jia & Xu; R1 Jia, R2 Xu). Protocol
 registered on OSF 2026-05-26: https://osf.io/s8ebf/ (five RQs; RQ3, construct
 operationalization, carries the analytical weight). Source records live in the owner's
@@ -147,19 +148,26 @@ behavior-vs-self-report opposition; nothing that reads as a study or a signup.
 
 Delta adds tasks where the learner moves data between representations. Two directions,
 built as two task types because conversion difficulty depends on direction (Duval, 2006):
-- **Task A, words to table (prototype: `tables.html`, "Table Lab").** A short passage
-  with numbers; the learner builds their own table (they choose rows and columns);
-  whole-table certainty on the same CBM scale; then the mirror. Traps map to named
+- **Task A, words to table (built: `tables.html`, "Table Lab").** Three passages: the
+  library (mixed slips, always first), the class trip ("fewer/less than", both
+  consistent and inconsistent wording) and getting home (percents and "the rest"). The
+  learner builds their own table (they choose rows and columns); whole-table certainty on
+  the same CBM scale; then the mirror, whose next move is a button that routes by slip
+  (relational slips go to the class trip, percent slips to getting home, a clean table to
+  Task B). Traps map to named
   errors: "fewer than" read as take-away (inconsistent wording, Lewis & Mayer, 1987),
   copying the difference as the count (direct translation, Hegarty, Mayer & Monk, 1995),
   a percent written as a count (Parker & Leinhardt, 1995), a total used as a part.
   List-versus-grid layout is reported neutrally, never marked wrong (two-way table
   construction: Martí, García-Mila, Gabucio & Konstantinidou, 2011).
-- **Task B, table to your own reasoning (next).** A table that is not simple; the learner
-  writes what it shows; checks whether claims follow from the numbers. Levels of reading
-  (Friel, Curcio & Bright, 2001) and ways of seeing data (Konold, Higgins, Russell &
-  Khalil, 2015) seed the codebook; traps: row versus column percentages, count versus
-  rate, reversal after merging groups.
+- **Task B, table to your own reasoning (built, same page).** One table (two library
+  branches × teens/adults, built as a Simpson's-paradox reversal: South higher inside each
+  age group, North higher overall). The learner first writes what it shows, unprompted
+  (sorted by a labelled keyword rule), then answers three questions on the Friel, Curcio &
+  Bright (2001) levels: read the data (wrong column/row/total traps), read between
+  (counts versus shares), read beyond (trusting the combined numbers), each with a reason
+  and CBM certainty. Ways of seeing data (Konold, Higgins, Russell & Khalil, 2015) remain
+  a codebook seed for later tables; row versus column percentages is not yet built.
 Statistics first; the geometry counterpart (words to figure, figure to claim) needs a
 geometry engine and waits. The checker is layout-free: every number is placed by the
 labels in its own row and column, matched against an EN/中文 word list, so any sensible
@@ -208,6 +216,8 @@ band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 d
 1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
 evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
 hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
+Tile 04 links to `tables.html` (Table Lab, §1b) under its lede; the Mirror engine is
+untouched by that link.
 **Not yet on the page:** the §1a direction (help-seeking as a fifth dimension in tile
 06; help-type logging + AI-use mirror panel under Phase 1 and gradual release under
 Phase 2 in tile 09). The page still describes the four-axis version.
@@ -357,9 +367,9 @@ GitHub's. A new project line starts its own counter at 1.
   CLAUDE.md rewrite that the 2026-09-08 handoff has since superseded, plus roughly 15k
   lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
   or drop.
-- Scoping review page: owner (and Jiarui Xu, as co-author) to review `review.html`
-  before merge and before any homepage link; confirm with the chair that the in-progress
-  counts may be public. Data follow-ups the build already flags: CNKI and Airiti search
+- Scoping review page: approved as an interim version (2026-09-27). Still open: Jiarui
+  Xu, as co-author, and the chair should know the interim counts are public once merged;
+  the homepage link remains the owner's call. Data follow-ups the build already flags: CNKI and Airiti search
   strings are paraphrases (verbatim copies from screenshots pending); ACM's recorded
   string (title/abstract/keyword) differs from the executed full-text "Anywhere" run;
   S002's charted reference lacks its DOI (10.1016/j.compedu.2025.105322). Not in the
@@ -369,8 +379,10 @@ GitHub's. A new project line starts its own counter at 1.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
-- §1b: `tables.html` (Table Lab, Task A) is a standalone prototype, not yet linked from
-  platform.html; owner reviews it first. Then Task B, then a link or tile on platform.html.
+- §1b: Table Lab has both directions and is linked from platform.html tile 04
+  (2026-09-27). Next: more passages and tables per slip (the report already names the
+  kind of follow-up each slip calls for), row-versus-column percentages, and a combined
+  task (build a table, then read it).
 - §1a follow-up: update platform.html tiles 06 and 09 to the five-axis version and the
   help-seeking roadmap, under the §1a site-copy constraints. Product line only; the
   portfolio's research tiles do not mention Delta as part of any study.

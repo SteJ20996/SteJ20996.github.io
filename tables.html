@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Table Lab · Delta · Yizhen (Stephen) Jia</title>
-<meta name="description" content="A Delta prototype: read a short passage with numbers in it, build your own table from it, and see which numbers landed in the right place and how sure you were." />
+<meta name="description" content="A Delta prototype: turn a short passage into your own table, or start from a table and say what it shows. Then see what landed, and how sure you were." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -246,12 +246,59 @@
   }
   .zoomer button:hover { color: var(--accent); border-color: var(--accent); }
 
+  /* direction picker, choices, item cards */
+  .pick-levels { grid-template-columns: repeat(2, 1fr); }
+  .pick-levels .conf-level { padding: 1.1rem 1rem; text-align: left; }
+  .pick-levels .cl-name { font-size: 1.25rem; }
+  .pick-levels .cl-pay { font-family: 'Instrument Sans', sans-serif; font-size: .82rem; line-height: 1.45; margin-top: .3rem; letter-spacing: 0; }
+  .task-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: .6rem; color: var(--accent-light); }
+  .stem { font-size: 1.05rem; line-height: 1.55; margin: .4rem 0 1rem; }
+  .options { display: grid; gap: .55rem; margin-bottom: .4rem; }
+  .option {
+    display: flex; align-items: center; gap: .8rem; padding: .75rem 1rem;
+    border: 1.5px solid var(--rule); border-radius: 9px; background: var(--paper);
+    cursor: pointer; font-size: .96rem; text-align: left; width: 100%; font-family: inherit; color: var(--ink);
+    transition: border-color .2s, background .2s;
+  }
+  .option:hover { border-color: var(--accent-light); }
+  .option.selected { border-color: var(--accent); background: rgba(201,164,92,.06); }
+  .okey { font-family: 'JetBrains Mono', monospace; font-size: .78rem; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 5px; background: var(--cream); color: var(--muted); flex-shrink: 0; }
+  .option.selected .okey { background: var(--accent); color: #1d1c19; }
+  .ans-input { width: 100%; max-width: 220px; padding: .65rem .9rem; border: 1.5px solid var(--rule); border-radius: 9px; background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: var(--ink); }
+  .ans-input:focus { outline: none; border-color: var(--accent); }
+  .report-item { border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin-bottom: .7rem; background: var(--paper); }
+  .report-item.correct { border-left: 4px solid var(--good); }
+  .report-item.wrong { border-left: 4px solid var(--accent); }
+  .ri-head { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; margin-bottom: .3rem; }
+  .ri-title { font-weight: 600; font-size: .9rem; }
+  .ri-meta { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--muted); }
+  .ri-line { font-size: .86rem; color: #c9c4b6; margin-top: .35rem; }
+  .ri-line b { color: var(--ink); }
+  .ri-tag.ok { background: rgba(114,185,141,.12); color: var(--good); }
+  .ri-tag { margin-left: 0; margin-right: .25rem; }
+  .mirror li .ri-tag { margin-left: .25rem; }
+
+  /* concept diagram: words -> table -> your reasoning */
+  .cdiag { display: flex; align-items: stretch; gap: .45rem; margin: .5rem 0 .8rem; }
+  .cnode { flex: 1 1 0; min-width: 0; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 10px; padding: .7rem .6rem; text-align: center; }
+  .cnode .ic { display: block; font-family: 'DM Serif Display', serif; font-size: 1.5rem; line-height: 1.1; color: var(--accent); }
+  .cnode b { display: block; font-size: .82rem; color: var(--ink); margin-top: .2rem; }
+  .cnode small { display: block; font-size: .68rem; line-height: 1.35; color: var(--muted); margin-top: .15rem; }
+  .cedge { flex: 1.15 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 0 .15rem; }
+  .cedge .ar { display: block; font-size: 1.25rem; line-height: 1; color: var(--accent); }
+  .cedge .ar::before { content: '⟶'; }
+  .cedge b { display: block; font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-top: .3rem; }
+  .cedge small { display: block; font-size: .66rem; line-height: 1.35; color: var(--muted); margin-top: .15rem; }
+  .cloop { display: grid; gap: .3rem; font-size: .74rem; color: #b0aa9c; border-top: 1px dashed var(--rule); padding-top: .6rem; }
+  .cloop span::before { content: '↺  '; color: var(--accent); }
+  .cloop span.m::before { content: 'Δ  '; }
+
   @media (max-width: 860px) {
     body { padding: 12px; }
     .zoomer { display: none; }
     .mast { padding: 1.3rem 1.3rem; }
     .mast-art { width: 88px; height: 88px; }
-    .conf-levels { grid-template-columns: 1fr; }
+    .conf-levels, .pick-levels { grid-template-columns: 1fr; }
     .demo-body { padding: 1.2rem 1rem; }
     table.grid input { width: 5.6rem; font-size: .84rem; }
     .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
@@ -261,6 +308,11 @@
     .mast { flex-direction: column-reverse; align-items: flex-start; gap: .8rem; }
     .mast-art { width: 64px; height: 64px; }
     .gap-bar-row { grid-template-columns: 80px 1fr 56px; }
+  }
+  @media (max-width: 640px) {
+    .cdiag { flex-direction: column; }
+    .cedge { padding: .1rem 0; }
+    .cedge .ar::before { content: '↓'; }
   }
 </style>
 </head>
@@ -272,8 +324,8 @@
     <div>
       <a class="backlink" href="platform.html">← Delta</a>
       <p class="mast-over">Delta Prototype · Table Lab</p>
-      <h1>From words to a <em>table</em>.</h1>
-      <p class="mast-tag">Read a short passage with numbers in it. Build your own table from it. Then see which numbers landed in the right place, and how sure you were.</p>
+      <h1>From words to a <em>table</em>, and back.</h1>
+      <p class="mast-tag">Build a table from a short passage, or start from a table and say what it shows. Then see what landed, and how sure you were.</p>
       <a class="arrowlink" href="#lab">→ Try it</a>
     </div>
     <div class="mast-art" aria-hidden="true">
@@ -296,41 +348,51 @@
   <div class="band band-a">
     <section class="tile">
       <p class="tile-label"><b>01</b> · The Skill</p>
-      <h3>Pulling numbers out of words</h3>
-      <p>A lot of real math starts as a paragraph: a report, a news story, a word problem. Before you can compare anything, you have to pull the numbers out and put each one where it belongs. That step is a skill of its own. It is also easy to get wrong without noticing.</p>
+      <h3>Moving numbers between words and tables</h3>
+      <p>A lot of real math starts as a paragraph: a report, a news story, a word problem. Before you can compare anything, you have to pull the numbers out and put each one where it belongs.</p>
+      <p>The reverse is just as real. A table holds the facts, but you still have to say what they mean. Both steps are easy to get wrong without noticing.</p>
     </section>
     <section class="tile">
       <p class="tile-label"><b>02</b> · What Delta Looks At</p>
       <h3>Four things, all at once</h3>
       <ul class="klist">
-        <li><b>Every number</b>Is each one in the right row and column?</li>
+        <li><b>Every number you place</b>Is each one in the right row and column?</li>
         <li><b>The tricky sentences</b>"Fewer than", a percent, a total that has to be split.</li>
-        <li><b>How you built it</b>A grid or a list, which labels you used, whether your totals add up.</li>
+        <li><b>How you read a table</b>Counts or shares, one group or all of them combined.</li>
         <li><b>How sure you were</b>Set next to how you actually did.</li>
       </ul>
     </section>
     <section class="tile">
       <p class="tile-label"><b>03</b> · The Honest Part</p>
       <h3>Simple rules, and we say so</h3>
-      <p>The checking here is done by simple rules. They match your labels against a word list, in English or 中文, and compare every number. Any sensible layout counts: groups down the side, groups across the top, or one long list.</p>
-      <p>The rules cannot read an unusual label that is not on the list. In the next phase, an AI model reads your labels the way a teacher would.</p>
+      <p>The checking here is done by simple rules. They match your table labels against a word list, in English or 中文, and compare every number. Any sensible layout counts: groups down the side, groups across the top, or one long list.</p>
+      <p>What you write about a table is read by a keyword rule too. Neither rule can read everything a person might say. In the next phase, an AI model reads your labels and your words the way a teacher would.</p>
     </section>
   </div>
 
   <section class="tile" id="lab">
     <p class="tile-label"><b>04</b> · Live Demo</p>
     <h3>Table Lab</h3>
-    <p class="lede">You get one passage. Build a table that holds its numbers, in whatever shape makes sense to you. Say how sure you are. You get no feedback until the end.</p>
+    <p class="lede">Pick a direction. <b>Words to a table</b> gives you a passage to turn into your own table, then a follow-up passage aimed at any slip. <b>A table to your reasoning</b> gives you a table, asks what it shows, then asks three questions about it. You get no feedback until the end of each.</p>
     <div class="demo-wrap">
       <div class="demo">
         <div class="demo-head">
           <div class="title">&#916; &nbsp;Table Lab</div>
-          <div class="demo-steps" id="pips"><span class="step-pip active"></span><span class="step-pip"></span><span class="step-pip"></span></div>
+          <div class="demo-steps" id="pips"></div>
         </div>
         <div class="demo-body">
 
-          <div class="stage active" id="stage-build">
+          <div class="stage active" id="stage-pick">
+            <div class="prompt-label">Pick a direction</div>
+            <div class="conf-levels pick-levels" id="pick">
+              <button type="button" class="conf-level" data-go="A"><span class="cl-name">Words → Table</span><span class="cl-pay">Read a passage and build your own table. A slip sends you to a passage aimed at it.</span></button>
+              <button type="button" class="conf-level" data-go="B"><span class="cl-name">Table → Your reasoning</span><span class="cl-pay">Say what a table shows in your own words, then answer three questions about it.</span></button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-build">
             <div class="prompt-label">Step 1 of 3 · Read, then build your table</div>
+            <p class="task-title" id="taskTitle"></p>
             <div class="passage" id="passage"></div>
             <p class="how">Put labels in the top row and the first column, and numbers in the other cells. Add or remove rows and columns as you need. There is no single right shape.</p>
             <div class="grid-wrap"><table class="grid" id="grid" aria-label="Your table"></table></div>
@@ -348,16 +410,16 @@
           </div>
 
           <div class="stage" id="stage-conf">
-            <div class="prompt-label">Step 2 of 3 · How sure are you that every number in your table is in the right place?</div>
-            <p class="stem-note">Scoring works like this: a confident right table earns the most, and a confident wrong one costs the most. So <b>honesty is your best strategy</b>. (The method is called certainty-based marking.)</p>
+            <div class="prompt-label" id="confLabel"></div>
+            <p class="stem-note">Scoring works like this: a confident right answer earns the most, and a confident wrong one costs the most. So <b>honesty is your best strategy</b>. (The method is called certainty-based marking.)</p>
             <div class="conf-levels" id="confLevels"></div>
             <div class="demo-actions">
-              <button class="demo-btn ghost" id="backBuild">← Back to my table</button>
+              <button class="demo-btn ghost" id="confBack">← Back</button>
               <button class="demo-btn primary" id="lockIn" disabled>Lock it in →</button>
             </div>
           </div>
 
-          <div class="stage" id="stage-report">
+          <div class="stage" id="stage-areport">
             <div class="prompt-label">Step 3 of 3 · Your report</div>
             <div class="gap-viz">
               <div class="gap-title">How sure you felt vs. how you did</div>
@@ -382,19 +444,72 @@
               <div class="k">Delta's next move</div>
               <div class="act" id="nextAct"></div>
               <div class="det" id="nextDet"></div>
+              <div class="demo-actions" style="margin-top:.8rem"><button class="demo-btn primary" id="goNext">Start it →</button></div>
             </div>
 
             <details class="ref">
               <summary>Show one way to lay it out</summary>
-              <p>Groups down the side, book types across the top. Groups across the top works just as well.</p>
+              <p>Groups down the side, the other kind of label across the top. Groups across the top works just as well.</p>
               <div class="grid-wrap"><table class="show" id="reference"></table></div>
             </details>
 
             <div class="demo-actions">
-              <button class="demo-btn ghost" id="restart">↺ Start over</button>
+              <button class="demo-btn ghost" data-restart>↺ Start over</button>
             </div>
-
             <p class="seam-note"><b>Preview note.</b> Everything here runs in your browser, and nothing you type leaves this page. Each number is placed by the labels in its own row and column, using a word list in English and 中文, so the layout is up to you. That word list is the honest seam: in the next phase an AI model reads your labels, even unusual ones, and asks a follow-up question.</p>
+          </div>
+
+          <div class="stage" id="stage-bfree">
+            <div class="prompt-label">First, your own reading</div>
+            <p class="task-title" id="bTitle"></p>
+            <div class="grid-wrap"><table class="show" id="bTable"></table></div>
+            <label class="field-label" for="bFree">What does this table show? One or two sentences, in your own words.</label>
+            <textarea class="explain-box" id="bFree" rows="3" placeholder="English or 中文"></textarea>
+            <div class="demo-actions">
+              <button class="demo-btn primary" id="bFreeNext" disabled>Next: three questions →</button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-bitem">
+            <div class="prompt-label" id="bItemLabel"></div>
+            <div class="grid-wrap"><table class="show" id="bTable2"></table></div>
+            <p class="stem" id="bStem"></p>
+            <div id="bAnswer"></div>
+            <div id="bWhyWrap">
+              <label class="field-label" for="bWhy" id="bWhyLabel"></label>
+              <textarea class="explain-box" id="bWhy" rows="2" placeholder="English or 中文"></textarea>
+            </div>
+            <div class="demo-actions">
+              <button class="demo-btn primary" id="bItemNext" disabled>Next: how sure are you? →</button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-breport">
+            <div class="prompt-label">Your report</div>
+            <div class="gap-viz">
+              <div class="gap-title">How sure you felt vs. how you did</div>
+              <div class="gap-bars">
+                <div class="gap-bar-row"><span class="lab">Confidence</span><div class="gap-track"><div class="gap-fill conf" id="bFillConf"></div></div><span class="gap-num" id="bNumConf">…</span></div>
+                <div class="gap-bar-row"><span class="lab">Right</span><div class="gap-track"><div class="gap-fill truth" id="bFillAcc"></div></div><span class="gap-num" id="bNumAcc">…</span></div>
+              </div>
+            </div>
+            <h3 class="gap-headline" id="bHeadline"></h3>
+            <p class="diag" id="bDiag"></p>
+            <div id="bItems"></div>
+            <div class="mirror">
+              <h4>&#916; What Delta noticed</h4>
+              <ul id="bMirror"></ul>
+            </div>
+            <div class="nextstep">
+              <div class="k">Delta's next move</div>
+              <div class="act" id="bNextAct"></div>
+              <div class="det" id="bNextDet"></div>
+            </div>
+            <div class="demo-actions">
+              <button class="demo-btn ghost" id="toWords">Words → Table</button>
+              <button class="demo-btn ghost" data-restart>↺ Start over</button>
+            </div>
+            <p class="seam-note"><b>Preview note.</b> Everything here runs in your browser, and nothing you type leaves this page. Numbers and choices are checked exactly. Your written reading and your reasons are checked by a small keyword rule that stands in for a real reader, and we say so plainly. In the next phase an AI model reads what you actually wrote and asks a follow-up question.</p>
           </div>
 
         </div>
@@ -406,22 +521,31 @@
     <section class="tile">
       <p class="tile-label"><b>05</b> · Two Directions</p>
       <h3>Words to a table, then a table to your own reasoning</h3>
-      <ul class="klist">
-        <li><span class="knum">HERE NOW</span><b>Words to a table</b>You turn a passage into a table. The hard part is putting each number where it belongs.</li>
-        <li><span class="knum">NEXT</span><b>A table to your own reasoning</b>You start from a table that is not so simple and write what it shows, in your own words. Delta checks whether each claim really follows from the numbers.</li>
-      </ul>
-      <p style="margin-top:.6rem">These are two different skills. Going one way can be much harder than going back, so each gets its own practice.</p>
+      <div class="cdiag" aria-label="How the two directions connect">
+        <div class="cnode"><span class="ic">¶</span><b>Words</b><small>a passage with numbers in it</small></div>
+        <div class="cedge"><span class="ar"></span><b>A · Build it</b><small>slips: “fewer than”, percents, totals</small></div>
+        <div class="cnode"><span class="ic">▦</span><b>Table</b><small>in your own layout</small></div>
+        <div class="cedge"><span class="ar"></span><b>B · Read it</b><small>slips: counts or shares, combined groups</small></div>
+        <div class="cnode"><span class="ic">✎</span><b>Your reasoning</b><small>what it shows, in your words</small></div>
+      </div>
+      <div class="cloop">
+        <span>Each slip sends you to a short task aimed at that slip.</span>
+        <span class="m">Every step ends in the mirror: how sure you felt, next to how right you were.</span>
+      </div>
+      <p style="margin-top:.7rem">These are two different skills. Going one way can be much harder than going back, so each gets its own practice.</p>
     </section>
     <section class="tile">
       <p class="tile-label"><b>06</b> · Where The Tricky Parts Come From</p>
-      <h3>Each trap is a slip students commonly make</h3>
+      <h3>Each trap is a slip people commonly make</h3>
       <ul class="klist">
-        <li><b>"Fewer than" read as take away</b>The sentence says fewer, but the missing number is bigger, so you have to add.</li>
+        <li><b>"Fewer than" read as take away</b>The sentence says fewer, but the number you need is the bigger one, so you add.</li>
         <li><b>Copying a number from the sentence</b>The number in the sentence is a difference, not the count.</li>
         <li><b>A percent written as a count</b>35% of 80 books is 28 books, not 35.</li>
         <li><b>A total used as a part</b>A group's total goes in a total cell, not in one of its parts.</li>
+        <li><b>Comparing counts, not shares</b>A bigger group can have more of something and still a smaller share of it.</li>
+        <li><b>Trusting the combined numbers</b>Putting groups together can flip a comparison that holds inside every group.</li>
       </ul>
-      <p class="sources">Background: Duval (2006) on moving between ways of showing math; Lewis &amp; Mayer (1987) on "fewer than" wording; Hegarty, Mayer &amp; Monk (1995) on copying numbers from the text; Parker &amp; Leinhardt (1995) on percents; Martí et al. (2011) on building two-way tables.</p>
+      <p class="sources">Background: Duval (2006) on moving between ways of showing math; Lewis &amp; Mayer (1987) on "fewer than" wording; Hegarty, Mayer &amp; Monk (1995) on copying numbers from the text; Parker &amp; Leinhardt (1995) on percents; Martí et al. (2011) on building two-way tables; Friel, Curcio &amp; Bright (2001) on levels of reading a graph or table; Simpson (1951) on combined groups.</p>
     </section>
   </div>
 
@@ -459,94 +583,183 @@
 
 <script>
 (function () {
-  // ── The task ─────────────────────────────────────────────────────────────
-  // Every trap value must stay distinct from every true value and from each
-  // other, or a slip could not be told apart from a misplaced number.
-  const TASK = {
-    passage: [
-      'Last week, the Riverside Library counted the books borrowed by three age groups.',
-      'Children borrowed 42 print books and 18 e-books.',
-      'Teens borrowed 30 print books. Children borrowed 7 fewer e-books than teens did.',
-      'Adults borrowed 80 books in all, and 35% of them were e-books.',
-      'Altogether, the library lent 195 books that week.'
-    ],
-    groups: [
-      { id: 'children', label: 'Children', names: ['children', 'child', 'kids', 'kid', '儿童', '孩子', '小孩', '兒童'] },
-      { id: 'teens', label: 'Teens', names: ['teens', 'teen', 'teenagers', 'teenager', '青少年', '少年'] },
-      { id: 'adults', label: 'Adults', names: ['adults', 'adult', 'grownups', '成人', '成年人', '大人'] }
-    ],
-    types: [
-      { id: 'print', label: 'Print books', names: ['print', 'printed', 'paper', 'hardcopy', '纸质', '纸本', '纸书', '紙本', '紙質', '印刷'] },
-      { id: 'ebook', label: 'E-books', names: ['ebook', 'ebooks', 'digital', 'electronic', '电子', '電子'] }
-    ],
-    truth: { children: { print: 42, ebook: 18 }, teens: { print: 30, ebook: 25 }, adults: { print: 52, ebook: 28 } },
-    traps: [
-      { g: 'teens', t: 'ebook', v: 11, tag: '“Fewer than” read as take away',
-        say: '“Children borrowed 7 fewer than teens” means teens borrowed 7 more: 18 + 7 = 25. The word “fewer” points one way and the math goes the other, so subtracting feels natural here.' },
-      { g: 'teens', t: 'ebook', v: 7, tag: 'Copied the difference',
-        say: '7 is how many more teens borrowed, not how many they borrowed. Teens borrowed 18 + 7 = 25.' },
-      { g: 'adults', t: 'ebook', v: 35, tag: 'Percent written as a count',
-        say: '35% is a share, and the table asks for a count. 35% of 80 books is 0.35 × 80 = 28.' },
-      { g: 'adults', t: 'print', v: 45, tag: 'Follows from the percent slip',
-        say: '45 comes from 80 − 35. With 28 e-books, adults borrowed 80 − 28 = 52 print books.' },
-      { g: 'adults', t: 'print', v: 80, tag: 'Total used as a part',
-        say: '80 is all the books adults borrowed. Print books are only part of that: 80 − 28 = 52.' }
-    ]
-  };
-  const GROUP_TOTAL = { children: 60, teens: 55, adults: 80 };
-  const TYPE_TOTAL = { print: 124, ebook: 71 };
-  const GRAND_TOTAL = 195;
-  const TOTAL_EN = /\b(total|totals|all|sum|overall|altogether|combined)\b/i;
-  const TOTAL_ZH = /合计|合計|总计|總計|总数|總數|共计|共計|总共|總共|一共|总和|總和/;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = s => String(s || '').toLowerCase().replace(/[\s\-_'’.,:;()（）]/g, '');
+  const tokens = s => String(s || '').toLowerCase().split(/[^a-z0-9一-鿿]+/).filter(Boolean);
+  const fmtSec = s => s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
+  const sum = xs => xs.reduce((a, b) => a + b, 0);
 
   // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM),
-  // identical to the Calibration Mirror so both demos score the same way.
+  // identical to the Calibration Mirror so every Delta demo scores the same way.
   const LEVELS = [
     { n: 1, label: 'Guessing', conf: 50, right: 1, wrong: 0 },
     { n: 2, label: 'Fairly sure', conf: 75, right: 2, wrong: -2 },
     { n: 3, label: 'Certain', conf: 92, right: 3, wrong: -6 }
   ];
+  const TOTAL_EN = /\b(total|totals|all|sum|overall|altogether|combined)\b/i;
+  const TOTAL_ZH = /合计|合計|总计|總計|总数|總數|共计|共計|总共|總共|一共|总和|總和/;
+  const isTotal = text => TOTAL_EN.test(text) || TOTAL_ZH.test(text);
 
-  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const norm = s => String(s || '').toLowerCase().replace(/[\s\-_'’.,:;()（）]/g, '');
-  const fmtSec = s => s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
-
-  // A cell is a number if, once the number and a few unit words are removed,
-  // nothing is left. "35%" counts as 35; "Grade 9" would count as a label.
-  function readNumber(raw) {
+  // A label name matches as a substring, except names written "=x", which must
+  // be a whole word so that "A" (Class A) is not found inside "Class B".
+  function findIn(text, list) {
+    const n = norm(text), toks = tokens(text);
+    return list.filter(c => c.names.some(name => name[0] === '='
+      ? toks.includes(name.slice(1)) : n.includes(norm(name)))).map(c => c.id);
+  }
+  // A cell is a number if, once the number and the task's unit words are
+  // removed, nothing is left. "35%" counts as 35; "Grade 9" stays a label.
+  function readNumber(raw, units) {
     const s = String(raw || '').trim().replace(/[，,]/g, '').replace(/[−–]/g, '-');
     if (!/\d/.test(s)) return null;
     const m = s.match(/-?\d+(?:\.\d+)?/);
-    const rest = s.replace(m[0], '').replace(/%|books?|e-?books?|本|册|冊/gi, '').trim();
-    return rest === '' ? { v: parseFloat(m[0]), pct: /%/.test(s) } : null;
+    let rest = s.replace(m[0], '').replace(/%/g, '');
+    if (units) rest = rest.replace(new RegExp(units.source, 'gi'), '');
+    return rest.trim() === '' ? { v: parseFloat(m[0]), pct: /%/.test(s) } : null;
   }
-  function findIn(text, list) {
-    const n = norm(text);
-    return list.filter(c => c.names.some(name => n.includes(norm(name)))).map(c => c.id);
-  }
-  const isTotal = text => TOTAL_EN.test(text) || TOTAL_ZH.test(text);
+
+  // ── Words → table: the passages ──────────────────────────────────────────
+  // Within a passage every trap value must differ from every true value, or a
+  // slip could not be told apart from a misplaced number.
+  const A_TASKS = [
+    {
+      id: 'library', title: 'Passage 1 · The library', focus: 'mixed',
+      passage: [
+        'Last week, the Riverside Library counted the books borrowed by three age groups.',
+        'Children borrowed 42 print books and 18 e-books.',
+        'Teens borrowed 30 print books. Children borrowed 7 fewer e-books than teens did.',
+        'Adults borrowed 80 books in all, and 35% of them were e-books.',
+        'Altogether, the library lent 195 books that week.'
+      ],
+      groups: [
+        { id: 'children', label: 'Children', names: ['children', 'child', 'kids', 'kid', '儿童', '孩子', '小孩', '兒童'] },
+        { id: 'teens', label: 'Teens', names: ['teens', 'teen', 'teenagers', '青少年', '少年'] },
+        { id: 'adults', label: 'Adults', names: ['adults', 'adult', 'grownups', '成人', '成年人', '大人'] }
+      ],
+      types: [
+        { id: 'print', label: 'Print books', names: ['print', 'printed', 'paper', 'hardcopy', '纸质', '纸本', '纸书', '紙本', '紙質', '印刷'] },
+        { id: 'ebook', label: 'E-books', names: ['ebook', 'ebooks', 'digital', 'electronic', '电子', '電子'] }
+      ],
+      truth: { children: { print: 42, ebook: 18 }, teens: { print: 30, ebook: 25 }, adults: { print: 52, ebook: 28 } },
+      traps: [
+        { g: 'teens', t: 'ebook', v: 11, focus: 'relational', tag: '“Fewer than” read as take away',
+          say: '“Children borrowed 7 fewer than teens” means teens borrowed 7 more: 18 + 7 = 25. The word “fewer” points one way and the math goes the other, so subtracting feels natural here.' },
+        { g: 'teens', t: 'ebook', v: 7, focus: 'relational', tag: 'Copied the difference',
+          say: '7 is how many more teens borrowed, not how many they borrowed. Teens borrowed 18 + 7 = 25.' },
+        { g: 'adults', t: 'ebook', v: 35, focus: 'percent', tag: 'Percent written as a count',
+          say: '35% is a share, and the table asks for a count. 35% of 80 books is 0.35 × 80 = 28.' },
+        { g: 'adults', t: 'print', v: 45, focus: 'percent', tag: 'Follows from the percent slip', chained: true,
+          say: '45 comes from 80 − 35. With 28 e-books, adults borrowed 80 − 28 = 52 print books.' },
+        { g: 'adults', t: 'print', v: 80, focus: 'percent', tag: 'Total used as a part',
+          say: '80 is all the books adults borrowed. Print books are only part of that: 80 − 28 = 52.' }
+      ],
+      units: /e-?books?|books?|本|册|冊/, totalHint: 'The passage gives 195 books in all.'
+    },
+    {
+      id: 'votes', title: 'Passage 2 · The class trip', focus: 'relational',
+      passage: [
+        'Three classes voted on a trip: the museum or the zoo.',
+        'In Class A, 14 students chose the museum and 9 chose the zoo.',
+        'Class C had 16 museum votes. Class B had 4 fewer museum votes than Class C.',
+        'Class A had 6 fewer zoo votes than Class B.',
+        'Class C’s zoo votes were 2 less than Class A’s.'
+      ],
+      groups: [
+        { id: 'a', label: 'Class A', names: ['classa', '=a', 'a班', '甲班'] },
+        { id: 'b', label: 'Class B', names: ['classb', '=b', 'b班', '乙班'] },
+        { id: 'c', label: 'Class C', names: ['classc', '=c', 'c班', '丙班'] }
+      ],
+      types: [
+        { id: 'museum', label: 'Museum', names: ['museum', '博物馆', '博物館'] },
+        { id: 'zoo', label: 'Zoo', names: ['zoo', '动物园', '動物園'] }
+      ],
+      truth: { a: { museum: 14, zoo: 9 }, b: { museum: 12, zoo: 15 }, c: { museum: 16, zoo: 7 } },
+      traps: [
+        { g: 'b', t: 'museum', v: 20, focus: 'relational', tag: 'Comparison read backwards',
+          say: '“Class B had 4 fewer than Class C” makes B the smaller one: 16 − 4 = 12. This time “fewer” really does mean take away.' },
+        { g: 'b', t: 'museum', v: 4, focus: 'relational', tag: 'Copied the difference',
+          say: '4 is the gap between the classes. Class B had 16 − 4 = 12 museum votes.' },
+        { g: 'b', t: 'zoo', v: 3, focus: 'relational', tag: '“Fewer than” read as take away',
+          say: '“Class A had 6 fewer than Class B” makes B the bigger one: 9 + 6 = 15. The word “fewer” sits next to Class A, but Class B is the one you are finding.' },
+        { g: 'b', t: 'zoo', v: 6, focus: 'relational', tag: 'Copied the difference',
+          say: '6 is the gap. Class B had 9 + 6 = 15 zoo votes.' },
+        { g: 'c', t: 'zoo', v: 11, focus: 'relational', tag: 'Comparison read backwards',
+          say: '“2 less than Class A’s” means 9 − 2 = 7.' },
+        { g: 'c', t: 'zoo', v: 2, focus: 'relational', tag: 'Copied the difference',
+          say: '2 is the gap. Class C had 9 − 2 = 7 zoo votes.' }
+      ],
+      units: /votes?|students?|票|人/, totalHint: null
+    },
+    {
+      id: 'clubs', title: 'Passage 3 · Getting home', focus: 'percent',
+      passage: [
+        'Three after-school clubs asked their members how they get home: they walk or they take the bus.',
+        'The chess club has 40 members, and 25% of them walk. The rest take the bus.',
+        'The robotics club has 60 members, and 45% of them take the bus.',
+        'In the art club, 24 members walk. That is 60% of the club.'
+      ],
+      groups: [
+        { id: 'chess', label: 'Chess club', names: ['chess', '象棋', '棋'] },
+        { id: 'robotics', label: 'Robotics club', names: ['robot', '机器人', '機器人'] },
+        { id: 'art', label: 'Art club', names: ['=art', 'artclub', '美术', '美術', '艺术', '藝術'] }
+      ],
+      types: [
+        { id: 'walk', label: 'Walk', names: ['walk', 'foot', '步行', '走'] },
+        { id: 'bus', label: 'Bus', names: ['bus', 'ride', '公交', '巴士', '校车', '校車', '公車', '坐车'] }
+      ],
+      truth: { chess: { walk: 10, bus: 30 }, robotics: { walk: 33, bus: 27 }, art: { walk: 24, bus: 16 } },
+      traps: [
+        { g: 'chess', t: 'walk', v: 25, focus: 'percent', tag: 'Percent written as a count',
+          say: '25% of 40 members is 0.25 × 40 = 10 who walk.' },
+        { g: 'chess', t: 'bus', v: 75, focus: 'percent', tag: 'Percent written as a count',
+          say: '“The rest” is 75% of the club, which is 30 members, not 75.' },
+        { g: 'chess', t: 'bus', v: 15, focus: 'percent', tag: 'Follows from the percent slip', chained: true,
+          say: '15 comes from 40 − 25. With 10 walkers, 40 − 10 = 30 take the bus.' },
+        { g: 'robotics', t: 'bus', v: 45, focus: 'percent', tag: 'Percent written as a count',
+          say: '45% of 60 members is 0.45 × 60 = 27 on the bus.' },
+        { g: 'robotics', t: 'walk', v: 55, focus: 'percent', tag: 'Percent written as a count',
+          say: 'The walkers are 55% of the club, which is 33 members, not 55.' },
+        { g: 'robotics', t: 'walk', v: 15, focus: 'percent', tag: 'Follows from the percent slip', chained: true,
+          say: '15 comes from 60 − 45. With 27 on the bus, 60 − 27 = 33 walk.' },
+        { g: 'art', t: 'bus', v: 40, focus: 'percent', tag: 'Total used as a part',
+          say: '40 is the whole art club: 24 ÷ 0.6 = 40 members. The bus riders are the rest: 40 − 24 = 16.' },
+        { g: 'art', t: 'walk', v: 60, focus: 'percent', tag: 'Percent written as a count',
+          say: 'The passage gives 24 walkers directly. 60% is their share of the club.' }
+      ],
+      units: /members?|students?|kids?|人|名/, totalHint: null
+    }
+  ];
+  A_TASKS.forEach(task => {
+    task.groupTotal = {}; task.typeTotal = {};
+    task.groups.forEach(g => { task.groupTotal[g.id] = sum(task.types.map(t => task.truth[g.id][t.id])); });
+    task.types.forEach(t => { task.typeTotal[t.id] = sum(task.groups.map(g => task.truth[g.id][t.id])); });
+    task.grandTotal = sum(Object.values(task.groupTotal));
+  });
+
+  const session = { done: new Set(), log: [], bDone: false };
 
   // ══════════════════════════════════════════════════════════════════════
   //  TABLE ENGINE  (v0, rule-based)
   //  The seam: read() turns a learner's grid into placed facts, diagnose()
-  //  judges them. In Phase 1 a model replaces the word-list matching inside
-  //  read(); diagnose() and the report stay as they are.
+  //  judges them, nextStep() picks what comes next. In Phase 1 a model
+  //  replaces the word-list matching inside read(); the rest stays.
   // ══════════════════════════════════════════════════════════════════════
   const TableEngine = {
-    read(grid) {
+    read(grid, task) {
       const facts = [], loose = [];
-      const R = grid.length, C = grid[0].length;
-      for (let r = 0; r < R; r++) {
-        for (let c = 0; c < C; c++) {
-          const num = readNumber(grid[r][c]);
-          if (!num) continue;
-          const rowText = grid[r].filter((x, j) => j !== c && !readNumber(x)).join(' ');
-          const colText = r === 0 ? '' : (readNumber(grid[0][c]) ? '' : grid[0][c]);
-          const gRow = findIn(rowText, TASK.groups), gCol = findIn(colText, TASK.groups);
-          const tRow = findIn(rowText, TASK.types), tCol = findIn(colText, TASK.types);
+      const num = x => readNumber(x, task.units);
+      for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[0].length; c++) {
+          const n = num(grid[r][c]);
+          if (!n) continue;
+          const rowText = grid[r].filter((x, j) => j !== c && !num(x)).join(' ');
+          const colText = r === 0 || num(grid[0][c]) ? '' : grid[0][c];
+          const gRow = findIn(rowText, task.groups), gCol = findIn(colText, task.groups);
+          const tRow = findIn(rowText, task.types), tCol = findIn(colText, task.types);
           const groups = [...new Set(gRow.concat(gCol))], types = [...new Set(tRow.concat(tCol))];
           const total = isTotal(rowText) || isTotal(colText);
-          const base = { r, c, v: num.v, pct: num.pct };
+          const base = { r, c, v: n.v, pct: n.pct };
           if (groups.length > 1 || types.length > 1) loose.push({ ...base, why: 'ambiguous' });
           else if (groups.length === 1 && types.length === 1)
             facts.push({ ...base, kind: 'cell', g: groups[0], t: types[0],
@@ -560,56 +773,55 @@
       return { facts, loose };
     },
 
-    diagnose(grid, level, behavior) {
-      const { facts, loose } = this.read(grid);
+    diagnose(grid, task, level, behavior) {
+      const { facts, loose } = this.read(grid, task);
       const cellFacts = facts.filter(f => f.kind === 'cell');
       const cells = [], marks = {};
-      for (const g of TASK.groups) {
-        for (const t of TASK.types) {
-          const want = TASK.truth[g.id][t.id];
+      for (const g of task.groups) {
+        for (const t of task.types) {
+          const want = task.truth[g.id][t.id];
           const here = cellFacts.filter(f => f.g === g.id && f.t === t.id);
           const values = [...new Set(here.map(f => f.v))];
           let status, trap = null, belongs = null;
           if (!here.length) status = loose.some(f => f.v === want) ? 'unlabelled' : 'missing';
           else if (values.length > 1) status = 'conflict';
           else if (values[0] === want) status = 'correct';
-          else if ((trap = TASK.traps.find(x => x.g === g.id && x.t === t.id && x.v === values[0]))) status = 'trap';
+          else if ((trap = task.traps.find(x => x.g === g.id && x.t === t.id && x.v === values[0]))) status = 'trap';
           else {
-            for (const g2 of TASK.groups) for (const t2 of TASK.types)
-              if (TASK.truth[g2.id][t2.id] === values[0]) belongs = { g: g2.label, t: t2.label };
+            for (const g2 of task.groups) for (const t2 of task.types)
+              if (task.truth[g2.id][t2.id] === values[0]) belongs = { g: g2.label, t: t2.label };
             status = belongs ? 'misplaced' : 'wrong';
           }
-          const cell = { g, t, want, given: values.length === 1 ? values[0] : values, status, trap, belongs, facts: here };
-          cells.push(cell);
+          cells.push({ g, t, want, given: values.length === 1 ? values[0] : values, status, trap, belongs, facts: here });
           here.forEach(f => { marks[f.r + ',' + f.c] = status; });
         }
       }
       const right = cells.filter(x => x.status === 'correct').length;
       const allRight = right === cells.length;
 
-      // Layout: where did the group and the book type come from for each number?
       let layout = 'none';
       if (cellFacts.length) {
         const sig = new Set(cellFacts.map(f => f.gFrom + '/' + f.tFrom));
         layout = sig.size > 1 ? 'mixed' : { 'row/col': 'groups-down', 'col/row': 'groups-across', 'row/row': 'list', 'col/col': 'list' }[[...sig][0]];
       }
 
-      // Totals are checked against the true totals and against the learner's own numbers.
+      // Totals are checked against the passage and against the learner's own numbers.
       const own = (g, t) => { const x = cells.find(k => k.g.id === g && k.t.id === t); return typeof x.given === 'number' ? x.given : null; };
+      const ownSum = parts => parts.every(p => p !== null) ? sum(parts) : null;
       const totals = facts.filter(f => f.kind !== 'cell').map(f => {
-        let expected, ownSum = null, name;
+        let expected, mine, name;
         if (f.kind === 'groupTotal') {
-          expected = GROUP_TOTAL[f.g]; name = TASK.groups.find(x => x.id === f.g).label;
-          const parts = TASK.types.map(t => own(f.g, t.id)); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+          expected = task.groupTotal[f.g]; name = task.groups.find(x => x.id === f.g).label;
+          mine = ownSum(task.types.map(t => own(f.g, t.id)));
         } else if (f.kind === 'typeTotal') {
-          expected = TYPE_TOTAL[f.t]; name = TASK.types.find(x => x.id === f.t).label;
-          const parts = TASK.groups.map(g => own(g.id, f.t)); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+          expected = task.typeTotal[f.t]; name = task.types.find(x => x.id === f.t).label;
+          mine = ownSum(task.groups.map(g => own(g.id, f.t)));
         } else {
-          expected = GRAND_TOTAL; name = 'Everything';
-          const parts = TASK.groups.flatMap(g => TASK.types.map(t => own(g.id, t.id))); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+          expected = task.grandTotal; name = 'Everything';
+          mine = ownSum(task.groups.flatMap(g => task.types.map(t => own(g.id, t.id))));
         }
         marks[f.r + ',' + f.c] = f.v === expected ? 'correct' : 'off';
-        return { ...f, name, expected, ownSum, ok: f.v === expected, ownOk: ownSum !== null && f.v === ownSum };
+        return { ...f, name, expected, ok: f.v === expected, ownOk: mine !== null && f.v === mine };
       });
       loose.forEach(f => { marks[f.r + ',' + f.c] = 'off'; });
 
@@ -624,178 +836,394 @@
                level, score: allRight ? level.right : level.wrong, behavior: b, behaviorNote };
     },
 
-    nextStep(dx) {
-      const has = tag => dx.cells.some(c => c.trap && c.trap.tag === tag);
-      if (has('“Fewer than” read as take away') || has('Copied the difference'))
-        return ['A short set of “fewer than” and “less than” sentences', 'Each one hides the bigger number behind the word “fewer”. You write the number before you build anything.'];
-      if (has('Percent written as a count') || has('Follows from the percent slip'))
-        return ['Passages where part of a group is given as a percent', 'You turn each percent into a count first, then check that the parts add back up to the group.'];
-      if (has('Total used as a part'))
-        return ['Passages that give a total and one part', 'You find the missing part before placing anything, and keep totals in their own row or column.'];
-      if (dx.cells.some(c => c.status === 'misplaced' || c.status === 'missing' || c.status === 'conflict') || dx.loose.length)
-        return ['Labels first, numbers second', 'The next passage starts with an empty frame: you name every row and column before any number goes in.'];
-      if (dx.layout === 'list')
-        return ['The same kind of data, as a grid', 'Your list was right. Next you put groups one way and types the other, so any two numbers can be compared side by side.'];
-      return ['The other direction: a table to your own reasoning', 'Next you start from a table that is not so simple and write what it shows. That task is still being built.'];
+    nextStep(dx, task) {
+      const focus = new Set(dx.cells.filter(c => c.trap).map(c => c.trap.focus));
+      const other = dx.cells.some(c => !['correct', 'trap'].includes(c.status)) || dx.loose.length > 0;
+      const aimed = f => A_TASKS.find(t => t.focus === f && t.id !== task.id);
+      if (focus.has('relational') && aimed('relational'))
+        return { go: aimed('relational').id, act: 'A passage built around “fewer than” and “less than”',
+                 det: 'Some of its sentences mean add and some mean take away. Write each missing number down before you build anything.' };
+      if (focus.has('percent') && aimed('percent'))
+        return { go: aimed('percent').id, act: 'A passage where parts of a group are given as percents',
+                 det: 'Turn each percent into a count first, then check that the parts add back up to the group.' };
+      const unseen = A_TASKS.find(t => t.id !== task.id && !session.done.has(t.id));
+      if ((focus.size || other) && unseen)
+        return { go: unseen.id, act: focus.size ? 'One more passage, with that slip in mind' : 'Labels first, numbers second',
+                 det: focus.size ? 'Slow down on each comparison and each percent before you place a number.'
+                                 : 'Name every row and column before any number goes in.' };
+      if (!session.bDone)
+        return { go: 'B', act: 'The other direction: a table to your own reasoning',
+                 det: 'Start from a table that is not so simple, say what it shows, then answer three questions about it.' };
+      if (unseen) return { go: unseen.id, act: 'Another passage', det: 'A new set of numbers with its own tricky sentences.' };
+      return { go: null, act: 'That is the whole lab for now', det: 'More passages and tables are being written.' };
     }
   };
 
-  // ── UI state ─────────────────────────────────────────────────────────────
-  let grid, level = null, tStart, tFirst = null, tBuildEnd = 0, edits = 0, reshapes = 0;
+  // ── Table → your reasoning ──────────────────────────────────────────────
+  // Inside each age group South has the higher share, but North is higher
+  // overall because most of its members are adults (Simpson, 1951).
+  const B_TASK = {
+    title: 'E-book use at two library branches, last month',
+    table: [
+      ['Branch', 'Age group', 'Members', 'Used e-books'],
+      ['North', 'Teens', '100', '20'],
+      ['North', 'Adults', '300', '180'],
+      ['North', 'All ages', '400', '200'],
+      ['South', 'Teens', '300', '90'],
+      ['South', 'Adults', '100', '70'],
+      ['South', 'All ages', '400', '160']
+    ],
+    items: [
+      { id: 'b1', reading: 'Read the data', type: 'number', answer: 70,
+        q: 'How many South adults used e-books?',
+        traps: [
+          { v: 100, tag: 'Read the wrong column', say: '100 is how many South adults are members. The used e-books column says 70.' },
+          { v: 180, tag: 'Read the wrong row', say: '180 is North adults. South adults used 70.' },
+          { v: 160, tag: 'Read the total row', say: '160 is every South member who used e-books. The adults row says 70.' }
+        ],
+        wrongSay: 'Find the South row for adults, then the used e-books column: 70.' },
+      { id: 'b2', reading: 'Read between the data', type: 'choice', answer: 'South',
+        q: 'Among adults, which branch had the higher share of members using e-books?',
+        choices: ['North', 'South', 'The same'],
+        why: 'Which numbers tell you?',
+        traps: [
+          { v: 'North', tag: 'Compared counts, not shares', say: 'North has more adult users, 180 against 70, but it also has three times as many adult members. As a share, North is 180 out of 300, which is 60%. South is 70 out of 100, which is 70%.' }
+        ],
+        wrongSay: 'North: 180 out of 300 is 60%. South: 70 out of 100 is 70%. South is higher.',
+        key: { re: /%|percent|share|rate|proportion|out of|\/|比例|百分|占|率/i, yes: 'Your reason compares shares, which is the fair way to compare groups of different sizes.', no: 'Your reason does not mention a share or a percent.' } },
+      { id: 'b3', reading: 'Read beyond the data', type: 'choice', answer: 'South',
+        q: 'Overall, 50% of North’s members used e-books, against 40% at South. Now look inside the age groups. Which branch has the higher share for teens and for adults?',
+        choices: ['North', 'South', 'It is different for teens and adults'],
+        why: 'How can one branch be ahead overall but not inside the groups?',
+        traps: [
+          { v: 'North', tag: 'Trusted the combined numbers', say: 'Teens: North 20 out of 100 (20%), South 90 out of 300 (30%). Adults: North 60%, South 70%. South is higher in both groups. North only wins overall because most of its members are adults, and adults use e-books more. Putting groups together can flip a comparison (this is called Simpson’s paradox).' }
+        ],
+        wrongSay: 'Teens: 20% at North, 30% at South. Adults: 60% at North, 70% at South. South is higher for both.',
+        key: { re: /more adults|mostly adults|most (of its |of the )?(members )?(are )?adults|mix|makeup|make-up|composition|different (sizes|numbers|groups)|weight|300 adults|成人多|大多是成人|多数是成人|多數是成人|人数不同|人數不同|构成|組成|组成|比例不同/i,
+               yes: 'Your reason names the cause: the two branches have very different mixes of teens and adults.',
+               no: 'Your reason does not mention that the branches have different mixes of teens and adults. That mix is what flips the result.' } }
+    ]
+  };
 
-  document.getElementById('passage').innerHTML = TASK.passage.map(s => `<p>${esc(s)}</p>`).join('');
+  const ReadEngine = {
+    // First reading, before any question: a keyword sketch of what the learner
+    // noticed. (Phase 1: a model reads the sentence itself.)
+    readFree(text) {
+      const t = String(text || '').toLowerCase();
+      const branches = /north|south|北|南/.test(t);
+      const shares = /%|percent|share|rate|proportion|out of|比例|百分|占|率/.test(t);
+      const inside = /teen|adult|age|青少年|成人|年龄|年齡/.test(t);
+      const counts = /\b(20|90|70|180|160|200)\b/.test(t);
+      const northUp = /north[^.。!?]*\b(more|higher|better|bigger|larger|most)\b|北[^。]*?(多|高|好)/.test(t);
+      return { branches, shares, inside, counts, northUp };
+    },
+    diagnose(item, answer, why, level, behavior) {
+      const given = item.type === 'number' ? (/\d/.test(answer) ? parseFloat(String(answer).replace(/[，,]/g, '').match(/-?\d+(?:\.\d+)?/)[0]) : null) : answer;
+      const correct = given === item.answer;
+      const trap = correct ? null : item.traps.find(t => t.v === given) || null;
+      const keyIdea = item.key ? item.key.re.test(why || '') : null;
+      let behaviorNote = null;
+      if (level.n === 3 && behavior.t >= 90) behaviorNote = `said “Certain” but took ${fmtSec(behavior.t)} to answer`;
+      else if (level.n === 1 && correct && behavior.t <= 15) behaviorNote = `said “Guessing” but got it right in ${fmtSec(behavior.t)}`;
+      return { item, given, correct, trap, keyIdea, level, marks: correct ? level.right : level.wrong, behavior, behaviorNote };
+    },
+    nextStep(results) {
+      const tag = x => results.some(r => r.trap && r.trap.tag === x);
+      if (tag('Trusted the combined numbers'))
+        return ['Tables where putting groups together flips the answer', 'Before trusting an overall number, check it inside each group first.'];
+      if (tag('Compared counts, not shares'))
+        return ['Tables where the groups are different sizes', 'Turn each count into a share of its own group before you compare.'];
+      if (results.some(r => r.trap) || results.some(r => !r.correct))
+        return ['Reading one cell at a time', 'Find the row first, then the column, and say both out loud before you read the number.'];
+      return ['Both directions in one task', 'Next you build a table from a passage and then say what it shows. That task is still being written.'];
+    }
+  };
 
-  function freshGrid() { return [['', '', ''], ['', '', ''], ['', '', '']]; }
-  function drawGrid() {
-    const t = document.getElementById('grid');
-    t.innerHTML = grid.map((row, r) => '<tr>' + row.map((v, c) => {
-      const head = r === 0 || c === 0;
-      const ph = r === 0 && c === 0 ? '' : head ? 'label' : '';
-      const cls = readNumber(v) ? ' class="num"' : '';
-      return `<td><input${cls} data-r="${r}" data-c="${c}" value="${esc(v)}" placeholder="${ph}" aria-label="Row ${r + 1}, column ${c + 1}" autocomplete="off"></td>`;
-    }).join('') + '</tr>').join('');
-    updateNext();
+  // ── Shared UI helpers ────────────────────────────────────────────────────
+  function show(id) { document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.id === id)); }
+  function pips(n, i) {
+    $('pips').innerHTML = Array.from({ length: n }, (_, k) =>
+      `<span class="step-pip${k === i ? ' active' : k < i ? ' done' : ''}"></span>`).join('');
   }
-  function updateNext() {
-    const nums = grid.flat().filter(v => readNumber(v)).length;
-    document.getElementById('toConf').disabled = nums < 2;
-  }
-  const gridEl = document.getElementById('grid');
-  gridEl.addEventListener('input', e => {
-    const i = e.target; if (!i.dataset) return;
-    if (tFirst === null) tFirst = (Date.now() - tStart) / 1000;
-    grid[+i.dataset.r][+i.dataset.c] = i.value;
-    i.classList.toggle('num', !!readNumber(i.value));
-    updateNext();
-  });
-  gridEl.addEventListener('change', () => { edits++; });
-  function reshape(fn) { fn(); reshapes++; drawGrid(); }
-  document.getElementById('addRow').onclick = () => { if (grid.length < 9) reshape(() => grid.push(grid[0].map(() => ''))); };
-  document.getElementById('addCol').onclick = () => { if (grid[0].length < 7) reshape(() => grid.forEach(r => r.push(''))); };
-  document.getElementById('delRow').onclick = () => { if (grid.length > 2) reshape(() => grid.pop()); };
-  document.getElementById('delCol').onclick = () => { if (grid[0].length > 2) reshape(() => grid.forEach(r => r.pop())); };
-
-  const confEl = document.getElementById('confLevels');
-  confEl.innerHTML = LEVELS.map(l => `<button type="button" class="conf-level" data-n="${l.n}"><span class="cl-name">${l.label}</span><span class="cl-pay">right +${l.right} · wrong ${l.wrong === 0 ? '0' : '−' + Math.abs(l.wrong)}</span></button>`).join('');
-  confEl.addEventListener('click', e => {
-    const b = e.target.closest('.conf-level'); if (!b) return;
-    level = LEVELS.find(l => l.n === +b.dataset.n);
-    [...confEl.children].forEach(x => x.classList.toggle('selected', x === b));
-    document.getElementById('lockIn').disabled = false;
-  });
-
-  function stage(id, pip) {
-    document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.id === id));
-    [...document.getElementById('pips').children].forEach((p, i) => {
-      p.classList.toggle('active', i === pip); p.classList.toggle('done', i < pip);
-    });
-  }
-  document.getElementById('toConf').onclick = () => { tBuildEnd = (Date.now() - tStart) / 1000; stage('stage-conf', 1); };
-  document.getElementById('backBuild').onclick = () => stage('stage-build', 0);
-  document.getElementById('lockIn').onclick = () => { report(); stage('stage-report', 2); };
-  document.getElementById('restart').onclick = start;
-
-  function showTable(el, g, marks) {
+  function showTable(el, g, marks, units) {
     el.innerHTML = g.map((row, r) => '<tr>' + row.map((v, c) => {
-      const num = readNumber(v), m = marks && marks[r + ',' + c];
+      const num = readNumber(v, units), m = marks && marks[r + ',' + c];
       const cls = [num ? 'n' : (String(v).trim() ? 'lab' : 'empty'),
                    m === 'correct' ? 'ok' : m === 'trap' ? 'trap' : m ? 'off' : ''].filter(Boolean).join(' ');
       return `<td class="${cls}">${esc(v) || '&nbsp;'}</td>`;
     }).join('') + '</tr>').join('');
   }
+  function bars(fillC, numC, fillA, numA, conf, acc, accText) {
+    $(fillC).style.width = '0'; $(fillA).style.width = '0';
+    requestAnimationFrame(() => requestAnimationFrame(() => { $(fillC).style.width = conf + '%'; $(fillA).style.width = acc + '%'; }));
+    $(numC).textContent = Math.round(conf) + '%';
+    $(numA).textContent = accText;
+  }
 
-  function report() {
+  // Certainty is one shared stage; each flow says what the judgment is about.
+  const confEl = $('confLevels');
+  let confDone = null, confBack = null, chosen = null;
+  confEl.innerHTML = LEVELS.map(l => `<button type="button" class="conf-level" data-n="${l.n}"><span class="cl-name">${l.label}</span><span class="cl-pay">right +${l.right} · wrong ${l.wrong === 0 ? '0' : '−' + Math.abs(l.wrong)}</span></button>`).join('');
+  confEl.addEventListener('click', e => {
+    const b = e.target.closest('.conf-level'); if (!b) return;
+    chosen = LEVELS.find(l => l.n === +b.dataset.n);
+    [...confEl.children].forEach(x => x.classList.toggle('selected', x === b));
+    $('lockIn').disabled = false;
+  });
+  function askSure(label, done, back) {
+    $('confLabel').textContent = label;
+    chosen = null; confDone = done; confBack = back;
+    [...confEl.children].forEach(x => x.classList.remove('selected'));
+    $('lockIn').disabled = true;
+    show('stage-conf');
+  }
+  $('lockIn').onclick = () => confDone(chosen);
+  $('confBack').onclick = () => confBack();
+
+  // ── Words → table flow ───────────────────────────────────────────────────
+  let task, grid, tStart, tFirst, tBuildEnd, edits, reshapes, committed;
+  const gridEl = $('grid');
+
+  function drawGrid() {
+    gridEl.innerHTML = grid.map((row, r) => '<tr>' + row.map((v, c) => {
+      const ph = r === 0 && c === 0 ? '' : (r === 0 || c === 0) ? 'label' : '';
+      const cls = readNumber(v, task.units) ? ' class="num"' : '';
+      return `<td><input${cls} data-r="${r}" data-c="${c}" value="${esc(v)}" placeholder="${ph}" aria-label="Row ${r + 1}, column ${c + 1}" autocomplete="off"></td>`;
+    }).join('') + '</tr>').join('');
+    updateNext();
+  }
+  function updateNext() {
+    $('toConf').disabled = grid.flat().filter(v => readNumber(v, task.units)).length < 2;
+  }
+  gridEl.addEventListener('input', e => {
+    const i = e.target; if (!i.dataset || i.dataset.r === undefined) return;
+    if (tFirst === null) tFirst = (Date.now() - tStart) / 1000;
+    grid[+i.dataset.r][+i.dataset.c] = i.value;
+    i.classList.toggle('num', !!readNumber(i.value, task.units));
+    updateNext();
+  });
+  gridEl.addEventListener('change', e => {
+    const k = e.target.dataset.r + ',' + e.target.dataset.c;
+    if (committed[k] && committed[k] !== e.target.value) edits++;
+    committed[k] = e.target.value;
+  });
+  function reshape(fn) { fn(); reshapes++; drawGrid(); }
+  $('addRow').onclick = () => { if (grid.length < 9) reshape(() => grid.push(grid[0].map(() => ''))); };
+  $('addCol').onclick = () => { if (grid[0].length < 7) reshape(() => grid.forEach(r => r.push(''))); };
+  $('delRow').onclick = () => { if (grid.length > 2) reshape(() => grid.pop()); };
+  $('delCol').onclick = () => { if (grid[0].length > 2) reshape(() => grid.forEach(r => r.pop())); };
+
+  function startA(id) {
+    task = A_TASKS.find(t => t.id === id);
+    grid = [['', '', ''], ['', '', ''], ['', '', '']];
+    tStart = Date.now(); tFirst = null; edits = 0; reshapes = 0; committed = {};
+    $('taskTitle').textContent = task.title;
+    $('passage').innerHTML = task.passage.map(s => `<p>${esc(s)}</p>`).join('');
+    $('note').value = '';
+    drawGrid();
+    pips(3, 0);
+    show('stage-build');
+    $('lab').scrollIntoView({ block: 'start' });
+  }
+  $('toConf').onclick = () => {
+    tBuildEnd = (Date.now() - tStart) / 1000;
+    pips(3, 1);
+    askSure('Step 2 of 3 · How sure are you that every number in your table is in the right place?',
+      level => reportA(level), () => { pips(3, 0); show('stage-build'); });
+  };
+
+  function reportA(level) {
     const behavior = { tBuild: tBuildEnd, tFirst: tFirst === null ? tBuildEnd : tFirst, edits, reshapes };
-    const dx = TableEngine.diagnose(grid, level, behavior);
-    const acc = Math.round(dx.right / dx.total * 100);
+    const dx = TableEngine.diagnose(grid, task, level, behavior);
+    session.done.add(task.id);
+    session.log.push({ title: task.title, right: dx.right, total: dx.total });
+    pips(3, 2);
+    show('stage-areport');
 
-    requestAnimationFrame(() => {
-      document.getElementById('fillConf').style.width = level.conf + '%';
-      document.getElementById('fillAcc').style.width = acc + '%';
-    });
-    document.getElementById('numConf').textContent = level.conf + '%';
-    document.getElementById('numAcc').textContent = dx.right + ' / ' + dx.total;
-
-    const h = document.getElementById('headline');
-    const off = dx.total - dx.right;
+    bars('fillConf', 'numConf', 'fillAcc', 'numAcc', level.conf, dx.right / dx.total * 100, dx.right + ' / ' + dx.total);
+    const h = $('headline'), off = dx.total - dx.right;
     if (dx.allRight && level.n === 3) { h.className = 'gap-headline calibrated'; h.textContent = 'Every number in place, and you knew it.'; }
     else if (dx.allRight) { h.className = 'gap-headline calibrated'; h.textContent = 'Every number in place. You were more right than you felt.'; }
-    else if (level.n === 3) { h.className = 'gap-headline blindspot'; h.textContent = `You felt certain, and ${off} of ${dx.total} numbers were not in place.`; }
+    else if (level.n === 3) { h.className = 'gap-headline blindspot'; h.textContent = `You felt certain, and ${off} of the ${dx.total} numbers ${off === 1 ? 'was' : 'were'} not in place.`; }
     else { h.className = 'gap-headline'; h.textContent = `${dx.right} of ${dx.total} numbers in place. Your doubt was fair.`; }
-    document.getElementById('diag').innerHTML =
-      `Scoring: <b>${level.label}</b> on a table that was ${dx.allRight ? '<b>right</b>' : '<b>not yet right</b>'}, so ${dx.score >= 0 ? '+' : '−'}${Math.abs(dx.score)} points.`;
+    $('diag').innerHTML = `${esc(task.title)}. Scoring: <b>${level.label}</b> on a table that was ${dx.allRight ? '<b>right</b>' : '<b>not yet right</b>'}, so ${dx.score >= 0 ? '+' : '−'}${Math.abs(dx.score)} points.`;
 
-    showTable(document.getElementById('checked'), grid, dx.marks);
+    showTable($('checked'), grid, dx.marks, task.units);
 
     const items = [];
-    const rank = c => (c.trap && c.trap.tag === 'Follows from the percent slip' ? 1 : 0);
+    const rank = c => (c.trap && c.trap.chained ? 1 : 0);
     dx.cells.slice().sort((a, b) => rank(a) - rank(b)).forEach(c => {
       const where = `${c.g.label}, ${c.t.label.toLowerCase()}`;
       if (c.status === 'trap') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b><span class="ri-tag">${esc(c.trap.tag)}</span> ${esc(c.trap.say)}`);
       else if (c.status === 'misplaced') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b> That number belongs to ${esc(c.belongs.g)}, ${esc(c.belongs.t.toLowerCase())}. This cell should hold ${c.want}.`);
       else if (c.status === 'wrong') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b> The passage gives ${c.want} here.`);
       else if (c.status === 'conflict') items.push(`<b>${esc(where)} appears more than once</b>, with different numbers (${c.given.join(' and ')}).`);
-      else if (c.status === 'unlabelled') items.push(`<b>${esc(where)}: the right number (${c.want}) is in your table,</b> but its row and column do not say both the group and the book type.`);
+      else if (c.status === 'unlabelled') items.push(`<b>${esc(where)}: the right number (${c.want}) is in your table,</b> but its row and column do not say both which group and which kind it is.`);
       else if (c.status === 'missing') items.push(`<b>${esc(where)} is missing.</b> Delta could not find a number labelled with both. It should be ${c.want}.`);
     });
     const explained = new Set(dx.cells.filter(c => c.status === 'unlabelled').map(c => c.want));
     const rest = dx.loose.filter(f => !explained.has(f.v));
-    const unl = rest.filter(f => f.why === 'unlabelled').length, half = rest.filter(f => f.why === 'half').length;
-    if (unl) items.push(`<b>${unl} number${unl > 1 ? 's have' : ' has'} no label Delta could read.</b> Each number needs a group and a book type in its row or column.`);
-    if (half) items.push(`<b>${half} number${half > 1 ? 's have' : ' has'} only half a label.</b> Delta could tell the group or the book type, but not both.`);
-    const pct = dx.cells.some(c => c.facts.some(f => f.pct));
-    if (pct) items.push('<b>You typed a percent sign in the table.</b> The table holds counts of books, so every cell should be a whole number.');
+    const unl = rest.filter(f => f.why === 'unlabelled').length, half = rest.filter(f => f.why !== 'unlabelled').length;
+    if (unl) items.push(`<b>${unl} number${unl > 1 ? 's have' : ' has'} no label Delta could read.</b> Each number needs a group and a kind in its row or column.`);
+    if (half) items.push(`<b>${half} number${half > 1 ? 's have' : ' has'} only half a label.</b> Delta could tell the group or the kind, but not both.`);
+    if (dx.cells.some(c => c.facts.some(f => f.pct))) items.push('<b>You typed a percent sign in the table.</b> The table holds counts, so every cell should be a whole number.');
     const lay = {
-      'groups-down': 'You put the groups down the side and the book types across the top.',
-      'groups-across': 'You put the groups across the top and the book types down the side. That works just as well.',
-      'list': 'You made one long list, with each group and book type on its own row. All the numbers fit that way. A grid with groups one way and types the other puts them side by side, which makes comparing easier.',
+      'groups-down': 'You put the groups down the side and the kinds across the top.',
+      'groups-across': 'You put the groups across the top and the kinds down the side. That works just as well.',
+      'list': 'You made one long list, with each group and kind on its own row. All the numbers fit that way. A grid with groups one way and kinds the other puts them side by side, which makes comparing easier.',
       'mixed': 'Your labels switch direction partway through, so some numbers are read across and some down.'
     }[dx.layout];
     if (lay) items.push(`<b>Layout.</b> ${lay}`);
     const okTotals = dx.totals.filter(t => t.ok);
     if (okTotals.length) items.push(okTotals.length === dx.totals.length
-      ? `<b>All ${okTotals.length} of your totals are right.</b> ${okTotals.length > 1 ? 'Each one is a check on the numbers it adds up.' : ''}`
+      ? `<b>All ${okTotals.length} of your totals are right.</b> Each one is a check on the numbers it adds up.`
       : `<b>Right totals:</b> ${okTotals.map(t => esc(t.name.toLowerCase()) + ' (' + t.v + ')').join(', ')}.`);
     dx.totals.filter(t => !t.ok).forEach(t => {
       if (t.ownOk) items.push(`<b>Your total for ${esc(t.name.toLowerCase())} (${t.v}) adds up with your own numbers,</b> but the passage gives ${t.expected}. A total only checks what went into it.`);
       else items.push(`<b>Your total for ${esc(t.name.toLowerCase())} (${t.v}) does not add up.</b> It should be ${t.expected}.`);
     });
-    if (!dx.totals.length && !dx.allRight) items.push('<b>You did not add a total.</b> The passage gives 195 books in all. A total row is a free check on every number above it.');
-    const note = document.getElementById('note').value.trim();
+    if (!dx.totals.length && !dx.allRight) items.push(`<b>You did not add a total.</b> ${task.totalHint ? esc(task.totalHint) + ' ' : ''}A total row is a free check on every number above it.`);
+    const note = $('note').value.trim();
     if (note) {
       const saw = [];
-      if (/fewer|less than|more than|比.{0,6}(少|多)|少于|少於/i.test(note)) saw.push('the “fewer than” sentence');
+      if (/fewer|less than|more than|比.{0,6}(少|多)|少于|少於/i.test(note)) saw.push('the comparison sentence');
       if (/percent|%|百分/i.test(note)) saw.push('the percent');
-      if (/\btotal|\bin all\b|合计|合計|总|總|一共/i.test(note)) saw.push('the totals');
+      if (/\btotal|\bin all\b|\brest\b|合计|合計|总|總|一共|其余|其餘/i.test(note)) saw.push('the totals');
       if (saw.length) items.push(`<b>You named ${saw.join(' and ')} as the hard part.</b> ${dx.allRight ? 'And you got past it.' : 'Spotting it is the first half; the table shows whether the second half landed.'}`);
     }
-    items.push(`<b>How you worked.</b> ${fmtSec(dx.behavior.tFirst)} of reading before your first entry, ${dx.behavior.edits} cell change${dx.behavior.edits === 1 ? '' : 's'}, ${dx.behavior.reshapes} change${dx.behavior.reshapes === 1 ? '' : 's'} to the table's shape, ${fmtSec(dx.behavior.tBuild)} in all.`);
+    items.push(`<b>How you worked.</b> ${fmtSec(behavior.tFirst)} of reading before your first entry, ${edits ? edits + ' change' + (edits === 1 ? '' : 's') + ' to cells you had already filled' : 'no changes to cells once filled'}, ${reshapes} change${reshapes === 1 ? '' : 's'} to the table's shape, ${fmtSec(behavior.tBuild)} in all.`);
     if (dx.behaviorNote) items.push(`<b>Your certainty and your process disagree.</b> ${esc(dx.behaviorNote)}`);
-    document.getElementById('mirrorList').innerHTML = items.map(x => `<li><span>${x}</span></li>`).join('');
+    if (session.log.length > 1) items.push(`<b>Across passages.</b> ${session.log.map(x => esc(x.title.split(' · ')[1]) + ': ' + x.right + ' of ' + x.total).join(' → ')}.`);
+    $('mirrorList').innerHTML = items.map(x => `<li><span>${x}</span></li>`).join('');
 
-    const [act, det] = TableEngine.nextStep(dx);
-    document.getElementById('nextAct').textContent = act;
-    document.getElementById('nextDet').textContent = det;
+    const next = TableEngine.nextStep(dx, task);
+    $('nextAct').textContent = next.act;
+    $('nextDet').textContent = next.det;
+    $('goNext').style.display = next.go ? '' : 'none';
+    $('goNext').onclick = () => next.go === 'B' ? startB() : startA(next.go);
+
+    const ref = [['', ...task.types.map(t => t.label), 'Total']];
+    task.groups.forEach(g => ref.push([g.label, ...task.types.map(t => String(task.truth[g.id][t.id])), String(task.groupTotal[g.id])]));
+    ref.push(['Total', ...task.types.map(t => String(task.typeTotal[t.id])), String(task.grandTotal)]);
+    showTable($('reference'), ref, null, task.units);
+    $('lab').scrollIntoView({ block: 'start' });
   }
 
-  (function reference() {
-    const ref = [['', ...TASK.types.map(t => t.label), 'Total']];
-    TASK.groups.forEach(g => ref.push([g.label, ...TASK.types.map(t => String(TASK.truth[g.id][t.id])), String(GROUP_TOTAL[g.id])]));
-    ref.push(['Total', ...TASK.types.map(t => String(TYPE_TOTAL[t.id])), String(GRAND_TOTAL)]);
-    showTable(document.getElementById('reference'), ref, null);
-  })();
+  // ── Table → your reasoning flow ──────────────────────────────────────────
+  let bFreeText, tBFree, bAnswers, bResults, bIdx, tItem, bChanges;
+  $('bTitle').textContent = B_TASK.title;
+  showTable($('bTable'), B_TASK.table, null, null);
+  showTable($('bTable2'), B_TASK.table, null, null);
+  $('bFree').addEventListener('input', () => { $('bFreeNext').disabled = $('bFree').value.trim().length < 8; });
 
-  function start() {
-    grid = freshGrid(); level = null; tFirst = null; edits = 0; reshapes = 0; tStart = Date.now();
-    document.getElementById('note').value = '';
-    [...confEl.children].forEach(x => x.classList.remove('selected'));
-    document.getElementById('lockIn').disabled = true;
-    document.getElementById('fillConf').style.width = '0';
-    document.getElementById('fillAcc').style.width = '0';
-    drawGrid();
-    stage('stage-build', 0);
+  function startB() {
+    bAnswers = B_TASK.items.map(() => ({ answer: '', why: '', last: '' }));
+    bResults = []; bChanges = B_TASK.items.map(() => 0);
+    $('bFree').value = ''; $('bFreeNext').disabled = true;
+    tBFree = Date.now();
+    pips(B_TASK.items.length + 2, 0);
+    show('stage-bfree');
+    $('lab').scrollIntoView({ block: 'start' });
   }
-  start();
+  $('bFreeNext').onclick = () => {
+    bFreeText = $('bFree').value.trim();
+    tBFree = (Date.now() - tBFree) / 1000;
+    showItem(0);
+  };
+
+  function showItem(i) {
+    bIdx = i; tItem = Date.now();
+    const item = B_TASK.items[i], a = bAnswers[i];
+    pips(B_TASK.items.length + 2, i + 1);
+    $('bItemLabel').textContent = `Question ${i + 1} of ${B_TASK.items.length} · ${item.reading}`;
+    $('bStem').textContent = item.q;
+    if (item.type === 'number') {
+      $('bAnswer').innerHTML = '<label class="field-label" for="bNum">Your answer</label><input class="ans-input" id="bNum" type="text" inputmode="decimal" autocomplete="off">';
+      $('bNum').value = a.answer;
+      $('bNum').addEventListener('input', () => { a.answer = $('bNum').value; checkItem(); });
+      $('bNum').addEventListener('change', () => { if (a.last && a.last !== a.answer) bChanges[i]++; a.last = a.answer; });
+    } else {
+      $('bAnswer').innerHTML = '<div class="options">' + item.choices.map((c, k) =>
+        `<button type="button" class="option${a.answer === c ? ' selected' : ''}" data-c="${esc(c)}"><span class="okey">${'ABC'[k]}</span>${esc(c)}</button>`).join('') + '</div>';
+      $('bAnswer').querySelectorAll('.option').forEach(b => b.onclick = () => {
+        if (a.answer && a.answer !== b.dataset.c) bChanges[i]++;
+        a.answer = b.dataset.c;
+        $('bAnswer').querySelectorAll('.option').forEach(x => x.classList.toggle('selected', x === b));
+        checkItem();
+      });
+    }
+    $('bWhyWrap').style.display = item.why ? '' : 'none';
+    $('bWhyLabel').textContent = item.why || '';
+    $('bWhy').value = a.why;
+    checkItem();
+    show('stage-bitem');
+  }
+  $('bWhy').addEventListener('input', () => { bAnswers[bIdx].why = $('bWhy').value; checkItem(); });
+  function checkItem() {
+    const item = B_TASK.items[bIdx], a = bAnswers[bIdx];
+    const answered = item.type === 'number' ? /\d/.test(a.answer) : !!a.answer;
+    $('bItemNext').disabled = !answered || (item.why && a.why.trim().length < 3);
+  }
+  $('bItemNext').onclick = () => {
+    const i = bIdx, t = (Date.now() - tItem) / 1000;
+    askSure(`Question ${i + 1} of ${B_TASK.items.length} · How sure are you, honestly?`, level => {
+      bResults[i] = ReadEngine.diagnose(B_TASK.items[i], bAnswers[i].answer, bAnswers[i].why, level, { t, changes: bChanges[i] });
+      if (i + 1 < B_TASK.items.length) showItem(i + 1); else reportB();
+    }, () => showItem(i));
+  };
+
+  function reportB() {
+    session.bDone = true;
+    const R = bResults, n = R.length, right = R.filter(r => r.correct).length;
+    const conf = sum(R.map(r => r.level.conf)) / n, marks = sum(R.map(r => r.marks));
+    pips(n + 2, n + 1);
+    show('stage-breport');
+    bars('bFillConf', 'bNumConf', 'bFillAcc', 'bNumAcc', conf, right / n * 100, right + ' / ' + n);
+    const h = $('bHeadline');
+    const overSure = R.filter(r => !r.correct && r.level.n === 3).length;
+    if (right === n) { h.className = 'gap-headline calibrated'; h.textContent = conf >= 80 ? 'All three right, and you knew it.' : 'All three right. You were more right than you felt.'; }
+    else if (overSure) { h.className = 'gap-headline blindspot'; h.textContent = `You were certain on ${overSure === 1 ? 'an answer' : overSure + ' answers'} that did not hold.`; }
+    else { h.className = 'gap-headline'; h.textContent = `${right} of ${n} right. Your doubt was fair where it counted.`; }
+    $('bDiag').innerHTML = `${esc(B_TASK.title)}. Certainty score across the three questions: <b>${marks >= 0 ? '+' : '−'}${Math.abs(marks)}</b>.`;
+
+    $('bItems').innerHTML = R.map((r, i) => {
+      const it = r.item;
+      const ans = it.type === 'number' ? (r.given === null ? '(no number)' : r.given) : r.given;
+      let lines = `<p class="ri-line">You answered <b>${esc(ans)}</b> · ${esc(r.level.label)} (${r.marks >= 0 ? '+' : '−'}${Math.abs(r.marks)})</p>`;
+      if (!r.correct) lines += `<p class="ri-line">${r.trap ? `<span class="ri-tag">${esc(r.trap.tag)}</span> ${esc(r.trap.say)}` : esc(it.wrongSay)}</p>`;
+      if (it.key) lines += `<p class="ri-line"><span class="ri-tag${r.keyIdea ? ' ok' : ''}">${r.keyIdea ? 'key idea there' : 'key idea missing'}</span> ${esc(r.keyIdea ? it.key.yes : it.key.no)}</p>`;
+      return `<div class="report-item ${r.correct ? 'correct' : 'wrong'}"><div class="ri-head"><span class="ri-title">${i + 1} · ${esc(it.reading)}: ${esc(it.q)}</span><span class="ri-meta">${r.correct ? 'right' : 'not right'}</span></div>${lines}</div>`;
+    }).join('');
+
+    const f = ReadEngine.readFree(bFreeText), m = [];
+    const b3 = R[2];
+    if (!f.branches) m.push('<b>Your first reading did not compare the two branches.</b> Most people start somewhere else; the questions then made the comparison for you.');
+    else if (f.inside) m.push('<b>Your first reading already looked inside the age groups.</b> That is the step that catches the flip in question 3.');
+    else if (f.northUp) m.push(`<b>Your first reading said North did better.</b> That is true of the combined numbers. ${b3.correct ? 'Question 3 shows you caught how it flips inside each age group.' : 'Inside each age group it is the other way round, which is what question 3 was about.'}`);
+    if (f.branches && f.counts && !f.shares) m.push('<b>Your first reading compared counts.</b> When the groups are different sizes, shares are the fair comparison.');
+    else if (f.shares) m.push('<b>Your first reading used shares.</b> That is the fair way to compare groups of different sizes.');
+    m.push(`<b>How you worked.</b> ${fmtSec(tBFree)} on your first reading, then ${R.map(r => fmtSec(r.behavior.t)).join(', ')} on the three questions. ${sum(bChanges) ? 'You changed ' + sum(bChanges) + ' answer' + (sum(bChanges) === 1 ? '' : 's') + ' along the way.' : 'You did not change any answers.'}`);
+    R.filter(r => r.behaviorNote).forEach(r => m.push(`<b>Your certainty and your pace disagree on question ${R.indexOf(r) + 1}:</b> you ${esc(r.behaviorNote)}.`));
+    m.push('<span style="color:var(--muted)">Your first reading was sorted by a simple keyword rule, so treat these notes as a rough sketch.</span>');
+    $('bMirror').innerHTML = m.map(x => `<li><span>${x}</span></li>`).join('');
+
+    const [act, det] = ReadEngine.nextStep(R);
+    $('bNextAct').textContent = act;
+    $('bNextDet').textContent = det;
+    $('lab').scrollIntoView({ block: 'start' });
+  }
+  $('toWords').onclick = () => startA(A_TASKS.find(t => !session.done.has(t.id)) ? A_TASKS.find(t => !session.done.has(t.id)).id : 'library');
+
+  // ── Start ────────────────────────────────────────────────────────────────
+  $('pick').addEventListener('click', e => {
+    const b = e.target.closest('[data-go]'); if (!b) return;
+    if (b.dataset.go === 'A') startA('library'); else startB();
+  });
+  function pickStage() { pips(1, 0); show('stage-pick'); }
+  document.querySelectorAll('[data-restart]').forEach(b => b.onclick = () => {
+    session.done.clear(); session.log = []; session.bDone = false; pickStage();
+  });
+  pickStage();
 })();
 </script>
 </body>

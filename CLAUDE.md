@@ -33,8 +33,8 @@ linked to EdArXiv preprints):**
   Education (2026-06-02; the site says "under journal review", never the venue).
   Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
-**Scoping review (Chapter 2) and its page (added 2026-09-27; owner approved it on
-2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
+**Scoping review (Chapter 2) and its page (added 2026-09-27, live since PR #18 /
+delta#17; owner approved it on 2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
 2026-06-15, via `review/data/review.json` `version` / `as_of_approx`):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
 Emerging Three-Way Intersection in Education" (Jia & Xu; R1 Jia, R2 Xu). Protocol
 registered on OSF 2026-05-26: https://osf.io/s8ebf/ (five RQs; RQ3, construct
@@ -54,8 +54,10 @@ tools: never open that PDF in a session).
 `review/build.py` (stdlib; `--import-charting` maps the matrix by Audit status and never
 reads outcome measures, key findings, limitations or audit notes), 11 automated checks
 (the page is not rewritten while one fails), PRISMA-ScR flow SVG with download, and an
-evidence map (chart skill × AI role / level / modality / measurement). Glyph ∩. The
-page is not linked from the homepage; linking it is the owner's call after review.
+evidence map (chart skill × AI role / level / modality / measurement). Glyph ∩. Since
+2026-09-27 (owner's call) the homepage papers band shows it as a third paper tile beside
+ACB and MDC: tag "Scoping review · Interim version", → Read more to review.html, OSF as
+the small link. Keep that tile's "interim" wording in step with review.json.
 
 **Live site:** https://stej20996.github.io/ (portfolio) · https://stej20996.github.io/platform.html (Delta vision page)
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
@@ -325,7 +327,13 @@ wording.
   Exception (2026-08-24, delta#12, owner settled here after trying all-white-gold and
   all-black-gold): the homepage's Δ·Prototype tile alone is hardcoded to platform.html's
   black-gold (tile #1d1c19, text #f0ede4, brass #c9a45c) as a theme preview of the
-  Delta page; the rest of the portfolio stays graphite-indigo.
+  Delta page; the rest of the portfolio stays graphite-indigo. Since 2026-09-27 that tile
+  is a `<section>`, not an `<a>`: its "→ Try the demo" link stretches an overlay over the
+  whole tile (so any click still opens platform.html) and a smaller "Try Graph Lab" link
+  sits above the overlay, one level down, like the papers' EdArXiv links. With three
+  paper tiles, laptop-height screens (861px+ wide, 940px or less tall) hide the About
+  tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
+  1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
   `platform.html` uses the black-gold dark system (see section 2, delta#11);
   `local-llm.html` keeps the original warm-paper terracotta system.
   Fonts are shared across all systems; the section-numbering pattern continues.
@@ -390,9 +398,9 @@ GitHub's. A new project line starts its own counter at 1.
   CLAUDE.md rewrite that the 2026-09-08 handoff has since superseded, plus roughly 15k
   lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
   or drop.
-- Scoping review page: approved as an interim version (2026-09-27). Still open: Jiarui
-  Xu, as co-author, and the chair should know the interim counts are public once merged;
-  the homepage link remains the owner's call. Data follow-ups the build already flags: CNKI and Airiti search
+- Scoping review page: live as an interim version and carried on the homepage as a paper
+  tile (2026-09-27). Still open: Jiarui Xu, as co-author, and the chair should know the
+  interim counts are public. Data follow-ups the build already flags: CNKI and Airiti search
   strings are paraphrases (verbatim copies from screenshots pending); ACM's recorded
   string (title/abstract/keyword) differs from the executed full-text "Anywhere" run;
   S002's charted reference lacks its DOI (10.1016/j.compedu.2025.105322). Not in the
@@ -402,8 +410,9 @@ GitHub's. A new project line starts its own counter at 1.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
-- §1b: Graph Lab (`graphs.html`) has the tables room (both directions), statistics
-  charts and geometry figures, linked from platform.html tile 04 (2026-09-27). Next, per
+- §1b: Graph Lab (`graphs.html`, live since PR #18) has the tables room (both
+  directions), statistics charts and geometry figures, linked from platform.html tile 04
+  and, as a secondary link, from the homepage Δ tile (2026-09-27). Next, per
   the tile 07 coverage map: make a chart (drag a box plot or histogram), catch a
   misleading table, catch a misleading figure; more items per slip (each report already
   names the follow-up); row-versus-column percentages; a combined build-then-read task.

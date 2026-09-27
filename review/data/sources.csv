@@ -1,0 +1,133 @@
+key,group,name,coverage,platform,fields,date_run,records,unit,query_status,note,query
+wos,database,Web of Science Core Collection,International,Clarivate Web of Science,"Title, abstract, keywords (TS=)",2026-05-29,2,records,verbatim,,"TS=(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")
+AND
+TS=(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)
+AND
+TS=(education OR learning OR student OR teaching OR pedagog* OR curricul*)"
+scopus,database,Scopus,International,Elsevier Scopus,"Title, abstract, keywords (TITLE-ABS-KEY)",2026-05-29,5,records,verbatim,Three of the five were preprints. A re-run on 16 June 2026 confirmed their published versions.,"TITLE-ABS-KEY(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")
+AND
+TITLE-ABS-KEY(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)
+AND
+TITLE-ABS-KEY(education OR learning OR student OR teaching OR pedagog* OR curricul*)"
+eric,database,ERIC,International,EBSCOhost,"Title, abstract, keywords (TI, AB, KW)",2026-06-09,0,records,verbatim,Run on its own on 9 June 2026 to get a clean count. A second run that also searched ERIC subject headings also returned 0.,"( TI graphicacy OR AB graphicacy OR KW graphicacy
+  OR TI ""data visualization literacy"" OR AB ""data visualization literacy"" OR KW ""data visualization literacy""
+  OR TI ""chart comprehension"" OR AB ""chart comprehension"" OR KW ""chart comprehension""
+  OR TI ""graph interpretation"" OR AB ""graph interpretation"" OR KW ""graph interpretation""
+  OR TI ""graphical reasoning"" OR AB ""graphical reasoning"" OR KW ""graphical reasoning"" )
+AND
+( TI ChatGPT OR AB ChatGPT OR KW ChatGPT
+  OR TI ""generative AI"" OR AB ""generative AI"" OR KW ""generative AI""
+  OR TI ""large language model"" OR AB ""large language model"" OR KW ""large language model""
+  OR TI LLM OR AB LLM OR KW LLM
+  OR TI ""multimodal LLM"" OR AB ""multimodal LLM"" OR KW ""multimodal LLM""
+  OR TI MLLM OR AB MLLM OR KW MLLM
+  OR TI Copilot OR AB Copilot OR KW Copilot
+  OR TI Gemini OR AB Gemini OR KW Gemini
+  OR TI Claude OR AB Claude OR KW Claude )
+AND
+( TI education OR AB education OR KW education
+  OR TI learning OR AB learning OR KW learning
+  OR TI student OR AB student OR KW student
+  OR TI teaching OR AB teaching OR KW teaching
+  OR TI pedagog* OR AB pedagog* OR KW pedagog*
+  OR TI curricul* OR AB curricul* OR KW curricul* )"
+ieee,database,IEEE Xplore,International,IEEE Xplore Command Search,All metadata,2026-05-29,0,records,verbatim,,"(""All Metadata"":graphicacy OR ""All Metadata"":""data visualization literacy"" OR ""All Metadata"":""chart comprehension"" OR ""All Metadata"":""graph interpretation"" OR ""All Metadata"":""graphical reasoning"")
+AND
+(""All Metadata"":ChatGPT OR ""All Metadata"":""generative AI"" OR ""All Metadata"":""large language model"" OR ""All Metadata"":LLM OR ""All Metadata"":""multimodal LLM"" OR ""All Metadata"":MLLM OR ""All Metadata"":Copilot OR ""All Metadata"":Gemini OR ""All Metadata"":Claude)
+AND
+(""All Metadata"":education OR ""All Metadata"":learning OR ""All Metadata"":student OR ""All Metadata"":teaching OR ""All Metadata"":pedagog* OR ""All Metadata"":curricul*)"
+acm,database,ACM Digital Library,International,ACM Advanced Search,"Full text (""Anywhere"")",2026-05-29,75,records,differs_from_run,"The run used full-text matching, which also finds passing mentions. The recorded string searches title, abstract and keywords only.","[[Title:(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")]
+ OR [Abstract:(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")]
+ OR [Keyword:(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")]]
+AND
+[[Title:(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)]
+ OR [Abstract:(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)]
+ OR [Keyword:(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)]]
+AND
+[[Title:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]
+ OR [Abstract:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]
+ OR [Keyword:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]]"
+psycinfo,database,APA PsycINFO,International,ProQuest,"Title, abstract, subject (TI, AB, SU)",2026-05-29,0,records,verbatim,,"(TI(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"") OR AB(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"") OR SU(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning""))
+AND
+(TI(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude) OR AB(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude) OR SU(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude))
+AND
+(TI(education OR learning OR student OR teaching OR pedagog* OR curricul*) OR AB(education OR learning OR student OR teaching OR pedagog* OR curricul*) OR SU(education OR learning OR student OR teaching OR pedagog* OR curricul*))"
+edsource,database,Education Source,International,EBSCOhost,"Title, abstract, keywords (TI, AB, KW)",2026-05-29,3,records,verbatim,,"( TI graphicacy OR AB graphicacy OR KW graphicacy
+  OR TI ""data visualization literacy"" OR AB ""data visualization literacy"" OR KW ""data visualization literacy""
+  OR TI ""chart comprehension"" OR AB ""chart comprehension"" OR KW ""chart comprehension""
+  OR TI ""graph interpretation"" OR AB ""graph interpretation"" OR KW ""graph interpretation""
+  OR TI ""graphical reasoning"" OR AB ""graphical reasoning"" OR KW ""graphical reasoning"" )
+AND
+( TI ChatGPT OR AB ChatGPT OR KW ChatGPT
+  OR TI ""generative AI"" OR AB ""generative AI"" OR KW ""generative AI""
+  OR TI ""large language model"" OR AB ""large language model"" OR KW ""large language model""
+  OR TI LLM OR AB LLM OR KW LLM
+  OR TI ""multimodal LLM"" OR AB ""multimodal LLM"" OR KW ""multimodal LLM""
+  OR TI MLLM OR AB MLLM OR KW MLLM
+  OR TI Copilot OR AB Copilot OR KW Copilot
+  OR TI Gemini OR AB Gemini OR KW Gemini
+  OR TI Claude OR AB Claude OR KW Claude )
+AND
+( TI education OR AB education OR KW education
+  OR TI learning OR AB learning OR KW learning
+  OR TI student OR AB student OR KW student
+  OR TI teaching OR AB teaching OR KW teaching
+  OR TI pedagog* OR AB pedagog* OR KW pedagog*
+  OR TI curricul* OR AB curricul* OR KW curricul* )"
+cnki,database,CNKI 中國知網,Mainland China,CNKI Advanced Search,"Title, keywords, abstract (篇關摘)",2026-05-29,0,records,paraphrased,The recorded string is a paraphrase. A word-for-word copy from the search screenshots is still to be added.,"Block 1 (篇關摘 = Title + Keywords + Abstract):
+( 圖表素養 + 數據視覺化素養 + 圖形素養 + 数据可视化素养 + 图形素养
+  + graphicacy + ""data visualization literacy"" + ""chart comprehension""
+  + ""graph interpretation"" + ""graphical reasoning"" )
+
+Block 2 (篇關摘):
+( 生成式人工智慧 + 生成式人工智能 + 生成式AI + 大語言模型 + 大语言模型
+  + ChatGPT + ""generative AI"" + ""large language model"" + LLM + ""multimodal LLM""
+  + MLLM + Copilot + Gemini + Claude )
+
+Block 3 (篇關摘):
+( 教育 + 學習 + 学习 + 教學 + 教学
+  + education + learning + student + teaching
+  + pedagogy + pedagogical + pedagogies
+  + curriculum + curricula + curricular )
+
+Combined with AND between blocks via the 進階搜尋 multi-row interface."
+airiti,database,Airiti Library 華藝線上圖書館,Taiwan,Airiti Advanced Search (guest access),"Title, keywords, abstract (篇名, 關鍵詞, 摘要)",2026-05-29,0,records,paraphrased,Searched with guest access. The recorded string is a paraphrase. A word-for-word copy is still to be added.,"Row 1 (篇名 OR 關鍵詞 OR 摘要):
+圖表素養 OR 數據視覺化素養 OR 圖形素養 OR 数据可视化素养 OR 图形素养 OR
+graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning""
+
+AND
+
+Row 2 (篇名 OR 關鍵詞 OR 摘要):
+生成式人工智慧 OR 生成式人工智能 OR 生成式AI OR 大語言模型 OR 大语言模型 OR
+ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude
+
+AND
+
+Row 3 (篇名 OR 關鍵詞 OR 摘要):
+教育 OR 學習 OR 学习 OR 教學 OR 教学 OR
+education OR learning OR student OR teaching OR
+pedagogy OR pedagogical OR pedagogies OR
+curriculum OR curricula OR curricular"
+cinii,database,CiNii Research,Japan,CiNii Research Advanced Search,"Keyword field (title, author keywords)",2026-05-29,0,records,verbatim,,"In the Keyword field (キーワード) as a single-line input:
+
+(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")
+AND
+(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)
+AND
+(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)
+
+If the Keyword field proves overly restrictive, expand to All Fields (フリーワード) with the same Boolean expression."
+scielo,database,SciELO,"Latin America, Iberia, South Africa",SciELO.org Integrated Search,"Title, abstract, keywords",2026-05-29,0,records,verbatim,,"Main SciELO.org interface, Integrated Search:
+
+(graphicacy OR ""data visualization literacy"" OR ""chart comprehension"" OR ""graph interpretation"" OR ""graphical reasoning"")
+AND
+(ChatGPT OR ""generative AI"" OR ""large language model"" OR LLM OR ""multimodal LLM"" OR MLLM OR Copilot OR Gemini OR Claude)
+AND
+(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)
+
+Alternate: SciELO Citation Index via Web of Science uses standard WoS TS= field tag syntax. It is limited to SciELO content when filtered via the WoS database selector."
+scholar,other,Google Scholar,International,Main search box,Full text,2026-05-29,2,new records,verbatim,First 100 results of each query checked. Used as a side route because its searches cannot be repeated exactly.,"Query A: graphicacy OR ""data visualization literacy"" ""generative AI"" OR ChatGPT education
+Query B: ""graph interpretation"" OR ""chart comprehension"" ""large language model"" OR ChatGPT student learning"
+arxiv,other,arXiv,International,arXiv,,2026-05-29,17,records,n/a,"Preprints. These test AI models on charts, with no learners involved.",
+pqdt,other,ProQuest Dissertations & Theses,International,ProQuest,,2026-05-29,0,new records,n/a,,
+citations,other,Citation tracking (forward and backward),International,From the two included studies,,2026-05-31,0,new studies,n/a,"Checked the studies that cite, and are cited by, the two included studies.",

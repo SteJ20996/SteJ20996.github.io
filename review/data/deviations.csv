@@ -1,0 +1,4 @@
+id,date,area,change,reason,class,recorded_in
+D1,2026-05-29,Search: CNKI,"Shortened the English part of the chart-skill terms and used CNKI's standard subject field.","CNKI limits field length and indexes little English-language education research.",minor,Appendix F
+D2,2026-05-29,Search: Airiti,"Widened the Chinese chart-skill terms to the forms used in Taiwan (資料視覺化, 視覺素養, 圖像素養).",Taiwanese research uses these forms more often than the terms in the plan.,minor,Appendix F
+D3,2026-06-09,Search: ERIC,Added a second run that also searched ERIC subject headings.,Checks that the zero result did not come from the choice of fields.,minor,Appendix F

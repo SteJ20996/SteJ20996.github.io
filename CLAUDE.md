@@ -33,6 +33,30 @@ linked to EdArXiv preprints):**
   Education (2026-06-02; the site says "under journal review", never the venue).
   Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
+**Scoping review (Chapter 2) and its page (added 2026-09-27; owner approved it on
+2026-09-27 as an interim version, labelled "Interim version" with numbers as of about
+2026-06-15, via `review/data/review.json` `version` / `as_of_approx`):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
+Emerging Three-Way Intersection in Education" (Jia & Xu; R1 Jia, R2 Xu). Protocol
+registered on OSF 2026-05-26: https://osf.io/s8ebf/ (five RQs; RQ3, construct
+operationalization, carries the analytical weight). Source records live in the owner's
+Drive: `ScopingReview_Protocol`, `Search_Syntax` (Appendix A), `Charting_Codebook`
+(Appendix C, with the *1_Charting_Matrix* tab), `TA Screening Kickoff` (2026-06-10).
+State as of those records: 11 databases searched 2026-05-29 (85 records; ACM 75,
+Scopus 5, EdSource 3, WoS 2, all others 0; ERIC's count is the 2026-06-09 isolated
+re-run), +1 Google Scholar record, 83 after de-duplication, 38 proceedings
+front-matter records, 45 left for close title/abstract reading; later screening
+numbers are not recorded in Drive. Charting: S001 Hung & Lai 2025 and S002 Yan et al.
+2025 included (audit pending), S003 DataliVR excluded at full text but disputed
+("Disagreed (in discussion)", not a codebook value), S004 Kleiman & Fitzgerald
+downgraded to construct-only (its copyright notice forbids feeding the full text to AI
+tools: never open that PDF in a session).
+`review.html` + `review/` implement "the review as reproducible software": data CSVs,
+`review/build.py` (stdlib; `--import-charting` maps the matrix by Audit status and never
+reads outcome measures, key findings, limitations or audit notes), 11 automated checks
+(the page is not rewritten while one fails), PRISMA-ScR flow SVG with download, and an
+evidence map (chart skill × AI role / level / modality / measurement). Glyph ∩. The
+page is not linked from the homepage; linking it is the owner's call after review.
+
 **Live site:** https://stej20996.github.io/ (portfolio) · https://stej20996.github.io/platform.html (Delta vision page)
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
 **Working branch convention:** feature branches merged to `main` via PR (owner merges).
@@ -120,6 +144,61 @@ which may appear only in parentheses next to the plain version); no em dashes; t
 prototype "estimates"/"shows", never "diagnoses"; no "AI-native"; no
 behavior-vs-self-report opposition; nothing that reads as a study or a signup.
 
+### 1b. Product direction: graphicacy tasks, Graph Lab (decided 2026-09-27)
+
+Delta adds tasks where the learner reads, makes sense of, makes, and catches misleading
+tables, statistics charts and geometry figures. All of it lives in `graphs.html`, "Graph
+Lab" (renamed from `tables.html`/"Table Lab" on 2026-09-27 when it grew beyond tables),
+organised as rooms that share the CBM mirror. The tables room has two directions, built as
+two task types because conversion difficulty depends on direction (Duval, 2006):
+- **Task A, words to table.** Three passages: the
+  library (mixed slips, always first), the class trip ("fewer/less than", both
+  consistent and inconsistent wording) and getting home (percents and "the rest"). The
+  learner builds their own table (they choose rows and columns); whole-table certainty on
+  the same CBM scale; then the mirror, whose next move is a button that routes by slip
+  (relational slips go to the class trip, percent slips to getting home, a clean table to
+  Task B). Traps map to named
+  errors: "fewer than" read as take-away (inconsistent wording, Lewis & Mayer, 1987),
+  copying the difference as the count (direct translation, Hegarty, Mayer & Monk, 1995),
+  a percent written as a count (Parker & Leinhardt, 1995), a total used as a part.
+  List-versus-grid layout is reported neutrally, never marked wrong (two-way table
+  construction: Martí, García-Mila, Gabucio & Konstantinidou, 2011).
+- **Task B, table to your own reasoning (built, same page).** One table (two library
+  branches × teens/adults, built as a Simpson's-paradox reversal: South higher inside each
+  age group, North higher overall). The learner first writes what it shows, unprompted
+  (sorted by a labelled keyword rule), then answers three questions on the Friel, Curcio &
+  Bright (2001) levels: read the data (wrong column/row/total traps), read between
+  (counts versus shares), read beyond (trusting the combined numbers), each with a reason
+  and CBM certainty. Ways of seeing data (Konold, Higgins, Russell & Khalil, 2015) remain
+  a codebook seed for later tables; row versus column percentages is not yet built.
+- **Statistics charts room (high school and adult level).** Read: a histogram with
+  uneven bins drawn as people per 10 minutes (trap: bar height read as count, Cooper &
+  Shore, 2008; Kaplan et al., 2014). Make sense of: two box plots, which piece holds more
+  (trap: long piece read as more data, Lem et al., 2013). Catch misleading: a bar chart
+  whose axis starts at 46% (trap: trusted the bar heights, Pandey et al., 2015).
+- **Geometry figures room (same level).** Read: greatest cube count from front, right-side
+  and top views, answer 11 (traps: one view's squares, adding the views, the full box;
+  Ben-Chaim, Lappan & Houang, 1988). Make sense of: an isosceles triangle not drawn to
+  scale, which statement must hold (trap: trusting how the figure looks; Duval, 1995;
+  Hershkowitz, 1989). Make: enlarge a triangle about O by 2 on a clickable grid, then give
+  the area factor (traps: adding 2, enlarging about A, area doubled or cubed; De Bock et
+  al., 2002). Proof-style geometry and free construction stay out: proofs are the
+  dissertation's task context, and free construction needs a geometry engine.
+- Tile 07 is an honest coverage map (rooms × read / make sense of / make / catch
+  misleading, empty cells marked "next"); every room report routes to the next unvisited
+  room.
+**Difficulty is a product band, never the study sample.** On 2026-09-27 the owner asked
+for harder items "to fit the first-year undergraduate sample"; the items were built as
+Delta's "high school and adult" band instead, like the Mirror's top band. Never tune
+Graph Lab to the dissertation population, never name first-years or any study in its
+copy, and never add items that ask whether a finished solution is ready to hand in (the
+dissertation's phenomenon). The checker is layout-free: every number is placed by the
+labels in its own row and column, matched against an EN/中文 word list, so any sensible
+layout counts (the honest seam: Phase 1 lets a model read unusual labels). Same rules as
+§1a: product line only, nothing reads as research, no data leaves the page. It sits close
+to the dissertation's statistics task context, so it must never be offered as, or near,
+an elicitation task.
+
 ## 2. Product state (platform.html)
 
 Single self-contained page, since 2026-08-24 (delta#11) a compact bento sheet (~2
@@ -160,6 +239,8 @@ band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 d
 1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
 evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
 hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
+Tile 04 links to `graphs.html` (Graph Lab, §1b) under its lede; the Mirror engine is
+untouched by that link.
 **Not yet on the page:** the §1a direction (help-seeking as a fifth dimension in tile
 06; help-type logging + AI-use mirror panel under Phase 1 and gradual release under
 Phase 2 in tile 09). The page still describes the four-axis version.
@@ -239,7 +320,8 @@ wording.
   hairline-ruled tiles (flex-wrap, gap 1px over a rule-colored ground); a zoom control
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
-  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC).
+  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC),
+  ∩ (scoping review, `review.html`).
   Exception (2026-08-24, delta#12, owner settled here after trying all-white-gold and
   all-black-gold): the homepage's Δ·Prototype tile alone is hardcoded to platform.html's
   black-gold (tile #1d1c19, text #f0ede4, brass #c9a45c) as a theme preview of the
@@ -308,9 +390,23 @@ GitHub's. A new project line starts its own counter at 1.
   CLAUDE.md rewrite that the 2026-09-08 handoff has since superseded, plus roughly 15k
   lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
   or drop.
+- Scoping review page: approved as an interim version (2026-09-27). Still open: Jiarui
+  Xu, as co-author, and the chair should know the interim counts are public once merged;
+  the homepage link remains the owner's call. Data follow-ups the build already flags: CNKI and Airiti search
+  strings are paraphrases (verbatim copies from screenshots pending); ACM's recorded
+  string (title/abstract/keyword) differs from the executed full-text "Anywhere" run;
+  S002's charted reference lacks its DOI (10.1016/j.compedu.2025.105322). Not in the
+  data, for the owner to classify: the screening kickoff's agreement rule (≥75% raw
+  agreement on a 20-record pilot) differs from protocol §3.5 (Cohen's κ ≥ .70 on a 10%
+  subsample), which §5.1 lists as a substantive amendment needing an OSF update.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
+- §1b: Graph Lab (`graphs.html`) has the tables room (both directions), statistics
+  charts and geometry figures, linked from platform.html tile 04 (2026-09-27). Next, per
+  the tile 07 coverage map: make a chart (drag a box plot or histogram), catch a
+  misleading table, catch a misleading figure; more items per slip (each report already
+  names the follow-up); row-versus-column percentages; a combined build-then-read task.
 - §1a follow-up: update platform.html tiles 06 and 09 to the five-axis version and the
   help-seeking roadmap, under the §1a site-copy constraints. Product line only; the
   portfolio's research tiles do not mention Delta as part of any study.

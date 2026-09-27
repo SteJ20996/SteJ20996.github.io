@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="A scoping review in progress on studies where chart skills, generative AI and learning meet. Registered on OSF. By Yizhen Jia and Jiarui Xu." />
+<title>Graphicacy × GenAI Scoping Review · Yizhen Jia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #16181e;
+    --paper: #f3f4f6;
+    --cream: #dfe1e6;
+    --accent: #31548e;
+    --accent-light: #6d8cbf;
+    --accent-wash: #e8edf5;
+    --muted: #737a86;
+    --rule: #c6cad2;
+    --card-bg: #fafbfc;
+    --shadow: 0 6px 40px rgba(22,24,30,.10);
+    --body: #454a54;
+    --warn: #8a5a12;
+    --fail: #a33a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 18px;
+  }
+  .sheet {
+    max-width: 1500px;
+    margin: 0 auto;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .band { display: flex; flex-wrap: wrap; gap: 1px; }
+  .band-a > .question { flex: 1 1 18rem; min-width: 0; }
+  .band-a > .sources { flex: 1.7 1 28rem; min-width: 0; }
+  .band-b > .flow { flex: 1.15 1 28rem; min-width: 0; }
+  .band-b > .map { flex: 1 1 26rem; min-width: 0; }
+  .band-c > .studies { flex: 1.5 1 28rem; min-width: 0; }
+  .band-c > .side { flex: 1 1 20rem; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .band-c > .side > .tile { flex: 1; }
+
+  .tile { background: var(--paper); padding: 1rem 1.2rem; position: relative; transition: background .25s; }
+  .tile:hover { background: var(--card-bg); }
+  .tile-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .58rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .65rem;
+  }
+  .tile-label b { color: var(--accent); font-weight: 500; }
+  .tile h3 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    margin-bottom: .5rem;
+  }
+  .tile p { font-size: .8rem; color: var(--body); }
+  .tile p + p { margin-top: .55rem; }
+  .small { font-size: .72rem !important; color: var(--muted) !important; }
+
+  .mast { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.2rem 1.8rem; }
+  .backlink {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: .6rem;
+  }
+  .backlink:hover { color: var(--accent); }
+  .mast-over {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .45rem;
+  }
+  .mast h1 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2.3vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    max-width: 36ch;
+  }
+  .mast-by { margin-top: .55rem; font-size: .82rem; color: var(--muted); }
+  .mast-by b { color: var(--ink); font-weight: 600; }
+  .mast-status {
+    margin-top: .5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .04em; color: var(--body);
+  }
+  .mast-note {
+    margin-top: .55rem; max-width: 70ch;
+    font-size: .76rem; color: var(--body);
+    border-left: 3px solid var(--accent-light); padding: .15rem 0 .15rem .6rem;
+  }
+  .mast-art { flex-shrink: 0; width: clamp(96px, 10vw, 136px); height: clamp(96px, 10vw, 136px); }
+  .mast-art svg { width: 100%; height: 100%; }
+  .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .dot { fill: var(--accent); }
+
+  .arrowlink {
+    display: inline-flex; align-items: center; gap: .4rem;
+    margin-top: .55rem; margin-right: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 500;
+    color: var(--accent); text-decoration: none;
+  }
+  .arrowlink:hover { text-decoration: underline; }
+
+  /* 01 question */
+  .venn { width: 100%; max-width: 250px; display: block; margin: .3rem auto .6rem; }
+  .venn circle { fill: var(--accent); fill-opacity: .07; stroke: var(--accent-light); stroke-width: 1.2; }
+  .venn text { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: var(--body); letter-spacing: .03em; }
+  .venn .core { font-family: 'DM Serif Display', serif; font-size: 22px; fill: var(--accent); }
+
+  /* 02 sources */
+  .src-group + .src-group { margin-top: .7rem; }
+  .src-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .56rem !important; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted) !important;
+    padding-bottom: .25rem; border-bottom: 1px solid var(--rule); margin-bottom: .1rem;
+  }
+  details.src { border-bottom: 1px dashed var(--rule); }
+  details.src summary {
+    list-style: none; cursor: pointer;
+    display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr 4.6rem; align-items: center; gap: .7rem;
+    padding: .32rem 0; font-size: .76rem;
+  }
+  details.src summary::-webkit-details-marker { display: none; }
+  details.src summary:hover .src-name { color: var(--accent); }
+  #sources { margin-top: .75rem; }
+  .src-name { color: var(--ink); line-height: 1.3; }
+  .src-name .flag {
+    display: inline-block; margin-left: .35rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .56rem;
+    color: var(--warn); border: 1px solid currentColor; border-radius: 3px; padding: 0 .25rem;
+    vertical-align: 1px;
+  }
+  .bar { height: 9px; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 2px; position: relative; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); border-radius: 1px; }
+  .bar.zero { background: transparent; border-style: dashed; }
+  .src-n { font-family: 'JetBrains Mono', monospace; font-size: .7rem; text-align: right; color: var(--ink); }
+  .src-n.zero { color: var(--muted); }
+  .src-more { padding: .15rem 0 .7rem; }
+  .src-meta { font-size: .72rem; color: var(--muted); }
+  .src-note { font-size: .74rem !important; color: var(--body) !important; margin-top: .3rem; }
+  .src-note.flagged { color: var(--warn) !important; }
+  pre.query {
+    margin-top: .45rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .64rem; line-height: 1.55;
+    white-space: pre-wrap; word-break: break-word;
+    background: var(--card-bg); border: 1px dashed var(--rule); border-radius: 6px;
+    padding: .55rem .65rem; color: var(--body);
+    max-height: 13rem; overflow: auto;
+  }
+
+  /* 03 flow */
+  .flow-svg { width: 100%; display: block; margin: .2rem 0 .5rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .7rem; color: var(--body); }
+  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .legend i { display: inline-block; width: 18px; height: 11px; border-radius: 2px; }
+  .lg-rec { border: 1.3px solid var(--ink); background: var(--card-bg); }
+  .lg-prov { border: 1.3px dashed var(--accent); background: var(--accent-wash); }
+  .lg-pend { border: 1.3px dashed #9aa0aa; background: var(--paper); }
+  .btn {
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 500;
+    color: var(--accent); background: transparent;
+    border: 1px solid var(--accent); border-radius: 5px;
+    padding: .38rem .7rem; cursor: pointer;
+  }
+  .btn:hover { background: var(--accent); color: #fff; }
+
+  /* 04 map */
+  .axis-switch { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .7rem; }
+  .axis-switch button {
+    font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .05em;
+    color: var(--body); background: var(--card-bg);
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: .28rem .65rem; cursor: pointer;
+  }
+  .axis-switch button:hover { border-color: var(--accent); color: var(--accent); }
+  .axis-switch button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .gm-wrap { overflow-x: auto; }
+  table.gm { border-collapse: collapse; width: 100%; min-width: 22rem; table-layout: fixed; }
+  table.gm thead th:first-child { width: 7.2rem; }
+  table.gm th, table.gm td { border: 1px solid var(--rule); }
+  table.gm thead th {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: .56rem; letter-spacing: .04em; color: var(--muted);
+    padding: .35rem .3rem; text-align: center; vertical-align: bottom; line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  table.gm tbody th {
+    text-align: left; font-weight: 600; font-size: .74rem; color: var(--ink);
+    padding: .4rem .55rem; white-space: nowrap; background: var(--card-bg);
+  }
+  table.gm tbody th small { display: block; font-weight: 400; font-size: .62rem; color: var(--muted); }
+  table.gm td { text-align: center; padding: .3rem; height: 2.6rem; background: var(--paper); }
+  table.gm td.has { cursor: pointer; background: var(--accent-wash); }
+  table.gm td.has:hover, table.gm td.sel { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .d { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin: 1px; vertical-align: middle; }
+  .d.main { background: var(--accent); }
+  .d.also { border: 1.6px solid var(--accent); background: transparent; }
+  .gm-detail { margin-top: .6rem; min-height: 2.4em; }
+
+  /* 05 studies */
+  .study { background: var(--card-bg); border: 1px solid var(--rule); border-radius: 8px; padding: .8rem .9rem; }
+  .study + .study { margin-top: .7rem; }
+  .study-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .6rem; margin-bottom: .45rem; }
+  .sid { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent); letter-spacing: .08em; }
+  .study-top b { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1rem; }
+  .badge {
+    font-family: 'JetBrains Mono', monospace; font-size: .56rem; letter-spacing: .05em;
+    color: var(--muted); border: 1px dashed var(--rule); border-radius: 999px; padding: .08rem .5rem;
+  }
+  .study dl { display: grid; grid-template-columns: 6.3rem 1fr; gap: .22rem .7rem; font-size: .76rem; }
+  .study dt { color: var(--muted); font-size: .7rem; }
+  .study dd { color: var(--body); }
+  .cite {
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; line-height: 1.6;
+    color: var(--body);
+    word-break: break-word;
+  }
+  .cite a { color: var(--accent); }
+
+  /* 06 changes, 07 checks */
+  .klist { list-style: none; }
+  .klist li { padding: .5rem 0; border-bottom: 1px dashed var(--rule); font-size: .76rem; color: var(--body); }
+  .klist li:last-child { border-bottom: none; }
+  .klist b { font-weight: 600; color: var(--ink); }
+  .knum { font-family: 'JetBrains Mono', monospace; font-size: .58rem; color: var(--accent); letter-spacing: .08em; margin-right: .35rem; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--rule); border-radius: 3px; padding: 0 .3rem; margin-left: .3rem;
+  }
+  .checks li { display: grid; grid-template-columns: 1.3rem 1fr; gap: .1rem .4rem; }
+  .ci { font-family: 'JetBrains Mono', monospace; font-size: .8rem; line-height: 1.3; text-align: center; }
+  .ci.pass { color: var(--accent); }
+  .ci.warn { color: var(--warn); }
+  .ci.fail { color: var(--fail); }
+  .checks .cd { grid-column: 2; font-size: .68rem; color: var(--muted); }
+  .tally { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--body); margin-bottom: .3rem; }
+
+  .foot {
+    position: sticky; bottom: 0; z-index: 40;
+    border-top: 1px solid var(--rule); margin-top: -1px;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: .6rem 1.6rem;
+    padding: .6rem 1.8rem .6rem 6.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .04em;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .foot a { color: var(--ink); text-decoration: none; }
+  .foot a:hover { color: var(--accent); }
+  .foot .copy { color: var(--muted); }
+
+  .zoomer { position: fixed; left: 26px; bottom: 9px; z-index: 50; display: flex; gap: 6px; }
+  .zoomer button {
+    width: 30px; height: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1;
+    color: var(--ink);
+    background: rgba(243,244,246,.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .zoomer button:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (min-width: 861px) and (max-height: 820px) {
+    html { font-size: 13.5px; }
+    body { padding: 12px; }
+    .tile { padding: .7rem .95rem; }
+    .mast { padding: .8rem 1.4rem; }
+    .mast-art { width: 84px; height: 84px; }
+  }
+  @media (max-width: 860px) {
+    body { padding: 12px; }
+    .zoomer { display: none; }
+    .mast { padding: 1.3rem 1.3rem; }
+    .mast-art { width: 84px; height: 84px; }
+    .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
+  }
+  @media (max-width: 520px) {
+    body { padding: 8px; }
+    .mast { flex-direction: column-reverse; align-items: flex-start; gap: .8rem; }
+    .mast-art { width: 64px; height: 64px; }
+    details.src summary { grid-template-columns: minmax(6.5rem, 9rem) 1fr 3.6rem; gap: .5rem; }
+    .study dl { grid-template-columns: 5rem 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<main class="sheet">
+
+  <header class="tile mast">
+    <div>
+      <a class="backlink" href="index.html">← Yizhen (Stephen) Jia</a>
+      <p class="mast-over">Scoping review · Interim version</p>
+      <h1 id="title">Graphicacy in the Generative AI Era: A PRISMA&#8209;ScR Scoping Review of an Emerging Three&#8209;Way Intersection in Education</h1>
+      <p class="mast-by"><b>Yizhen Jia</b> &amp; <b>Jiarui Xu</b> · College of Education, Westcliff University</p>
+      <p class="mast-status" id="status"></p>
+      <p class="mast-note" id="interim"></p>
+    </div>
+    <div class="mast-art" aria-hidden="true">
+      <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="170" cy="170" r="80" class="ring" stroke-dasharray="4 8" />
+        <circle cx="170" cy="170" r="120" class="ring" stroke-dasharray="6 10" />
+        <circle cx="170" cy="170" r="155" class="ring" stroke-dasharray="3 12" />
+        <circle cx="275" cy="120" r="5" class="dot" opacity=".9" />
+        <circle cx="75" cy="235" r="4" class="dot" opacity=".6" />
+        <text x="170" y="193" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="66" style="fill:var(--accent)" opacity=".85">∩</text>
+      </svg>
+    </div>
+  </header>
+
+  <div class="band band-a">
+
+    <section class="tile question">
+      <p class="tile-label"><b>01</b> · The Question</p>
+      <h3>Where three things meet</h3>
+      <svg class="venn" viewBox="0 0 250 170" aria-hidden="true">
+        <circle cx="95" cy="68" r="52" />
+        <circle cx="155" cy="68" r="52" />
+        <circle cx="125" cy="115" r="52" />
+        <text x="62" y="40" text-anchor="middle">Charts</text>
+        <text x="190" y="40" text-anchor="middle">Gen AI</text>
+        <text x="125" y="160" text-anchor="middle">Learning</text>
+        <text x="125" y="95" text-anchor="middle" class="core">∩</text>
+      </svg>
+      <p>This review looks for studies where three things meet: reading or making charts, generative AI, and learning. The skill of reading and making charts is called graphicacy.</p>
+      <p>It asks how much research sits at that meeting point, what job the AI does there, and how the studies measure chart skills.</p>
+      <p>The plan was fixed and registered before screening began. A registered plan like this is called a protocol.</p>
+      <a class="arrowlink" id="osf-link" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">→ Registered plan on OSF</a>
+    </section>
+
+    <section class="tile sources">
+      <p class="tile-label"><b>02</b> · Where We Searched</p>
+      <h3>11 databases, four of them regional</h3>
+      <p>Each bar is the number of records a database returned. A record found in more than one database counts in each. Open a row to see the exact search.</p>
+      <div id="sources"></div>
+    </section>
+
+  </div>
+
+  <div class="band band-b">
+
+    <section class="tile flow">
+      <p class="tile-label"><b>03</b> · Flow of Records</p>
+      <h3>From the search to the studies that fit</h3>
+      <div id="flow"></div>
+      <div class="legend">
+        <span><i class="lg-rec"></i>Recorded</span>
+        <span><i class="lg-prov"></i>Running count</span>
+        <span><i class="lg-pend"></i>Not yet recorded</span>
+      </div>
+      <p class="small" style="margin-top:.5rem">This follows the standard diagram for reporting scoping reviews (PRISMA&#8209;ScR). Dashed boxes are not final.</p>
+      <button class="btn" id="dl-flow" type="button">Download diagram (SVG)</button>
+    </section>
+
+    <section class="tile map">
+      <p class="tile-label"><b>04</b> · Evidence Map</p>
+      <h3>Where the included studies sit</h3>
+      <div class="axis-switch" id="axis-switch" aria-label="Choose what the columns show"></div>
+      <div class="gm-wrap"><table class="gm" id="gm"></table></div>
+      <p class="small" style="margin-top:.5rem"><span class="d main"></span> the chart skill the main result measures &nbsp; <span class="d also"></span> a skill the study also involves</p>
+      <p class="gm-detail" id="gm-detail" aria-live="polite">Each dot is one included study. Empty cells show where no included study sits yet. Select a cell to see its studies.</p>
+    </section>
+
+  </div>
+
+  <div class="band band-c">
+
+    <section class="tile studies">
+      <p class="tile-label"><b>05</b> · Included Studies So Far</p>
+      <h3 id="studies-head">Included studies</h3>
+      <div id="studies"></div>
+      <p class="small" id="construct-note" style="margin-top:.7rem"></p>
+    </section>
+
+    <div class="side">
+      <section class="tile">
+        <p class="tile-label"><b>06</b> · Changes From the Plan</p>
+        <h3>Every change is logged</h3>
+        <p>Small changes are listed in the final report. A bigger change needs an update to the registered plan on OSF first.</p>
+        <ul class="klist" id="deviations"></ul>
+      </section>
+      <section class="tile">
+        <p class="tile-label"><b>07</b> · Checks</p>
+        <h3>The numbers check themselves</h3>
+        <p>This page is built from plain data files by a small script. The script runs these checks each time. It will not rebuild the page if one fails.</p>
+        <p class="tally" id="tally" style="margin-top:.6rem"></p>
+        <ul class="klist checks" id="checks"></ul>
+      </section>
+    </div>
+
+  </div>
+
+  <noscript><section class="tile"><p>This page draws its charts with JavaScript. The underlying data files are in the review folder of this site's repository.</p></section></noscript>
+
+  <footer class="tile foot">
+    <div class="foot-links">
+      <a href="index.html">← Home</a>
+      <a href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF project ↗</a>
+      <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
+      <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <span class="copy">© 2026 Yizhen (Stephen) Jia</span>
+  </footer>
+
+</main>
+
+<div class="zoomer" aria-label="Zoom">
+  <button id="zout" aria-label="Zoom out" title="Zoom out">−</button>
+  <button id="zin" aria-label="Zoom in" title="Zoom in">+</button>
+</div>
+
+<script id="review-data" type="application/json">
+{
+ "meta": {
+  "title": "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an Emerging Three-Way Intersection in Education",
+  "authors": [
+   "Yizhen Jia",
+   "Jiarui Xu"
+  ],
+  "affiliation": "College of Education, Westcliff University",
+  "osf": "https://osf.io/s8ebf/",
+  "registered": "2026-05-26",
+  "searched": "2026-05-29",
+  "data_as_of": "2026-06-15",
+  "window": "November 2022 to January 2027",
+  "version": "Interim version",
+  "as_of_approx": true
+ },
+ "sources": [
+  {
+   "key": "wos",
+   "group": "database",
+   "name": "Web of Science Core Collection",
+   "coverage": "International",
+   "platform": "Clarivate Web of Science",
+   "fields": "Title, abstract, keywords (TS=)",
+   "date_run": "2026-05-29",
+   "records": 2,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "TS=(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")\nAND\nTS=(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)\nAND\nTS=(education OR learning OR student OR teaching OR pedagog* OR curricul*)"
+  },
+  {
+   "key": "scopus",
+   "group": "database",
+   "name": "Scopus",
+   "coverage": "International",
+   "platform": "Elsevier Scopus",
+   "fields": "Title, abstract, keywords (TITLE-ABS-KEY)",
+   "date_run": "2026-05-29",
+   "records": 5,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "Three of the five were preprints. A re-run on 16 June 2026 confirmed their published versions.",
+   "query": "TITLE-ABS-KEY(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")\nAND\nTITLE-ABS-KEY(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)\nAND\nTITLE-ABS-KEY(education OR learning OR student OR teaching OR pedagog* OR curricul*)"
+  },
+  {
+   "key": "eric",
+   "group": "database",
+   "name": "ERIC",
+   "coverage": "International",
+   "platform": "EBSCOhost",
+   "fields": "Title, abstract, keywords (TI, AB, KW)",
+   "date_run": "2026-06-09",
+   "records": 0,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "Run on its own on 9 June 2026 to get a clean count. A second run that also searched ERIC subject headings also returned 0.",
+   "query": "( TI graphicacy OR AB graphicacy OR KW graphicacy\n  OR TI \"data visualization literacy\" OR AB \"data visualization literacy\" OR KW \"data visualization literacy\"\n  OR TI \"chart comprehension\" OR AB \"chart comprehension\" OR KW \"chart comprehension\"\n  OR TI \"graph interpretation\" OR AB \"graph interpretation\" OR KW \"graph interpretation\"\n  OR TI \"graphical reasoning\" OR AB \"graphical reasoning\" OR KW \"graphical reasoning\" )\nAND\n( TI ChatGPT OR AB ChatGPT OR KW ChatGPT\n  OR TI \"generative AI\" OR AB \"generative AI\" OR KW \"generative AI\"\n  OR TI \"large language model\" OR AB \"large language model\" OR KW \"large language model\"\n  OR TI LLM OR AB LLM OR KW LLM\n  OR TI \"multimodal LLM\" OR AB \"multimodal LLM\" OR KW \"multimodal LLM\"\n  OR TI MLLM OR AB MLLM OR KW MLLM\n  OR TI Copilot OR AB Copilot OR KW Copilot\n  OR TI Gemini OR AB Gemini OR KW Gemini\n  OR TI Claude OR AB Claude OR KW Claude )\nAND\n( TI education OR AB education OR KW education\n  OR TI learning OR AB learning OR KW learning\n  OR TI student OR AB student OR KW student\n  OR TI teaching OR AB teaching OR KW teaching\n  OR TI pedagog* OR AB pedagog* OR KW pedagog*\n  OR TI curricul* OR AB curricul* OR KW curricul* )"
+  },
+  {
+   "key": "ieee",
+   "group": "database",
+   "name": "IEEE Xplore",
+   "coverage": "International",
+   "platform": "IEEE Xplore Command Search",
+   "fields": "All metadata",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "(\"All Metadata\":graphicacy OR \"All Metadata\":\"data visualization literacy\" OR \"All Metadata\":\"chart comprehension\" OR \"All Metadata\":\"graph interpretation\" OR \"All Metadata\":\"graphical reasoning\")\nAND\n(\"All Metadata\":ChatGPT OR \"All Metadata\":\"generative AI\" OR \"All Metadata\":\"large language model\" OR \"All Metadata\":LLM OR \"All Metadata\":\"multimodal LLM\" OR \"All Metadata\":MLLM OR \"All Metadata\":Copilot OR \"All Metadata\":Gemini OR \"All Metadata\":Claude)\nAND\n(\"All Metadata\":education OR \"All Metadata\":learning OR \"All Metadata\":student OR \"All Metadata\":teaching OR \"All Metadata\":pedagog* OR \"All Metadata\":curricul*)"
+  },
+  {
+   "key": "acm",
+   "group": "database",
+   "name": "ACM Digital Library",
+   "coverage": "International",
+   "platform": "ACM Advanced Search",
+   "fields": "Full text (\"Anywhere\")",
+   "date_run": "2026-05-29",
+   "records": 75,
+   "unit": "records",
+   "query_status": "differs_from_run",
+   "note": "The run used full-text matching, which also finds passing mentions. The recorded string searches title, abstract and keywords only.",
+   "query": "[[Title:(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")]\n OR [Abstract:(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")]\n OR [Keyword:(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")]]\nAND\n[[Title:(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)]\n OR [Abstract:(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)]\n OR [Keyword:(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)]]\nAND\n[[Title:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]\n OR [Abstract:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]\n OR [Keyword:(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)]]"
+  },
+  {
+   "key": "psycinfo",
+   "group": "database",
+   "name": "APA PsycINFO",
+   "coverage": "International",
+   "platform": "ProQuest",
+   "fields": "Title, abstract, subject (TI, AB, SU)",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "(TI(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\") OR AB(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\") OR SU(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\"))\nAND\n(TI(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude) OR AB(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude) OR SU(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude))\nAND\n(TI(education OR learning OR student OR teaching OR pedagog* OR curricul*) OR AB(education OR learning OR student OR teaching OR pedagog* OR curricul*) OR SU(education OR learning OR student OR teaching OR pedagog* OR curricul*))"
+  },
+  {
+   "key": "edsource",
+   "group": "database",
+   "name": "Education Source",
+   "coverage": "International",
+   "platform": "EBSCOhost",
+   "fields": "Title, abstract, keywords (TI, AB, KW)",
+   "date_run": "2026-05-29",
+   "records": 3,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "( TI graphicacy OR AB graphicacy OR KW graphicacy\n  OR TI \"data visualization literacy\" OR AB \"data visualization literacy\" OR KW \"data visualization literacy\"\n  OR TI \"chart comprehension\" OR AB \"chart comprehension\" OR KW \"chart comprehension\"\n  OR TI \"graph interpretation\" OR AB \"graph interpretation\" OR KW \"graph interpretation\"\n  OR TI \"graphical reasoning\" OR AB \"graphical reasoning\" OR KW \"graphical reasoning\" )\nAND\n( TI ChatGPT OR AB ChatGPT OR KW ChatGPT\n  OR TI \"generative AI\" OR AB \"generative AI\" OR KW \"generative AI\"\n  OR TI \"large language model\" OR AB \"large language model\" OR KW \"large language model\"\n  OR TI LLM OR AB LLM OR KW LLM\n  OR TI \"multimodal LLM\" OR AB \"multimodal LLM\" OR KW \"multimodal LLM\"\n  OR TI MLLM OR AB MLLM OR KW MLLM\n  OR TI Copilot OR AB Copilot OR KW Copilot\n  OR TI Gemini OR AB Gemini OR KW Gemini\n  OR TI Claude OR AB Claude OR KW Claude )\nAND\n( TI education OR AB education OR KW education\n  OR TI learning OR AB learning OR KW learning\n  OR TI student OR AB student OR KW student\n  OR TI teaching OR AB teaching OR KW teaching\n  OR TI pedagog* OR AB pedagog* OR KW pedagog*\n  OR TI curricul* OR AB curricul* OR KW curricul* )"
+  },
+  {
+   "key": "cnki",
+   "group": "database",
+   "name": "CNKI 中國知網",
+   "coverage": "Mainland China",
+   "platform": "CNKI Advanced Search",
+   "fields": "Title, keywords, abstract (篇關摘)",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "paraphrased",
+   "note": "The recorded string is a paraphrase. A word-for-word copy from the search screenshots is still to be added.",
+   "query": "Block 1 (篇關摘 = Title + Keywords + Abstract):\n( 圖表素養 + 數據視覺化素養 + 圖形素養 + 数据可视化素养 + 图形素养\n  + graphicacy + \"data visualization literacy\" + \"chart comprehension\"\n  + \"graph interpretation\" + \"graphical reasoning\" )\n\nBlock 2 (篇關摘):\n( 生成式人工智慧 + 生成式人工智能 + 生成式AI + 大語言模型 + 大语言模型\n  + ChatGPT + \"generative AI\" + \"large language model\" + LLM + \"multimodal LLM\"\n  + MLLM + Copilot + Gemini + Claude )\n\nBlock 3 (篇關摘):\n( 教育 + 學習 + 学习 + 教學 + 教学\n  + education + learning + student + teaching\n  + pedagogy + pedagogical + pedagogies\n  + curriculum + curricula + curricular )\n\nCombined with AND between blocks via the 進階搜尋 multi-row interface."
+  },
+  {
+   "key": "airiti",
+   "group": "database",
+   "name": "Airiti Library 華藝線上圖書館",
+   "coverage": "Taiwan",
+   "platform": "Airiti Advanced Search (guest access)",
+   "fields": "Title, keywords, abstract (篇名, 關鍵詞, 摘要)",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "paraphrased",
+   "note": "Searched with guest access. The recorded string is a paraphrase. A word-for-word copy is still to be added.",
+   "query": "Row 1 (篇名 OR 關鍵詞 OR 摘要):\n圖表素養 OR 數據視覺化素養 OR 圖形素養 OR 数据可视化素养 OR 图形素养 OR\ngraphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\"\n\nAND\n\nRow 2 (篇名 OR 關鍵詞 OR 摘要):\n生成式人工智慧 OR 生成式人工智能 OR 生成式AI OR 大語言模型 OR 大语言模型 OR\nChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude\n\nAND\n\nRow 3 (篇名 OR 關鍵詞 OR 摘要):\n教育 OR 學習 OR 学习 OR 教學 OR 教学 OR\neducation OR learning OR student OR teaching OR\npedagogy OR pedagogical OR pedagogies OR\ncurriculum OR curricula OR curricular"
+  },
+  {
+   "key": "cinii",
+   "group": "database",
+   "name": "CiNii Research",
+   "coverage": "Japan",
+   "platform": "CiNii Research Advanced Search",
+   "fields": "Keyword field (title, author keywords)",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "In the Keyword field (キーワード) as a single-line input:\n\n(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")\nAND\n(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)\nAND\n(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)\n\nIf the Keyword field proves overly restrictive, expand to All Fields (フリーワード) with the same Boolean expression."
+  },
+  {
+   "key": "scielo",
+   "group": "database",
+   "name": "SciELO",
+   "coverage": "Latin America, Iberia, South Africa",
+   "platform": "SciELO.org Integrated Search",
+   "fields": "Title, abstract, keywords",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "records",
+   "query_status": "verbatim",
+   "note": "",
+   "query": "Main SciELO.org interface, Integrated Search:\n\n(graphicacy OR \"data visualization literacy\" OR \"chart comprehension\" OR \"graph interpretation\" OR \"graphical reasoning\")\nAND\n(ChatGPT OR \"generative AI\" OR \"large language model\" OR LLM OR \"multimodal LLM\" OR MLLM OR Copilot OR Gemini OR Claude)\nAND\n(education OR learning OR student OR teaching OR pedagogy OR pedagogical OR pedagogies OR curriculum OR curricula OR curricular)\n\nAlternate: SciELO Citation Index via Web of Science uses standard WoS TS= field tag syntax. It is limited to SciELO content when filtered via the WoS database selector."
+  },
+  {
+   "key": "scholar",
+   "group": "other",
+   "name": "Google Scholar",
+   "coverage": "International",
+   "platform": "Main search box",
+   "fields": "Full text",
+   "date_run": "2026-05-29",
+   "records": 2,
+   "unit": "new records",
+   "query_status": "verbatim",
+   "note": "First 100 results of each query checked. Used as a side route because its searches cannot be repeated exactly.",
+   "query": "Query A: graphicacy OR \"data visualization literacy\" \"generative AI\" OR ChatGPT education\nQuery B: \"graph interpretation\" OR \"chart comprehension\" \"large language model\" OR ChatGPT student learning"
+  },
+  {
+   "key": "arxiv",
+   "group": "other",
+   "name": "arXiv",
+   "coverage": "International",
+   "platform": "arXiv",
+   "fields": "",
+   "date_run": "2026-05-29",
+   "records": 17,
+   "unit": "records",
+   "query_status": "n/a",
+   "note": "Preprints. These test AI models on charts, with no learners involved.",
+   "query": ""
+  },
+  {
+   "key": "pqdt",
+   "group": "other",
+   "name": "ProQuest Dissertations & Theses",
+   "coverage": "International",
+   "platform": "ProQuest",
+   "fields": "",
+   "date_run": "2026-05-29",
+   "records": 0,
+   "unit": "new records",
+   "query_status": "n/a",
+   "note": "",
+   "query": ""
+  },
+  {
+   "key": "citations",
+   "group": "other",
+   "name": "Citation tracking (forward and backward)",
+   "coverage": "International",
+   "platform": "From the two included studies",
+   "fields": "",
+   "date_run": "2026-05-31",
+   "records": 0,
+   "unit": "new studies",
+   "query_status": "n/a",
+   "note": "Checked the studies that cite, and are cited by, the two included studies.",
+   "query": ""
+  }
+ ],
+ "flow": {
+  "identified_databases": {
+   "key": "identified_databases",
+   "label": "Records found in 11 databases",
+   "count": 85,
+   "status": "recorded",
+   "basis": "Search log, 29 May 2026 (ERIC re-run 9 June 2026)"
+  },
+  "identified_other": {
+   "key": "identified_other",
+   "label": "Records added from other sources (Google Scholar)",
+   "count": 1,
+   "status": "recorded",
+   "basis": "Screening kickoff note, 10 June 2026"
+  },
+  "after_dedup": {
+   "key": "after_dedup",
+   "label": "Records after duplicates were removed",
+   "count": 83,
+   "status": "recorded",
+   "basis": "Screening kickoff note, 10 June 2026"
+  },
+  "duplicates_removed": {
+   "key": "duplicates_removed",
+   "label": "Duplicates removed",
+   "count": 3,
+   "status": "derived",
+   "basis": "85 + 1 - 83"
+  },
+  "screened": {
+   "key": "screened",
+   "label": "Records screened on title and abstract",
+   "count": 83,
+   "status": "derived",
+   "basis": "Same as the records after duplicates were removed"
+  },
+  "excluded_frontmatter": {
+   "key": "excluded_frontmatter",
+   "label": "Conference proceedings front matter (volume records)",
+   "count": 38,
+   "status": "recorded",
+   "basis": "Screening kickoff note, 10 June 2026"
+  },
+  "screened_substantive": {
+   "key": "screened_substantive",
+   "label": "Records left for a close title and abstract reading",
+   "count": 45,
+   "status": "recorded",
+   "basis": "Screening kickoff note, 10 June 2026"
+  },
+  "excluded_ta_other": {
+   "key": "excluded_ta_other",
+   "label": "Other exclusions on title and abstract",
+   "count": null,
+   "status": "pending",
+   "basis": ""
+  },
+  "fulltext_assessed": {
+   "key": "fulltext_assessed",
+   "label": "Full texts assessed",
+   "count": null,
+   "status": "pending",
+   "basis": ""
+  },
+  "excluded_fulltext": {
+   "key": "excluded_fulltext",
+   "label": "Full texts excluded, with reasons",
+   "count": null,
+   "status": "pending",
+   "basis": ""
+  },
+  "included": {
+   "key": "included",
+   "label": "Studies included",
+   "count": 2,
+   "status": "provisional",
+   "basis": "Charting matrix; running count"
+  },
+  "construct_only": {
+   "key": "construct_only",
+   "label": "Kept only for the construct analysis",
+   "count": 1,
+   "status": "provisional",
+   "basis": "Charting matrix; running count"
+  }
+ },
+ "studies": [
+  {
+   "id": "S001",
+   "short": "Hung & Lai (2025)",
+   "citation": "Hung, H.-C., & Lai, P.-J. (2025). Enhancing graduate students' data visualization literacy through an inquiry-based learning companion system integrated with generative AI. Educational Technology & Society, 28(4), 304–320. https://doi.org/10.30191/ETS.202510_28(4).SP07",
+   "doi": "10.30191/ETS.202510_28(4).SP07",
+   "year": "2025",
+   "country": "Taiwan",
+   "language": "EN",
+   "source": "WoS; Scopus; EdSource (three-way hit)",
+   "population": "Graduate students",
+   "sample_size": "53 (28 experimental; 25 control)",
+   "level": "Graduate",
+   "prior_ai": "NR",
+   "methodology": "Quantitative",
+   "design": "Quasi-experimental (two-group pre-post; IBLCS n=28 vs general-ChatGPT control n=25; no random assignment reported)",
+   "genai_role": "Tutor",
+   "genai_system": "OpenAI GPT (GPT-3.5)",
+   "genai_modality": "Text-only",
+   "activities": "Interpret / Construct",
+   "primary_activity": "Interpret",
+   "chart_types": "Bar / Line / Scatter / Geographic map",
+   "domain": "Cross-disciplinary",
+   "measurement": "End-state performance",
+   "status": "included",
+   "check": "awaiting second-reviewer check"
+  },
+  {
+   "id": "S002",
+   "short": "Yan et al. (2025)",
+   "citation": "Yan, L., Martinez-Maldonado, R., Jin, Y., Echeverria, V., Milesi, M., Fan, J., Zhao, L., Alfredo, R., Li, X., & Gašević, D. (2025). The effects of generative AI agents and scaffolding on enhancing students' comprehension of visual learning analytics. Computers & Education, 234, 105322.",
+   "doi": "",
+   "year": "2025",
+   "country": "Australia",
+   "language": "EN",
+   "source": "GS (Google Scholar supplementary)",
+   "population": "Higher education students with healthcare, medical, or nursing backgrounds (recruited via Prolific)",
+   "sample_size": "117 (141 recruited; 24 invalid)",
+   "level": "Mixed (UG 77; Grad 21; Vocational 13; Doctoral 6)",
+   "prior_ai": "Mixed (none 1 / beginner 34 / intermediate 63 / advanced 15 / expert 4)",
+   "methodology": "Quantitative",
+   "design": "Experimental (RCT; mixed 3×3 within–between design)",
+   "genai_role": "Tutor",
+   "genai_system": "OpenAI GPT (GPT-4o, RAG via LangChain/Chroma)",
+   "genai_modality": "Multimodal text+image",
+   "activities": "Read / Interpret",
+   "primary_activity": "Interpret",
+   "chart_types": "Bar / Network / Heatmap / Other (specify: ward map combining spatial heatmap, communication, and peak heart-rate overlays)",
+   "domain": "Other (specify: healthcare/nursing simulation analytics)",
+   "measurement": "End-state performance",
+   "status": "included",
+   "check": "awaiting second-reviewer check"
+  },
+  {
+   "id": "S004",
+   "short": "Kleiman & Fitzgerald (2025)",
+   "citation": "Kleiman, J., & Fitzgerald, K. (2025). Beyond Excel: Leveraging AI for student data exploration. Ohio Journal of School Mathematics, 91, 52–70.",
+   "doi": "",
+   "year": "2025",
+   "country": "USA",
+   "language": "EN",
+   "source": "EdSource",
+   "population": "Not applicable (conceptual; hypothetical classroom activity)",
+   "sample_size": "NR",
+   "level": "",
+   "prior_ai": "Not applicable",
+   "methodology": "Conceptual (non-empirical)",
+   "design": "Other (specify: conceptual/practitioner framework)",
+   "genai_role": "Tool",
+   "genai_system": "",
+   "genai_modality": "",
+   "activities": "",
+   "primary_activity": "NR",
+   "chart_types": "",
+   "domain": "Math (general)",
+   "measurement": "Unclear",
+   "status": "construct_only",
+   "check": ""
+  }
+ ],
+ "codebook": {
+  "language": [
+   "EN",
+   "TC",
+   "SC"
+  ],
+  "source": [
+   "WoS",
+   "Scopus",
+   "ERIC",
+   "IEEE",
+   "ACM",
+   "PsycINFO",
+   "EdSource",
+   "CNKI",
+   "Airiti",
+   "CiNii",
+   "SciELO",
+   "Backward",
+   "Forward",
+   "GS",
+   "arXiv"
+  ],
+  "level": [
+   "Elementary",
+   "Middle",
+   "High",
+   "Undergraduate",
+   "Graduate",
+   "Professional",
+   "Adult learner",
+   "Mixed",
+   "NR",
+   "Not applicable"
+  ],
+  "prior_ai": [
+   "None reported",
+   "Some",
+   "Frequent users",
+   "Mixed",
+   "NR",
+   "Not applicable"
+  ],
+  "methodology": [
+   "Quantitative",
+   "Qualitative",
+   "Mixed-methods",
+   "Conceptual (non-empirical)"
+  ],
+  "design": [
+   "Experimental",
+   "Quasi-experimental",
+   "Pre-post",
+   "Cross-sectional",
+   "Longitudinal",
+   "Case study",
+   "Action research",
+   "Design-based",
+   "Computational evaluation",
+   "Other (specify)"
+  ],
+  "genai_role": [
+   "Tool",
+   "Tutor",
+   "Collaborator",
+   "Evaluator",
+   "Other (specify)"
+  ],
+  "genai_system": [
+   "OpenAI GPT",
+   "Anthropic Claude",
+   "Google Gemini",
+   "Microsoft Copilot",
+   "Meta Llama",
+   "Domain-specific",
+   "Multiple compared",
+   "NR",
+   "Other (specify)"
+  ],
+  "genai_modality": [
+   "Text-only",
+   "Multimodal text+image",
+   "Text+audio",
+   "Image-only",
+   "Other (specify)"
+  ],
+  "activities": [
+   "Read",
+   "Interpret",
+   "Construct",
+   "Critique"
+  ],
+  "primary_activity": [
+   "Read",
+   "Interpret",
+   "Construct",
+   "Critique",
+   "NR"
+  ],
+  "chart_types": [
+   "Bar",
+   "Line",
+   "Scatter",
+   "Histogram",
+   "Pie",
+   "Box plot",
+   "Kinematics graph",
+   "Geographic map",
+   "Network",
+   "Tree",
+   "Heatmap",
+   "Multi-panel",
+   "Other (specify)"
+  ],
+  "domain": [
+   "Physics",
+   "Statistics",
+   "Biology",
+   "Chemistry",
+   "Geography",
+   "Economics",
+   "Math (general)",
+   "Engineering",
+   "Social science",
+   "Cross-disciplinary",
+   "Other (specify)"
+  ],
+  "measurement": [
+   "End-state performance",
+   "Cognitive process trace",
+   "Mixed",
+   "Unclear"
+  ],
+  "audit": [
+   "Pending",
+   "Verified",
+   "Discrepancy resolved",
+   "Excluded (full-text)",
+   "Downgraded (§3.7)"
+  ]
+ },
+ "deviations": [
+  {
+   "id": "D1",
+   "date": "2026-05-29",
+   "area": "Search: CNKI",
+   "change": "Shortened the English part of the chart-skill terms and used CNKI's standard subject field.",
+   "reason": "CNKI limits field length and indexes little English-language education research.",
+   "class": "minor",
+   "recorded_in": "Appendix F"
+  },
+  {
+   "id": "D2",
+   "date": "2026-05-29",
+   "area": "Search: Airiti",
+   "change": "Widened the Chinese chart-skill terms to the forms used in Taiwan (資料視覺化, 視覺素養, 圖像素養).",
+   "reason": "Taiwanese research uses these forms more often than the terms in the plan.",
+   "class": "minor",
+   "recorded_in": "Appendix F"
+  },
+  {
+   "id": "D3",
+   "date": "2026-06-09",
+   "area": "Search: ERIC",
+   "change": "Added a second run that also searched ERIC subject headings.",
+   "reason": "Checks that the zero result did not come from the choice of fields.",
+   "class": "minor",
+   "recorded_in": "Appendix F"
+  }
+ ],
+ "checks": [
+  {
+   "id": "sources-complete",
+   "label": "Every source has a run date and a count",
+   "level": "pass",
+   "detail": "15 sources logged."
+  },
+  {
+   "id": "db-sum",
+   "label": "Database counts add up",
+   "level": "pass",
+   "detail": "2 + 5 + 0 + 0 + 75 + 0 + 3 + 0 + 0 + 0 + 0 = 85; the flow diagram says 85."
+  },
+  {
+   "id": "dedup",
+   "label": "Duplicates line up with the screening pool",
+   "level": "pass",
+   "detail": "85 + 1 - 3 = 83."
+  },
+  {
+   "id": "frontmatter",
+   "label": "Front-matter step adds up",
+   "level": "pass",
+   "detail": "83 - 38 = 45."
+  },
+  {
+   "id": "pending",
+   "label": "Unfinished stages are marked, not guessed",
+   "level": "pass",
+   "detail": "Stages after the first unfinished one are pending or running counts."
+  },
+  {
+   "id": "included",
+   "label": "Included count matches the study list",
+   "level": "pass",
+   "detail": "Diagram: 2 included, 1 construct-only. Study list: 2 and 1."
+  },
+  {
+   "id": "codebook",
+   "label": "Every code comes from the codebook",
+   "level": "pass",
+   "detail": "3 charted rows, all codes valid."
+  },
+  {
+   "id": "primary",
+   "label": "Main skill is one of the skills present",
+   "level": "pass",
+   "detail": "True for all 2 included studies."
+  },
+  {
+   "id": "verbatim",
+   "label": "Search strings are recorded word for word",
+   "level": "warn",
+   "detail": "Paraphrased: CNKI 中國知網, Airiti Library 華藝線上圖書館. Recorded string differs from the run: ACM Digital Library."
+  },
+  {
+   "id": "doi",
+   "label": "Included references carry a DOI",
+   "level": "warn",
+   "detail": "No DOI in the charted reference: S002"
+  },
+  {
+   "id": "deviations",
+   "label": "Changes from the plan are classified",
+   "level": "pass",
+   "detail": "3 logged, all minor (reported in Appendix F)."
+  }
+ ]
+}
+</script>
+
+<script>
+  (function () {
+    var z = 1, MIN = 0.8, MAX = 1.6, STEP = 0.2;
+    try { z = parseFloat(localStorage.getItem('yj-zoom')) || 1; } catch (e) {}
+    function apply() {
+      if (Math.abs(z - 1) < 0.01) document.documentElement.style.fontSize = '';
+      else document.documentElement.style.fontSize = (16 * z) + 'px';
+      try { localStorage.setItem('yj-zoom', z); } catch (e) {}
+    }
+    document.getElementById('zin').addEventListener('click', function () { z = Math.min(MAX, +(z + STEP).toFixed(2)); apply(); });
+    document.getElementById('zout').addEventListener('click', function () { z = Math.max(MIN, +(z - STEP).toFixed(2)); apply(); });
+    apply();
+  })();
+</script>
+
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('review-data').textContent || '{}');
+  if (!D.meta) return;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function base(v) {
+    v = String(v || '').trim();
+    if (/^other/i.test(v)) return 'Other';
+    return v.replace(/\s*\(.*\)\s*$/, '').trim();
+  }
+  function splitOutside(v, sep) {
+    var parts = [], depth = 0, cur = '', i = 0;
+    v = String(v || '');
+    while (i < v.length) {
+      var ch = v[i];
+      if (ch === '(') depth++;
+      if (ch === ')') depth = Math.max(0, depth - 1);
+      if (depth === 0 && v.substr(i, sep.length) === sep) { parts.push(cur.trim()); cur = ''; i += sep.length; continue; }
+      cur += ch; i++;
+    }
+    if (cur.trim()) parts.push(cur.trim());
+    return parts;
+  }
+  function pretty(v) {
+    return String(v || '').replace(/^Other \(specify:\s*(.*)\)$/i, '$1');
+  }
+  function day(iso) {
+    var p = iso.split('-');
+    var m = ['January','February','March','April','May','June','July','August','September','October','November','December'][+p[1] - 1];
+    return (+p[2]) + ' ' + m + ' ' + p[0];
+  }
+
+  // mast status
+  var asOf = (D.meta.as_of_approx ? 'about ' : '') + day(D.meta.data_as_of);
+  document.getElementById('status').textContent =
+    (D.meta.version ? D.meta.version + ' · ' : '') + 'Plan registered ' + day(D.meta.registered) +
+    ' · Searches run ' + day(D.meta.searched) + ' · Numbers as of ' + asOf;
+  if (D.meta.version) document.getElementById('interim').textContent =
+    'This is an interim version. It shows the review as it stood on ' + asOf +
+    '. Screening and charting have moved on since then, and this page will be replaced when they finish.';
+
+  // 02 sources
+  (function () {
+    var dbs = D.sources.filter(function (s) { return s.group === 'database'; });
+    var max = Math.max.apply(null, D.sources.map(function (s) { return s.records; }));
+    var groups = [
+      { head: 'International databases (' + dbs.filter(function (s) { return s.coverage === 'International'; }).length + ')',
+        rows: dbs.filter(function (s) { return s.coverage === 'International'; }) },
+      { head: 'Regional databases (' + dbs.filter(function (s) { return s.coverage !== 'International'; }).length + ')',
+        rows: dbs.filter(function (s) { return s.coverage !== 'International'; }) },
+      { head: 'Other routes', rows: D.sources.filter(function (s) { return s.group !== 'database'; }) }
+    ];
+    var flagText = { paraphrased: 'paraphrased', differs_from_run: 'see note' };
+    var html = groups.map(function (g) {
+      return '<div class="src-group"><p class="src-head">' + esc(g.head) + '</p>' + g.rows.map(function (s) {
+        var zero = s.records === 0;
+        var w = zero ? 0 : Math.max(1.5, s.records / max * 100);
+        var unit = s.unit === 'records' ? '' : ' ' + s.unit.replace('records', '').replace('studies', '').trim();
+        var flag = flagText[s.query_status] ? '<span class="flag">' + flagText[s.query_status] + '</span>' : '';
+        var region = s.coverage === 'International' ? '' : s.coverage + ' · ';
+        var meta = [region + esc(s.platform), s.fields ? esc(s.fields) : '', s.date_run ? 'run ' + day(s.date_run) : '']
+          .filter(Boolean).join(' · ');
+        return '<details class="src"><summary>' +
+          '<span class="src-name" title="' + esc(s.name) + '">' + esc(s.name) + flag + '</span>' +
+          '<span class="bar' + (zero ? ' zero' : '') + '"><i style="width:' + w + '%"></i></span>' +
+          '<span class="src-n' + (zero ? ' zero' : '') + '">' + s.records + esc(unit) + '</span></summary>' +
+          '<div class="src-more"><p class="src-meta">' + meta + '</p>' +
+          (s.note ? '<p class="src-note' + (flag ? ' flagged' : '') + '">' + esc(s.note) + '</p>' : '') +
+          (s.query ? '<pre class="query">' + esc(s.query) + '</pre>' : '') +
+          '</div></details>';
+      }).join('') + '</div>';
+    }).join('');
+    document.getElementById('sources').innerHTML = html;
+  })();
+
+  // 03 flow diagram (explicit colours so the downloaded SVG looks the same)
+  var C = { ink: '#16181e', body: '#454a54', muted: '#737a86', rule: '#c6cad2', card: '#fafbfc',
+            paper: '#f3f4f6', accent: '#31548e', wash: '#e8edf5', pend: '#9aa0aa' };
+  var FONT = "Instrument Sans, Helvetica, Arial, sans-serif";
+  var MONO = "JetBrains Mono, Menlo, Consolas, monospace";
+
+  function wrap(text, n) {
+    var words = String(text).split(' '), lines = [], cur = '';
+    words.forEach(function (w) {
+      if ((cur + ' ' + w).trim().length > n && cur) { lines.push(cur); cur = w; }
+      else cur = (cur + ' ' + w).trim();
+    });
+    if (cur) lines.push(cur);
+    return lines;
+  }
+  function box(x, y, w, h, row, extra) {
+    var st = row.status;
+    var stroke = st === 'provisional' ? C.accent : st === 'pending' ? C.pend : C.ink;
+    var fill = st === 'provisional' ? C.wash : st === 'pending' ? C.paper : C.card;
+    var dash = st === 'provisional' ? ' stroke-dasharray="5 4"' : st === 'pending' ? ' stroke-dasharray="3 4"' : '';
+    var out = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4" fill="' + fill +
+      '" stroke="' + stroke + '" stroke-width="1.3"' + dash + '/>';
+    var lines = wrap(row.label, Math.floor((w - 20) / 6.1));
+    lines.forEach(function (l, i) {
+      out += '<text x="' + (x + 10) + '" y="' + (y + 17 + i * 14) + '" font-family="' + FONT +
+        '" font-size="11.5" fill="' + C.ink + '">' + esc(l) + '</text>';
+    });
+    var cy = y + 17 + lines.length * 14 + 6;
+    var countText, color = st === 'provisional' ? C.accent : C.ink;
+    if (st === 'pending') {
+      out += '<text x="' + (x + 10) + '" y="' + cy + '" font-family="' + FONT + '" font-size="11" font-style="italic" fill="' +
+        C.muted + '">not yet recorded</text>';
+    } else {
+      countText = 'n = ' + row.count;
+      out += '<text x="' + (x + 10) + '" y="' + (cy + 2) + '" font-family="' + FONT + '" font-size="16" font-weight="600" fill="' +
+        color + '">' + countText + '</text>';
+      var tag = st === 'provisional' ? 'so far' : st === 'derived' ? 'worked out' : '';
+      if (tag) out += '<text x="' + (x + 12 + countText.length * 9.2) + '" y="' + (cy + 1) + '" font-family="' + MONO +
+        '" font-size="9" fill="' + C.muted + '">' + tag + '</text>';
+    }
+    (extra || []).forEach(function (l, i) {
+      out += '<text x="' + (x + 10) + '" y="' + (cy + 20 + i * 13) + '" font-family="' + FONT + '" font-size="10.5" fill="' +
+        C.body + '">' + esc(l) + '</text>';
+    });
+    return out;
+  }
+  function arrow(d) {
+    return '<path d="' + d + '" fill="none" stroke="' + C.muted + '" stroke-width="1.2" marker-end="url(#ah)"/>';
+  }
+  function phase(label, y1, y2) {
+    var cy = (y1 + y2) / 2;
+    return '<rect x="0" y="' + y1 + '" width="22" height="' + (y2 - y1) + '" rx="3" fill="' + C.wash + '"/>' +
+      '<text x="11" y="' + cy + '" transform="rotate(-90 11 ' + cy + ')" text-anchor="middle" dominant-baseline="central" font-family="' +
+      MONO + '" font-size="8.5" letter-spacing=".6" fill="' + C.accent + '">' + label.toUpperCase() + '</text>';
+  }
+  (function () {
+    var F = D.flow, W = 640, MX = 34, MW = 280, SX = 352, SW = 288;
+    var y1 = 0, y2 = 118, y3 = 236, y4 = 364, y5 = 466, H = 552;
+    var dupe = F.duplicates_removed, fm = F.excluded_frontmatter, sub = F.screened_substantive;
+    var excluded = { label: 'Records excluded', status: F.excluded_ta_other.status };
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" class="flow-svg" role="img" aria-label="Flow of records through the review">' +
+      '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+      '<path d="M0,0 L10,5 L0,10 z" fill="' + C.muted + '"/></marker></defs>' +
+      '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#ffffff" fill-opacity="0"/>' +
+      phase('Identification', y1, y1 + 90) + phase('Screening', y2, y4 + 76) + phase('Included', y5, y5 + 84) +
+      box(MX, y1, MW, 90, F.identified_databases) +
+      box(SX, y1, SW, 90, F.identified_other) +
+      box(MX, y2, MW, 88, F.after_dedup, [dupe.count + ' duplicates removed (worked out)']) +
+      box(MX, y3, MW, 100, F.screened, [fm.count + ' set aside as front matter,', sub.count + ' then read closely']) +
+      box(SX, y3, SW, 100, excluded, ['Proceedings front matter, not articles: ' + fm.count, 'Other exclusions: not yet recorded']) +
+      box(MX, y4, MW, 76, F.fulltext_assessed) +
+      box(SX, y4, SW, 76, F.excluded_fulltext) +
+      box(MX, y5, MW, 84, F.included) +
+      box(SX, y5, SW, 84, F.construct_only, ['Not counted as included']) +
+      arrow('M' + (MX + MW / 2) + ' ' + (y1 + 90) + ' V' + (y2 - 2)) +
+      arrow('M' + (SX + SW / 2) + ' ' + (y1 + 90) + ' V' + (y1 + 104) + ' H' + (MX + MW - 40) + ' V' + (y2 - 2)) +
+      arrow('M' + (MX + MW / 2) + ' ' + (y2 + 88) + ' V' + (y3 - 2)) +
+      arrow('M' + (MX + MW) + ' ' + (y3 + 50) + ' H' + (SX - 2)) +
+      arrow('M' + (MX + MW / 2) + ' ' + (y3 + 100) + ' V' + (y4 - 2)) +
+      arrow('M' + (MX + MW) + ' ' + (y4 + 38) + ' H' + (SX - 2)) +
+      arrow('M' + (MX + MW / 2) + ' ' + (y4 + 76) + ' V' + (y5 - 2)) +
+      arrow('M' + (MX + MW - 40) + ' ' + (y4 + 76) + ' V' + (y4 + 88) + ' H' + (SX + SW / 2) + ' V' + (y5 - 2)) +
+      '</svg>';
+    document.getElementById('flow').innerHTML = svg;
+    document.getElementById('dl-flow').addEventListener('click', function () {
+      var src = document.querySelector('#flow svg').outerHTML;
+      var blob = new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n' + src], { type: 'image/svg+xml' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'prisma-scr-flow.svg';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  })();
+
+  // 04 evidence map
+  (function () {
+    var included = D.studies.filter(function (s) { return s.status === 'included'; });
+    var skills = [
+      ['Read', 'take values off a chart'],
+      ['Interpret', 'say what it shows'],
+      ['Construct', 'make a chart'],
+      ['Critique', 'judge a chart']
+    ];
+    var axes = [
+      { key: 'genai_role', label: 'What the AI does' },
+      { key: 'level', label: 'Learner level' },
+      { key: 'genai_modality', label: 'How the AI takes input' },
+      { key: 'measurement', label: 'What the main result measures' }
+    ];
+    var current = axes[0], selected = null;
+    var sw = document.getElementById('axis-switch');
+    sw.innerHTML = axes.map(function (a, i) {
+      return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + esc(a.label) + '</button>';
+    }).join('');
+    sw.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      current = axes[+b.dataset.i]; selected = null;
+      [].forEach.call(sw.children, function (x) { x.setAttribute('aria-pressed', x === b); });
+      draw();
+    });
+    function columns() {
+      var cols = (D.codebook[current.key] || []).map(base).filter(function (v) { return v !== 'NR' && v !== 'Not applicable'; });
+      included.forEach(function (s) { var v = base(s[current.key]); if (v && cols.indexOf(v) < 0) cols.push(v); });
+      return cols;
+    }
+    function draw() {
+      var cols = columns();
+      var head = '<thead><tr><th scope="col" style="text-align:left">Chart skill</th>' + cols.map(function (c) {
+        return '<th scope="col">' + esc(c) + '</th>';
+      }).join('') + '</tr></thead>';
+      var body = '<tbody>' + skills.map(function (sk) {
+        return '<tr><th scope="row">' + sk[0] + '<small>' + sk[1] + '</small></th>' + cols.map(function (c) {
+          var hits = included.filter(function (s) {
+            return base(s[current.key]) === c &&
+              splitOutside(s.activities, ' / ').map(base).indexOf(sk[0]) >= 0;
+          });
+          var dots = hits.map(function (s) {
+            var main = base(s.primary_activity) === sk[0];
+            return '<span class="d ' + (main ? 'main' : 'also') + '" title="' + esc(s.short || s.id) + '"></span>';
+          }).join('');
+          var key = sk[0] + '|' + c;
+          return '<td' + (hits.length ? ' class="has' + (selected === key ? ' sel' : '') + '" tabindex="0" data-k="' + esc(key) + '"' : '') +
+            ' aria-label="' + esc(sk[0] + ', ' + c + ': ' + hits.length + ' studies') + '">' + dots + '</td>';
+        }).join('') + '</tr>';
+      }).join('') + '</tbody>';
+      var t = document.getElementById('gm');
+      t.style.minWidth = (7.2 + cols.length * 4.8) + 'rem';
+      t.innerHTML = head + body;
+    }
+    function pick(td) {
+      var k = td.dataset.k; if (!k) return;
+      selected = k;
+      var parts = k.split('|');
+      var hits = included.filter(function (s) {
+        return base(s[current.key]) === parts[1] && splitOutside(s.activities, ' / ').map(base).indexOf(parts[0]) >= 0;
+      });
+      document.getElementById('gm-detail').innerHTML = '<b>' + esc(parts[0]) + ' · ' + esc(parts[1]) + ':</b> ' +
+        hits.map(function (s) {
+          return esc(s.id + ' ' + (s.short || '')) + (base(s.primary_activity) === parts[0] ? ' (main skill)' : ' (also involved)');
+        }).join('; ') + '.';
+      draw();
+    }
+    var t = document.getElementById('gm');
+    t.addEventListener('click', function (e) { var td = e.target.closest('td.has'); if (td) pick(td); });
+    t.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('td.has')) { e.preventDefault(); pick(e.target); }
+    });
+    draw();
+  })();
+
+  // 05 studies
+  (function () {
+    var inc = D.studies.filter(function (s) { return s.status === 'included'; });
+    var con = D.studies.filter(function (s) { return s.status === 'construct_only'; });
+    var waiting = inc.filter(function (s) { return /^awaiting/.test(s.check); }).length;
+    document.getElementById('studies-head').textContent =
+      inc.length + ' included ' + (inc.length === 1 ? 'study' : 'studies') +
+      (waiting === inc.length ? ', charted and waiting for a second check'
+        : waiting ? ', ' + waiting + ' still waiting for a second check' : ', checked by the second reviewer');
+    document.getElementById('studies').innerHTML = inc.map(function (s) {
+      var acts = splitOutside(s.activities, ' / ').map(function (a) {
+        return base(a) === base(s.primary_activity) ? a + ' (main)' : a;
+      }).join(', ');
+      var charts = splitOutside(s.chart_types, ' / ').map(pretty).join(', ');
+      var cite = esc(s.citation);
+      if (s.doi) {
+        var link = 'https://doi.org/' + s.doi;
+        cite = cite.indexOf(esc(link)) >= 0
+          ? cite.replace(esc(link), '<a href="' + esc(link) + '" target="_blank" rel="noopener">' + esc(link) + '</a>')
+          : cite + ' <a href="' + esc(link) + '" target="_blank" rel="noopener">' + esc(link) + '</a>';
+      }
+      return '<article class="study"><p class="study-top"><span class="sid">' + esc(s.id) + '</span><b>' + esc(s.short || s.id) +
+        '</b>' + (s.check ? '<span class="badge">' + esc(s.check) + '</span>' : '') + '</p><dl>' +
+        '<dt>Learners</dt><dd>' + esc([s.population, 'N = ' + s.sample_size, s.country].join(' · ')) + '</dd>' +
+        '<dt>Level</dt><dd>' + esc(s.level) + '</dd>' +
+        '<dt>Design</dt><dd>' + esc(base(s.methodology) + ' · ' + base(s.design)) + '</dd>' +
+        '<dt>The AI</dt><dd>' + esc(s.genai_system + ' · ' + s.genai_role + ' · ' + s.genai_modality) + '</dd>' +
+        '<dt>Chart skills</dt><dd>' + esc(acts) + '</dd>' +
+        '<dt>Charts</dt><dd>' + esc(charts + ' · ' + pretty(s.domain)) + '</dd>' +
+        '</dl><p class="cite">' + cite + '</p></article>';
+    }).join('');
+    document.getElementById('construct-note').textContent = con.length
+      ? 'Also kept, only for the part of the review that looks at how studies define chart skills: ' +
+        con.map(function (s) { return s.short || s.id; }).join(', ') + '. ' +
+        (con.length === 1 ? 'It is' : 'They are') + ' not counted as included.'
+      : '';
+  })();
+
+  // 06 changes, 07 checks
+  document.getElementById('deviations').innerHTML = D.deviations.map(function (d) {
+    return '<li><span class="knum">' + esc(d.id) + '</span><b>' + esc(d.area) + '</b><span class="tag">' + esc(d.class) + '</span><br>' +
+      esc(d.change) + ' <span style="color:var(--muted)">' + esc(d.reason) + '</span></li>';
+  }).join('');
+  var icon = { pass: '✓', warn: '!', fail: '✗' };
+  var n = { pass: 0, warn: 0, fail: 0 };
+  D.checks.forEach(function (c) { n[c.level]++; });
+  document.getElementById('tally').textContent = n.pass + ' pass · ' + n.warn + ' to follow up · ' + n.fail + ' fail';
+  document.getElementById('checks').innerHTML = D.checks.map(function (c) {
+    return '<li><span class="ci ' + c.level + '" aria-label="' + c.level + '">' + icon[c.level] + '</span><b>' + esc(c.label) +
+      '</b><span class="cd">' + esc(c.detail) + '</span></li>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

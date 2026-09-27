@@ -143,6 +143,31 @@ which may appear only in parentheses next to the plain version); no em dashes; t
 prototype "estimates"/"shows", never "diagnoses"; no "AI-native"; no
 behavior-vs-self-report opposition; nothing that reads as a study or a signup.
 
+### 1b. Product direction: converting between words and tables (decided 2026-09-27)
+
+Delta adds tasks where the learner moves data between representations. Two directions,
+built as two task types because conversion difficulty depends on direction (Duval, 2006):
+- **Task A, words to table (prototype: `tables.html`, "Table Lab").** A short passage
+  with numbers; the learner builds their own table (they choose rows and columns);
+  whole-table certainty on the same CBM scale; then the mirror. Traps map to named
+  errors: "fewer than" read as take-away (inconsistent wording, Lewis & Mayer, 1987),
+  copying the difference as the count (direct translation, Hegarty, Mayer & Monk, 1995),
+  a percent written as a count (Parker & Leinhardt, 1995), a total used as a part.
+  List-versus-grid layout is reported neutrally, never marked wrong (two-way table
+  construction: Martí, García-Mila, Gabucio & Konstantinidou, 2011).
+- **Task B, table to your own reasoning (next).** A table that is not simple; the learner
+  writes what it shows; checks whether claims follow from the numbers. Levels of reading
+  (Friel, Curcio & Bright, 2001) and ways of seeing data (Konold, Higgins, Russell &
+  Khalil, 2015) seed the codebook; traps: row versus column percentages, count versus
+  rate, reversal after merging groups.
+Statistics first; the geometry counterpart (words to figure, figure to claim) needs a
+geometry engine and waits. The checker is layout-free: every number is placed by the
+labels in its own row and column, matched against an EN/中文 word list, so any sensible
+layout counts (the honest seam: Phase 1 lets a model read unusual labels). Same rules as
+§1a: product line only, nothing reads as research, no data leaves the page. It sits close
+to the dissertation's statistics task context, so it must never be offered as, or near,
+an elicitation task.
+
 ## 2. Product state (platform.html)
 
 Single self-contained page, since 2026-08-24 (delta#11) a compact bento sheet (~2
@@ -344,6 +369,8 @@ GitHub's. A new project line starts its own counter at 1.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
+- §1b: `tables.html` (Table Lab, Task A) is a standalone prototype, not yet linked from
+  platform.html; owner reviews it first. Then Task B, then a link or tile on platform.html.
 - §1a follow-up: update platform.html tiles 06 and 09 to the five-axis version and the
   help-seeking roadmap, under the §1a site-copy constraints. Product line only; the
   portfolio's research tiles do not mention Delta as part of any study.

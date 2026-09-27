@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Table Lab · Delta · Yizhen (Stephen) Jia</title>
+<meta name="description" content="A Delta prototype: read a short passage with numbers in it, build your own table from it, and see which numbers landed in the right place and how sure you were." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    color-scheme: dark;
+    --ink: #f0ede4;
+    --paper: #1d1c19;
+    --cream: #171613;
+    --accent: #c9a45c;
+    --accent-light: #dcbe83;
+    --muted: #a49e90;
+    --rule: #3d3a31;
+    --card-bg: #262420;
+    --shadow: 0 2px 24px rgba(0,0,0,.35);
+    --good: #72b98d;
+    --warn: #d9a83d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding: 18px;
+  }
+  .sheet {
+    max-width: 1500px;
+    margin: 0 auto;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .band { display: flex; flex-wrap: wrap; gap: 1px; }
+  .band-a > * { flex: 1 1 18rem; min-width: 0; }
+  .band-b > * { flex: 1 1 24rem; min-width: 0; }
+  .tile { background: var(--paper); padding: 1.05rem 1.3rem; position: relative; transition: background .25s; }
+  .tile:hover { background: #201f1b; }
+  .tile-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .6rem;
+  }
+  .tile-label b { color: var(--accent); font-weight: 500; }
+  .tile h3 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.08rem; line-height: 1.25; margin-bottom: .45rem; color: var(--ink); }
+  .tile > p { font-size: .8rem; color: #c9c4b6; }
+  .tile > p + p { margin-top: .6rem; }
+  .tile .lede { font-size: .8rem; color: #b0aa9c; max-width: 90ch; margin-bottom: 1rem; }
+
+  .mast { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem 1.8rem; }
+  .backlink {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; margin-bottom: .6rem;
+  }
+  .backlink:hover { color: var(--accent); }
+  .mast-over { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: .45rem; }
+  .mast h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(1.9rem, 3.1vw, 2.7rem); line-height: 1.08; letter-spacing: -.01em; }
+  .mast h1 em { font-style: italic; color: var(--accent); }
+  .mast-tag { margin-top: .55rem; font-size: .84rem; color: var(--muted); max-width: 62ch; }
+  .mast-art { flex-shrink: 0; width: clamp(96px, 10vw, 140px); height: clamp(96px, 10vw, 140px); }
+  .mast-art svg { width: 100%; height: 100%; }
+  .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .dot { fill: var(--accent); }
+
+  .klist { list-style: none; }
+  .klist li { padding: .5rem 0; border-bottom: 1px dashed var(--rule); font-size: .76rem; color: #b0aa9c; }
+  .klist li:last-child { border-bottom: none; }
+  .klist b { display: block; font-weight: 600; color: #ddd8cc; font-size: .78rem; }
+  .klist .knum { font-family: 'JetBrains Mono', monospace; font-size: .56rem; color: var(--accent); letter-spacing: .1em; }
+  .sources { margin-top: .7rem; font-family: 'JetBrains Mono', monospace; font-size: .62rem; line-height: 1.6; color: var(--muted); }
+
+  .arrowlink {
+    display: inline-flex; align-items: center; gap: .4rem;
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 500;
+    color: var(--accent); text-decoration: none;
+  }
+  .arrowlink:hover { text-decoration: underline; }
+
+  /* ---- LAB CARD (same chassis as the Calibration Mirror) ---- */
+  .demo-wrap { max-width: 820px; margin: 0 auto; }
+  .demo { background: var(--card-bg); border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .demo-head {
+    padding: 1.1rem 1.6rem; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    background: linear-gradient(180deg, rgba(201,164,92,.05), transparent);
+  }
+  .demo-head .title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; }
+  .demo-steps { display: flex; gap: .4rem; }
+  .step-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); transition: background .3s, transform .3s; }
+  .step-pip.active { background: var(--accent); transform: scale(1.25); }
+  .step-pip.done { background: var(--accent-light); }
+  .demo-body { padding: 1.5rem 1.6rem; }
+  .stage { display: none; }
+  .stage.active { display: block; animation: fade .4s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .prompt-label {
+    font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .7rem;
+  }
+  .passage {
+    background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    border-radius: 9px; padding: 1rem 1.2rem; margin-bottom: 1.2rem;
+    font-size: 1rem; line-height: 1.65; color: #e4dfd2;
+  }
+  .passage p + p { margin-top: .35rem; }
+  .how { font-size: .86rem; color: var(--muted); margin-bottom: .8rem; }
+
+  .grid-wrap { overflow-x: auto; padding-bottom: .3rem; }
+  table.grid { border-collapse: separate; border-spacing: 4px; }
+  table.grid input {
+    width: 7.2rem; padding: .5rem .55rem;
+    border: 1.5px solid var(--rule); border-radius: 7px;
+    background: var(--paper); color: var(--ink);
+    font-family: 'Instrument Sans', sans-serif; font-size: .9rem;
+  }
+  table.grid tr:first-child input, table.grid td:first-child input { background: #22201c; font-weight: 600; }
+  table.grid input:focus { outline: none; border-color: var(--accent); }
+  table.grid input.num { font-family: 'JetBrains Mono', monospace; text-align: right; font-weight: 400; }
+  .shape { display: flex; flex-wrap: wrap; gap: .45rem; margin: .7rem 0 0; }
+  .shape button {
+    font-family: 'JetBrains Mono', monospace; font-size: .66rem; letter-spacing: .04em;
+    color: var(--muted); background: transparent;
+    border: 1px solid var(--rule); border-radius: 6px; padding: .35rem .6rem; cursor: pointer;
+  }
+  .shape button:hover { color: var(--ink); border-color: var(--ink); }
+
+  .field-label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted); margin: 1rem 0 .35rem;
+  }
+  .explain-box {
+    width: 100%; padding: .7rem .9rem; border: 1.5px solid var(--rule); border-radius: 9px;
+    background: var(--paper); font-family: inherit; font-size: .95rem; line-height: 1.55; color: var(--ink); resize: vertical;
+  }
+  .explain-box:focus { outline: none; border-color: var(--accent); }
+
+  .conf-levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: 1.4rem; }
+  .conf-level {
+    border: 1.5px solid var(--rule); border-radius: 9px; background: var(--paper); cursor: pointer;
+    padding: .9rem .6rem; text-align: center; font-family: inherit; color: var(--ink);
+    transition: border-color .2s, background .2s, transform .1s;
+  }
+  .conf-level:hover { border-color: var(--accent-light); transform: translateY(-1px); }
+  .conf-level.selected { border-color: var(--accent); background: rgba(201,164,92,.06); }
+  .cl-name { display: block; font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: .25rem; }
+  .cl-pay { display: block; font-family: 'JetBrains Mono', monospace; font-size: .66rem; color: var(--muted); letter-spacing: .02em; }
+  .conf-level.selected .cl-pay { color: var(--accent); }
+  .stem-note { font-size: .95rem; color: var(--muted); margin-bottom: 1.1rem; }
+  .stem-note b { color: var(--accent); }
+
+  .demo-actions { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; margin-top: 1.2rem; }
+  .demo-btn { padding: .65rem 1.4rem; border-radius: 7px; border: none; font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .demo-btn.primary { background: var(--accent); color: #1d1c19; }
+  .demo-btn.primary:hover:not(:disabled) { background: #b78f45; transform: translateY(-1px); }
+  .demo-btn.primary:disabled { opacity: .4; cursor: not-allowed; }
+  .demo-btn.ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--rule); }
+  .demo-btn.ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  .gap-viz { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.3rem; margin-bottom: 1.2rem; }
+  .gap-title { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .9rem; }
+  .gap-bars { display: grid; gap: .7rem; }
+  .gap-bar-row { display: grid; grid-template-columns: 92px 1fr 64px; align-items: center; gap: .7rem; font-size: .8rem; }
+  .gap-bar-row .lab { color: var(--muted); }
+  .gap-track { height: 12px; background: var(--cream); border-radius: 6px; overflow: hidden; }
+  .gap-fill { height: 100%; border-radius: 6px; width: 0; transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .gap-fill.conf { background: linear-gradient(90deg, var(--accent-light), var(--accent)); }
+  .gap-fill.truth { background: var(--good); }
+  .gap-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: .8rem; }
+  .gap-headline { font-family: 'DM Serif Display', serif; font-size: 1.25rem; line-height: 1.35; margin-bottom: .6rem; }
+  .gap-headline.blindspot { color: var(--accent); }
+  .gap-headline.calibrated { color: var(--good); }
+  .diag { font-size: .96rem; color: #c9c4b6; margin-bottom: 1.1rem; }
+  .diag b { color: var(--ink); }
+
+  .checked-title { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: .4rem 0 .6rem; }
+  table.show { border-collapse: separate; border-spacing: 4px; margin-bottom: .6rem; }
+  table.show td {
+    min-width: 5.6rem; padding: .45rem .6rem; border-radius: 7px; border: 1.5px solid var(--rule);
+    background: var(--paper); font-size: .86rem; color: #c9c4b6; vertical-align: top;
+  }
+  table.show td.lab { background: #22201c; color: var(--ink); font-weight: 600; }
+  table.show td.n { font-family: 'JetBrains Mono', monospace; text-align: right; color: var(--ink); }
+  table.show td.ok { border-color: var(--good); background: rgba(114,185,141,.08); }
+  table.show td.trap { border-color: var(--accent); background: rgba(201,164,92,.1); }
+  table.show td.off { border-color: var(--warn); border-style: dashed; }
+  table.show td.empty { opacity: .45; }
+  table.show td small { display: block; font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); text-align: right; }
+  .key { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .74rem; color: var(--muted); margin-bottom: 1.2rem; }
+  .key span::before { content: ''; display: inline-block; width: 12px; height: 10px; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; border: 1.5px solid var(--rule); }
+  .key .k-ok::before { border-color: var(--good); background: rgba(114,185,141,.15); }
+  .key .k-trap::before { border-color: var(--accent); background: rgba(201,164,92,.18); }
+  .key .k-off::before { border-color: var(--warn); border-style: dashed; }
+
+  .mirror { border: 1px dashed var(--accent-light); border-radius: 10px; padding: 1.1rem 1.3rem; background: rgba(201,164,92,.04); margin-bottom: 1.2rem; }
+  .mirror h4 { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .7rem; }
+  .mirror ul { list-style: none; display: grid; gap: .6rem; }
+  .mirror li { font-size: .9rem; color: #c9c4b6; display: flex; gap: .55rem; align-items: flex-start; }
+  .mirror li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .mirror li b { color: var(--ink); }
+  .ri-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .03em; padding: .1rem .45rem; border-radius: 4px; background: rgba(201,164,92,.12); color: var(--accent); margin-left: .25rem; vertical-align: 1px; }
+
+  .nextstep { border: 1px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.3rem; background: var(--card-bg); margin-bottom: 1.2rem; }
+  .nextstep .k { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+  .nextstep .act { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: .3rem; }
+  .nextstep .det { font-size: .9rem; color: #c9c4b6; }
+  details.ref summary { cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  details.ref p { font-size: .86rem; color: #c9c4b6; margin: .6rem 0; }
+
+  .seam-note { margin-top: 1.4rem; font-family: 'JetBrains Mono', monospace; font-size: .72rem; line-height: 1.6; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1rem; }
+  .seam-note b { color: var(--accent); }
+
+  .foot {
+    position: sticky; bottom: 0; z-index: 40;
+    border-top: 1px solid var(--rule); margin-top: -1px;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: .6rem 1.6rem; padding: .6rem 1.8rem .6rem 6.2rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .04em;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .foot a { color: var(--ink); text-decoration: none; }
+  .foot a:hover { color: var(--accent); }
+  .foot .copy { color: var(--muted); }
+  .zoomer { position: fixed; left: 26px; bottom: 9px; z-index: 50; display: flex; gap: 6px; }
+  .zoomer button {
+    width: 30px; height: 28px; font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 1;
+    color: var(--ink); background: rgba(29,28,25,.88); backdrop-filter: blur(6px);
+    border: 1px solid var(--rule); border-radius: 6px; cursor: pointer; transition: all .2s;
+  }
+  .zoomer button:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 860px) {
+    body { padding: 12px; }
+    .zoomer { display: none; }
+    .mast { padding: 1.3rem 1.3rem; }
+    .mast-art { width: 88px; height: 88px; }
+    .conf-levels { grid-template-columns: 1fr; }
+    .demo-body { padding: 1.2rem 1rem; }
+    table.grid input { width: 5.6rem; font-size: .84rem; }
+    .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
+  }
+  @media (max-width: 520px) {
+    body { padding: 8px; }
+    .mast { flex-direction: column-reverse; align-items: flex-start; gap: .8rem; }
+    .mast-art { width: 64px; height: 64px; }
+    .gap-bar-row { grid-template-columns: 80px 1fr 56px; }
+  }
+</style>
+</head>
+<body>
+
+<main class="sheet">
+
+  <header class="tile mast">
+    <div>
+      <a class="backlink" href="platform.html">← Delta</a>
+      <p class="mast-over">Delta Prototype · Table Lab</p>
+      <h1>From words to a <em>table</em>.</h1>
+      <p class="mast-tag">Read a short passage with numbers in it. Build your own table from it. Then see which numbers landed in the right place, and how sure you were.</p>
+      <a class="arrowlink" href="#lab">→ Try it</a>
+    </div>
+    <div class="mast-art" aria-hidden="true">
+      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="160" cy="160" r="76" class="ring" stroke-dasharray="4 8" />
+        <circle cx="160" cy="160" r="112" class="ring" stroke-dasharray="6 10" />
+        <circle cx="160" cy="160" r="146" class="ring" stroke-dasharray="3 12" />
+        <g stroke="#3d3a31" stroke-width="1.2" fill="none">
+          <rect x="104" y="112" width="112" height="84" rx="4" />
+          <line x1="104" y1="140" x2="216" y2="140" /><line x1="104" y1="168" x2="216" y2="168" />
+          <line x1="144" y1="112" x2="144" y2="196" /><line x1="180" y1="112" x2="180" y2="196" />
+        </g>
+        <circle cx="236" cy="160" r="5" class="dot" opacity=".9" />
+        <circle cx="112" cy="56" r="4" class="dot" opacity=".6" />
+        <text x="160" y="248" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="46" fill="#c9a45c" opacity=".9">&#916;</text>
+      </svg>
+    </div>
+  </header>
+
+  <div class="band band-a">
+    <section class="tile">
+      <p class="tile-label"><b>01</b> · The Skill</p>
+      <h3>Pulling numbers out of words</h3>
+      <p>A lot of real math starts as a paragraph: a report, a news story, a word problem. Before you can compare anything, you have to pull the numbers out and put each one where it belongs. That step is a skill of its own. It is also easy to get wrong without noticing.</p>
+    </section>
+    <section class="tile">
+      <p class="tile-label"><b>02</b> · What Delta Looks At</p>
+      <h3>Four things, all at once</h3>
+      <ul class="klist">
+        <li><b>Every number</b>Is each one in the right row and column?</li>
+        <li><b>The tricky sentences</b>"Fewer than", a percent, a total that has to be split.</li>
+        <li><b>How you built it</b>A grid or a list, which labels you used, whether your totals add up.</li>
+        <li><b>How sure you were</b>Set next to how you actually did.</li>
+      </ul>
+    </section>
+    <section class="tile">
+      <p class="tile-label"><b>03</b> · The Honest Part</p>
+      <h3>Simple rules, and we say so</h3>
+      <p>The checking here is done by simple rules. They match your labels against a word list, in English or 中文, and compare every number. Any sensible layout counts: groups down the side, groups across the top, or one long list.</p>
+      <p>The rules cannot read an unusual label that is not on the list. In the next phase, an AI model reads your labels the way a teacher would.</p>
+    </section>
+  </div>
+
+  <section class="tile" id="lab">
+    <p class="tile-label"><b>04</b> · Live Demo</p>
+    <h3>Table Lab</h3>
+    <p class="lede">You get one passage. Build a table that holds its numbers, in whatever shape makes sense to you. Say how sure you are. You get no feedback until the end.</p>
+    <div class="demo-wrap">
+      <div class="demo">
+        <div class="demo-head">
+          <div class="title">&#916; &nbsp;Table Lab</div>
+          <div class="demo-steps" id="pips"><span class="step-pip active"></span><span class="step-pip"></span><span class="step-pip"></span></div>
+        </div>
+        <div class="demo-body">
+
+          <div class="stage active" id="stage-build">
+            <div class="prompt-label">Step 1 of 3 · Read, then build your table</div>
+            <div class="passage" id="passage"></div>
+            <p class="how">Put labels in the top row and the first column, and numbers in the other cells. Add or remove rows and columns as you need. There is no single right shape.</p>
+            <div class="grid-wrap"><table class="grid" id="grid" aria-label="Your table"></table></div>
+            <div class="shape">
+              <button type="button" id="addRow">+ Row</button>
+              <button type="button" id="addCol">+ Column</button>
+              <button type="button" id="delRow">− Row</button>
+              <button type="button" id="delCol">− Column</button>
+            </div>
+            <label class="field-label" for="note">Which number took the most thought? Why? (optional)</label>
+            <textarea class="explain-box" id="note" rows="2" placeholder="English or 中文"></textarea>
+            <div class="demo-actions">
+              <button class="demo-btn primary" id="toConf" disabled>Next: how sure are you? →</button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-conf">
+            <div class="prompt-label">Step 2 of 3 · How sure are you that every number in your table is in the right place?</div>
+            <p class="stem-note">Scoring works like this: a confident right table earns the most, and a confident wrong one costs the most. So <b>honesty is your best strategy</b>. (The method is called certainty-based marking.)</p>
+            <div class="conf-levels" id="confLevels"></div>
+            <div class="demo-actions">
+              <button class="demo-btn ghost" id="backBuild">← Back to my table</button>
+              <button class="demo-btn primary" id="lockIn" disabled>Lock it in →</button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-report">
+            <div class="prompt-label">Step 3 of 3 · Your report</div>
+            <div class="gap-viz">
+              <div class="gap-title">How sure you felt vs. how you did</div>
+              <div class="gap-bars">
+                <div class="gap-bar-row"><span class="lab">Confidence</span><div class="gap-track"><div class="gap-fill conf" id="fillConf"></div></div><span class="gap-num" id="numConf">…</span></div>
+                <div class="gap-bar-row"><span class="lab">Numbers right</span><div class="gap-track"><div class="gap-fill truth" id="fillAcc"></div></div><span class="gap-num" id="numAcc">…</span></div>
+              </div>
+            </div>
+            <h3 class="gap-headline" id="headline"></h3>
+            <p class="diag" id="diag"></p>
+
+            <p class="checked-title">Your table, checked</p>
+            <div class="grid-wrap"><table class="show" id="checked"></table></div>
+            <div class="key"><span class="k-ok">in the right place</span><span class="k-trap">a common slip</span><span class="k-off">misplaced, wrong, or not labelled</span></div>
+
+            <div class="mirror">
+              <h4>&#916; What Delta noticed</h4>
+              <ul id="mirrorList"></ul>
+            </div>
+
+            <div class="nextstep">
+              <div class="k">Delta's next move</div>
+              <div class="act" id="nextAct"></div>
+              <div class="det" id="nextDet"></div>
+            </div>
+
+            <details class="ref">
+              <summary>Show one way to lay it out</summary>
+              <p>Groups down the side, book types across the top. Groups across the top works just as well.</p>
+              <div class="grid-wrap"><table class="show" id="reference"></table></div>
+            </details>
+
+            <div class="demo-actions">
+              <button class="demo-btn ghost" id="restart">↺ Start over</button>
+            </div>
+
+            <p class="seam-note"><b>Preview note.</b> Everything here runs in your browser, and nothing you type leaves this page. Each number is placed by the labels in its own row and column, using a word list in English and 中文, so the layout is up to you. That word list is the honest seam: in the next phase an AI model reads your labels, even unusual ones, and asks a follow-up question.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="band band-b">
+    <section class="tile">
+      <p class="tile-label"><b>05</b> · Two Directions</p>
+      <h3>Words to a table, then a table to your own reasoning</h3>
+      <ul class="klist">
+        <li><span class="knum">HERE NOW</span><b>Words to a table</b>You turn a passage into a table. The hard part is putting each number where it belongs.</li>
+        <li><span class="knum">NEXT</span><b>A table to your own reasoning</b>You start from a table that is not so simple and write what it shows, in your own words. Delta checks whether each claim really follows from the numbers.</li>
+      </ul>
+      <p style="margin-top:.6rem">These are two different skills. Going one way can be much harder than going back, so each gets its own practice.</p>
+    </section>
+    <section class="tile">
+      <p class="tile-label"><b>06</b> · Where The Tricky Parts Come From</p>
+      <h3>Each trap is a slip students commonly make</h3>
+      <ul class="klist">
+        <li><b>"Fewer than" read as take away</b>The sentence says fewer, but the missing number is bigger, so you have to add.</li>
+        <li><b>Copying a number from the sentence</b>The number in the sentence is a difference, not the count.</li>
+        <li><b>A percent written as a count</b>35% of 80 books is 28 books, not 35.</li>
+        <li><b>A total used as a part</b>A group's total goes in a total cell, not in one of its parts.</li>
+      </ul>
+      <p class="sources">Background: Duval (2006) on moving between ways of showing math; Lewis &amp; Mayer (1987) on "fewer than" wording; Hegarty, Mayer &amp; Monk (1995) on copying numbers from the text; Parker &amp; Leinhardt (1995) on percents; Martí et al. (2011) on building two-way tables.</p>
+    </section>
+  </div>
+
+  <footer class="tile foot">
+    <div class="foot-links">
+      <a href="platform.html">← Delta</a>
+      <a href="index.html">Portfolio</a>
+      <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
+      <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <span class="copy">© 2026 Yizhen (Stephen) Jia · Table Lab is an early prototype</span>
+  </footer>
+
+</main>
+
+<div class="zoomer" aria-label="Zoom">
+  <button id="zout" aria-label="Zoom out" title="Zoom out">−</button>
+  <button id="zin" aria-label="Zoom in" title="Zoom in">+</button>
+</div>
+
+<script>
+  (function () {
+    var z = 1, MIN = 0.8, MAX = 1.6, STEP = 0.2;
+    try { z = parseFloat(localStorage.getItem('yj-zoom')) || 1; } catch (e) {}
+    function apply() {
+      if (Math.abs(z - 1) < 0.01) document.documentElement.style.fontSize = '';
+      else document.documentElement.style.fontSize = (16 * z) + 'px';
+      try { localStorage.setItem('yj-zoom', z); } catch (e) {}
+    }
+    document.getElementById('zin').addEventListener('click', function () { z = Math.min(MAX, +(z + STEP).toFixed(2)); apply(); });
+    document.getElementById('zout').addEventListener('click', function () { z = Math.max(MIN, +(z - STEP).toFixed(2)); apply(); });
+    apply();
+  })();
+</script>
+
+<script>
+(function () {
+  // ── The task ─────────────────────────────────────────────────────────────
+  // Every trap value must stay distinct from every true value and from each
+  // other, or a slip could not be told apart from a misplaced number.
+  const TASK = {
+    passage: [
+      'Last week, the Riverside Library counted the books borrowed by three age groups.',
+      'Children borrowed 42 print books and 18 e-books.',
+      'Teens borrowed 30 print books. Children borrowed 7 fewer e-books than teens did.',
+      'Adults borrowed 80 books in all, and 35% of them were e-books.',
+      'Altogether, the library lent 195 books that week.'
+    ],
+    groups: [
+      { id: 'children', label: 'Children', names: ['children', 'child', 'kids', 'kid', '儿童', '孩子', '小孩', '兒童'] },
+      { id: 'teens', label: 'Teens', names: ['teens', 'teen', 'teenagers', 'teenager', '青少年', '少年'] },
+      { id: 'adults', label: 'Adults', names: ['adults', 'adult', 'grownups', '成人', '成年人', '大人'] }
+    ],
+    types: [
+      { id: 'print', label: 'Print books', names: ['print', 'printed', 'paper', 'hardcopy', '纸质', '纸本', '纸书', '紙本', '紙質', '印刷'] },
+      { id: 'ebook', label: 'E-books', names: ['ebook', 'ebooks', 'digital', 'electronic', '电子', '電子'] }
+    ],
+    truth: { children: { print: 42, ebook: 18 }, teens: { print: 30, ebook: 25 }, adults: { print: 52, ebook: 28 } },
+    traps: [
+      { g: 'teens', t: 'ebook', v: 11, tag: '“Fewer than” read as take away',
+        say: '“Children borrowed 7 fewer than teens” means teens borrowed 7 more: 18 + 7 = 25. The word “fewer” points one way and the math goes the other, so subtracting feels natural here.' },
+      { g: 'teens', t: 'ebook', v: 7, tag: 'Copied the difference',
+        say: '7 is how many more teens borrowed, not how many they borrowed. Teens borrowed 18 + 7 = 25.' },
+      { g: 'adults', t: 'ebook', v: 35, tag: 'Percent written as a count',
+        say: '35% is a share, and the table asks for a count. 35% of 80 books is 0.35 × 80 = 28.' },
+      { g: 'adults', t: 'print', v: 45, tag: 'Follows from the percent slip',
+        say: '45 comes from 80 − 35. With 28 e-books, adults borrowed 80 − 28 = 52 print books.' },
+      { g: 'adults', t: 'print', v: 80, tag: 'Total used as a part',
+        say: '80 is all the books adults borrowed. Print books are only part of that: 80 − 28 = 52.' }
+    ]
+  };
+  const GROUP_TOTAL = { children: 60, teens: 55, adults: 80 };
+  const TYPE_TOTAL = { print: 124, ebook: 71 };
+  const GRAND_TOTAL = 195;
+  const TOTAL_EN = /\b(total|totals|all|sum|overall|altogether|combined)\b/i;
+  const TOTAL_ZH = /合计|合計|总计|總計|总数|總數|共计|共計|总共|總共|一共|总和|總和/;
+
+  // Certainty levels, after Gardner-Medwin's certainty-based marking (CBM),
+  // identical to the Calibration Mirror so both demos score the same way.
+  const LEVELS = [
+    { n: 1, label: 'Guessing', conf: 50, right: 1, wrong: 0 },
+    { n: 2, label: 'Fairly sure', conf: 75, right: 2, wrong: -2 },
+    { n: 3, label: 'Certain', conf: 92, right: 3, wrong: -6 }
+  ];
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = s => String(s || '').toLowerCase().replace(/[\s\-_'’.,:;()（）]/g, '');
+  const fmtSec = s => s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
+
+  // A cell is a number if, once the number and a few unit words are removed,
+  // nothing is left. "35%" counts as 35; "Grade 9" would count as a label.
+  function readNumber(raw) {
+    const s = String(raw || '').trim().replace(/[，,]/g, '').replace(/[−–]/g, '-');
+    if (!/\d/.test(s)) return null;
+    const m = s.match(/-?\d+(?:\.\d+)?/);
+    const rest = s.replace(m[0], '').replace(/%|books?|e-?books?|本|册|冊/gi, '').trim();
+    return rest === '' ? { v: parseFloat(m[0]), pct: /%/.test(s) } : null;
+  }
+  function findIn(text, list) {
+    const n = norm(text);
+    return list.filter(c => c.names.some(name => n.includes(norm(name)))).map(c => c.id);
+  }
+  const isTotal = text => TOTAL_EN.test(text) || TOTAL_ZH.test(text);
+
+  // ══════════════════════════════════════════════════════════════════════
+  //  TABLE ENGINE  (v0, rule-based)
+  //  The seam: read() turns a learner's grid into placed facts, diagnose()
+  //  judges them. In Phase 1 a model replaces the word-list matching inside
+  //  read(); diagnose() and the report stay as they are.
+  // ══════════════════════════════════════════════════════════════════════
+  const TableEngine = {
+    read(grid) {
+      const facts = [], loose = [];
+      const R = grid.length, C = grid[0].length;
+      for (let r = 0; r < R; r++) {
+        for (let c = 0; c < C; c++) {
+          const num = readNumber(grid[r][c]);
+          if (!num) continue;
+          const rowText = grid[r].filter((x, j) => j !== c && !readNumber(x)).join(' ');
+          const colText = r === 0 ? '' : (readNumber(grid[0][c]) ? '' : grid[0][c]);
+          const gRow = findIn(rowText, TASK.groups), gCol = findIn(colText, TASK.groups);
+          const tRow = findIn(rowText, TASK.types), tCol = findIn(colText, TASK.types);
+          const groups = [...new Set(gRow.concat(gCol))], types = [...new Set(tRow.concat(tCol))];
+          const total = isTotal(rowText) || isTotal(colText);
+          const base = { r, c, v: num.v, pct: num.pct };
+          if (groups.length > 1 || types.length > 1) loose.push({ ...base, why: 'ambiguous' });
+          else if (groups.length === 1 && types.length === 1)
+            facts.push({ ...base, kind: 'cell', g: groups[0], t: types[0],
+                         gFrom: gRow.length ? 'row' : 'col', tFrom: tRow.length ? 'row' : 'col' });
+          else if (total && groups.length === 1) facts.push({ ...base, kind: 'groupTotal', g: groups[0] });
+          else if (total && types.length === 1) facts.push({ ...base, kind: 'typeTotal', t: types[0] });
+          else if (total) facts.push({ ...base, kind: 'grandTotal' });
+          else loose.push({ ...base, why: groups.length || types.length ? 'half' : 'unlabelled' });
+        }
+      }
+      return { facts, loose };
+    },
+
+    diagnose(grid, level, behavior) {
+      const { facts, loose } = this.read(grid);
+      const cellFacts = facts.filter(f => f.kind === 'cell');
+      const cells = [], marks = {};
+      for (const g of TASK.groups) {
+        for (const t of TASK.types) {
+          const want = TASK.truth[g.id][t.id];
+          const here = cellFacts.filter(f => f.g === g.id && f.t === t.id);
+          const values = [...new Set(here.map(f => f.v))];
+          let status, trap = null, belongs = null;
+          if (!here.length) status = loose.some(f => f.v === want) ? 'unlabelled' : 'missing';
+          else if (values.length > 1) status = 'conflict';
+          else if (values[0] === want) status = 'correct';
+          else if ((trap = TASK.traps.find(x => x.g === g.id && x.t === t.id && x.v === values[0]))) status = 'trap';
+          else {
+            for (const g2 of TASK.groups) for (const t2 of TASK.types)
+              if (TASK.truth[g2.id][t2.id] === values[0]) belongs = { g: g2.label, t: t2.label };
+            status = belongs ? 'misplaced' : 'wrong';
+          }
+          const cell = { g, t, want, given: values.length === 1 ? values[0] : values, status, trap, belongs, facts: here };
+          cells.push(cell);
+          here.forEach(f => { marks[f.r + ',' + f.c] = status; });
+        }
+      }
+      const right = cells.filter(x => x.status === 'correct').length;
+      const allRight = right === cells.length;
+
+      // Layout: where did the group and the book type come from for each number?
+      let layout = 'none';
+      if (cellFacts.length) {
+        const sig = new Set(cellFacts.map(f => f.gFrom + '/' + f.tFrom));
+        layout = sig.size > 1 ? 'mixed' : { 'row/col': 'groups-down', 'col/row': 'groups-across', 'row/row': 'list', 'col/col': 'list' }[[...sig][0]];
+      }
+
+      // Totals are checked against the true totals and against the learner's own numbers.
+      const own = (g, t) => { const x = cells.find(k => k.g.id === g && k.t.id === t); return typeof x.given === 'number' ? x.given : null; };
+      const totals = facts.filter(f => f.kind !== 'cell').map(f => {
+        let expected, ownSum = null, name;
+        if (f.kind === 'groupTotal') {
+          expected = GROUP_TOTAL[f.g]; name = TASK.groups.find(x => x.id === f.g).label;
+          const parts = TASK.types.map(t => own(f.g, t.id)); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+        } else if (f.kind === 'typeTotal') {
+          expected = TYPE_TOTAL[f.t]; name = TASK.types.find(x => x.id === f.t).label;
+          const parts = TASK.groups.map(g => own(g.id, f.t)); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+        } else {
+          expected = GRAND_TOTAL; name = 'Everything';
+          const parts = TASK.groups.flatMap(g => TASK.types.map(t => own(g.id, t.id))); if (parts.every(p => p !== null)) ownSum = parts.reduce((a, b) => a + b, 0);
+        }
+        marks[f.r + ',' + f.c] = f.v === expected ? 'correct' : 'off';
+        return { ...f, name, expected, ownSum, ok: f.v === expected, ownOk: ownSum !== null && f.v === ownSum };
+      });
+      loose.forEach(f => { marks[f.r + ',' + f.c] = 'off'; });
+
+      const b = behavior;
+      let behaviorNote = null;
+      if (level.n === 3 && (b.tBuild >= 300 || b.reshapes >= 6))
+        behaviorNote = `You said “Certain”, and you also rebuilt the table's shape ${b.reshapes} times over ${fmtSec(b.tBuild)}. That much reworking usually comes with some doubt.`;
+      else if (level.n === 1 && allRight && b.tBuild <= 150)
+        behaviorNote = `You said “Guessing”, but every number was right, and you finished in ${fmtSec(b.tBuild)}. You knew more than you gave yourself credit for.`;
+
+      return { cells, right, total: cells.length, allRight, layout, totals, loose, marks,
+               level, score: allRight ? level.right : level.wrong, behavior: b, behaviorNote };
+    },
+
+    nextStep(dx) {
+      const has = tag => dx.cells.some(c => c.trap && c.trap.tag === tag);
+      if (has('“Fewer than” read as take away') || has('Copied the difference'))
+        return ['A short set of “fewer than” and “less than” sentences', 'Each one hides the bigger number behind the word “fewer”. You write the number before you build anything.'];
+      if (has('Percent written as a count') || has('Follows from the percent slip'))
+        return ['Passages where part of a group is given as a percent', 'You turn each percent into a count first, then check that the parts add back up to the group.'];
+      if (has('Total used as a part'))
+        return ['Passages that give a total and one part', 'You find the missing part before placing anything, and keep totals in their own row or column.'];
+      if (dx.cells.some(c => c.status === 'misplaced' || c.status === 'missing' || c.status === 'conflict') || dx.loose.length)
+        return ['Labels first, numbers second', 'The next passage starts with an empty frame: you name every row and column before any number goes in.'];
+      if (dx.layout === 'list')
+        return ['The same kind of data, as a grid', 'Your list was right. Next you put groups one way and types the other, so any two numbers can be compared side by side.'];
+      return ['The other direction: a table to your own reasoning', 'Next you start from a table that is not so simple and write what it shows. That task is still being built.'];
+    }
+  };
+
+  // ── UI state ─────────────────────────────────────────────────────────────
+  let grid, level = null, tStart, tFirst = null, tBuildEnd = 0, edits = 0, reshapes = 0;
+
+  document.getElementById('passage').innerHTML = TASK.passage.map(s => `<p>${esc(s)}</p>`).join('');
+
+  function freshGrid() { return [['', '', ''], ['', '', ''], ['', '', '']]; }
+  function drawGrid() {
+    const t = document.getElementById('grid');
+    t.innerHTML = grid.map((row, r) => '<tr>' + row.map((v, c) => {
+      const head = r === 0 || c === 0;
+      const ph = r === 0 && c === 0 ? '' : head ? 'label' : '';
+      const cls = readNumber(v) ? ' class="num"' : '';
+      return `<td><input${cls} data-r="${r}" data-c="${c}" value="${esc(v)}" placeholder="${ph}" aria-label="Row ${r + 1}, column ${c + 1}" autocomplete="off"></td>`;
+    }).join('') + '</tr>').join('');
+    updateNext();
+  }
+  function updateNext() {
+    const nums = grid.flat().filter(v => readNumber(v)).length;
+    document.getElementById('toConf').disabled = nums < 2;
+  }
+  const gridEl = document.getElementById('grid');
+  gridEl.addEventListener('input', e => {
+    const i = e.target; if (!i.dataset) return;
+    if (tFirst === null) tFirst = (Date.now() - tStart) / 1000;
+    grid[+i.dataset.r][+i.dataset.c] = i.value;
+    i.classList.toggle('num', !!readNumber(i.value));
+    updateNext();
+  });
+  gridEl.addEventListener('change', () => { edits++; });
+  function reshape(fn) { fn(); reshapes++; drawGrid(); }
+  document.getElementById('addRow').onclick = () => { if (grid.length < 9) reshape(() => grid.push(grid[0].map(() => ''))); };
+  document.getElementById('addCol').onclick = () => { if (grid[0].length < 7) reshape(() => grid.forEach(r => r.push(''))); };
+  document.getElementById('delRow').onclick = () => { if (grid.length > 2) reshape(() => grid.pop()); };
+  document.getElementById('delCol').onclick = () => { if (grid[0].length > 2) reshape(() => grid.forEach(r => r.pop())); };
+
+  const confEl = document.getElementById('confLevels');
+  confEl.innerHTML = LEVELS.map(l => `<button type="button" class="conf-level" data-n="${l.n}"><span class="cl-name">${l.label}</span><span class="cl-pay">right +${l.right} · wrong ${l.wrong === 0 ? '0' : '−' + Math.abs(l.wrong)}</span></button>`).join('');
+  confEl.addEventListener('click', e => {
+    const b = e.target.closest('.conf-level'); if (!b) return;
+    level = LEVELS.find(l => l.n === +b.dataset.n);
+    [...confEl.children].forEach(x => x.classList.toggle('selected', x === b));
+    document.getElementById('lockIn').disabled = false;
+  });
+
+  function stage(id, pip) {
+    document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.id === id));
+    [...document.getElementById('pips').children].forEach((p, i) => {
+      p.classList.toggle('active', i === pip); p.classList.toggle('done', i < pip);
+    });
+  }
+  document.getElementById('toConf').onclick = () => { tBuildEnd = (Date.now() - tStart) / 1000; stage('stage-conf', 1); };
+  document.getElementById('backBuild').onclick = () => stage('stage-build', 0);
+  document.getElementById('lockIn').onclick = () => { report(); stage('stage-report', 2); };
+  document.getElementById('restart').onclick = start;
+
+  function showTable(el, g, marks) {
+    el.innerHTML = g.map((row, r) => '<tr>' + row.map((v, c) => {
+      const num = readNumber(v), m = marks && marks[r + ',' + c];
+      const cls = [num ? 'n' : (String(v).trim() ? 'lab' : 'empty'),
+                   m === 'correct' ? 'ok' : m === 'trap' ? 'trap' : m ? 'off' : ''].filter(Boolean).join(' ');
+      return `<td class="${cls}">${esc(v) || '&nbsp;'}</td>`;
+    }).join('') + '</tr>').join('');
+  }
+
+  function report() {
+    const behavior = { tBuild: tBuildEnd, tFirst: tFirst === null ? tBuildEnd : tFirst, edits, reshapes };
+    const dx = TableEngine.diagnose(grid, level, behavior);
+    const acc = Math.round(dx.right / dx.total * 100);
+
+    requestAnimationFrame(() => {
+      document.getElementById('fillConf').style.width = level.conf + '%';
+      document.getElementById('fillAcc').style.width = acc + '%';
+    });
+    document.getElementById('numConf').textContent = level.conf + '%';
+    document.getElementById('numAcc').textContent = dx.right + ' / ' + dx.total;
+
+    const h = document.getElementById('headline');
+    const off = dx.total - dx.right;
+    if (dx.allRight && level.n === 3) { h.className = 'gap-headline calibrated'; h.textContent = 'Every number in place, and you knew it.'; }
+    else if (dx.allRight) { h.className = 'gap-headline calibrated'; h.textContent = 'Every number in place. You were more right than you felt.'; }
+    else if (level.n === 3) { h.className = 'gap-headline blindspot'; h.textContent = `You felt certain, and ${off} of ${dx.total} numbers were not in place.`; }
+    else { h.className = 'gap-headline'; h.textContent = `${dx.right} of ${dx.total} numbers in place. Your doubt was fair.`; }
+    document.getElementById('diag').innerHTML =
+      `Scoring: <b>${level.label}</b> on a table that was ${dx.allRight ? '<b>right</b>' : '<b>not yet right</b>'}, so ${dx.score >= 0 ? '+' : '−'}${Math.abs(dx.score)} points.`;
+
+    showTable(document.getElementById('checked'), grid, dx.marks);
+
+    const items = [];
+    const rank = c => (c.trap && c.trap.tag === 'Follows from the percent slip' ? 1 : 0);
+    dx.cells.slice().sort((a, b) => rank(a) - rank(b)).forEach(c => {
+      const where = `${c.g.label}, ${c.t.label.toLowerCase()}`;
+      if (c.status === 'trap') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b><span class="ri-tag">${esc(c.trap.tag)}</span> ${esc(c.trap.say)}`);
+      else if (c.status === 'misplaced') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b> That number belongs to ${esc(c.belongs.g)}, ${esc(c.belongs.t.toLowerCase())}. This cell should hold ${c.want}.`);
+      else if (c.status === 'wrong') items.push(`<b>${esc(where)}: you wrote ${c.given}.</b> The passage gives ${c.want} here.`);
+      else if (c.status === 'conflict') items.push(`<b>${esc(where)} appears more than once</b>, with different numbers (${c.given.join(' and ')}).`);
+      else if (c.status === 'unlabelled') items.push(`<b>${esc(where)}: the right number (${c.want}) is in your table,</b> but its row and column do not say both the group and the book type.`);
+      else if (c.status === 'missing') items.push(`<b>${esc(where)} is missing.</b> Delta could not find a number labelled with both. It should be ${c.want}.`);
+    });
+    const explained = new Set(dx.cells.filter(c => c.status === 'unlabelled').map(c => c.want));
+    const rest = dx.loose.filter(f => !explained.has(f.v));
+    const unl = rest.filter(f => f.why === 'unlabelled').length, half = rest.filter(f => f.why === 'half').length;
+    if (unl) items.push(`<b>${unl} number${unl > 1 ? 's have' : ' has'} no label Delta could read.</b> Each number needs a group and a book type in its row or column.`);
+    if (half) items.push(`<b>${half} number${half > 1 ? 's have' : ' has'} only half a label.</b> Delta could tell the group or the book type, but not both.`);
+    const pct = dx.cells.some(c => c.facts.some(f => f.pct));
+    if (pct) items.push('<b>You typed a percent sign in the table.</b> The table holds counts of books, so every cell should be a whole number.');
+    const lay = {
+      'groups-down': 'You put the groups down the side and the book types across the top.',
+      'groups-across': 'You put the groups across the top and the book types down the side. That works just as well.',
+      'list': 'You made one long list, with each group and book type on its own row. All the numbers fit that way. A grid with groups one way and types the other puts them side by side, which makes comparing easier.',
+      'mixed': 'Your labels switch direction partway through, so some numbers are read across and some down.'
+    }[dx.layout];
+    if (lay) items.push(`<b>Layout.</b> ${lay}`);
+    const okTotals = dx.totals.filter(t => t.ok);
+    if (okTotals.length) items.push(okTotals.length === dx.totals.length
+      ? `<b>All ${okTotals.length} of your totals are right.</b> ${okTotals.length > 1 ? 'Each one is a check on the numbers it adds up.' : ''}`
+      : `<b>Right totals:</b> ${okTotals.map(t => esc(t.name.toLowerCase()) + ' (' + t.v + ')').join(', ')}.`);
+    dx.totals.filter(t => !t.ok).forEach(t => {
+      if (t.ownOk) items.push(`<b>Your total for ${esc(t.name.toLowerCase())} (${t.v}) adds up with your own numbers,</b> but the passage gives ${t.expected}. A total only checks what went into it.`);
+      else items.push(`<b>Your total for ${esc(t.name.toLowerCase())} (${t.v}) does not add up.</b> It should be ${t.expected}.`);
+    });
+    if (!dx.totals.length && !dx.allRight) items.push('<b>You did not add a total.</b> The passage gives 195 books in all. A total row is a free check on every number above it.');
+    const note = document.getElementById('note').value.trim();
+    if (note) {
+      const saw = [];
+      if (/fewer|less than|more than|比.{0,6}(少|多)|少于|少於/i.test(note)) saw.push('the “fewer than” sentence');
+      if (/percent|%|百分/i.test(note)) saw.push('the percent');
+      if (/\btotal|\bin all\b|合计|合計|总|總|一共/i.test(note)) saw.push('the totals');
+      if (saw.length) items.push(`<b>You named ${saw.join(' and ')} as the hard part.</b> ${dx.allRight ? 'And you got past it.' : 'Spotting it is the first half; the table shows whether the second half landed.'}`);
+    }
+    items.push(`<b>How you worked.</b> ${fmtSec(dx.behavior.tFirst)} of reading before your first entry, ${dx.behavior.edits} cell change${dx.behavior.edits === 1 ? '' : 's'}, ${dx.behavior.reshapes} change${dx.behavior.reshapes === 1 ? '' : 's'} to the table's shape, ${fmtSec(dx.behavior.tBuild)} in all.`);
+    if (dx.behaviorNote) items.push(`<b>Your certainty and your process disagree.</b> ${esc(dx.behaviorNote)}`);
+    document.getElementById('mirrorList').innerHTML = items.map(x => `<li><span>${x}</span></li>`).join('');
+
+    const [act, det] = TableEngine.nextStep(dx);
+    document.getElementById('nextAct').textContent = act;
+    document.getElementById('nextDet').textContent = det;
+  }
+
+  (function reference() {
+    const ref = [['', ...TASK.types.map(t => t.label), 'Total']];
+    TASK.groups.forEach(g => ref.push([g.label, ...TASK.types.map(t => String(TASK.truth[g.id][t.id])), String(GROUP_TOTAL[g.id])]));
+    ref.push(['Total', ...TASK.types.map(t => String(TYPE_TOTAL[t.id])), String(GRAND_TOTAL)]);
+    showTable(document.getElementById('reference'), ref, null);
+  })();
+
+  function start() {
+    grid = freshGrid(); level = null; tFirst = null; edits = 0; reshapes = 0; tStart = Date.now();
+    document.getElementById('note').value = '';
+    [...confEl.children].forEach(x => x.classList.remove('selected'));
+    document.getElementById('lockIn').disabled = true;
+    document.getElementById('fillConf').style.width = '0';
+    document.getElementById('fillAcc').style.width = '0';
+    drawGrid();
+    stage('stage-build', 0);
+  }
+  start();
+})();
+</script>
+</body>
+</html>

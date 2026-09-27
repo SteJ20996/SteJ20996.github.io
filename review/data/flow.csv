@@ -1,0 +1,13 @@
+key,label,count,status,basis
+identified_databases,Records found in 11 databases,85,recorded,"Search log, 29 May 2026 (ERIC re-run 9 June 2026)"
+identified_other,Records added from other sources (Google Scholar),1,recorded,"Screening kickoff note, 10 June 2026"
+after_dedup,Records after duplicates were removed,83,recorded,"Screening kickoff note, 10 June 2026"
+duplicates_removed,Duplicates removed,3,derived,85 + 1 - 83
+screened,Records screened on title and abstract,83,derived,Same as the records after duplicates were removed
+excluded_frontmatter,Conference proceedings front matter (volume records),38,recorded,"Screening kickoff note, 10 June 2026"
+screened_substantive,Records left for a close title and abstract reading,45,recorded,"Screening kickoff note, 10 June 2026"
+excluded_ta_other,Other exclusions on title and abstract,,pending,
+fulltext_assessed,Full texts assessed,,pending,
+excluded_fulltext,"Full texts excluded, with reasons",,pending,
+included,Studies included,2,provisional,Charting matrix; running count
+construct_only,Kept only for the construct analysis,1,provisional,Charting matrix; running count

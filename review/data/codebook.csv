@@ -1,0 +1,16 @@
+key,field,values,multi,note
+language,Language,EN / TC / SC,plus,Combinations are joined with + (for example EN+TC)
+source,Source database,WoS / Scopus / ERIC / IEEE / ACM / PsycINFO / EdSource / CNKI / Airiti / CiNii / SciELO / Backward / Forward / GS / arXiv,semicolon,
+level,Age band,Elementary / Middle / High / Undergraduate / Graduate / Professional / Adult learner / Mixed / NR / Not applicable,,
+prior_ai,Prior AI exposure,None reported / Some / Frequent users / Mixed / NR / Not applicable,,
+methodology,Methodology type,Quantitative / Qualitative / Mixed-methods / Conceptual (non-empirical),,
+design,Design type,Experimental / Quasi-experimental / Pre-post / Cross-sectional / Longitudinal / Case study / Action research / Design-based / Computational evaluation / Other (specify),,
+genai_role,GenAI role,Tool / Tutor / Collaborator / Evaluator / Other (specify),,Open category
+genai_system,GenAI system family,OpenAI GPT / Anthropic Claude / Google Gemini / Microsoft Copilot / Meta Llama / Domain-specific / Multiple compared / NR / Other (specify),,
+genai_modality,GenAI modality,Text-only / Multimodal text+image / Text+audio / Image-only / Other (specify),,
+activities,Activity types present,Read / Interpret / Construct / Critique,slash,
+primary_activity,Primary activity type,Read / Interpret / Construct / Critique / NR,,Must be one of the activity types present; NR when no single measured action can be isolated
+chart_types,Chart types,Bar / Line / Scatter / Histogram / Pie / Box plot / Kinematics graph / Geographic map / Network / Tree / Heatmap / Multi-panel / Other (specify),slash,Open category
+domain,Domain context,Physics / Statistics / Biology / Chemistry / Geography / Economics / Math (general) / Engineering / Social science / Cross-disciplinary / Other (specify),,
+measurement,Measurement target,End-state performance / Cognitive process trace / Mixed / Unclear,,
+audit,Audit status,Pending / Verified / Discrepancy resolved / Excluded (full-text) / Downgraded (§3.7),,

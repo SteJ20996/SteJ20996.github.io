@@ -33,6 +33,29 @@ linked to EdArXiv preprints):**
   Education (2026-06-02; the site says "under journal review", never the venue).
   Preprint (live): https://osf.io/preprints/edarxiv/4cr8j_v5
 
+**Scoping review (Chapter 2) and its page (added 2026-09-27, unmerged, awaiting owner
+review):** "Graphicacy in the Generative AI Era: A PRISMA-ScR Scoping Review of an
+Emerging Three-Way Intersection in Education" (Jia & Xu; R1 Jia, R2 Xu). Protocol
+registered on OSF 2026-05-26: https://osf.io/s8ebf/ (five RQs; RQ3, construct
+operationalization, carries the analytical weight). Source records live in the owner's
+Drive: `ScopingReview_Protocol`, `Search_Syntax` (Appendix A), `Charting_Codebook`
+(Appendix C, with the *1_Charting_Matrix* tab), `TA Screening Kickoff` (2026-06-10).
+State as of those records: 11 databases searched 2026-05-29 (85 records; ACM 75,
+Scopus 5, EdSource 3, WoS 2, all others 0; ERIC's count is the 2026-06-09 isolated
+re-run), +1 Google Scholar record, 83 after de-duplication, 38 proceedings
+front-matter records, 45 left for close title/abstract reading; later screening
+numbers are not recorded in Drive. Charting: S001 Hung & Lai 2025 and S002 Yan et al.
+2025 included (audit pending), S003 DataliVR excluded at full text but disputed
+("Disagreed (in discussion)", not a codebook value), S004 Kleiman & Fitzgerald
+downgraded to construct-only (its copyright notice forbids feeding the full text to AI
+tools: never open that PDF in a session).
+`review.html` + `review/` implement "the review as reproducible software": data CSVs,
+`review/build.py` (stdlib; `--import-charting` maps the matrix by Audit status and never
+reads outcome measures, key findings, limitations or audit notes), 11 automated checks
+(the page is not rewritten while one fails), PRISMA-ScR flow SVG with download, and an
+evidence map (chart skill × AI role / level / modality / measurement). Glyph ∩. The
+page is not linked from the homepage; linking it is the owner's call after review.
+
 **Live site:** https://stej20996.github.io/ (portfolio) · https://stej20996.github.io/platform.html (Delta vision page)
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
 **Working branch convention:** feature branches merged to `main` via PR (owner merges).
@@ -239,7 +262,8 @@ wording.
   hairline-ruled tiles (flex-wrap, gap 1px over a rule-colored ground); a zoom control
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
-  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC).
+  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Δ (Delta), ∅ (ACB), ≠ (MDC),
+  ∩ (scoping review, `review.html`).
   Exception (2026-08-24, delta#12, owner settled here after trying all-white-gold and
   all-black-gold): the homepage's Δ·Prototype tile alone is hardcoded to platform.html's
   black-gold (tile #1d1c19, text #f0ede4, brass #c9a45c) as a theme preview of the
@@ -308,6 +332,15 @@ GitHub's. A new project line starts its own counter at 1.
   CLAUDE.md rewrite that the 2026-09-08 handoff has since superseded, plus roughly 15k
   lines of Supervisor-Skills. Owner to decide: merge (then this file's §3/§4 win), rebase,
   or drop.
+- Scoping review page: owner (and Jiarui Xu, as co-author) to review `review.html`
+  before merge and before any homepage link; confirm with the chair that the in-progress
+  counts may be public. Data follow-ups the build already flags: CNKI and Airiti search
+  strings are paraphrases (verbatim copies from screenshots pending); ACM's recorded
+  string (title/abstract/keyword) differs from the executed full-text "Anywhere" run;
+  S002's charted reference lacks its DOI (10.1016/j.compedu.2025.105322). Not in the
+  data, for the owner to classify: the screening kickoff's agreement rule (≥75% raw
+  agreement on a 20-record pilot) differs from protocol §3.5 (Cohen's κ ≥ .70 on a 10%
+  subsample), which §5.1 lists as a substantive amendment needing an OSF update.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).

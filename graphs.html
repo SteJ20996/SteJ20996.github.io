@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Table Lab · Delta · Yizhen (Stephen) Jia</title>
-<meta name="description" content="A Delta prototype: turn a short passage into your own table, or start from a table and say what it shows. Then see what landed, and how sure you were." />
+<title>Graph Lab · Delta · Yizhen (Stephen) Jia</title>
+<meta name="description" content="A Delta prototype: turn words into a table, read tables, statistics charts and geometry figures, and say what they show. Then see what landed, and how sure you were." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -293,6 +293,27 @@
   .cloop span::before { content: '↺  '; color: var(--accent); }
   .cloop span.m::before { content: 'Δ  '; }
 
+
+  .band-b > .two-tile { flex: 1 1 22rem; }
+  .band-b > .traps-tile { flex: 1.6 1 28rem; }
+  .band-c > * { flex: 1 1 100%; min-width: 0; }
+  .klist.two { columns: 2 18rem; column-gap: 1.8rem; }
+  .klist.two li { break-inside: avoid; }
+  .cover-tile table.cover { max-width: 1100px; }
+  /* figures, the grid to click on, the coverage table */
+  .fig { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: .7rem .8rem .5rem; margin-bottom: .9rem; }
+  .fig svg { width: 100%; height: auto; display: block; }
+  .fig-cap { font-family: 'JetBrains Mono', monospace; font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .45rem; }
+  .fig .note { font-size: .82rem; color: #c9c4b6; margin-top: .4rem; }
+  .gridpick .hit { cursor: pointer; }
+  .gridpick .hit:hover { fill: rgba(201,164,92,.3); }
+  #qFigure .grid-wrap { margin-bottom: .9rem; }
+  table.cover { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: .72rem; margin-top: .6rem; }
+  table.cover th, table.cover td { border: 1px solid var(--rule); padding: .42rem .5rem; vertical-align: top; }
+  table.cover thead th { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left; }
+  table.cover tbody th { text-align: left; color: var(--ink); font-weight: 600; white-space: nowrap; }
+  table.cover td { color: #c9c4b6; }
+  table.cover td.gap { color: #6f6a5f; font-style: italic; }
   @media (max-width: 860px) {
     body { padding: 12px; }
     .zoomer { display: none; }
@@ -323,9 +344,9 @@
   <header class="tile mast">
     <div>
       <a class="backlink" href="platform.html">← Delta</a>
-      <p class="mast-over">Delta Prototype · Table Lab</p>
-      <h1>From words to a <em>table</em>, and back.</h1>
-      <p class="mast-tag">Build a table from a short passage, or start from a table and say what it shows. Then see what landed, and how sure you were.</p>
+      <p class="mast-over">Delta Prototype · Graph Lab</p>
+      <h1>Tables, charts and <em>figures</em>.</h1>
+      <p class="mast-tag">Turn a passage into a table. Read a table, a chart or a geometry figure and say what it shows. Then see what landed, and how sure you were.</p>
       <a class="arrowlink" href="#lab">→ Try it</a>
     </div>
     <div class="mast-art" aria-hidden="true">
@@ -348,45 +369,47 @@
   <div class="band band-a">
     <section class="tile">
       <p class="tile-label"><b>01</b> · The Skill</p>
-      <h3>Moving numbers between words and tables</h3>
-      <p>A lot of real math starts as a paragraph: a report, a news story, a word problem. Before you can compare anything, you have to pull the numbers out and put each one where it belongs.</p>
-      <p>The reverse is just as real. A table holds the facts, but you still have to say what they mean. Both steps are easy to get wrong without noticing.</p>
+      <h3>Reading and making pictures of math</h3>
+      <p>Tables, charts and geometry figures pack a lot of math into a small space. Reading them, drawing them, and noticing when one misleads are skills of their own. (The skill is called graphicacy.)</p>
+      <p>Each kind hides easy slips: a bar whose height is not its count, a figure that only looks like it has a right angle, a picture that doubles in width but grows four times in area.</p>
     </section>
     <section class="tile">
       <p class="tile-label"><b>02</b> · What Delta Looks At</p>
       <h3>Four things, all at once</h3>
       <ul class="klist">
         <li><b>Every number you place</b>Is each one in the right row and column?</li>
-        <li><b>The tricky sentences</b>"Fewer than", a percent, a total that has to be split.</li>
-        <li><b>How you read a table</b>Counts or shares, one group or all of them combined.</li>
+        <li><b>How a picture holds numbers</b>Height, area, length and position, and which one carries the count.</li>
+        <li><b>What a figure really tells you</b>What is given, and what only looks true.</li>
         <li><b>How sure you were</b>Set next to how you actually did.</li>
       </ul>
     </section>
     <section class="tile">
       <p class="tile-label"><b>03</b> · The Honest Part</p>
       <h3>Simple rules, and we say so</h3>
-      <p>The checking here is done by simple rules. They match your table labels against a word list, in English or 中文, and compare every number. Any sensible layout counts: groups down the side, groups across the top, or one long list.</p>
-      <p>What you write about a table is read by a keyword rule too. Neither rule can read everything a person might say. In the next phase, an AI model reads your labels and your words the way a teacher would.</p>
+      <p>The checking here is done by simple rules. Numbers, choices and points on a grid are checked exactly. Table labels are matched against a word list, in English or 中文, so any sensible layout counts.</p>
+      <p>What you write in your own words is read by a keyword rule, which cannot read everything a person might say. In the next phase, an AI model reads your labels and your words the way a teacher would.</p>
     </section>
   </div>
 
   <section class="tile" id="lab">
     <p class="tile-label"><b>04</b> · Live Demo</p>
-    <h3>Table Lab</h3>
-    <p class="lede">Pick a direction. <b>Words to a table</b> gives you a passage to turn into your own table, then a follow-up passage aimed at any slip. <b>A table to your reasoning</b> gives you a table, asks what it shows, then asks three questions about it. You get no feedback until the end of each.</p>
+    <h3>Graph Lab</h3>
+    <p class="lede">Pick a room. <b>Tables</b> has two directions: turn a passage into your own table, or say what a table shows. <b>Statistics charts</b> and <b>geometry figures</b> each give you three questions at a high school and adult level. Every question ends with how sure you are, and you get no feedback until the end.</p>
     <div class="demo-wrap">
       <div class="demo">
         <div class="demo-head">
-          <div class="title">&#916; &nbsp;Table Lab</div>
+          <div class="title">&#916; &nbsp;Graph Lab</div>
           <div class="demo-steps" id="pips"></div>
         </div>
         <div class="demo-body">
 
           <div class="stage active" id="stage-pick">
-            <div class="prompt-label">Pick a direction</div>
+            <div class="prompt-label">Pick a room</div>
             <div class="conf-levels pick-levels" id="pick">
-              <button type="button" class="conf-level" data-go="A"><span class="cl-name">Words → Table</span><span class="cl-pay">Read a passage and build your own table. A slip sends you to a passage aimed at it.</span></button>
-              <button type="button" class="conf-level" data-go="B"><span class="cl-name">Table → Your reasoning</span><span class="cl-pay">Say what a table shows in your own words, then answer three questions about it.</span></button>
+              <button type="button" class="conf-level" data-go="A"><span class="cl-name">Words → Table</span><span class="cl-pay">Turn a passage into your own table. A slip sends you to a passage aimed at it.</span></button>
+              <button type="button" class="conf-level" data-go="reading"><span class="cl-name">Table → Your reasoning</span><span class="cl-pay">Say what a table shows in your own words, then answer three questions.</span></button>
+              <button type="button" class="conf-level" data-go="charts"><span class="cl-name">Statistics charts</span><span class="cl-pay">A histogram, two box plots and a bar chart. High school and adult level.</span></button>
+              <button type="button" class="conf-level" data-go="figures"><span class="cl-name">Geometry figures</span><span class="cl-pay">Three views of a stack, a figure not drawn to scale, and an enlargement on a grid.</span></button>
             </div>
           </div>
 
@@ -472,7 +495,7 @@
 
           <div class="stage" id="stage-bitem">
             <div class="prompt-label" id="bItemLabel"></div>
-            <div class="grid-wrap"><table class="show" id="bTable2"></table></div>
+            <div id="qFigure"></div>
             <p class="stem" id="bStem"></p>
             <div id="bAnswer"></div>
             <div id="bWhyWrap">
@@ -504,12 +527,13 @@
               <div class="k">Delta's next move</div>
               <div class="act" id="bNextAct"></div>
               <div class="det" id="bNextDet"></div>
+              <div class="demo-actions" style="margin-top:.8rem"><button class="demo-btn primary" id="bGoNext"></button></div>
             </div>
             <div class="demo-actions">
-              <button class="demo-btn ghost" id="toWords">Words → Table</button>
+              <button class="demo-btn ghost" id="toRooms">All rooms</button>
               <button class="demo-btn ghost" data-restart>↺ Start over</button>
             </div>
-            <p class="seam-note"><b>Preview note.</b> Everything here runs in your browser, and nothing you type leaves this page. Numbers and choices are checked exactly. Your written reading and your reasons are checked by a small keyword rule that stands in for a real reader, and we say so plainly. In the next phase an AI model reads what you actually wrote and asks a follow-up question.</p>
+            <p class="seam-note"><b>Preview note.</b> Everything here runs in your browser, and nothing you type leaves this page. Charts and figures are drawn by the page itself. Numbers, choices and points are checked exactly. Your reasons are checked by a small keyword rule that stands in for a real reader, and we say so plainly. In the next phase an AI model reads what you actually wrote and asks a follow-up question.</p>
           </div>
 
         </div>
@@ -518,7 +542,7 @@
   </section>
 
   <div class="band band-b">
-    <section class="tile">
+    <section class="tile two-tile">
       <p class="tile-label"><b>05</b> · Two Directions</p>
       <h3>Words to a table, then a table to your own reasoning</h3>
       <div class="cdiag" aria-label="How the two directions connect">
@@ -534,18 +558,38 @@
       </div>
       <p style="margin-top:.7rem">These are two different skills. Going one way can be much harder than going back, so each gets its own practice.</p>
     </section>
-    <section class="tile">
+    <section class="tile traps-tile">
       <p class="tile-label"><b>06</b> · Where The Tricky Parts Come From</p>
       <h3>Each trap is a slip people commonly make</h3>
-      <ul class="klist">
-        <li><b>"Fewer than" read as take away</b>The sentence says fewer, but the number you need is the bigger one, so you add.</li>
-        <li><b>Copying a number from the sentence</b>The number in the sentence is a difference, not the count.</li>
+      <ul class="klist two">
+        <li><b>"Fewer than" read as take away</b>The sentence says fewer, but the number you need is the bigger one.</li>
         <li><b>A percent written as a count</b>35% of 80 books is 28 books, not 35.</li>
-        <li><b>A total used as a part</b>A group's total goes in a total cell, not in one of its parts.</li>
-        <li><b>Comparing counts, not shares</b>A bigger group can have more of something and still a smaller share of it.</li>
-        <li><b>Trusting the combined numbers</b>Putting groups together can flip a comparison that holds inside every group.</li>
+        <li><b>Comparing counts, not shares</b>A bigger group can have more of something and still a smaller share.</li>
+        <li><b>Trusting the combined numbers</b>Putting groups together can flip a comparison that holds inside each group.</li>
+        <li><b>A bar's height read as its count</b>When bars have different widths, the area shows how many.</li>
+        <li><b>A long piece of a box plot read as more</b>Each of the four pieces holds about a quarter of the data.</li>
+        <li><b>An axis that does not start at zero</b>A small gap can be drawn to look huge.</li>
+        <li><b>Counting the squares in one view</b>One square in a view can hide a whole column of cubes.</li>
+        <li><b>Trusting how a figure looks</b>Only what is given counts, not what the drawing suggests.</li>
+        <li><b>Area scaled like length</b>Double every length and the area grows four times.</li>
       </ul>
-      <p class="sources">Background: Duval (2006) on moving between ways of showing math; Lewis &amp; Mayer (1987) on "fewer than" wording; Hegarty, Mayer &amp; Monk (1995) on copying numbers from the text; Parker &amp; Leinhardt (1995) on percents; Martí et al. (2011) on building two-way tables; Friel, Curcio &amp; Bright (2001) on levels of reading a graph or table; Simpson (1951) on combined groups.</p>
+      <p class="sources">Background: Duval (2006) on moving between ways of showing math; Lewis &amp; Mayer (1987); Hegarty, Mayer &amp; Monk (1995); Parker &amp; Leinhardt (1995); Martí et al. (2011); Friel, Curcio &amp; Bright (2001); Simpson (1951); Cooper &amp; Shore (2008) and Kaplan et al. (2014) on histograms; Lem et al. (2013) on box plots; Pandey et al. (2015) on misleading charts; Ben-Chaim, Lappan &amp; Houang (1988) on views of solids; Duval (1995) and Hershkowitz (1989) on reading geometry figures; De Bock et al. (2002) on scaling area like length.</p>
+    </section>
+  </div>
+
+  <div class="band band-c">
+    <section class="tile cover-tile">
+      <p class="tile-label"><b>07</b> · What Each Room Covers</p>
+      <h3>Four things you can do with a picture</h3>
+      <p>Read it, make sense of it, make one yourself, or catch it misleading. Empty cells are still being written.</p>
+      <div class="grid-wrap"><table class="cover">
+        <thead><tr><th></th><th>Read</th><th>Make sense of</th><th>Make</th><th>Catch misleading</th></tr></thead>
+        <tbody>
+          <tr><th>Tables</th><td>Find one cell</td><td>Counts or shares; combined groups</td><td>Words to a table, three passages</td><td class="gap">next</td></tr>
+          <tr><th>Statistics charts</th><td>Uneven histogram</td><td>Pieces of a box plot</td><td class="gap">next</td><td>A cut-off axis</td></tr>
+          <tr><th>Geometry figures</th><td>Three views of a stack</td><td>Not drawn to scale</td><td>Enlarge on a grid</td><td class="gap">next</td></tr>
+        </tbody>
+      </table></div>
     </section>
   </div>
 
@@ -556,7 +600,7 @@
       <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
       <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
-    <span class="copy">© 2026 Yizhen (Stephen) Jia · Table Lab is an early prototype</span>
+    <span class="copy">© 2026 Yizhen (Stephen) Jia · Graph Lab is an early prototype</span>
   </footer>
 
 </main>
@@ -737,7 +781,7 @@
     task.grandTotal = sum(Object.values(task.groupTotal));
   });
 
-  const session = { done: new Set(), log: [], bDone: false };
+  const session = { done: new Set(), log: [] };
 
   // ══════════════════════════════════════════════════════════════════════
   //  TABLE ENGINE  (v0, rule-based)
@@ -851,91 +895,323 @@
         return { go: unseen.id, act: focus.size ? 'One more passage, with that slip in mind' : 'Labels first, numbers second',
                  det: focus.size ? 'Slow down on each comparison and each percent before you place a number.'
                                  : 'Name every row and column before any number goes in.' };
-      if (!session.bDone)
-        return { go: 'B', act: 'The other direction: a table to your own reasoning',
+      if (!session.done.has('reading'))
+        return { go: 'reading', act: 'The other direction: a table to your own reasoning',
                  det: 'Start from a table that is not so simple, say what it shows, then answer three questions about it.' };
+      const room = ['charts', 'figures'].find(r => !session.done.has(r));
+      if (room) return { go: room, act: ROOMS[room].label, det: room === 'charts' ? 'A histogram, two box plots and a bar chart, at a high school and adult level.' : 'Three views of a stack, a figure not drawn to scale, and an enlargement on a grid.' };
       if (unseen) return { go: unseen.id, act: 'Another passage', det: 'A new set of numbers with its own tricky sentences.' };
       return { go: null, act: 'That is the whole lab for now', det: 'More passages and tables are being written.' };
     }
   };
 
-  // ── Table → your reasoning ──────────────────────────────────────────────
-  // Inside each age group South has the higher share, but North is higher
-  // overall because most of its members are adults (Simpson, 1951).
-  const B_TASK = {
-    title: 'E-book use at two library branches, last month',
-    table: [
-      ['Branch', 'Age group', 'Members', 'Used e-books'],
-      ['North', 'Teens', '100', '20'],
-      ['North', 'Adults', '300', '180'],
-      ['North', 'All ages', '400', '200'],
-      ['South', 'Teens', '300', '90'],
-      ['South', 'Adults', '100', '70'],
-      ['South', 'All ages', '400', '160']
-    ],
-    items: [
-      { id: 'b1', reading: 'Read the data', type: 'number', answer: 70,
-        q: 'How many South adults used e-books?',
-        traps: [
-          { v: 100, tag: 'Read the wrong column', say: '100 is how many South adults are members. The used e-books column says 70.' },
-          { v: 180, tag: 'Read the wrong row', say: '180 is North adults. South adults used 70.' },
-          { v: 160, tag: 'Read the total row', say: '160 is every South member who used e-books. The adults row says 70.' }
-        ],
-        wrongSay: 'Find the South row for adults, then the used e-books column: 70.' },
-      { id: 'b2', reading: 'Read between the data', type: 'choice', answer: 'South',
-        q: 'Among adults, which branch had the higher share of members using e-books?',
-        choices: ['North', 'South', 'The same'],
-        why: 'Which numbers tell you?',
-        traps: [
-          { v: 'North', tag: 'Compared counts, not shares', say: 'North has more adult users, 180 against 70, but it also has three times as many adult members. As a share, North is 180 out of 300, which is 60%. South is 70 out of 100, which is 70%.' }
-        ],
-        wrongSay: 'North: 180 out of 300 is 60%. South: 70 out of 100 is 70%. South is higher.',
-        key: { re: /%|percent|share|rate|proportion|out of|\/|比例|百分|占|率/i, yes: 'Your reason compares shares, which is the fair way to compare groups of different sizes.', no: 'Your reason does not mention a share or a percent.' } },
-      { id: 'b3', reading: 'Read beyond the data', type: 'choice', answer: 'South',
-        q: 'Overall, 50% of North’s members used e-books, against 40% at South. Now look inside the age groups. Which branch has the higher share for teens and for adults?',
-        choices: ['North', 'South', 'It is different for teens and adults'],
-        why: 'How can one branch be ahead overall but not inside the groups?',
-        traps: [
-          { v: 'North', tag: 'Trusted the combined numbers', say: 'Teens: North 20 out of 100 (20%), South 90 out of 300 (30%). Adults: North 60%, South 70%. South is higher in both groups. North only wins overall because most of its members are adults, and adults use e-books more. Putting groups together can flip a comparison (this is called Simpson’s paradox).' }
-        ],
-        wrongSay: 'Teens: 20% at North, 30% at South. Adults: 60% at North, 70% at South. South is higher for both.',
-        key: { re: /more adults|mostly adults|most (of its |of the )?(members )?(are )?adults|mix|makeup|make-up|composition|different (sizes|numbers|groups)|weight|300 adults|成人多|大多是成人|多数是成人|多數是成人|人数不同|人數不同|构成|組成|组成|比例不同/i,
-               yes: 'Your reason names the cause: the two branches have very different mixes of teens and adults.',
-               no: 'Your reason does not mention that the branches have different mixes of teens and adults. That mix is what flips the result.' } }
-    ]
+  // ── Figures, drawn by the page itself ────────────────────────────────────
+  // Explicit colours so every figure reads the same on the dark sheet.
+  const FC = { axis: '#a49e90', rule: '#3d3a31', bar: '#c9a45c', soft: 'rgba(201,164,92,.22)', text: '#c9c4b6', ink: '#f0ede4', faint: 'rgba(240,237,228,.08)' };
+  const FFONT = 'Instrument Sans, sans-serif', FMONO = 'JetBrains Mono, monospace';
+  const svgWrap = (W, H, body, label) => `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">${body}</svg>`;
+  const T = (x, y, s, o = {}) => `<text x="${x}" y="${y}" fill="${o.fill || FC.text}" font-family="${o.mono ? FMONO : FFONT}" font-size="${o.size || 12}" text-anchor="${o.anchor || 'start'}"${o.italic ? ' font-style="italic"' : ''}${o.weight ? ` font-weight="${o.weight}"` : ''}${o.rot ? ` transform="rotate(${o.rot} ${x} ${y})"` : ''}>${esc(s)}</text>`;
+  const Ln = (x1, y1, x2, y2, stroke = FC.axis, w = 1) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${w}"/>`;
+  const figBox = (cap, svg, note) => `<div class="fig">${cap ? `<p class="fig-cap">${esc(cap)}</p>` : ''}${svg}${note ? `<p class="note">${esc(note)}</p>` : ''}</div>`;
+
+  // Bars are [from, to, people per 10 minutes]; the counts are 14, 36, 40, 60, 30.
+  const HIST = [[0, 10, 14], [10, 20, 36], [20, 30, 40], [30, 60, 20], [60, 120, 5]];
+  function histogramSVG() {
+    const W = 540, H = 272, L = 60, R = 18, Tp = 14, B = 50, pw = W - L - R, ph = H - Tp - B;
+    const X = m => L + m / 120 * pw, Y = v => Tp + ph - v / 40 * ph;
+    let s = '';
+    [0, 10, 20, 30, 40].forEach(v => { s += Ln(L, Y(v), W - R, Y(v), FC.rule); s += T(L - 8, Y(v) + 4, v, { anchor: 'end', size: 11, mono: true }); });
+    HIST.forEach(([a, b, d]) => { s += `<rect x="${X(a)}" y="${Y(d)}" width="${X(b) - X(a)}" height="${Y(0) - Y(d)}" fill="${FC.soft}" stroke="${FC.bar}" stroke-width="1.4"/>`; });
+    [0, 10, 20, 30, 60, 90, 120].forEach(m => { s += Ln(X(m), Y(0), X(m), Y(0) + 5); s += T(X(m), Y(0) + 18, m, { anchor: 'middle', size: 11, mono: true }); });
+    s += Ln(L, Y(0), W - R, Y(0)) + Ln(L, Tp, L, Y(0));
+    s += T(L + pw / 2, H - 8, 'Minutes to get to work', { anchor: 'middle' });
+    s += T(18, Tp + ph / 2, 'People per 10 minutes', { anchor: 'middle', rot: -90 });
+    return svgWrap(W, H, s, 'Histogram of commute times with bars of different widths');
+  }
+
+  const BOXES = [['Class A', [45, 55, 62, 70, 80]], ['Class B', [40, 60, 64, 68, 98]]];
+  function boxplotSVG() {
+    const W = 540, H = 196, L = 74, R = 18, Tp = 10, B = 44, pw = W - L - R;
+    const X = v => L + (v - 30) / 70 * pw;
+    let s = '';
+    for (let v = 30; v <= 100; v += 10) { s += Ln(X(v), Tp, X(v), H - B, FC.rule); s += T(X(v), H - B + 18, v, { anchor: 'middle', size: 11, mono: true }); }
+    s += T(L + pw / 2, H - 8, 'Quiz score', { anchor: 'middle' });
+    BOXES.forEach(([name, q], i) => {
+      const y = Tp + 36 + i * 64, h = 32;
+      s += T(L - 12, y + 4, name, { anchor: 'end', fill: FC.ink });
+      s += Ln(X(q[0]), y, X(q[1]), y, FC.axis, 1.4) + Ln(X(q[3]), y, X(q[4]), y, FC.axis, 1.4);
+      s += Ln(X(q[0]), y - 9, X(q[0]), y + 9, FC.axis, 1.4) + Ln(X(q[4]), y - 9, X(q[4]), y + 9, FC.axis, 1.4);
+      s += `<rect x="${X(q[1])}" y="${y - h / 2}" width="${X(q[3]) - X(q[1])}" height="${h}" fill="${FC.soft}" stroke="${FC.bar}" stroke-width="1.4"/>`;
+      s += Ln(X(q[2]), y - h / 2, X(q[2]), y + h / 2, FC.bar, 2.6);
+    });
+    return svgWrap(W, H, s, 'Box plots of quiz scores for two classes');
+  }
+
+  function truncatedSVG() {
+    const W = 400, H = 270, L = 62, R = 18, Tp = 22, B = 40, pw = W - L - R, ph = H - Tp - B;
+    const Y = v => Tp + ph - (v - 46) / 8 * ph;
+    let s = '';
+    [46, 48, 50, 52, 54].forEach(v => { s += Ln(L, Y(v), W - R, Y(v), FC.rule); s += T(L - 8, Y(v) + 4, v + '%', { anchor: 'end', size: 11, mono: true }); });
+    [['Plan A', 52, .16], ['Plan B', 48, .58]].forEach(([name, v, at]) => {
+      const x = L + pw * at, w = pw * .26;
+      s += `<rect x="${x}" y="${Y(v)}" width="${w}" height="${Y(46) - Y(v)}" fill="${FC.soft}" stroke="${FC.bar}" stroke-width="1.4"/>`;
+      s += T(x + w / 2, Y(v) - 7, v + '%', { anchor: 'middle', size: 12, mono: true, fill: FC.ink });
+      s += T(x + w / 2, H - B + 20, name, { anchor: 'middle', fill: FC.ink });
+    });
+    s += Ln(L, Y(46), W - R, Y(46)) + Ln(L, Tp, L, Y(46));
+    s += T(18, Tp + ph / 2, 'Support', { anchor: 'middle', rot: -90 });
+    return svgWrap(W, H, s, 'Bar chart of support for two plans');
+  }
+
+  // Front heights by column, right-side heights listed front to back, and the
+  // covered squares of the top view (row 0 is the back). The biggest stack that
+  // fits all three views has 11 cubes.
+  const VIEWS = { front: [3, 1, 2], side: [1, 3, 2], top: [[1, 0, 1], [1, 1, 1], [1, 0, 0]] };
+  function viewsSVG() {
+    const u = 26, W = 580, H = 206, base = 150;
+    let s = '';
+    const col = (x, h) => { let r = ''; for (let k = 0; k < h; k++) r += `<rect x="${x}" y="${base - (k + 1) * u}" width="${u}" height="${u}" fill="${FC.soft}" stroke="${FC.bar}" stroke-width="1.2"/>`; return r; };
+    const panel = (x0, heights, title, sub) => {
+      let r = Ln(x0 - 10, base, x0 + 3 * u + 10, base, FC.axis, 1.2);
+      heights.forEach((h, i) => { r += col(x0 + i * u, h); });
+      return r + T(x0 + 1.5 * u, base + 24, title, { anchor: 'middle', fill: FC.ink, weight: 600 }) + T(x0 + 1.5 * u, base + 42, sub, { anchor: 'middle', size: 11 });
+    };
+    s += panel(40, VIEWS.front, 'Front', 'as you face it');
+    s += panel(245, VIEWS.side, 'Right side', 'front is on the left');
+    const tx = 450, ty = base - 3 * u;
+    VIEWS.top.forEach((row, r) => row.forEach((on, c) => {
+      s += `<rect x="${tx + c * u}" y="${ty + r * u}" width="${u}" height="${u}" fill="${on ? FC.soft : 'none'}" stroke="${on ? FC.bar : FC.rule}" stroke-width="${on ? 1.2 : 1}"/>`;
+    }));
+    s += T(tx + 1.5 * u, base + 24, 'Top', { anchor: 'middle', fill: FC.ink, weight: 600 }) + T(tx + 1.5 * u, base + 42, 'front is at the bottom', { anchor: 'middle', size: 11 });
+    return svgWrap(W, H, s, 'Front, right side and top views of a stack of cubes');
+  }
+
+  function triangleSVG() {
+    const W = 380, H = 236, A = [190, 26], B = [52, 196], C = [328, 196], D = [190, 196];
+    const tick = (P, Q) => {
+      const mx = (P[0] + Q[0]) / 2, my = (P[1] + Q[1]) / 2, dx = Q[0] - P[0], dy = Q[1] - P[1], len = Math.hypot(dx, dy);
+      const nx = -dy / len * 7, ny = dx / len * 7;
+      return Ln(mx - nx, my - ny, mx + nx, my + ny, FC.bar, 2);
+    };
+    let s = '';
+    s += `<polygon points="${A} ${B} ${C}" fill="${FC.faint}" stroke="${FC.ink}" stroke-width="1.4"/>`;
+    s += Ln(A[0], A[1], D[0], D[1], FC.axis, 1.2) + tick(A, B) + tick(A, C);
+    s += T(A[0], A[1] - 8, 'A', { anchor: 'middle', fill: FC.ink, weight: 600 }) + T(B[0] - 12, B[1] + 5, 'B', { anchor: 'middle', fill: FC.ink, weight: 600 });
+    s += T(C[0] + 12, C[1] + 5, 'C', { anchor: 'middle', fill: FC.ink, weight: 600 }) + T(D[0], D[1] + 18, 'D', { anchor: 'middle', fill: FC.ink, weight: 600 });
+    s += T(W - 8, H - 6, 'Not drawn to scale', { anchor: 'end', italic: true, size: 11 });
+    return svgWrap(W, H, s, 'Triangle ABC with a point D on BC');
+  }
+
+  // Grid for the enlargement: x from 0 to 8, y from 0 to 5, O at the corner.
+  const GRID = { nx: 8, ny: 5, u: 48, L: 34, Tp: 14 };
+  const GX = x => GRID.L + x * GRID.u, GY = y => GRID.Tp + (GRID.ny - y) * GRID.u;
+  const ABC = { A: [1, 1], B: [3, 1], C: [1, 2] };
+  function gridSVG(points) {
+    const W = GRID.L + GRID.nx * GRID.u + 20, H = GRID.Tp + GRID.ny * GRID.u + 34;
+    let s = '';
+    for (let x = 0; x <= GRID.nx; x++) { s += Ln(GX(x), GY(0), GX(x), GY(GRID.ny), x ? FC.rule : FC.axis); if (x) s += T(GX(x), GY(0) + 18, x, { anchor: 'middle', size: 11, mono: true }); }
+    for (let y = 0; y <= GRID.ny; y++) { s += Ln(GX(0), GY(y), GX(GRID.nx), GY(y), y ? FC.rule : FC.axis); if (y) s += T(GX(0) - 10, GY(y) + 4, y, { anchor: 'end', size: 11, mono: true }); }
+    s += T(GX(0) - 10, GY(0) + 18, 'O', { anchor: 'middle', fill: FC.ink, weight: 600 });
+    s += `<polygon points="${['A', 'B', 'C'].map(k => GX(ABC[k][0]) + ',' + GY(ABC[k][1])).join(' ')}" fill="rgba(240,237,228,.1)" stroke="${FC.axis}" stroke-width="1.4"/>`;
+    Object.entries(ABC).forEach(([k, p]) => { s += T(GX(p[0]) - 9, GY(p[1]) + 16, k, { anchor: 'middle', size: 12 }); });
+    const placed = ['A', 'B', 'C'].filter(k => points[k]);
+    if (placed.length === 3) s += `<polygon points="${placed.map(k => GX(points[k][0]) + ',' + GY(points[k][1])).join(' ')}" fill="${FC.soft}" stroke="${FC.bar}" stroke-width="1.6"/>`;
+    placed.forEach(k => {
+      const [x, y] = points[k];
+      s += `<circle cx="${GX(x)}" cy="${GY(y)}" r="6" fill="${FC.bar}"/>` + T(GX(x) + 9, GY(y) - 9, k + '′', { fill: FC.bar, weight: 600, size: 13 });
+    });
+    for (let x = 0; x <= GRID.nx; x++) for (let y = 0; y <= GRID.ny; y++)
+      s += `<circle class="hit" data-x="${x}" data-y="${y}" cx="${GX(x)}" cy="${GY(y)}" r="13" fill="transparent"/>`;
+    return svgWrap(W, H, s, 'Grid with triangle ABC; click to place the enlarged points');
+  }
+
+  // ── The rooms: a table, statistics charts, geometry figures ──────────────
+  // In the table, South has the higher share inside each age group, but North
+  // is higher overall because most of its members are adults (Simpson, 1951).
+  const B_TABLE = [
+    ['Branch', 'Age group', 'Members', 'Used e-books'],
+    ['North', 'Teens', '100', '20'],
+    ['North', 'Adults', '300', '180'],
+    ['North', 'All ages', '400', '200'],
+    ['South', 'Teens', '300', '90'],
+    ['South', 'Adults', '100', '70'],
+    ['South', 'All ages', '400', '160']
+  ];
+  const tableFig = () => `<div class="grid-wrap"><table class="show">${B_TABLE.map(r => '<tr>' + r.map(v => `<td class="${/^\d+$/.test(v) ? 'n' : 'lab'}">${esc(v)}</td>`).join('') + '</tr>').join('')}</table></div>`;
+
+  const ROOMS = {
+    reading: {
+      id: 'reading', label: 'Table → your reasoning', blurb: 'Say what a table shows in your own words, then answer three questions about it.', title: 'E-book use at two library branches, last month', free: true, next: 'charts',
+      items: [
+        { reading: 'Read the data', type: 'number', answer: 70, figure: tableFig,
+          q: 'How many South adults used e-books?',
+          traps: [
+            { v: 100, tag: 'Read the wrong column', say: '100 is how many South adults are members. The used e-books column says 70.' },
+            { v: 180, tag: 'Read the wrong row', say: '180 is North adults. South adults used 70.' },
+            { v: 160, tag: 'Read the total row', say: '160 is every South member who used e-books. The adults row says 70.' }
+          ],
+          wrongSay: 'Find the South row for adults, then the used e-books column: 70.' },
+        { reading: 'Read between the data', type: 'choice', answer: 'South', figure: tableFig,
+          q: 'Among adults, which branch had the higher share of members using e-books?',
+          choices: ['North', 'South', 'The same'], why: 'Which numbers tell you?',
+          traps: [
+            { v: 'North', tag: 'Compared counts, not shares', say: 'North has more adult users, 180 against 70, but it also has three times as many adult members. As a share, North is 180 out of 300, which is 60%. South is 70 out of 100, which is 70%.' }
+          ],
+          wrongSay: 'North: 180 out of 300 is 60%. South: 70 out of 100 is 70%. South is higher.',
+          key: { re: /%|percent|share|rate|proportion|out of|\/|比例|百分|占|率/i, yes: 'Your reason compares shares, which is the fair way to compare groups of different sizes.', no: 'Your reason does not mention a share or a percent.' } },
+        { reading: 'Read beyond the data', type: 'choice', answer: 'South', figure: tableFig,
+          q: 'Overall, 50% of North’s members used e-books, against 40% at South. Now look inside the age groups. Which branch has the higher share for teens and for adults?',
+          choices: ['North', 'South', 'It is different for teens and adults'], why: 'How can one branch be ahead overall but not inside the groups?',
+          traps: [
+            { v: 'North', tag: 'Trusted the combined numbers', say: 'Teens: North 20 out of 100 (20%), South 90 out of 300 (30%). Adults: North 60%, South 70%. South is higher in both groups. North only wins overall because most of its members are adults, and adults use e-books more. Putting groups together can flip a comparison (this is called Simpson’s paradox).' }
+          ],
+          wrongSay: 'Teens: 20% at North, 30% at South. Adults: 60% at North, 70% at South. South is higher for both.',
+          key: { re: /more adults|mostly adults|most (of its |of the )?(members )?(are )?adults|mix|makeup|make-up|composition|different (sizes|numbers|groups)|weight|300 adults|成人多|大多是成人|多数是成人|多數是成人|人数不同|人數不同|构成|組成|组成|比例不同/i,
+                 yes: 'Your reason names the cause: the two branches have very different mixes of teens and adults.',
+                 no: 'Your reason does not mention that the branches have different mixes of teens and adults. That mix is what flips the result.' } }
+      ],
+      nextStep(R) {
+        const tag = x => R.some(r => r.trap && r.trap.tag === x);
+        if (tag('Trusted the combined numbers')) return ['Tables where putting groups together flips the answer', 'Before trusting an overall number, check it inside each group first.'];
+        if (tag('Compared counts, not shares')) return ['Tables where the groups are different sizes', 'Turn each count into a share of its own group before you compare.'];
+        if (R.some(r => !r.correct)) return ['Reading one cell at a time', 'Find the row first, then the column, and say both before you read the number.'];
+        return ['Statistics charts', 'The same kind of reading, now with a histogram, box plots and a bar chart.'];
+      }
+    },
+
+    charts: {
+      id: 'charts', label: 'Statistics charts', blurb: 'A histogram, two box plots and a bar chart, at a high school and adult level.', title: 'Statistics charts', next: 'figures',
+      items: [
+        { reading: 'Read', type: 'number', answer: 60,
+          figure: () => figBox('Commute times of 180 people', histogramSVG()),
+          q: 'How many of the 180 people took between 30 and 60 minutes to get to work?',
+          why: 'How did you get your number?',
+          traps: [
+            { v: 20, tag: 'Read the bar height as a count', say: 'The bar is 20 high, but the axis counts people per 10 minutes, and this bar is 30 minutes wide: 20 × 3 = 60. When bars have different widths, the area of a bar shows how many people it holds.' },
+            { v: 40, tag: 'Read the tallest bar', say: '40 belongs to the 20 to 30 minute bar. The 30 to 60 minute bar holds 20 × 3 = 60 people.' }
+          ],
+          wrongSay: 'The bar is 20 people per 10 minutes and 30 minutes wide, so it holds 20 × 3 = 60 people.',
+          key: { re: /area|width|wide|per 10|×\s*3|x\s*3|\*\s*3|times 3|three times|30 minutes|面积|宽|组距|組距|每10|每 10|乘3|乘以3|3倍/i, yes: 'Your reason uses the width of the bar, which is what turns its height into a count.', no: 'Your reason does not use the width of the bar. With uneven bars, height alone does not give the count.' } },
+        { reading: 'Make sense of', type: 'choice', answer: 'About the same number',
+          figure: () => figBox('Quiz scores, 32 students in each class', boxplotSVG()),
+          q: 'In Class B, the piece from the median to the top of the box (64 to 68) is short, and the top whisker (68 to 98) is long. Which piece holds more students?',
+          choices: ['The long top whisker', 'The short piece, 64 to 68', 'About the same number'],
+          why: 'Why?',
+          traps: [
+            { v: 'The long top whisker', tag: 'Read a long piece as more data', say: 'Each of the four pieces of a box plot holds about a quarter of the students, here about 8 of 32, whatever its length. A long piece means those scores are spread out, not that there are more of them.' },
+            { v: 'The short piece, 64 to 68', tag: 'Read a crowded piece as more data', say: 'The short piece has its 8 students packed close together. The long whisker has another 8, spread far apart. Each piece holds about a quarter.' }
+          ],
+          wrongSay: 'Each piece holds about a quarter of the class.',
+          key: { re: /quarter|25|fourth|each (part|piece|section)|same number|四分之一|25%|每段|每部分|一样多/i, yes: 'Your reason uses the rule that each piece holds a quarter of the data.', no: 'Your reason does not mention that each piece holds a quarter of the data.' } },
+        { reading: 'Catch misleading', type: 'choice', answer: 'Plan A has a little more support, about 1.1 times as much',
+          figure: () => figBox('Support for two plans', truncatedSVG()),
+          q: 'On this chart, Plan A’s bar looks about three times as tall as Plan B’s. What does the chart really show?',
+          choices: ['Plan A has about three times the support of Plan B', 'Plan A has a little more support, about 1.1 times as much', 'Plan B has more support than Plan A'],
+          why: 'What in the chart could mislead a reader?',
+          traps: [
+            { v: 'Plan A has about three times the support of Plan B', tag: 'Trusted the bar heights', say: 'The vertical axis starts at 46%, not at zero, so the bars show only the part above 46%. The real values are 52% and 48%: Plan A has 52 ÷ 48, about 1.08 times, the support of Plan B. Cutting off the bottom of an axis makes a small gap look large.' }
+          ],
+          wrongSay: 'The bars are labelled 52% and 48%, so Plan A is a little ahead.',
+          key: { re: /axis|zero|\b0\b|start|46|cut|truncat|bottom|纵轴|縱軸|坐标|从0|从零|不从|截断|截斷|起点/i, yes: 'Your reason names the axis that does not start at zero.', no: 'Your reason does not mention where the vertical axis starts. That is what makes the gap look big.' } }
+      ],
+      nextStep(R) {
+        const tag = x => R.some(r => r.trap && r.trap.tag === x);
+        if (tag('Read the bar height as a count') || tag('Read the tallest bar')) return ['Histograms with bars of different widths', 'Work out each bar’s area, width times height, before you count or compare.'];
+        if (tag('Read a long piece as more data') || tag('Read a crowded piece as more data')) return ['Box plots, piece by piece', 'Say “a quarter” for every piece before you compare lengths.'];
+        if (tag('Trusted the bar heights')) return ['Charts that stretch a small gap', 'Check where each axis starts before you trust a bar’s height.'];
+        if (R.some(r => !r.correct)) return ['One more pass through these charts', 'Read the axis labels first, then the bars.'];
+        return ['Geometry figures', 'Three views of a stack, a figure not drawn to scale, and an enlargement on a grid.'];
+      }
+    },
+
+    figures: {
+      id: 'figures', label: 'Geometry figures', blurb: 'Three views of a stack, a figure not drawn to scale, and an enlargement on a grid.', title: 'Geometry figures', next: null,
+      items: [
+        { reading: 'Read', type: 'number', answer: 11,
+          figure: () => figBox('Three views of one stack of cubes', viewsSVG()),
+          q: 'These three views show one stack of cubes. What is the greatest number of cubes the stack could have?',
+          why: 'How did you count?',
+          traps: [
+            { v: 6, tag: 'Counted the squares in one view', say: 'Each view shows 6 squares, but one square in a view can hide a whole column of cubes.' },
+            { v: 18, tag: 'Added the three views', say: 'Adding the views counts some cubes twice and misses others. Work square by square on the top view.' },
+            { v: 27, tag: 'Filled the whole box', say: 'The top view shows only 6 of the 9 squares are covered, so the stack cannot fill the whole 3 by 3 by 3 box.' }
+          ],
+          wrongSay: 'For each covered square on the top view, the tallest column that fits is the smaller of its front height and its side height. Adding those gives 2 + 3 + 1 + 2 + 2 + 1 = 11.',
+          key: { re: /smaller|min|lower|lesser|both views|each square|column|较小|較小|最小|取小|每一格|每一列/i, yes: 'Your reason works column by column, taking the smaller of the two heights.', no: 'Your reason does not work column by column. Each covered square can be as tall as the smaller of its two view heights.' } },
+        { reading: 'Make sense of', type: 'choice', answer: 'Angle B equals angle C',
+          figure: () => figBox('Given: AB = AC. D is a point on BC.', triangleSVG()),
+          q: 'Which statement must be true?',
+          choices: ['AD is perpendicular to BC', 'BD equals DC', 'Angle B equals angle C'],
+          why: 'Which given fact did you use?',
+          traps: [
+            { v: 'AD is perpendicular to BC', tag: 'Trusted how the figure looks', say: 'Nothing given says where D sits on BC. AD only looks perpendicular. From AB = AC alone, the triangle is isosceles, so its base angles are equal: angle B equals angle C.' },
+            { v: 'BD equals DC', tag: 'Trusted how the figure looks', say: 'D only looks like the midpoint. Nothing given places it there. From AB = AC alone, the base angles are equal: angle B equals angle C.' }
+          ],
+          wrongSay: 'From AB = AC, the triangle is isosceles, so angle B equals angle C.',
+          key: { re: /AB\s*=\s*AC|isosceles|equal sides|two sides|base angles|given|等腰|两边相等|兩邊相等|底角|已知/i, yes: 'Your reason starts from what is given, AB = AC.', no: 'Your reason does not start from the given fact AB = AC.' } },
+        { reading: 'Make', type: 'grid', area: 4,
+          expect: { A: [2, 2], B: [6, 2], C: [2, 4] },
+          q: 'Enlarge triangle ABC by a scale factor of 2, with the center at O. Click the grid to place A′, then B′, then C′. Click a point again to remove it.',
+          why: 'How did you place the points?',
+          pointTraps: [
+            { pts: { A: [3, 3], B: [5, 3], C: [3, 4] }, tag: 'Added 2 instead of doubling', say: 'Moving each point 2 across and 2 up slides the triangle without making it bigger. From O, every distance doubles: A(1, 1) goes to A′(2, 2), B(3, 1) to B′(6, 2), C(1, 2) to C′(2, 4).' },
+            { pts: { A: [1, 1], B: [5, 1], C: [1, 3] }, tag: 'Enlarged about A, not about O', say: 'That is a correct enlargement, but centered at A. Centered at O, every point doubles its distance from O: A′(2, 2), B′(6, 2), C′(2, 4).' }
+          ],
+          areaTraps: [
+            { v: 2, tag: 'Scaled area like length', say: 'Every length doubles, so the area grows 2 × 2 = 4 times. Expecting the area to double too is a very common slip.' },
+            { v: 8, tag: 'Used the rule for volume', say: 'Area grows by the square of the scale factor, 2 × 2 = 4. The cube, 2 × 2 × 2 = 8, is for volume.' }
+          ],
+          key: { re: /double|×\s*2|x\s*2|times 2|twice|from o|origin|multiply|distance|乘2|乘以2|翻倍|2倍|原点|原點|距离/i, yes: 'Your reason doubles each distance from O.', no: 'Your reason does not mention doubling the distance from O.' } }
+      ],
+      nextStep(R) {
+        const tag = x => R.some(r => (r.trap && r.trap.tag === x) || (r.parts && ((r.parts.ptTrap && r.parts.ptTrap.tag === x) || (r.parts.areaTrap && r.parts.areaTrap.tag === x))));
+        if (tag('Scaled area like length') || tag('Used the rule for volume')) return ['Scale factors, areas and volumes', 'Double a length, then count the unit squares inside before you trust a rule.'];
+        if (tag('Trusted how the figure looks')) return ['Figures that are not drawn to scale', 'List what is given before you look at the drawing.'];
+        if (tag('Counted the squares in one view') || tag('Added the three views') || tag('Filled the whole box')) return ['More stacks from three views', 'Work one covered square of the top view at a time.'];
+        if (R.some(r => !r.correct)) return ['One more pass through these figures', 'Start from the givens and the grid numbers, not from how things look.'];
+        return ['You have been through every room', 'More questions are being written for each one.'];
+      }
+    }
   };
+  const ROOM_ORDER = ['reading', 'charts', 'figures'];
 
   const ReadEngine = {
-    // First reading, before any question: a keyword sketch of what the learner
-    // noticed. (Phase 1: a model reads the sentence itself.)
+    // First reading of the table, before any question: a keyword sketch of what
+    // the learner noticed. (Phase 1: a model reads the sentence itself.)
     readFree(text) {
       const t = String(text || '').toLowerCase();
-      const branches = /north|south|北|南/.test(t);
-      const shares = /%|percent|share|rate|proportion|out of|比例|百分|占|率/.test(t);
-      const inside = /teen|adult|age|青少年|成人|年龄|年齡/.test(t);
-      const counts = /\b(20|90|70|180|160|200)\b/.test(t);
-      const northUp = /north[^.。!?]*\b(more|higher|better|bigger|larger|most)\b|北[^。]*?(多|高|好)/.test(t);
-      return { branches, shares, inside, counts, northUp };
+      return {
+        branches: /north|south|北|南/.test(t),
+        shares: /%|percent|share|rate|proportion|out of|比例|百分|占|率/.test(t),
+        inside: /teen|adult|age|青少年|成人|年龄|年齡/.test(t),
+        counts: /\b(20|90|70|180|160|200)\b/.test(t),
+        northUp: /north[^.。!?]*\b(more|higher|better|bigger|larger|most)\b|北[^。]*?(多|高|好)/.test(t)
+      };
     },
-    diagnose(item, answer, why, level, behavior) {
-      const given = item.type === 'number' ? (/\d/.test(answer) ? parseFloat(String(answer).replace(/[，,]/g, '').match(/-?\d+(?:\.\d+)?/)[0]) : null) : answer;
-      const correct = given === item.answer;
-      const trap = correct ? null : item.traps.find(t => t.v === given) || null;
-      const keyIdea = item.key ? item.key.re.test(why || '') : null;
+    diagnose(item, a, level, behavior) {
+      const num = x => /\d/.test(String(x)) ? parseFloat(String(x).replace(/[，,]/g, '').match(/-?\d+(?:\.\d+)?/)[0]) : null;
+      const keyIdea = item.key ? item.key.re.test(a.why || '') : null;
+      let given, correct, trap = null, parts = null;
+      if (item.type === 'grid') {
+        const same = (p, q) => !!p && !!q && p[0] === q[0] && p[1] === q[1];
+        const L = ['A', 'B', 'C'], k = p => p ? p.join(',') : '';
+        const exact = L.every(l => same(a.points[l], item.expect[l]));
+        const setEq = !exact && L.map(l => k(a.points[l])).sort().join('|') === L.map(l => k(item.expect[l])).sort().join('|');
+        const ptTrap = exact || setEq ? null : item.pointTraps.find(t => L.every(l => same(a.points[l], t.pts[l]))) || null;
+        const area = num(a.num), areaOk = area === item.area;
+        const areaTrap = areaOk ? null : item.areaTraps.find(t => t.v === area) || null;
+        parts = { ptsOk: exact || setEq, setEq, ptTrap, area, areaOk, areaTrap };
+        correct = parts.ptsOk && areaOk;
+        given = L.map(l => a.points[l] ? `${l}′(${a.points[l].join(', ')})` : `${l}′ missing`).join(' ') + `; area × ${area === null ? '?' : area}`;
+      } else {
+        given = item.type === 'number' ? num(a.answer) : a.answer;
+        correct = given === item.answer;
+        trap = correct ? null : item.traps.find(t => t.v === given) || null;
+      }
       let behaviorNote = null;
       if (level.n === 3 && behavior.t >= 90) behaviorNote = `said “Certain” but took ${fmtSec(behavior.t)} to answer`;
       else if (level.n === 1 && correct && behavior.t <= 15) behaviorNote = `said “Guessing” but got it right in ${fmtSec(behavior.t)}`;
-      return { item, given, correct, trap, keyIdea, level, marks: correct ? level.right : level.wrong, behavior, behaviorNote };
-    },
-    nextStep(results) {
-      const tag = x => results.some(r => r.trap && r.trap.tag === x);
-      if (tag('Trusted the combined numbers'))
-        return ['Tables where putting groups together flips the answer', 'Before trusting an overall number, check it inside each group first.'];
-      if (tag('Compared counts, not shares'))
-        return ['Tables where the groups are different sizes', 'Turn each count into a share of its own group before you compare.'];
-      if (results.some(r => r.trap) || results.some(r => !r.correct))
-        return ['Reading one cell at a time', 'Find the row first, then the column, and say both out loud before you read the number.'];
-      return ['Both directions in one task', 'Next you build a table from a passage and then say what it shows. That task is still being written.'];
+      return { item, given, correct, trap, parts, keyIdea, level, marks: correct ? level.right : level.wrong, behavior, behaviorNote };
     }
   };
 
@@ -1100,7 +1376,7 @@
     $('nextAct').textContent = next.act;
     $('nextDet').textContent = next.det;
     $('goNext').style.display = next.go ? '' : 'none';
-    $('goNext').onclick = () => next.go === 'B' ? startB() : startA(next.go);
+    $('goNext').onclick = () => ROOMS[next.go] ? startRoom(next.go) : startA(next.go);
 
     const ref = [['', ...task.types.map(t => t.label), 'Total']];
     task.groups.forEach(g => ref.push([g.label, ...task.types.map(t => String(task.truth[g.id][t.id])), String(task.groupTotal[g.id])]));
@@ -1109,48 +1385,77 @@
     $('lab').scrollIntoView({ block: 'start' });
   }
 
-  // ── Table → your reasoning flow ──────────────────────────────────────────
-  let bFreeText, tBFree, bAnswers, bResults, bIdx, tItem, bChanges;
-  $('bTitle').textContent = B_TASK.title;
-  showTable($('bTable'), B_TASK.table, null, null);
-  showTable($('bTable2'), B_TASK.table, null, null);
+  // ── Question rooms: a table, statistics charts, geometry figures ─────────
+  let room, qA, qR, qIdx, tItem, qChanges, freeText, tFree;
+  $('bTitle').textContent = ROOMS.reading.title;
+  $('bTable').innerHTML = B_TABLE.map(r => '<tr>' + r.map(v => `<td class="${/^\d+$/.test(v) ? 'n' : 'lab'}">${esc(v)}</td>`).join('') + '</tr>').join('');
   $('bFree').addEventListener('input', () => { $('bFreeNext').disabled = $('bFree').value.trim().length < 8; });
 
-  function startB() {
-    bAnswers = B_TASK.items.map(() => ({ answer: '', why: '', last: '' }));
-    bResults = []; bChanges = B_TASK.items.map(() => 0);
-    $('bFree').value = ''; $('bFreeNext').disabled = true;
-    tBFree = Date.now();
-    pips(B_TASK.items.length + 2, 0);
-    show('stage-bfree');
+  const offset = () => room.free ? 1 : 0;
+  const totalPips = () => room.items.length + offset() + 1;
+
+  function startRoom(id) {
+    room = ROOMS[id];
+    qA = room.items.map(() => ({ answer: '', why: '', last: '', points: {}, num: '' }));
+    qR = []; qChanges = room.items.map(() => 0);
+    if (room.free) {
+      $('bFree').value = ''; $('bFreeNext').disabled = true;
+      tFree = Date.now();
+      pips(totalPips(), 0);
+      show('stage-bfree');
+    } else showItem(0);
     $('lab').scrollIntoView({ block: 'start' });
   }
   $('bFreeNext').onclick = () => {
-    bFreeText = $('bFree').value.trim();
-    tBFree = (Date.now() - tBFree) / 1000;
+    freeText = $('bFree').value.trim();
+    tFree = (Date.now() - tFree) / 1000;
     showItem(0);
   };
 
+  function drawGridItem() {
+    $('qFigure').innerHTML = `<div class="fig gridpick">${gridSVG(qA[qIdx].points)}</div>`;
+  }
+  $('qFigure').addEventListener('click', e => {
+    const hit = e.target.closest('.hit');
+    if (!hit || room.items[qIdx].type !== 'grid') return;
+    const a = qA[qIdx], x = +hit.dataset.x, y = +hit.dataset.y;
+    const here = ['A', 'B', 'C'].find(k => a.points[k] && a.points[k][0] === x && a.points[k][1] === y);
+    if (here) { delete a.points[here]; qChanges[qIdx]++; }
+    else { const nextKey = ['A', 'B', 'C'].find(k => !a.points[k]); if (nextKey) a.points[nextKey] = [x, y]; }
+    drawGridItem();
+    checkItem();
+  });
+
   function showItem(i) {
-    bIdx = i; tItem = Date.now();
-    const item = B_TASK.items[i], a = bAnswers[i];
-    pips(B_TASK.items.length + 2, i + 1);
-    $('bItemLabel').textContent = `Question ${i + 1} of ${B_TASK.items.length} · ${item.reading}`;
+    qIdx = i; tItem = Date.now();
+    const item = room.items[i], a = qA[i];
+    pips(totalPips(), i + offset());
+    $('bItemLabel').textContent = `${room.label} · Question ${i + 1} of ${room.items.length} · ${item.reading}`;
     $('bStem').textContent = item.q;
-    if (item.type === 'number') {
-      $('bAnswer').innerHTML = '<label class="field-label" for="bNum">Your answer</label><input class="ans-input" id="bNum" type="text" inputmode="decimal" autocomplete="off">';
-      $('bNum').value = a.answer;
-      $('bNum').addEventListener('input', () => { a.answer = $('bNum').value; checkItem(); });
-      $('bNum').addEventListener('change', () => { if (a.last && a.last !== a.answer) bChanges[i]++; a.last = a.answer; });
+    if (item.type === 'grid') {
+      drawGridItem();
+      $('bAnswer').innerHTML = '<div class="demo-actions" style="margin:0 0 .4rem"><button type="button" class="demo-btn ghost" id="gridClear">Clear points</button></div>' +
+        '<label class="field-label" for="gridNum">The new triangle’s area is how many times the old one’s?</label><input class="ans-input" id="gridNum" type="text" inputmode="decimal" autocomplete="off">';
+      $('gridNum').value = a.num;
+      $('gridNum').addEventListener('input', () => { a.num = $('gridNum').value; checkItem(); });
+      $('gridClear').onclick = () => { if (Object.keys(a.points).length) qChanges[i]++; a.points = {}; drawGridItem(); checkItem(); };
     } else {
-      $('bAnswer').innerHTML = '<div class="options">' + item.choices.map((c, k) =>
-        `<button type="button" class="option${a.answer === c ? ' selected' : ''}" data-c="${esc(c)}"><span class="okey">${'ABC'[k]}</span>${esc(c)}</button>`).join('') + '</div>';
-      $('bAnswer').querySelectorAll('.option').forEach(b => b.onclick = () => {
-        if (a.answer && a.answer !== b.dataset.c) bChanges[i]++;
-        a.answer = b.dataset.c;
-        $('bAnswer').querySelectorAll('.option').forEach(x => x.classList.toggle('selected', x === b));
-        checkItem();
-      });
+      $('qFigure').innerHTML = item.figure ? item.figure() : '';
+      if (item.type === 'number') {
+        $('bAnswer').innerHTML = '<label class="field-label" for="bNum">Your answer</label><input class="ans-input" id="bNum" type="text" inputmode="decimal" autocomplete="off">';
+        $('bNum').value = a.answer;
+        $('bNum').addEventListener('input', () => { a.answer = $('bNum').value; checkItem(); });
+        $('bNum').addEventListener('change', () => { if (a.last && a.last !== a.answer) qChanges[i]++; a.last = a.answer; });
+      } else {
+        $('bAnswer').innerHTML = '<div class="options">' + item.choices.map((c, k) =>
+          `<button type="button" class="option${a.answer === c ? ' selected' : ''}" data-c="${esc(c)}"><span class="okey">${'ABC'[k]}</span>${esc(c)}</button>`).join('') + '</div>';
+        $('bAnswer').querySelectorAll('.option').forEach(b => b.onclick = () => {
+          if (a.answer && a.answer !== b.dataset.c) qChanges[i]++;
+          a.answer = b.dataset.c;
+          $('bAnswer').querySelectorAll('.option').forEach(x => x.classList.toggle('selected', x === b));
+          checkItem();
+        });
+      }
     }
     $('bWhyWrap').style.display = item.why ? '' : 'none';
     $('bWhyLabel').textContent = item.why || '';
@@ -1158,25 +1463,26 @@
     checkItem();
     show('stage-bitem');
   }
-  $('bWhy').addEventListener('input', () => { bAnswers[bIdx].why = $('bWhy').value; checkItem(); });
+  $('bWhy').addEventListener('input', () => { qA[qIdx].why = $('bWhy').value; checkItem(); });
   function checkItem() {
-    const item = B_TASK.items[bIdx], a = bAnswers[bIdx];
-    const answered = item.type === 'number' ? /\d/.test(a.answer) : !!a.answer;
+    const item = room.items[qIdx], a = qA[qIdx];
+    const answered = item.type === 'grid' ? Object.keys(a.points).length === 3 && /\d/.test(a.num)
+      : item.type === 'number' ? /\d/.test(a.answer) : !!a.answer;
     $('bItemNext').disabled = !answered || (item.why && a.why.trim().length < 3);
   }
   $('bItemNext').onclick = () => {
-    const i = bIdx, t = (Date.now() - tItem) / 1000;
-    askSure(`Question ${i + 1} of ${B_TASK.items.length} · How sure are you, honestly?`, level => {
-      bResults[i] = ReadEngine.diagnose(B_TASK.items[i], bAnswers[i].answer, bAnswers[i].why, level, { t, changes: bChanges[i] });
-      if (i + 1 < B_TASK.items.length) showItem(i + 1); else reportB();
+    const i = qIdx, t = (Date.now() - tItem) / 1000;
+    askSure(`${room.label} · Question ${i + 1} of ${room.items.length} · How sure are you, honestly?`, level => {
+      qR[i] = ReadEngine.diagnose(room.items[i], qA[i], level, { t, changes: qChanges[i] });
+      if (i + 1 < room.items.length) showItem(i + 1); else reportRoom();
     }, () => showItem(i));
   };
 
-  function reportB() {
-    session.bDone = true;
-    const R = bResults, n = R.length, right = R.filter(r => r.correct).length;
+  function reportRoom() {
+    session.done.add(room.id);
+    const R = qR, n = R.length, right = R.filter(r => r.correct).length;
     const conf = sum(R.map(r => r.level.conf)) / n, marks = sum(R.map(r => r.marks));
-    pips(n + 2, n + 1);
+    pips(totalPips(), totalPips() - 1);
     show('stage-breport');
     bars('bFillConf', 'bNumConf', 'bFillAcc', 'bNumAcc', conf, right / n * 100, right + ' / ' + n);
     const h = $('bHeadline');
@@ -1184,44 +1490,67 @@
     if (right === n) { h.className = 'gap-headline calibrated'; h.textContent = conf >= 80 ? 'All three right, and you knew it.' : 'All three right. You were more right than you felt.'; }
     else if (overSure) { h.className = 'gap-headline blindspot'; h.textContent = `You were certain on ${overSure === 1 ? 'an answer' : overSure + ' answers'} that did not hold.`; }
     else { h.className = 'gap-headline'; h.textContent = `${right} of ${n} right. Your doubt was fair where it counted.`; }
-    $('bDiag').innerHTML = `${esc(B_TASK.title)}. Certainty score across the three questions: <b>${marks >= 0 ? '+' : '−'}${Math.abs(marks)}</b>.`;
+    $('bDiag').innerHTML = `${esc(room.title)}. Certainty score across the three questions: <b>${marks >= 0 ? '+' : '−'}${Math.abs(marks)}</b>.`;
 
     $('bItems').innerHTML = R.map((r, i) => {
-      const it = r.item;
-      const ans = it.type === 'number' ? (r.given === null ? '(no number)' : r.given) : r.given;
-      let lines = `<p class="ri-line">You answered <b>${esc(ans)}</b> · ${esc(r.level.label)} (${r.marks >= 0 ? '+' : '−'}${Math.abs(r.marks)})</p>`;
-      if (!r.correct) lines += `<p class="ri-line">${r.trap ? `<span class="ri-tag">${esc(r.trap.tag)}</span> ${esc(r.trap.say)}` : esc(it.wrongSay)}</p>`;
+      const it = r.item, sign = r.marks >= 0 ? '+' : '−';
+      let lines;
+      if (it.type === 'grid') {
+        const p = r.parts;
+        lines = `<p class="ri-line">You placed <b>${esc(r.given)}</b> · ${esc(r.level.label)} (${sign}${Math.abs(r.marks)})</p>`;
+        lines += `<p class="ri-line">${p.ptsOk ? `<span class="ri-tag ok">points right</span>${p.setEq ? ' The triangle is right, though the labels A′, B′, C′ are swapped.' : ''}`
+          : p.ptTrap ? `<span class="ri-tag">${esc(p.ptTrap.tag)}</span> ${esc(p.ptTrap.say)}`
+          : 'The points should be A′(2, 2), B′(6, 2), C′(2, 4): every distance from O doubles.'}</p>`;
+        lines += `<p class="ri-line">${p.areaOk ? '<span class="ri-tag ok">area right</span> The area grows 2 × 2 = 4 times.'
+          : p.areaTrap ? `<span class="ri-tag">${esc(p.areaTrap.tag)}</span> ${esc(p.areaTrap.say)}`
+          : 'The area grows 2 × 2 = 4 times. You can check by counting unit squares inside both triangles.'}</p>`;
+      } else {
+        const ans = r.given === null ? '(no number)' : r.given;
+        lines = `<p class="ri-line">You answered <b>${esc(ans)}</b> · ${esc(r.level.label)} (${sign}${Math.abs(r.marks)})</p>`;
+        if (!r.correct) lines += `<p class="ri-line">${r.trap ? `<span class="ri-tag">${esc(r.trap.tag)}</span> ${esc(r.trap.say)}` : esc(it.wrongSay)}</p>`;
+      }
       if (it.key) lines += `<p class="ri-line"><span class="ri-tag${r.keyIdea ? ' ok' : ''}">${r.keyIdea ? 'key idea there' : 'key idea missing'}</span> ${esc(r.keyIdea ? it.key.yes : it.key.no)}</p>`;
       return `<div class="report-item ${r.correct ? 'correct' : 'wrong'}"><div class="ri-head"><span class="ri-title">${i + 1} · ${esc(it.reading)}: ${esc(it.q)}</span><span class="ri-meta">${r.correct ? 'right' : 'not right'}</span></div>${lines}</div>`;
     }).join('');
 
-    const f = ReadEngine.readFree(bFreeText), m = [];
-    const b3 = R[2];
-    if (!f.branches) m.push('<b>Your first reading did not compare the two branches.</b> Most people start somewhere else; the questions then made the comparison for you.');
-    else if (f.inside) m.push('<b>Your first reading already looked inside the age groups.</b> That is the step that catches the flip in question 3.');
-    else if (f.northUp) m.push(`<b>Your first reading said North did better.</b> That is true of the combined numbers. ${b3.correct ? 'Question 3 shows you caught how it flips inside each age group.' : 'Inside each age group it is the other way round, which is what question 3 was about.'}`);
-    if (f.branches && f.counts && !f.shares) m.push('<b>Your first reading compared counts.</b> When the groups are different sizes, shares are the fair comparison.');
-    else if (f.shares) m.push('<b>Your first reading used shares.</b> That is the fair way to compare groups of different sizes.');
-    m.push(`<b>How you worked.</b> ${fmtSec(tBFree)} on your first reading, then ${R.map(r => fmtSec(r.behavior.t)).join(', ')} on the three questions. ${sum(bChanges) ? 'You changed ' + sum(bChanges) + ' answer' + (sum(bChanges) === 1 ? '' : 's') + ' along the way.' : 'You did not change any answers.'}`);
-    R.filter(r => r.behaviorNote).forEach(r => m.push(`<b>Your certainty and your pace disagree on question ${R.indexOf(r) + 1}:</b> you ${esc(r.behaviorNote)}.`));
-    m.push('<span style="color:var(--muted)">Your first reading was sorted by a simple keyword rule, so treat these notes as a rough sketch.</span>');
+    const m = [];
+    if (room.free) {
+      const f = ReadEngine.readFree(freeText), b3 = R[2];
+      if (!f.branches) m.push('<b>Your first reading did not compare the two branches.</b> Most people start somewhere else; the questions then made the comparison for you.');
+      else if (f.inside) m.push('<b>Your first reading already looked inside the age groups.</b> That is the step that catches the flip in question 3.');
+      else if (f.northUp) m.push(`<b>Your first reading said North did better.</b> That is true of the combined numbers. ${b3.correct ? 'Question 3 shows you caught how it flips inside each age group.' : 'Inside each age group it is the other way round, which is what question 3 was about.'}`);
+      if (f.branches && f.counts && !f.shares) m.push('<b>Your first reading compared counts.</b> When the groups are different sizes, shares are the fair comparison.');
+      else if (f.shares) m.push('<b>Your first reading used shares.</b> That is the fair way to compare groups of different sizes.');
+    }
+    const keyed = R.filter(r => r.item.key), keyHits = keyed.filter(r => r.keyIdea).length;
+    const rightNoKey = R.filter(r => r.correct && r.item.key && !r.keyIdea).length;
+    if (keyed.length) m.push(`<b>Your reasons named the key idea in ${keyHits} of ${keyed.length} questions.</b>${rightNoKey ? ` ${rightNoKey === 1 ? 'One right answer came' : rightNoKey + ' right answers came'} without the reason behind it. That kind of answer is the easiest to lose next time.` : ''}`);
+    const ch = sum(qChanges);
+    m.push(`<b>How you worked.</b> ${room.free ? fmtSec(tFree) + ' on your first reading, then ' : ''}${R.map(r => fmtSec(r.behavior.t)).join(', ')} on the three questions. ${ch ? 'You changed ' + ch + ' answer' + (ch === 1 ? '' : 's') + ' along the way.' : 'You did not change any answers.'}`);
+    R.forEach((r, i) => { if (r.behaviorNote) m.push(`<b>Your certainty and your pace disagree on question ${i + 1}:</b> you ${esc(r.behaviorNote)}.`); });
+    m.push('<span style="color:var(--muted)">Your written reasons were read by a simple keyword rule, so treat those notes as a rough sketch.</span>');
     $('bMirror').innerHTML = m.map(x => `<li><span>${x}</span></li>`).join('');
 
-    const [act, det] = ReadEngine.nextStep(R);
+    const go = ROOM_ORDER.find(id => !session.done.has(id) && ROOM_ORDER.indexOf(id) > ROOM_ORDER.indexOf(room.id)) || ROOM_ORDER.find(id => !session.done.has(id));
+    let [act, det] = room.nextStep(R);
+    if (right === n) [act, det] = go ? [ROOMS[go].label, ROOMS[go].blurb] : ['You have been through every room', 'More questions are being written for each one.'];
     $('bNextAct').textContent = act;
     $('bNextDet').textContent = det;
+    const btn = $('bGoNext');
+    btn.parentElement.style.display = go ? '' : 'none';
+    if (go) { btn.textContent = `Go on: ${ROOMS[go].label} →`; btn.onclick = () => startRoom(go); }
     $('lab').scrollIntoView({ block: 'start' });
   }
-  $('toWords').onclick = () => startA(A_TASKS.find(t => !session.done.has(t.id)) ? A_TASKS.find(t => !session.done.has(t.id)).id : 'library');
+  $('toRooms').onclick = () => pickStage();
 
   // ── Start ────────────────────────────────────────────────────────────────
   $('pick').addEventListener('click', e => {
     const b = e.target.closest('[data-go]'); if (!b) return;
-    if (b.dataset.go === 'A') startA('library'); else startB();
+    if (b.dataset.go === 'A') startA('library'); else startRoom(b.dataset.go);
   });
   function pickStage() { pips(1, 0); show('stage-pick'); }
   document.querySelectorAll('[data-restart]').forEach(b => b.onclick = () => {
-    session.done.clear(); session.log = []; session.bDone = false; pickStage();
+    session.done.clear(); session.log = []; pickStage();
   });
   pickStage();
 })();

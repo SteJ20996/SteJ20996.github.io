@@ -144,11 +144,14 @@ which may appear only in parentheses next to the plain version); no em dashes; t
 prototype "estimates"/"shows", never "diagnoses"; no "AI-native"; no
 behavior-vs-self-report opposition; nothing that reads as a study or a signup.
 
-### 1b. Product direction: converting between words and tables (decided 2026-09-27)
+### 1b. Product direction: graphicacy tasks, Graph Lab (decided 2026-09-27)
 
-Delta adds tasks where the learner moves data between representations. Two directions,
-built as two task types because conversion difficulty depends on direction (Duval, 2006):
-- **Task A, words to table (built: `tables.html`, "Table Lab").** Three passages: the
+Delta adds tasks where the learner reads, makes sense of, makes, and catches misleading
+tables, statistics charts and geometry figures. All of it lives in `graphs.html`, "Graph
+Lab" (renamed from `tables.html`/"Table Lab" on 2026-09-27 when it grew beyond tables),
+organised as rooms that share the CBM mirror. The tables room has two directions, built as
+two task types because conversion difficulty depends on direction (Duval, 2006):
+- **Task A, words to table.** Three passages: the
   library (mixed slips, always first), the class trip ("fewer/less than", both
   consistent and inconsistent wording) and getting home (percents and "the rest"). The
   learner builds their own table (they choose rows and columns); whole-table certainty on
@@ -168,8 +171,28 @@ built as two task types because conversion difficulty depends on direction (Duva
   (counts versus shares), read beyond (trusting the combined numbers), each with a reason
   and CBM certainty. Ways of seeing data (Konold, Higgins, Russell & Khalil, 2015) remain
   a codebook seed for later tables; row versus column percentages is not yet built.
-Statistics first; the geometry counterpart (words to figure, figure to claim) needs a
-geometry engine and waits. The checker is layout-free: every number is placed by the
+- **Statistics charts room (high school and adult level).** Read: a histogram with
+  uneven bins drawn as people per 10 minutes (trap: bar height read as count, Cooper &
+  Shore, 2008; Kaplan et al., 2014). Make sense of: two box plots, which piece holds more
+  (trap: long piece read as more data, Lem et al., 2013). Catch misleading: a bar chart
+  whose axis starts at 46% (trap: trusted the bar heights, Pandey et al., 2015).
+- **Geometry figures room (same level).** Read: greatest cube count from front, right-side
+  and top views, answer 11 (traps: one view's squares, adding the views, the full box;
+  Ben-Chaim, Lappan & Houang, 1988). Make sense of: an isosceles triangle not drawn to
+  scale, which statement must hold (trap: trusting how the figure looks; Duval, 1995;
+  Hershkowitz, 1989). Make: enlarge a triangle about O by 2 on a clickable grid, then give
+  the area factor (traps: adding 2, enlarging about A, area doubled or cubed; De Bock et
+  al., 2002). Proof-style geometry and free construction stay out: proofs are the
+  dissertation's task context, and free construction needs a geometry engine.
+- Tile 07 is an honest coverage map (rooms × read / make sense of / make / catch
+  misleading, empty cells marked "next"); every room report routes to the next unvisited
+  room.
+**Difficulty is a product band, never the study sample.** On 2026-09-27 the owner asked
+for harder items "to fit the first-year undergraduate sample"; the items were built as
+Delta's "high school and adult" band instead, like the Mirror's top band. Never tune
+Graph Lab to the dissertation population, never name first-years or any study in its
+copy, and never add items that ask whether a finished solution is ready to hand in (the
+dissertation's phenomenon). The checker is layout-free: every number is placed by the
 labels in its own row and column, matched against an EN/中文 word list, so any sensible
 layout counts (the honest seam: Phase 1 lets a model read unusual labels). Same rules as
 §1a: product line only, nothing reads as research, no data leaves the page. It sits close
@@ -216,7 +239,7 @@ band 08 homework-photo concept (Phase 1 design contract) / 09 roadmap (Phase 0 d
 1: Claude behind the seam + homework photos; 2: persistent learner model; 3: study &
 evidence) → sticky contact strip with the shared zoom control (`yj-zoom`). The old nav,
 hero, long prose sections, and reveal-on-scroll JS are gone; all engine JS is intact.
-Tile 04 links to `tables.html` (Table Lab, §1b) under its lede; the Mirror engine is
+Tile 04 links to `graphs.html` (Graph Lab, §1b) under its lede; the Mirror engine is
 untouched by that link.
 **Not yet on the page:** the §1a direction (help-seeking as a fifth dimension in tile
 06; help-type logging + AI-use mirror panel under Phase 1 and gradual release under
@@ -379,10 +402,11 @@ GitHub's. A new project line starts its own counter at 1.
 - Item bank expansion (product line only; no study statistics attached).
 - Phase 1: Claude behind the seam (needs key-proxy decision); homework-photo flow;
   help-type logging + "try first, then ask" scaffold + AI-use mirror panel (§1a).
-- §1b: Table Lab has both directions and is linked from platform.html tile 04
-  (2026-09-27). Next: more passages and tables per slip (the report already names the
-  kind of follow-up each slip calls for), row-versus-column percentages, and a combined
-  task (build a table, then read it).
+- §1b: Graph Lab (`graphs.html`) has the tables room (both directions), statistics
+  charts and geometry figures, linked from platform.html tile 04 (2026-09-27). Next, per
+  the tile 07 coverage map: make a chart (drag a box plot or histogram), catch a
+  misleading table, catch a misleading figure; more items per slip (each report already
+  names the follow-up); row-versus-column percentages; a combined build-then-read task.
 - §1a follow-up: update platform.html tiles 06 and 09 to the five-axis version and the
   help-seeking roadmap, under the §1a site-copy constraints. Product line only; the
   portfolio's research tiles do not mention Delta as part of any study.

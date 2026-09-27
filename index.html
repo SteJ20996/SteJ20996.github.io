@@ -216,6 +216,11 @@
     .about p.dim { display: none; }
   }
 
+  /* Laptop-height screens: drop the About tile's closing aside so three paper tiles still fit one screen. */
+  @media (min-width: 861px) and (max-height: 940px) {
+    .about p.dim { display: none; }
+  }
+
   /* ===== Mobile ===== */
   @media (max-width: 860px) {
     body { padding: 12px; }
@@ -297,7 +302,7 @@
       <h3>Delta · The Calibration Mirror</h3>
       <p>A prototype tutor that works out what you understand from how you work, then adjusts what comes next. Graph Lab adds tables, charts and geometry figures.</p>
       <a class="arrowlink main" href="platform.html">→ Try the demo</a>
-      <a class="arrowlink sub" href="graphs.html">Graph Lab</a>
+      <a class="arrowlink sub" href="graphs.html">Try Graph Lab</a>
       <span class="glyph">Δ</span>
     </section>
 
@@ -322,6 +327,15 @@
       <p>With AI, a student can hand in work that is correct and complete while knowing, at that moment, that they do not understand it. This paper gives that experience a name and works out what it is.</p>
       <a class="arrowlink" href="mdc.html">→ Read more</a>
       <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv</a>
+    </section>
+
+    <section class="tile paper review">
+      <span class="ptag">Scoping review · Interim version</span>
+      <h3>Graphicacy in the Generative AI Era</h3>
+      <p class="sub">A PRISMA-ScR scoping review of an emerging three-way intersection in education · with Jiarui Xu</p>
+      <p>The review maps the studies where charts, generative AI and learning meet. This interim version shows the search and the studies found so far, as of about mid-June 2026.</p>
+      <a class="arrowlink" href="review.html">→ Read more</a>
+      <a class="arrowlink sub" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF</a>
     </section>
 
   </div>

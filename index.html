@@ -132,24 +132,22 @@
   .res-line b { display: block; font-weight: 600; font-size: .8rem; }
   .res-line span { color: var(--muted); font-size: .73rem; }
 
-  /* Delta tile: black-gold, matching platform.html's theme */
-  .delta { background: #1d1c19; color: #f0ede4; overflow: hidden; display: block; text-decoration: none; }
-  .delta:hover { background: #262420; }
-  .delta .tile-label { color: #a49e90; }
-  .delta .tile-label b { color: #c9a45c; }
-  .delta h3 { color: #f0ede4; }
-  .delta p { color: #b8b4a9; }
-  .delta .glyph {
+  /* Quidence tile: the learning site's own colors (navy ground, teal accents), a preview of www.quidence.com */
+  .quidence { background: #142236; color: #f3f6fb; overflow: hidden; display: block; text-decoration: none; }
+  .quidence:hover { background: #1b2d47; }
+  .quidence .tile-label { color: #9fb0c6; }
+  .quidence .tile-label b { color: #71ddc5; }
+  .quidence h3 { color: #ffffff; }
+  .quidence p { color: #c8d5e4; }
+  .quidence .glyph {
     position: absolute; right: .3rem; bottom: -1.4rem;
     font-family: 'DM Serif Display', serif;
-    font-size: 6.2rem; line-height: 1; color: #c9a45c; opacity: .45;
+    font-size: 6.2rem; line-height: 1; color: #62c4af; opacity: .35;
     pointer-events: none;
   }
-  .delta .arrowlink { color: #c9a45c; }
-  /* The demo link's overlay keeps the whole tile clickable; Graph Lab sits above it. */
-  .delta .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
-  .delta .arrowlink.sub { position: relative; z-index: 1; color: #a49e90; }
-  .delta .arrowlink.sub:hover { color: #c9a45c; }
+  .quidence .arrowlink { color: #71ddc5; }
+  /* The link's overlay keeps the whole tile clickable. */
+  .quidence .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
 
   /* Paper tiles */
   .paper .ptag {
@@ -297,13 +295,12 @@
       </ul>
     </section>
 
-    <section class="tile delta">
-      <p class="tile-label"><b>Δ</b> · Prototype</p>
-      <h3>Delta · The Calibration Mirror</h3>
-      <p>A prototype tutor that works out what you understand from how you work, then adjusts what comes next. Graph Lab adds tables, charts and geometry figures.</p>
-      <a class="arrowlink main" href="platform.html">→ Try the demo</a>
-      <a class="arrowlink sub" href="graphs.html">Try Graph Lab</a>
-      <span class="glyph">Δ</span>
+    <section class="tile quidence">
+      <p class="tile-label"><b>Q</b> · Learning site</p>
+      <h3>Quidence · Mathematics &amp; Science</h3>
+      <p>Choose a course in mathematics, statistics, or introductory physics, review an idea, and test your understanding with problems that have several parts. Your work stays in your browser.</p>
+      <a class="arrowlink main" href="https://www.quidence.com/" target="_blank" rel="noopener">→ Open Quidence</a>
+      <span class="glyph">Q</span>
     </section>
 
   </div>

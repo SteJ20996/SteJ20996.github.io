@@ -209,6 +209,22 @@ wording.
   laptop-height screens (861px+ wide, 940px or less tall) hide the About tile's closing
   aside (`.about p.dim`) so the homepage still fits one screen from 1280×800 to
   2560×1440; the 820px compact mode is otherwise unchanged.
+  Photo ground on the homepage only (since site#2, 2026-10-09; owner's choice after three
+  mockups: masthead band, light wash, frosted tiles): `assets/yosemite-light.webp` (the
+  owner's own Yosemite Tunnel View photo, IMG_6641, 1920×1440, about 85 KB) sits in a fixed
+  `body::before` layer (not `background-attachment: fixed`, which iOS Safari ignores). The
+  tiles are frosted glass: paper at 50% over `backdrop-filter: blur(16px)`, hairlines drawn
+  by a 1px box-shadow because the sheet ground is now transparent; the contact strip is at
+  86%; the Quidence tile stays opaque. The image file carries the readability work:
+  desaturated to 70%, shadows lifted (gamma 0.55), blended 25% toward paper, plus an extra
+  blend toward paper rising to 40% over the lower 55% of the frame so the dark forest never
+  sits behind text, then a 1px blur. Homepage `--muted` is #565d6a (the paper pages keep
+  #737a86) so the smallest grey text keeps a 4.0:1 floor against the darkest spot behind
+  it, the value the old grey had on plain paper; body text stays above 5.4, headings above
+  10. Fallbacks: tiles go to 90% without backdrop-filter support and to 94% under
+  `prefers-reduced-transparency`. Rule for any change here: measure the darkest 5% of the
+  backdrop under each text block (headless Chromium + PIL) and keep that floor; with this
+  photo 50% is the lowest tile opacity that passes.
   `platform.html` is a short Quidence page in the portfolio chassis (kept so old links
   land somewhere); `local-llm.html` keeps the original warm-paper terracotta system.
   Fonts are shared across all systems; the section-numbering pattern continues.
@@ -248,7 +264,9 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
 - `delta#n` — the Delta line (`index.html`, `platform.html`, `CLAUDE.md`); closed at
   `delta#19` (2026-10-08, the PR that replaced Delta with Quidence on the site)
 - `site#n` — the portfolio line from 2026-10-08 on (`index.html`, `acb.html`, `mdc.html`,
-  `review.html` + `review/`, `platform.html`, `README.md`, `CLAUDE.md`); starts at `site#1`
+  `review.html` + `review/`, `platform.html`, `README.md`, `CLAUDE.md`); starts at `site#1`.
+  Assigned: `site#1` = PR #21 (CNAME for stephenjia.com, 2026-10-09); `site#2` = homepage
+  photo ground (2026-10-09)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)
 
 Every PR title carries its reference as a `[line#n]` prefix. Already assigned: PRs #1–#8
@@ -290,14 +308,17 @@ GitHub's. A new project line starts its own counter at 1.
   Quidence, nothing on the portfolio needs to change. This repo never hosts or copies
   Quidence content (owner, 2026-10-08).
 - stephenjia.com: domain bought on Cloudflare (2026-10-08); zone active (DNS setup
-  "Full"). site#1 adds the `CNAME` file and switches README/CLAUDE.md to the new
-  address. Order that avoids downtime: Cloudflare records first (see the Repo line), then
+  "Full"). site#1 (PR #21, opened 2026-10-09) adds the `CNAME` file and switches
+  README/CLAUDE.md to the new address. Order that avoids downtime: Cloudflare records first (see the Repo line), then
   merge site#1, then GitHub Settings → Pages: wait for "DNS check successful", tick
   "Enforce HTTPS" (certificate can take up to a day). Optional afterwards: verify the
   domain under the account's Pages settings (prevents takeover); Cloudflare Email Routing
   for a you@stephenjia.com forward; turning on the Cloudflare proxy (orange cloud) only
   with SSL/TLS mode "Full (strict)". Content inventory lives in the owner's Claude Doc
   "stephenjia.com 内容整理".
+- Homepage photo ground (site#2): the paper pages (`acb.html`, `mdc.html`, `review.html`,
+  `platform.html`) stay plain graphite-indigo on purpose; the owner asked for the homepage.
+  If it is ever extended, reuse the recipe and the contrast floor recorded in §5.
 - Delta is retired on the site (2026-10-08, delta#19); its design record stays at commit
   07937b2 (§2). The project's own name remains SteJ Delta Project (STEJDP) in the
   aliases so the owner's references keep routing here.

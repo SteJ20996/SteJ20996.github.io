@@ -15,11 +15,11 @@
     --cream: #dfe1e6;
     --accent: #31548e;
     --accent-light: #6d8cbf;
-    --muted: #565d6a;        /* one notch darker than the paper pages: small text sits on frosted tiles here */
+    --muted: #4b5260;        /* darker than the paper pages' #737a86: small text sits on glass here */
     --rule: #c6cad2;
     --card-bg: #fafbfc;
     --shadow: 0 6px 40px rgba(22,24,30,.10);
-    --body: #454a54;
+    --body: #3a3f49;         /* the paper pages keep #454a54 */
     --ink-hover: #1f2430;
     --inv-muted: #8b93a2;
     --inv-body: #aeb5c2;
@@ -60,15 +60,18 @@
   .band-main > .about { flex-grow: 1.25; }
   .band-papers > * { flex: 1 1 26rem; min-width: 0; }
 
-  /* Frosted tiles: half-opaque paper over the blurred photo; the 1px shadow draws the hairline grid
-   that the sheet's rule-coloured ground used to provide. */
+  /* Glass tiles: a quarter of paper over the blurred photo, and a paper-coloured halo under every
+   glyph so the text always sits on light ground; the 1px shadow draws the hairline grid that the
+   sheet's rule-coloured ground used to provide. */
   .tile {
-    background: rgba(243,244,246,.5);
-    -webkit-backdrop-filter: blur(16px) saturate(.85); backdrop-filter: blur(16px) saturate(.85);
+    background: rgba(243,244,246,.25);
+    -webkit-backdrop-filter: blur(16px) saturate(.9); backdrop-filter: blur(16px) saturate(.9);
     box-shadow: 0 0 0 1px var(--rule);
     padding: 1rem 1.2rem; position: relative; transition: background .25s;
   }
-  .tile:hover { background: rgba(250,251,252,.62); }
+  .tile:hover { background: rgba(250,251,252,.4); }
+  .tile:not(.quidence), .foot { text-shadow: 0 0 3px rgba(243,244,246,.9), 0 0 1px rgba(243,244,246,.9); }
+  .glyph { text-shadow: none; }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .tile { background: rgba(243,244,246,.9); }
   }

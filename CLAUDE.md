@@ -60,10 +60,14 @@ evidence map (chart skill × AI role / level / modality / measurement). Glyph �
 ACB and MDC: tag "Scoping review · Interim version", → Read more to review.html, OSF as
 the small link. Keep that tile's "interim" wording in step with review.json.
 
-**Live site:** https://stej20996.github.io/ (portfolio; paper pages `acb.html`, `mdc.html`,
+**Live site:** https://stephenjia.com/ (custom domain since site#1, 2026-10-08; the old
+https://stej20996.github.io/ forwards there; paper pages `acb.html`, `mdc.html`,
 `review.html`; `platform.html` is a short Quidence page). **Quidence:** https://www.quidence.com/
 (the owner's learning site, separate repo SteJ20996/AA01; not yet deployed as of 2026-10-08).
-**Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`)
+**Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`; the custom
+domain is set by the `CNAME` file at the repo root, DNS lives on Cloudflare: four A records
+`@` → 185.199.108.153 / .109.153 / .110.153 / .111.153 and a `www` CNAME →
+`stej20996.github.io`, DNS-only during setup; HTTPS is enforced in Settings → Pages)
 **Working branch convention:** feature branches merged to `main` via PR (owner merges).
 
 **Lines in this repo.** Everything below describes the portfolio line (`index.html`,
@@ -285,10 +289,15 @@ GitHub's. A new project line starts its own counter at 1.
   already links there (homepage tile, `platform.html`, README). When the owner deploys
   Quidence, nothing on the portfolio needs to change. This repo never hosts or copies
   Quidence content (owner, 2026-10-08).
-- stephenjia.com: domain bought on Cloudflare (2026-10-08). Content inventory and
-  migration plan live in the owner's Claude Doc "stephenjia.com 内容整理"; steps when the
-  owner says go: `CNAME` file, Cloudflare A records to GitHub Pages + `www` CNAME, Pages
-  custom domain + HTTPS, README/CLAUDE.md live-site lines. Not started.
+- stephenjia.com: domain bought on Cloudflare (2026-10-08); zone active (DNS setup
+  "Full"). site#1 adds the `CNAME` file and switches README/CLAUDE.md to the new
+  address. Order that avoids downtime: Cloudflare records first (see the Repo line), then
+  merge site#1, then GitHub Settings → Pages: wait for "DNS check successful", tick
+  "Enforce HTTPS" (certificate can take up to a day). Optional afterwards: verify the
+  domain under the account's Pages settings (prevents takeover); Cloudflare Email Routing
+  for a you@stephenjia.com forward; turning on the Cloudflare proxy (orange cloud) only
+  with SSL/TLS mode "Full (strict)". Content inventory lives in the owner's Claude Doc
+  "stephenjia.com 内容整理".
 - Delta is retired on the site (2026-10-08, delta#19); its design record stays at commit
   07937b2 (§2). The project's own name remains SteJ Delta Project (STEJDP) in the
   aliases so the owner's references keep routing here.

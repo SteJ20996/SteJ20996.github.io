@@ -206,9 +206,9 @@ wording.
   preview of www.quidence.com; the rest of the portfolio stays graphite-indigo. The tile
   is a `<section>`: its "→ Open Quidence" link stretches an overlay over the whole tile,
   so any click opens www.quidence.com in a new tab. With three paper tiles,
-  laptop-height screens (861px+ wide, 940px or less tall) hide the About tile's closing
-  aside (`.about p.dim`) so the homepage still fits one screen from 1280×800 to
-  2560×1440; the 820px compact mode is otherwise unchanged.
+  laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
+  the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
+  1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
   Photo ground on the homepage only (site#2, 2026-10-09, at 50% tiles; site#3 the same day
   took it to 25% after the owner asked twice for more of the photo): `assets/yosemite-light.webp`
   (the owner's own Yosemite Tunnel View photo, IMG_6641, 1920×1440, about 135 KB) sits in a
@@ -228,6 +228,16 @@ wording.
   colour at 4.5:1 or better; as merged, headings 12, body 6.9, small grey 5.1 (4.9 at
   1280×720). The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
+  Type scale (site#3, 2026-10-09, owner's ask: a little larger on computers, unchanged on
+  phones): the homepage root font is `--base-fs`, 16px on phones, 17px on desktop
+  (min-width 861px) and 14.5px in the compact tier (desktop, 820px or less tall; it was
+  13.5px). The zoom control multiplies `--base-fs` (`calc(var(--base-fs) * z)`), so every
+  tier keeps its own steps. The laptop tier (861px+ wide, 1000px or less tall) tightens tile
+  and masthead padding so the larger type still fits one screen at 1440×900, 1536×864 and
+  the 1470×956 / 1512×982 MacBook sizes. Any tier that re-pads `.tile` must use
+  `.tile:not(.foot)`: the contact strip is a tile too, and its 6.2rem left padding is what keeps
+  the zoom buttons off the email (the compact tier had this bug until site#3);
+  the paper pages keep their 16px root.
   `platform.html` is a short Quidence page in the portfolio chassis (kept so old links
   land somewhere); `local-llm.html` keeps the original warm-paper terracotta system.
   Fonts are shared across all systems; the section-numbering pattern continues.

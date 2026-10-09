@@ -15,7 +15,7 @@
     --cream: #dfe1e6;
     --accent: #31548e;
     --accent-light: #6d8cbf;
-    --muted: #737a86;
+    --muted: #565d6a;        /* one notch darker than the paper pages: small text sits on frosted tiles here */
     --rule: #c6cad2;
     --card-bg: #fafbfc;
     --shadow: 0 6px 40px rgba(22,24,30,.10);
@@ -26,6 +26,13 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 16px; }
+  /* Photo ground: Yosemite Tunnel View (the owner's photo). The file itself has its dark lower
+     third lifted so no text ever sits on a dark patch. A fixed layer instead of
+     background-attachment: fixed, which iOS Safari ignores. */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--cream) url(assets/yosemite-light.webp) center / cover no-repeat;
+  }
   body {
     font-family: 'Instrument Sans', sans-serif;
     background: var(--cream);
@@ -40,7 +47,7 @@
     min-height: calc(100dvh - 36px);
     max-width: 1500px;
     margin: 0 auto;
-    background: var(--rule);
+    background: transparent;
     border: 1px solid var(--rule);
     box-shadow: var(--shadow);
     display: flex;
@@ -53,8 +60,21 @@
   .band-main > .about { flex-grow: 1.25; }
   .band-papers > * { flex: 1 1 26rem; min-width: 0; }
 
-  .tile { background: var(--paper); padding: 1rem 1.2rem; position: relative; transition: background .25s; }
-  .tile:hover { background: var(--card-bg); }
+  /* Frosted tiles: half-opaque paper over the blurred photo; the 1px shadow draws the hairline grid
+   that the sheet's rule-coloured ground used to provide. */
+  .tile {
+    background: rgba(243,244,246,.5);
+    -webkit-backdrop-filter: blur(16px) saturate(.85); backdrop-filter: blur(16px) saturate(.85);
+    box-shadow: 0 0 0 1px var(--rule);
+    padding: 1rem 1.2rem; position: relative; transition: background .25s;
+  }
+  .tile:hover { background: rgba(250,251,252,.62); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .tile { background: rgba(243,244,246,.9); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .tile { background: rgba(243,244,246,.94); }
+  }
 
   .tile-label {
     font-family: 'JetBrains Mono', monospace;
@@ -169,7 +189,8 @@
     z-index: 40;
     border-top: 1px solid var(--rule);
     margin-top: -1px;
-    background: var(--paper);
+    background: rgba(243,244,246,.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
     gap: .6rem 1.6rem;
     padding: .6rem 1.8rem .6rem 6.2rem;

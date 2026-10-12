@@ -7,7 +7,7 @@
 <title>Yizhen (Stephen) Jia · Math Educator &amp; Researcher</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #16181e;
@@ -117,7 +117,7 @@
     letter-spacing: -.01em;
   }
   .mast h1 em { font-style: italic; color: var(--accent); }
-  .mast-tag { margin-top: .5rem; font-size: .84rem; color: var(--muted); max-width: 52ch; }
+  .mast-tag { margin-top: .5rem; font-size: .84rem; color: var(--muted); max-width: 52ch; font-weight: 580; }
   .mast-art { flex-shrink: 0; width: clamp(96px, 11vw, 148px); height: clamp(96px, 11vw, 148px); }
   .mast-art svg { width: 100%; height: 100%; }
   .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
@@ -134,15 +134,16 @@
   .about h3 { font-size: 1.15rem; }
   .about p { font-size: .85rem; line-height: 1.6; }
   .about p + p { margin-top: .7rem; }
-  .tile p { font-size: .78rem; color: var(--body); font-weight: 500; }
-  .plainlist small, .paper .sub, .res-line span { font-weight: 500; }   /* medium weight reads crisper on glass */
+  .tile p { font-size: .78rem; color: var(--body); font-weight: 600; }
+  .plainlist small, .paper .sub, .res-line span { font-weight: 600; }   /* semibold reads crisper on glass (owner asked twice for bolder text) */
+  .tile-label, .plainlist .yr, .foot { font-weight: 500; }
   .tile p.dim { color: var(--muted); }
 
   .plainlist { list-style: none; font-size: .78rem; }
   .plainlist li { padding: .34rem 0; border-bottom: 1px dashed var(--rule); }
   .plainlist li:last-child { border-bottom: none; }
   .plainlist .yr { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); white-space: nowrap; }
-  .plainlist b { font-weight: 600; display: block; }
+  .plainlist b { font-weight: 700; display: block; }
   .plainlist small { display: block; color: var(--muted); font-size: .72rem; }
 
   .arrowlink {
@@ -157,7 +158,7 @@
 
   .res-line { padding: .45rem 0; border-bottom: 1px dashed var(--rule); font-size: .78rem; }
   .res-line:last-of-type { border-bottom: none; }
-  .res-line b { display: block; font-weight: 600; font-size: .8rem; }
+  .res-line b { display: block; font-weight: 700; font-size: .8rem; }
   .res-line span { color: var(--muted); font-size: .73rem; }
 
   /* Sites slot: the owner's two sites stacked in one slot of the main band, each card in its own
@@ -280,6 +281,12 @@
     .about p + p { margin-top: .55rem; }
     .paper .ptag { margin-bottom: .35rem; }
     .paper .sub { margin-bottom: .25rem; }
+  }
+
+  /* Laptop heights above the compact tier: the masthead circle set the masthead's height, and the
+     semibold text needs that room (the compact tier keeps its own 84px circle). */
+  @media (min-width: 861px) and (min-height: 821px) and (max-height: 1000px) {
+    .mast-art { width: 116px; height: 116px; }
   }
 
   /* ===== Mobile ===== */

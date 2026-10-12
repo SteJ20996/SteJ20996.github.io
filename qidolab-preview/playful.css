@@ -73,12 +73,14 @@
 .preview-tools>summary{cursor:pointer;list-style:none;min-height:44px;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:#fcfbfe;border:1px solid #d4cddd;border-radius:99px;box-shadow:0 4px 20px #15353b18}
 .preview-tools>summary::-webkit-details-marker{display:none}
 .preview-tools[open]>summary{border-color:#a0bdab}
-.preview-tool-panel{position:absolute;right:0;bottom:56px;width:304px;max-width:calc(100vw - 36px);padding:18px;border:1px solid #d4cddd;border-radius:18px;background:#fcfbfe;box-shadow:0 12px 34px #15353b25}
+.preview-tool-panel{max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px);overflow:auto;overscroll-behavior:contain;position:absolute;right:0;bottom:56px;width:304px;max-width:calc(100vw - 36px);padding:18px;border:1px solid #d4cddd;border-radius:18px;background:#fcfbfe;box-shadow:0 12px 34px #15353b25}
 .preview-tool-panel h2{font:500 15px/1.5 system-ui,sans-serif;margin:0 0 5px}
 .preview-tool-panel p{font:12px/1.6 system-ui,sans-serif;margin:0 0 14px;color:#5c7167}
 .preview-tool-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .preview-tool-modes button{min-height:44px;border:1px solid #c7d8cb;border-radius:9px;padding:9px;background:#f0f5ed;color:#3d604d;font:12px/1.5 system-ui,sans-serif;white-space:normal}
 .preview-tool-modes button[aria-pressed=true]{background:#f3dfac;border-color:#b59858;color:#745322}
+.preview-tool-modes [data-palette][aria-pressed=true]{background:#ddd2ed;border-color:#c9b6e3;color:#53416c}
+.preview-tool-panel hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .preview-tools button:focus-visible,.preview-tools summary:focus-visible{outline:3px solid #278465;outline-offset:3px}
 .preview-tool-close{min-height:44px;padding:8px 0;border:0;background:transparent;color:#426755;font:12px system-ui,sans-serif;margin-top:8px;width:100%}
 @media(prefers-reduced-motion:no-preference){.activity-nav a.is-fully-completed,.activity-nav a[data-preview-gold=true]{animation:gold-arrival .6s ease-out}@keyframes gold-arrival{from{box-shadow:0 0 0 6px #ddb74635}to{box-shadow:0 4px 14px -7px #af7e3a55}}}

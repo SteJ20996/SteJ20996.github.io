@@ -9,7 +9,8 @@ registerTranslations({
   crownCompletedReplay: {'zh-CN':'挑战极限已完成',en:'Extreme completed','es-MX':'Reto extremo completado'},
   solidCrownReplay: {'zh-CN':'未看答案完成 · 实心金色皇冠',en:'Solved without viewing the answer · Solid gold crown','es-MX':'Resuelto sin ver la solución · Corona dorada sólida'},
   hollowCrownReplay: {'zh-CN':'看过极限答案 · 空心金色皇冠',en:'Extreme answer viewed · Hollow gold crown','es-MX':'Solución del reto extremo vista · Corona dorada hueca'},
-  completionGuide: {'zh-CN':'标题左侧 ✓：原题已完成；右侧 ★：“再走一步”已完成。标题上方皇冠：实心表示未看答案完成“挑战极限”；空心表示看过极限答案，即使之后完成也保持空心。不要求先拿 ★。可随时回来继续或重玩，记录只保存在此浏览器。',en:'Left ✓: original completed. Right ★: extra step completed. Crown above: solid means the extreme was solved without viewing its answer; hollow means its answer was viewed and stays hollow even after solving. ★ is optional. Return any time; progress stays in this browser.','es-MX':'✓ a la izquierda: reto original completado. ★ a la derecha: paso extra completado. Corona arriba: sólida si resolviste el reto extremo sin ver la solución; hueca si la viste, incluso si después lo resuelves. ★ es opcional. Vuelve cuando quieras; el progreso se guarda en este navegador.'},
+  fullyCompletedReplay: {'zh-CN':'三项集齐 · 这一题变金了',en:'All three cleared · Gold unlocked','es-MX':'Los tres retos superados · Dorado desbloqueado'},
+  completionGuide: {'zh-CN':'✓ 原题拿下 · ★ 再走一步 · 皇冠：挑战极限。三项齐了，这一题就镀金。极限可以先挑战；看过答案的皇冠保持空心。想重玩就回来，进度保存在此浏览器。',en:'✓ Original · ★ Extra step · Crown: extreme. Collect all three to turn this stop gold. You can try the extreme before the extra step. Viewed answers leave hollow crowns. Come back anytime; progress stays in this browser.','es-MX':'✓ Reto original · ★ Paso extra · Corona: reto extremo. Junta los tres y este juego se vuelve dorado. Puedes probar el extremo antes del paso extra. Ver la solución deja la corona hueca. Vuelve cuando quieras; el progreso se guarda en este navegador.'},
   clockCompletionGuide: {'zh-CN':'想点亮完成标记？亲手走到目标 8 或 2。',en:'For the completion check, build a path to target 8 or 2.','es-MX':'Para obtener la marca de completado, llega a la meta 8 o 2.'},
   tilesCompletionGuide: {'zh-CN':'想点亮完成标记？试试“相邻少两格”，亲手铺满棋盘。',en:'For the completion check, cover the board with adjacent squares missing.','es-MX':'Para obtener la marca de completado, cubre el tablero con dos huecos vecinos.'}
 });
@@ -47,16 +48,21 @@ export function renderCompletion() {
     const crowned=done && crownCompletion.has(link.dataset.activity);
     const viewed=done && answerViewed.has(link.dataset.activity);
     const hasCrown=crowned||viewed;
+    const fullyCompleted=done&&extra&&crowned;
     const crownLabel=viewed?t('hollowCrownReplay'):crowned?t('solidCrownReplay'):'';
     let crown=[...link.children].find(x=>(x.className||'').split(/\s+/).includes('orbit-crown'));
     if(!crown){crown=document.createElement('span');crown.className='orbit-crown';crown.setAttribute('aria-hidden','true');crown.innerHTML='<svg viewBox="0 0 32 24" focusable="false"><path d="M4 18 1 5l8 5 7-9 7 9 8-5-3 13Z"/><path d="M4 21h24"/></svg>';link.append(crown);}
     crown.hidden=!hasCrown;link.classList.toggle('has-crown',hasCrown);link.classList.toggle('has-hollow-crown',viewed);link.dataset.extremeCompleted=String(crowned);link.dataset.answerViewed=String(viewed);
     link.classList.toggle('is-completed',done);
     link.classList.toggle('has-branch-star',extra);
+    link.classList.toggle('is-fully-completed',fullyCompleted);
+    link.dataset.fullyCompleted=String(fullyCompleted);
     link.dataset.completed=String(done);
     link.dataset.branchCompleted=String(extra);
-    if(done){link.setAttribute('aria-label',`${[...link.children].filter(child=>child.getAttribute?.('aria-hidden')!=='true').map(child=>child.textContent).join(' ').trim() || link.textContent.trim()} · ${t('completedReplay')}${extra?' · '+t('branchCompletedReplay'):''}${crowned?' · '+t('crownCompletedReplay'):''}${crownLabel?' · '+crownLabel:''}`);link.setAttribute('title',crownLabel|| (extra?t('branchCompletedReplay'):t('completedReplay')));}
+    if(done){link.setAttribute('aria-label',`${[...link.children].filter(child=>child.getAttribute?.('aria-hidden')!=='true').map(child=>child.textContent).join(' ').trim() || link.textContent.trim()} · ${t('completedReplay')}${extra?' · '+t('branchCompletedReplay'):''}${crowned?' · '+t('crownCompletedReplay'):''}${crownLabel?' · '+crownLabel:''}${fullyCompleted?' · '+t('fullyCompletedReplay'):''}`);link.setAttribute('title',fullyCompleted?t('fullyCompletedReplay')+' · '+crownLabel:crownLabel|| (extra?t('branchCompletedReplay'):t('completedReplay')));}
   });
+  const nav=document.getElementById('activity-orbit');
+  if(nav){const links=[...nav.querySelectorAll('[data-activity]')];nav.parentElement.classList.toggle('all-gold',links.length===activityIds.length&&links.every(link=>link.dataset.fullyCompleted==='true'));}
   for(const [id,key] of [['completion-guide','completionGuide'],['clock-completion-guide','clockCompletionGuide'],['tiles-completion-guide','tilesCompletionGuide']]){
     const el=document.getElementById(id);if(el)el.textContent=t(key);
   }

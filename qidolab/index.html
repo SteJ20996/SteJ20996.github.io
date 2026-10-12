@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="startup.js"></script>
-<meta name="theme-color" content="#102e35"><meta name="description" content="十八个数学探索。通过预测、辨识、策略比较和新证据，观察自己的思路如何调整。">
-<title>Qidolab · 小小的发现</title>
-<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#162b4a"><meta name="description" data-i18n-content="welcome.description" content="18 个脑力小游戏。试试你的招，换条路，再看看要不要挑战下一层。">
+<title data-i18n="welcome.title">Qidolab · 脑力小游戏</title>
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://qidolab.com/">
+<meta property="og:type" content="website"><meta property="og:title" data-i18n-content="welcome.title" content="Qidolab · 脑力小游戏"><meta property="og:description" data-i18n-content="welcome.description" content="18 个脑力小游戏。换个招，再看看要不要挑战下一层。"><meta property="og:url" content="https://qidolab.com/">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="more-games.css">
 <link rel="stylesheet" href="extra-games.css">
@@ -15,11 +17,12 @@
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="branches.css">
 <link rel="stylesheet" href="extremes.css">
-<link rel="stylesheet" href="brand-footer.css"></head>
+<link rel="stylesheet" href="brand-footer.css"><link rel="stylesheet" href="theme.css?v=1.0.0">
+</head>
 <body>
-<header class="topbar"><a class="wordmark" href="./" aria-label="qidolab 首页"><img src="assets/qidolab-lockup.svg" alt="qidolab · Quidence" width="1118" height="404"></a><div class="header-tools"><span class="edition" data-i18n="branch.edition">换个角度，试试你的思路</span><label class="language-control" for="language-select"><span class="sr-only">语言</span><select id="language-select" aria-label="语言"><option value="zh-CN" lang="zh-CN">简体中文</option><option value="en" lang="en">English</option><option value="es-MX" lang="es-MX">Español</option></select></label></div></header>
+<header class="topbar"><a class="wordmark" href="./" aria-label="qidolab 首页"><img src="assets/qidolab-lockup.svg" alt="qidolab · Quidence" width="1118" height="404"></a><div class="header-tools"><span class="edition" data-i18n="branch.edition">先玩一题，再说。</span><label class="language-control" for="language-select"><span class="sr-only">语言</span><select id="language-select" aria-label="语言"><option value="zh-CN" lang="zh-CN">简体中文</option><option value="en" lang="en">English</option><option value="es-MX" lang="es-MX">Español</option></select></label></div></header>
 <main class="orbit-shell">
-<p class="audience-note" data-i18n="branch.audience">从一个实验开始，观察、预测，再调整。</p>
+<p class="audience-note" data-i18n="branch.audience">18 个小游戏，挑你顺眼的。卡住了？换个招再来。</p>
 <div class="orbit-stage">
 <svg class="orbit-track" aria-hidden="true" focusable="false"><ellipse cx="50%" cy="50%" rx="50%" ry="50%" /></svg>
 <nav id="activity-orbit" class="activity-nav" aria-label="选择小实验，所选实验会转到正上方">
@@ -103,11 +106,11 @@
 </section>
 </div>
 </div>
-<p class="orbit-invitation" data-i18n="branch.orbitGuide">圆环上是十八个实验。完成后，所选实验向外多一个探索节点；也可先跳过。</p>
+<p class="orbit-invitation" data-i18n="branch.orbitGuide">选一题开玩。拿下原题后，“再走一步”和“挑战极限”就在外圈等你。想先逛别题也行。</p>
 <p id="completion-guide" class="quiet-note"></p>
 </main>
 <section class="brand-bridge" id="brand-bridge" data-brand-target="quidence" data-bridge-theme="mint" data-no-translate aria-labelledby="bridge-title"><a class="bridge-inner" href="https://www.quidence.com/" aria-labelledby="bridge-title bridge-name" aria-describedby="bridge-description"><div class="bridge-copy"><p class="bridge-achievement" hidden aria-live="polite"></p><h2 class="bridge-title" id="bridge-title">想看看自己对一门学科掌握得怎样？</h2><p class="bridge-description" id="bridge-description">到 Quidence Education 选一门学科，用互动题和项目检验理解，看看哪些地方值得再练一练。</p><p class="bridge-language">目前支持 English · Español。</p></div><div class="bridge-brand"><span class="bridge-name" id="bridge-name">Quidence Education</span><img class="bridge-logo" src="assets/quidence-logo.svg" alt="" aria-hidden="true"><span class="bridge-subbrand">Education</span><span class="bridge-action"><span class="bridge-action-label">进入 Quidence Education</span><span class="bridge-action-arrow" aria-hidden="true">↗</span></span></div></a></section>
-<footer><span>qidolab / 小小的发现</span><span data-i18n="branch.footer">十八个实验 · 每个都有另一种可能</span></footer>
+<footer><span>qidolab / 小小的发现</span><span data-i18n="branch.footer">十八个小游戏 · 你来选下一招</span></footer>
 <script type="module" src="app.mjs"></script>
 <script type="module" src="more-games.mjs"></script>
 <script type="module" src="extra-games.mjs"></script>
@@ -119,4 +122,4 @@
 <script type="module" src="activities.mjs"></script>
 <script type="module" src="orbit-layout.mjs"></script>
 <script type="module" src="mobile-navigation.mjs"></script>
-<script type="module" src="footer.mjs"></script></body></html>
+<script type="module" src="footer.mjs"></script><script type="module" src="welcome.mjs?v=1.0.0"></script></body></html>

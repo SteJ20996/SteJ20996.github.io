@@ -13,13 +13,13 @@
     --ink: #16181e;
     --paper: #f3f4f6;
     --cream: #dfe1e6;
-    --accent: #31548e;
+    --accent: #284a80;       /* one step darker than the paper pages' #31548e, for links on glass */
     --accent-light: #6d8cbf;
-    --muted: #4b5260;        /* darker than the paper pages' #737a86: small text sits on glass here */
+    --muted: #363c47;        /* much darker than the paper pages' #737a86: small text sits on glass here */
     --rule: #c6cad2;
     --card-bg: #fafbfc;
     --shadow: 0 6px 40px rgba(22,24,30,.10);
-    --body: #3a3f49;         /* the paper pages keep #454a54 */
+    --body: #272b33;         /* the paper pages keep #454a54 */
     --ink-hover: #1f2430;
     --inv-muted: #8b93a2;
     --inv-body: #aeb5c2;
@@ -42,7 +42,6 @@
     background: var(--cream);
     color: var(--ink);
     line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
     padding: 18px;
   }
 
@@ -74,7 +73,8 @@
     padding: 1rem 1.2rem; position: relative; transition: background .25s;
   }
   .tile:hover { background: rgba(250,251,252,.4); }
-  .tile:not(.brandcard), .foot { text-shadow: 0 0 3px rgba(243,244,246,.9), 0 0 1px rgba(243,244,246,.9); }
+  /* A 1px paper-coloured edge on each letter. It was a 3px glow, which made the text look soft. */
+  .tile:not(.brandcard), .foot { text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .glyph { text-shadow: none; }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .tile { background: rgba(243,244,246,.9); }
@@ -205,7 +205,7 @@
   .paper .ptag {
     display: inline-block;
     font-family: 'JetBrains Mono', monospace;
-    font-size: .56rem; letter-spacing: .12em; text-transform: uppercase;
+    font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
     color: var(--accent);
     border: 1px solid var(--rule);
     padding: .18rem .5rem; border-radius: 99px;

@@ -3,7 +3,10 @@ import {renderCompletion} from './completion.mjs';
 
 const copy={
   summary:['外观预览','Preview the look','Vista previa'],
-  title:['先看看集齐后的样子','See the gold look','Mira cómo se ve en dorado'],
+  title:['换个配色，看看成就','Try a palette and the gold look','Prueba los colores y el dorado'],
+  palette:['网页配色','Page colors','Colores de la página'],
+  mist:['薄雾紫','Mist lavender','Lavanda suave'],
+  cream:['暖奶油','Warm cream','Crema cálida'],
   note:['只展示外观，不改变答题进度。','Appearance only. Your puzzle progress stays as it is.','Solo cambia la apariencia. Tu progreso se queda como está.'],
   live:['真实进度','My progress','Mi progreso'],
   one:['一题金色','One gold stop','Un juego dorado'],
@@ -25,11 +28,18 @@ if(success)success.dataset.i18n='look.success';
 // Preserve the small decorative dot when these two captions are translated.
 for(const key of ['waterEyebrow','coinEyebrow'])registerTranslations({['look.'+key]:Object.fromEntries(locales.map((locale,i)=>[locale,'<span></span>'+copy[key][i]]))});
 
-document.body.insertAdjacentHTML('beforeend',`<details class="preview-tools" id="look-tools"><summary id="look-summary"></summary><div class="preview-tool-panel"><h2 data-i18n="look.title"></h2><p data-i18n="look.note"></p><div class="preview-tool-modes" role="group" id="look-modes"><button type="button" data-look="live" data-i18n="look.live"></button><button type="button" data-look="one" data-i18n="look.one"></button><button type="button" data-look="all" data-i18n="look.all"></button><button type="button" data-look="hollow" data-i18n="look.hollow"></button></div><button type="button" class="preview-tool-close" id="look-close" data-i18n="look.close"></button></div></details>`);
+document.body.insertAdjacentHTML('beforeend',`<details class="preview-tools" id="look-tools"><summary id="look-summary"></summary><div class="preview-tool-panel"><h2 data-i18n="look.title"></h2><p data-i18n="look.note"></p><div class="preview-tool-modes" role="group" id="look-palettes"><button type="button" data-palette="mist" data-i18n="look.mist"></button><button type="button" data-palette="cream" data-i18n="look.cream"></button></div><hr><div class="preview-tool-modes" role="group" id="look-modes"><button type="button" data-look="live" data-i18n="look.live"></button><button type="button" data-look="one" data-i18n="look.one"></button><button type="button" data-look="all" data-i18n="look.all"></button><button type="button" data-look="hollow" data-i18n="look.hollow"></button></div><button type="button" class="preview-tool-close" id="look-close" data-i18n="look.close"></button></div></details>`);
 const tools=document.getElementById('look-tools'),summary=document.getElementById('look-summary'),nav=document.getElementById('activity-orbit');
 const allowed=['live','one','all','hollow'];
 let mode=new URL(location.href).searchParams.get('look');if(!allowed.includes(mode))mode='live';
 function paint(){
+  const palette=new URL(location.href).searchParams.get('palette')==='mist'?'mist':'cream';
+  const sheet=palette==='mist'?'playful.css?v=mist-2':'cream.css?v=cream-1';
+  const style=document.getElementById('palette-style');
+  if(style.getAttribute('href')!==sheet)style.setAttribute('href',sheet);
+  document.querySelector('meta[name="theme-color"]').content=palette==='mist'?'#153f44':'#162b4a';
+  for(const button of document.querySelectorAll('[data-palette]'))button.setAttribute('aria-pressed',String(button.dataset.palette===palette));
+  document.getElementById('look-palettes').setAttribute('aria-label',t('look.palette'));
   for(const button of document.querySelectorAll('[data-look]'))button.setAttribute('aria-pressed',String(button.dataset.look===mode));
   summary.textContent=t('look.summary')+(mode==='live'?'':' · '+t('look.'+mode));
   document.getElementById('look-modes').setAttribute('aria-label',t('look.title'));
@@ -42,6 +52,9 @@ function paint(){
   window.postMessage({protocol:'quidolab-brand-footer-preview-v1',type:'theme',theme:'mint',simulate:mode==='all'},location.origin);
   window.dispatchEvent(new Event('activitiesready'));
 }
+for(const button of document.querySelectorAll('[data-palette]'))button.addEventListener('click',()=>{
+  const url=new URL(location.href);url.searchParams.set('palette',button.dataset.palette);history.replaceState(null,'',url);paint();
+});
 for(const button of document.querySelectorAll('[data-look]'))button.addEventListener('click',()=>{
   mode=button.dataset.look;const url=new URL(location.href);if(mode==='live')url.searchParams.delete('look');else url.searchParams.set('look',mode);history.replaceState(null,'',url);paint();
 });

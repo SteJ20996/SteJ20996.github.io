@@ -1,0 +1,88 @@
+/* Warm cream, midnight blue, lake blue and apricot; gold marks achievement. */
+:root{--paper:#f8f5ec;--ink:#172e4e;--muted:#626879;--mint:#b9dfef;--line:#ded8cd;--deep:#162b4a}
+.topbar .edition{color:#67513a;background:#f0e8dc;border:1px solid #dccfbc;border-radius:99px;padding:6px 12px;letter-spacing:.2px}
+.language-control select,#language-select,.mobile-back{background:#fffdf7;border-color:#d8d0c3}
+.intro .eyebrow>span{background:#b96e39}
+.intro h1 span{color:#356887}
+.intro .target{background:linear-gradient(transparent 58%,#d8e9f1 58%)}
+.audience-note{color:#52657b;letter-spacing:.1px}
+.activity-nav a{color:#3d5470;border-color:#ded8cd;background:#fffdf7;box-shadow:0 3px 9px #172e4e0d}
+.activity-nav a:hover{background:#e5f0f7;border-color:#84b1c9;box-shadow:0 5px 13px #183f6620}
+.activity-nav a[aria-current]{background:linear-gradient(135deg,#daeaf4,#d8eaf2);border-color:#7da9c2;color:#274d68;box-shadow:0 0 0 3px #639bbe1a}
+.activity-nav a.is-completed{color:#385e70;background:#e9f2f6;border-color:#bdd5e3}
+.activity-nav a.is-completed .orbit-number{color:#385e70}
+.activity-nav a.is-completed[aria-current]{color:#294f65;background:linear-gradient(135deg,#dcecf4,#d4e7f0);border-color:#739eb6}
+.activity-nav a.is-completed:hover{color:#294f65;background:#dcecf4;border-color:#87b1c6}
+.activity-nav a.is-completed::before{color:#2e5e77}
+.activity-nav a.has-branch-star::after{color:#6b5484}
+.outer-next{background:#e6eef7;border-color:#a8bfd8;color:#3b5a7f}
+.outer-next[aria-current]{background:#d3e3f2;border-color:#6c91b9}
+.outer-next.extreme-link{background:#fae8d8;border-color:#d6b08d;color:#785038!important}
+.playground{background:linear-gradient(140deg,#162b4a 0%,#1d3e61 65%,#244b67 100%);box-shadow:0 17px 35px -23px #214f7959;border:1px solid #436582}
+.playground .experiment-label,.playground .board-caption{color:#c8dfef}
+.playground .experiment-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#f5c39d;margin-right:7px;vertical-align:1px}
+.playground .rule-reminder{color:#c6deec}
+.playground .rules{color:#d1e2ef;border-left-color:#f5c39d}
+.playground .water{background:linear-gradient(180deg,#8ad9f0,#4fa9cb)}
+.playground .water-surface{background:#def4fc;opacity:.8}
+.playground .vessel{border-color:#8ebad1;border-top-color:#cde6f2;background:linear-gradient(125deg,#c3edff14,#cceaff07)}
+.playground .glass-shine{background:#ffffff24}
+.playground .vessel.has-water .quantity{color:#14364a}
+.playground .jug-actions button{background:#cfe8f5;border-color:#95bcd3;color:#284f6a;font-weight:500}
+.playground .jug-actions button span[aria-hidden]{color:#356c8c}
+.playground .pour-actions button{background:#f5c39d;border-color:#d9a676;color:#64442f}
+.primary-button,.branch-button{background:#b9dfef;color:#234d69;border:1px solid #8db8d0}
+.playground .primary-button{background:#b9dfef;color:#234d69;border-color:#8db8d0}
+.playground button:hover:not(:disabled){filter:brightness(1.04)}
+.playground .placement-tabs button[aria-pressed=true]{background:#d1e7f4;border-color:#98bed6;color:#294e70}
+.hint-button{background:#f0e8dc;border-color:#d8c9b4;color:#67513a}
+.success,.discovery,.number-result{background:linear-gradient(125deg,#edf3f3,#e0eef7);border-color:#bdd2df;box-shadow:0 7px 22px -18px #32638955}
+.success-mark{background:#b9dfef;color:#234d69}
+.next-invite{background:#eef3f7;border-color:#c9d8e5}
+.branch-card{background:#edf2f7;border-color:#c7d6e4}
+.branch-evidence{background:#e0eef7;border-color:#b9d2e5}
+.branch-options button[aria-pressed=true]{background:#dcebf5;border-color:#7199bd;box-shadow:inset 3px 0 #557fa6}
+.branch-complete{background:#dceaf4;color:#3b5a7f}
+.success-invitation{background:var(--paper);border-color:#c1cddb;box-shadow:0 20px 70px #182c4e38}
+.invitation-symbol{background:#c9e4f2;color:#2c5771}
+.success-invitation .branch-button{background:#b9dfef;color:#234d69;border-color:#8db8d0}
+.success-invitation .extreme-button{background:#f5c39d;color:#64442f!important;border-color:#d9a676!important}
+.success-invitation .invitation-later{background:#edf0f7;border-color:#ccd4e2;color:#485b74}
+.extreme-view textarea{background:#193855;border-color:#6f99b7;color:#f0f2d5}
+.extreme-view .extreme-visual svg{background:#193550}
+.extreme-controls button,.extreme-grid button,.extreme-proof button{background:#e5eef5;color:#31546d;border-color:#b3cada}
+.extreme-view button[aria-pressed=true],.extreme-view button.selected{background:#fae8d8;color:#785038;border-color:#d6b08d}
+.extreme-grid button.lit{background:#f3d47f;color:#644916}
+.extreme-grid button.covered{background:#d9e7f0;color:#41637b}
+.orbit-track ellipse{stroke:#c2c9d3}
+/* A gold title requires all three completed challenges, not answer exposure. */
+.activity-nav a.is-fully-completed,.activity-nav a[data-preview-gold=true]{background:linear-gradient(140deg,#fff5d1,#f4dfa9);border-color:#b58b36;color:#765016;box-shadow:0 4px 14px -7px #af7e3a55}
+.activity-nav a.is-fully-completed .orbit-number,.activity-nav a[data-preview-gold=true] .orbit-number{color:#765016}
+.activity-nav a.is-fully-completed::before,.activity-nav a.is-fully-completed::after,.activity-nav a[data-preview-gold=true]::before,.activity-nav a[data-preview-gold=true]::after{color:#765016}
+.activity-nav a.is-fully-completed:hover,.activity-nav a[data-preview-gold=true]:hover{color:#6d4811;background:linear-gradient(140deg,#fff1bd,#eed397);border-color:#a17829;box-shadow:0 5px 18px -7px #af7e3a65}
+.activity-nav a.is-fully-completed[aria-current],.activity-nav a[data-preview-gold=true][aria-current]{background:linear-gradient(140deg,#fff1ba,#efd18a);border-color:#9d762b;color:#684712;box-shadow:0 0 0 3px #d9ac4430,0 5px 18px -7px #af7e3a50}
+.activity-nav a.is-fully-completed .orbit-crown svg,.activity-nav a[data-preview-gold=true] .orbit-crown svg{stroke:#926521;fill:#e8bd52}
+.activity-nav a.has-hollow-crown .orbit-crown svg,.activity-nav a[data-preview-hollow=true] .orbit-crown svg{fill:none;stroke:#926521;filter:none}
+.orbit-stage.all-gold .orbit-track ellipse,.orbit-stage.preview-all-gold .orbit-track ellipse{stroke:#c79a3e}
+.activity-nav a[data-preview-gold=true]{padding-top:38px!important}
+.activity-nav a[data-preview-gold=true]::before{content:'✓';left:5px}
+.activity-nav a[data-preview-gold=true]::after{content:'★';right:5px}
+.activity-nav a[data-preview-gold=true] .orbit-crown[hidden]{display:block!important}
+.brand-bridge:not([data-bridge-theme=gold]){--bridge-ink:#203e59;--bridge-muted:#486076;--bridge-accent:#315f84;--bridge-background:linear-gradient(115deg,#eee4d4 0%,#dbeaf2 70%,#cfe3ee 100%);--bridge-line:#b7c4cd;--bridge-line-hover:#6f91ae}
+/* These controls belong only to this appearance preview. */
+.preview-tools{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:10;color:#35526a;font:12px/1.6 system-ui,sans-serif;max-width:calc(100vw - 36px)}
+.preview-tools>summary{cursor:pointer;list-style:none;min-height:44px;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:#fffdf7;border:1px solid #d8d0c3;border-radius:99px;box-shadow:0 4px 20px #172e4e18}
+.preview-tools>summary::-webkit-details-marker{display:none}
+.preview-tools[open]>summary{border-color:#9eb8cc}
+.preview-tool-panel{max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px);overflow:auto;overscroll-behavior:contain;position:absolute;right:0;bottom:56px;width:304px;max-width:calc(100vw - 36px);padding:18px;border:1px solid #d8d0c3;border-radius:18px;background:#fffdf7;box-shadow:0 12px 34px #172e4e25}
+.preview-tool-panel h2{font:500 15px/1.5 system-ui,sans-serif;margin:0 0 5px}
+.preview-tool-panel p{font:12px/1.6 system-ui,sans-serif;margin:0 0 14px;color:#607083}
+.preview-tool-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.preview-tool-modes button{min-height:44px;border:1px solid #bdccd9;border-radius:9px;padding:9px;background:#e9f0f6;color:#365674;font:12px/1.5 system-ui,sans-serif;white-space:normal}
+.preview-tool-modes button[aria-pressed=true]{background:#f3dfac;border-color:#b59858;color:#745322}
+.preview-tool-modes [data-palette][aria-pressed=true]{background:#d1e7f4;border-color:#98bed6;color:#294e70}
+.preview-tool-panel hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.preview-tools button:focus-visible,.preview-tools summary:focus-visible{outline:3px solid #356e9a;outline-offset:3px}
+.preview-tool-close{min-height:44px;padding:8px 0;border:0;background:transparent;color:#3e6381;font:12px system-ui,sans-serif;margin-top:8px;width:100%}
+@media(prefers-reduced-motion:no-preference){.activity-nav a.is-fully-completed,.activity-nav a[data-preview-gold=true]{animation:gold-arrival .6s ease-out}@keyframes gold-arrival{from{box-shadow:0 0 0 6px #ddb74635}to{box-shadow:0 4px 14px -7px #af7e3a55}}}
+@media(max-width:979px){.preview-tools{right:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:calc(100vw - 24px)}.preview-tool-panel{max-width:calc(100vw - 24px)}.preview-tools>summary{padding:10px 13px}}

@@ -15,11 +15,11 @@
     --cream: #dfe1e6;
     --accent: #284a80;       /* one step darker than the paper pages' #31548e, for links on glass */
     --accent-light: #6d8cbf;
-    --muted: #363c47;        /* much darker than the paper pages' #737a86: small text sits on glass here */
+    --muted: #30353f;        /* much darker than the paper pages' #737a86: small text sits on glass here */
     --rule: #c6cad2;
     --card-bg: #fafbfc;
     --shadow: 0 6px 40px rgba(22,24,30,.10);
-    --body: #272b33;         /* the paper pages keep #454a54 */
+    --body: #20242b;         /* the paper pages keep #454a54 */
     --ink-hover: #1f2430;
     --inv-muted: #8b93a2;
     --inv-body: #aeb5c2;
@@ -63,16 +63,16 @@
   .band-main > .about { flex-grow: 1.25; }
   .band-papers > * { flex: 1 1 26rem; min-width: 0; }
 
-  /* Glass tiles: a quarter of paper over the blurred photo, and a paper-coloured halo under every
+  /* Glass tiles: a little over a third of paper over the blurred photo, and a paper-coloured halo under every
    glyph so the text always sits on light ground; the 1px shadow draws the hairline grid that the
    sheet's rule-coloured ground used to provide. */
   .tile {
-    background: rgba(243,244,246,.25);
-    -webkit-backdrop-filter: blur(16px) saturate(.9); backdrop-filter: blur(16px) saturate(.9);
+    background: rgba(243,244,246,.38);
+    -webkit-backdrop-filter: blur(22px) saturate(.8); backdrop-filter: blur(22px) saturate(.8);
     box-shadow: 0 0 0 1px var(--rule);
     padding: 1rem 1.2rem; position: relative; transition: background .25s;
   }
-  .tile:hover { background: rgba(250,251,252,.4); }
+  .tile:hover { background: rgba(250,251,252,.5); }
   /* A 1px paper-coloured edge on each letter. It was a 3px glow, which made the text look soft. */
   .tile:not(.brandcard), .foot { text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .glyph { text-shadow: none; }
@@ -134,7 +134,8 @@
   .about h3 { font-size: 1.15rem; }
   .about p { font-size: .85rem; line-height: 1.6; }
   .about p + p { margin-top: .7rem; }
-  .tile p { font-size: .78rem; color: var(--body); }
+  .tile p { font-size: .78rem; color: var(--body); font-weight: 500; }
+  .plainlist small, .paper .sub, .res-line span { font-weight: 500; }   /* medium weight reads crisper on glass */
   .tile p.dim { color: var(--muted); }
 
   .plainlist { list-style: none; font-size: .78rem; }

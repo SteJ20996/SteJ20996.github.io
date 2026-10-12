@@ -34,7 +34,7 @@ const allowed=['live','one','all','hollow'];
 let mode=new URL(location.href).searchParams.get('look');if(!allowed.includes(mode))mode='live';
 function paint(){
   const palette=new URL(location.href).searchParams.get('palette')==='mist'?'mist':'cream';
-  const sheet=palette==='mist'?'playful.css?v=mist-2':'cream.css?v=cream-1';
+  const sheet=palette==='mist'?'playful.css?v=mist-2':'cream.css?v=cream-2';
   const style=document.getElementById('palette-style');
   if(style.getAttribute('href')!==sheet)style.setAttribute('href',sheet);
   document.querySelector('meta[name="theme-color"]').content=palette==='mist'?'#153f44':'#162b4a';

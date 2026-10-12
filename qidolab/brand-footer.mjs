@@ -1,4 +1,3 @@
-const protocol='quidolab-brand-footer-preview-v1';
 const goldenBridgeKey='qidolab-golden-bridge-v1';
 const originalActivityIds=['water','lights','coins','numbers','clock','tiles','sums','bridge','takeaway','path','search','logic','probability','sorting','schedule','coloring','fractions','reflection'];
 const goldenLabels={en:'18 explorations completed',es:'18 juegos completados',zh:'18 道探索已完成'};
@@ -29,16 +28,16 @@ function language(value){return String(value).startsWith('es')?'es':String(value
 export function mountFooter(getLanguage=()=>document.documentElement.lang){
   const section=document.getElementById('brand-bridge');if(!section)return;
   const target=section.dataset.brandTarget,anchor=section.querySelector('.bridge-inner');
-  const page=target==='qidolab'?'quidence':'qidolab',destination=anchor.href;
-  let theme='mint',simulate=false,unlocked=false,lastReported;
+  const destination=anchor.href;
+  let unlocked=false;
   try{unlocked=localStorage.getItem(goldenBridgeKey)==='1';}catch{}
   // This cosmetic handoff lets the two independent domains remember a visit.
   // It never writes a solved-game record or grants access to game content.
   try{if(new URL(location.href).searchParams.get('qidolab-gold')==='1')unlocked=true;}catch{}
   function paint(){
-    section.dataset.bridgeTheme=unlocked||simulate?'gold':theme;
-    section.dataset.earnedGold=String(unlocked||simulate);
-    const badge=section.querySelector('.bridge-achievement');badge.hidden=!(unlocked||simulate);badge.textContent=goldenLabels[language(getLanguage())];
+    section.dataset.bridgeTheme=unlocked?'gold':'mint';
+    section.dataset.earnedGold=String(unlocked);
+    const badge=section.querySelector('.bridge-achievement');badge.hidden=!unlocked;badge.textContent=goldenLabels[language(getLanguage())];
     const url=new URL(destination);if(unlocked)url.searchParams.set('qidolab-gold','1');anchor.href=url.href;
   }
   function refreshAchievement(){
@@ -46,7 +45,6 @@ export function mountFooter(getLanguage=()=>document.documentElement.lang){
     unlocked=unlocked||hasFinishedOriginals();
     if(unlocked)try{if(localStorage.getItem(goldenBridgeKey)!=='1')localStorage.setItem(goldenBridgeKey,'1');}catch{}
     paint();
-    if(lastReported!==unlocked){lastReported=unlocked;parent.postMessage({protocol,type:'achievement',page,unlocked},'*');}
   }
   function render(){
     const lang=language(getLanguage()),copy=copies[target][lang];section.lang=lang;
@@ -56,26 +54,9 @@ export function mountFooter(getLanguage=()=>document.documentElement.lang){
     const note=section.querySelector('.bridge-language');note.hidden=!copy.language;note.textContent=copy.language||'';
     paint();
   }
-  function scroll(where){
-    if(where==='top')window.scrollTo({top:0,behavior:'instant'});
-    else section.scrollIntoView({block:'center',behavior:'instant'});
-  }
-  anchor.addEventListener('click',event=>{
-    if(parent===window)return;
-    if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-    event.preventDefault();parent.postMessage({protocol,type:'navigate',page:target,language:getLanguage(),gold:unlocked},'*');
-  });
-  window.addEventListener('message',event=>{
-    if(event.source!==parent||event.data?.protocol!==protocol)return;
-    if(event.data.type==='scroll')requestAnimationFrame(()=>scroll(event.data.where));
-    if(event.data.type==='theme'){theme=event.data.theme==='gold'?'gold':'mint';simulate=event.data.simulate===true;paint();}
-  });
   document.addEventListener('quidence:language',render);window.addEventListener('languagechange',render);render();refreshAchievement();
   window.addEventListener('storage',refreshAchievement);window.addEventListener('focus',refreshAchievement);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshAchievement();});
   const orbit=document.getElementById('activity-orbit');
   if(orbit)new MutationObserver(refreshAchievement).observe(orbit,{subtree:true,attributes:true,attributeFilter:['data-completed']});
-  const ready=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>parent.postMessage({protocol,type:'ready',page},'*')));
-  if(document.fonts?.ready)document.fonts.ready.then(ready);else ready();
-  window.__brandFooterPreview={render,target,refreshAchievement};
 }

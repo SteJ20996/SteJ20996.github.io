@@ -1,11 +1,46 @@
-# Qidolab standalone playtest
+# Qidolab 1.0 — production source
 
-Temporary GitHub Pages address: https://stephenjia.com/qidolab/
+Target domain: https://qidolab.com/
 
-This folder publishes Qidolab independently of the portfolio homepage and the live Quidence application. It contains the same 18 original explorations, optional extra steps and extreme challenges as the standalone playtest. Chinese, English and Spanish are available. Completed originals, extra steps and crown states stay in the visitor’s browser. Completing all 18 originals turns the Quidence footer link gold.
+This folder contains the complete static site: 18 original puzzles, optional extra steps, extreme challenges and Chinese, English and Spanish interfaces. All runtime scripts, styles and logos use local relative paths. No installation or compilation is needed.
 
-All runtime scripts, styles and logos use relative paths in this folder. No ChatGPT service, remote font provider, CDN, account, backend or analytics endpoint is required to play. The footer is an ordinary outgoing link to https://www.quidence.com/.
+The approved warm-cream theme uses warm charcoal, sage and muted apricot on desktop (980px and wider). Narrow screens retain cream, midnight blue and lake blue. The separate `../qidolab-preview/` folder retains the appearance comparison tools; none are loaded by this production page.
 
-The page is a temporary preview, with a noindex metadata directive. Keep this folder intact when copying it to another static host. A local HTTP server is needed for ES modules when testing a downloaded copy.
+## Cloudflare Pages deployment from GitHub
 
-Mainland-China network availability must be verified by testers. Moving the app to this host removes the chatgpt.site dependency; it does not guarantee that every network will allow this host.
+Create a new Pages project with Git integration. Use these settings:
+
+| Setting | Value |
+| --- | --- |
+| Repository | `SteJ20996/SteJ20996.github.io` |
+| Production branch | `main` |
+| Framework preset | `None` |
+| Root directory | `qidolab` |
+| Build command | `exit 0` |
+| Build output directory | `.` |
+
+After the first deployment succeeds, open the project's **Custom domains**, add `qidolab.com`, and follow Cloudflare's DNS setup. The domain is registered with Cloudflare. Wait until the custom domain and HTTPS are active before announcing the domain. Do not change the portfolio repository's root `CNAME`, which belongs to stephenjia.com.
+
+GitHub updates to this folder can then deploy through the linked Pages project. `_headers` gives ES modules a JavaScript content type and makes browsers revalidate updated files.
+
+Official references:
+
+- https://developers.cloudflare.com/pages/framework-guides/deploy-anything/
+- https://developers.cloudflare.com/pages/configuration/build-configuration/
+- https://developers.cloudflare.com/pages/configuration/custom-domains/
+
+## Local preview
+
+From the repository root, run `python3 -m http.server 8080 --directory qidolab` and open http://localhost:8080/. Use an HTTP server because browsers load the game's ES modules through HTTP.
+
+## Progress and achievements
+
+Progress is stored in this browser for this origin. Moving from the stephenjia.com preview to qidolab.com starts a separate browser save; it does not automatically transfer previous progress.
+
+- A check marks an original puzzle as solved; a star marks its optional extra step.
+- Solving an extreme challenge earns a crown. It can be attempted before the extra step.
+- Viewing its answer keeps the crown hollow. Answer exposure alone does not solve the extreme.
+- A title and its marks turn gold when all three challenges are solved.
+- Solving all 18 original puzzles turns the Quidence bridge gold. Its cosmetic handoff does not mark other puzzles as solved.
+
+Question data, solvers and storage-key formats are retained from the reviewed game. Browser visual QA and mainland-China access testing still require real devices/networks.

@@ -296,7 +296,8 @@
   @media (min-width: 861px) and (max-height: 820px) {
     html { font-size: 13.5px; }
     body { padding: 12px; }
-    .tile { padding: .7rem .95rem; }
+    .tile:not(.foot) { padding: .7rem .95rem; }   /* the contact strip keeps its reserved left padding for the zoom buttons */
+    .foot { padding-left: 7rem; }   /* at 13.5px, 6.2rem left only 5px between the buttons and the first link */
     .mast { padding: .8rem 1.4rem; }
     .mast-art { width: 84px; height: 84px; }
   }

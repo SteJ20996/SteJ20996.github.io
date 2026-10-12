@@ -7,7 +7,8 @@ Math teacher and doctoral student in education. This repository is the source of
 ## Pages
 
 - [Home](https://stephenjia.com/) · who I am, what I teach, what I study
-- [Quidence](https://www.quidence.com/) · my learning site for mathematics, statistics, and introductory physics (a separate site; its content lives there)
+- [Quidence](https://www.quidence.com/) · my learning site for mathematics and introductory physics, in English and Spanish (a separate site; its content lives there)
+- [Qidolab](https://qidolab.com/) · my puzzle site: 18 hands-on brain games in English, Chinese, and Spanish (a separate site)
 - [The Absent Cognitive Baseline](https://stephenjia.com/acb.html) · paper page, with Jiarui Xu
 - [Metacognitively Discordant Completion](https://stephenjia.com/mdc.html) · paper page
 - [Graphicacy in the Generative AI Era](https://stephenjia.com/review.html) · scoping review, interim version, with Jiarui Xu

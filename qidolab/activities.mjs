@@ -93,7 +93,7 @@ let coins = read('quidence-coins-v1'); if (!validCoins(coins)) coins = freshCoin
 let destination = 'left', coinHint = 0, coinMessage = null;
 const possibilities = () => coins.rounds.reduce((c, r) => candidatesAfter(c, r.left, r.right, r.result), allCoins());
 const panCoins = side => allCoins().filter(i => coins.placement[i] === side);
-const coinNames = list => list.map(i => i + 1).join(locale === 'zh-CN' ? '、' : ', ');
+const coinNames = list => list.map(i => i + 1).join(locale.startsWith('zh') ? '、' : ', ');
 const resultNames = {left: '左盘更重', right: '右盘更重', balanced: '两盘平衡'};
 const panNames = {left: '左盘', right: '右盘', table: '桌面'};
 for (let i = 0; i < 8; i++) {

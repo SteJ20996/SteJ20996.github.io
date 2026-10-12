@@ -1,3 +1,4 @@
+import {regionalCopy} from './i18n.mjs';
 import {JOSEPHUS_KEY,chiliState} from './josephus-engine.mjs';
 export const CHILI_COPY={
  title:['72 人辣椒圈','The 72-person chili circle','El círculo de chile de 72 personas'],
@@ -13,7 +14,7 @@ export const CHILI_COPY={
  diagram:['72 个固定座位的圆环。已休息 {count} 人，剩余座位：{alive}。','Circle of 72 fixed seats. {count} people resting; seats still counting: {alive}.','Círculo de 72 lugares fijos. Descansan {count} personas; siguen contando los lugares: {alive}.']
 };
 export function installChili(parent,onChange){
- const $=id=>document.getElementById(id),tr=(key,params={})=>CHILI_COPY[key][document.documentElement.lang==='es-MX'?2:document.documentElement.lang==='en'?1:0].replace(/\{(\w+)\}/g,(_,key)=>String(params[key]??`{${key}}`));
+ const $=id=>document.getElementById(id),tr=(key,params={})=>regionalCopy(CHILI_COPY[key][document.documentElement.lang==='es-MX'?2:document.documentElement.lang==='en'?1:0],document.documentElement.lang).replace(/\{(\w+)\}/g,(_,key)=>String(params[key]??`{${key}}`));
  parent.insertAdjacentHTML('beforeend',`<section id="chili-ring" class="chili-ring" hidden aria-labelledby="chili-title"><h3 id="chili-title"></h3><p id="chili-rule"></p><svg id="chili-diagram" viewBox="0 0 520 520" role="img" focusable="false"></svg><p id="chili-legend"></p><p id="chili-status" role="status" aria-live="polite"></p><p id="chili-count"></p><div class="chili-controls"><button id="chili-next" type="button"></button><button id="chili-finish" type="button"></button><button id="chili-reset" type="button"></button></div><details><summary id="chili-alive-label"></summary><div id="chili-alive" class="chili-alive"></div></details><details><summary id="chili-order-label"></summary><p id="chili-order"></p></details></section>`);
  let steps=0;try{const record=JSON.parse(localStorage.getItem(JOSEPHUS_KEY));if(record?.version===1){chiliState(record.steps);steps=record.steps;}}catch{}
  const save=()=>{try{localStorage.setItem(JOSEPHUS_KEY,JSON.stringify({version:1,steps}));}catch{}};

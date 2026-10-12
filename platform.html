@@ -171,7 +171,8 @@
     html { font-size: 13.5px; }
     body { padding: 12px; }
     .sheet { min-height: calc(100dvh - 24px); }
-    .tile { padding: .7rem .95rem; }
+    .tile:not(.foot) { padding: .7rem .95rem; }   /* the contact strip keeps its reserved left padding for the zoom buttons */
+    .foot { padding-left: 7rem; }   /* at 13.5px, 6.2rem left only 5px between the buttons and the first link */
     .mast { padding: .8rem 1.4rem; }
     .mast-art { width: 84px; height: 84px; }
   }
@@ -214,15 +215,15 @@
     <section class="tile">
       <p class="tile-label"><b>01</b> · What it is</p>
       <h3>Lessons, checks, and projects</h3>
-      <p>Each course has short lessons, a few check problems with several parts, and two field projects set in real-life situations. Quidence checks the fixed parts of your answers and saves your calculations, drawings, and explanations for you to review. It does not check every written step on its own; the report is something to talk over with a teacher or tutor.</p>
+      <p>Most courses have short lessons, a few check problems with several parts, and two field projects set in real-life situations. Number Theory has ten proof projects instead. Quidence checks the fixed parts of your answers and saves your calculations, drawings, and explanations for you to review. It does not check every written step on its own; the report is something to talk over with a teacher or tutor.</p>
     </section>
 
     <section class="tile">
       <p class="tile-label"><b>02</b> · Subjects</p>
-      <h3>Ten courses in three groups</h3>
+      <h3>Eleven courses in three groups</h3>
       <ul class="klist">
         <li><b>School Mathematics</b>Pre-Algebra, Algebra I, Geometry, Algebra II</li>
-        <li><b>Further Mathematics</b>Pre-calculus, Calculus, Statistics, Linear Algebra</li>
+        <li><b>Further Mathematics</b>Pre-calculus, Calculus, Statistics, Linear Algebra, Number Theory</li>
         <li><b>Science</b>Physics 1 Foundations, Physics 2 Foundations</li>
       </ul>
     </section>
@@ -236,8 +237,9 @@
     <section class="tile">
       <p class="tile-label"><b>04</b> · Where it lives</p>
       <h3>A separate site</h3>
-      <p>Quidence has its own address, and all of its content is moving there. This page used to show an earlier prototype; Quidence has taken its place.</p>
+      <p>Quidence has its own address, in English and Spanish. This page used to show an earlier prototype; Quidence has taken its place. Its sister site, Qidolab, has 18 hands-on puzzles.</p>
       <a class="arrowlink" href="https://www.quidence.com/" target="_blank" rel="noopener">→ www.quidence.com</a>
+      <a class="arrowlink" href="https://qidolab.com/" target="_blank" rel="noopener">→ qidolab.com</a>
     </section>
 
   </div>

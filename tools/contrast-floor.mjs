@@ -6,7 +6,7 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 const pw = await import('playwright').catch(() => import('/opt/node22/lib/node_modules/playwright/index.mjs'));
 const file = resolve(process.argv[2] || 'index.html'); const floor = Number(process.argv[3] || 4.5);
-const SEL = '.tile:not(.quidence) h1, .tile:not(.quidence) h3, .tile:not(.quidence) p, .tile:not(.quidence) small, .tile:not(.quidence) .yr, .tile:not(.quidence) .tile-label, .tile:not(.quidence) a, .mast-tag, .mast-over, .foot .copy, .foot a';
+const SEL = '.tile h1, .tile h3, .tile p, .tile small, .tile .yr, .tile .tile-label, .tile a, .mast-tag, .mast-over, .foot .copy, .foot a';   // glass tiles and the opaque site cards alike
 const browser = await pw.chromium.launch(); let worstOverall = Infinity;
 for (const [w, h] of [[1440, 900], [1280, 720]]) {
   const page = await browser.newPage({ viewport: { width: w, height: h } });

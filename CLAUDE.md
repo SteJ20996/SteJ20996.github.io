@@ -1,7 +1,8 @@
 # SteJ Delta Project (STEJDP)
 
 **Aliases:** SteJ Delta Project, STEJDP, Delta, the Calibration Mirror, Quidence (the
-learning site that replaced Delta on the portfolio, 2026-10-08).
+learning site that replaced Delta on the portfolio, 2026-10-08), Qidolab (Quidence's sister
+puzzle site, live 2026-10-12; §1a).
 When the owner mentions any of these names — in this repo or elsewhere — work inside the
 framework defined in this file. This file is the project's persistent memory; keep it
 updated when major decisions change.
@@ -63,7 +64,9 @@ the small link. Keep that tile's "interim" wording in step with review.json.
 **Live site:** https://stephenjia.com/ (custom domain since site#1, 2026-10-08; the old
 https://stej20996.github.io/ forwards there; paper pages `acb.html`, `mdc.html`,
 `review.html`; `platform.html` is a short Quidence page). **Quidence:** https://www.quidence.com/
-(the owner's learning site, separate repo SteJ20996/AA01; not yet deployed as of 2026-10-08).
+(the owner's learning site, separate repo SteJ20996/AA01; live by the owner's account on
+2026-10-12). **Qidolab:** https://qidolab.com/ (the owner's puzzle site, separate public repo
+SteJ20996/Qidolab, Cloudflare Workers; live by the owner's account on 2026-10-12).
 **Repo:** SteJ20996/SteJ20996.github.io (GitHub Pages, publishes from `main`; the custom
 domain is set by the `CNAME` file at the repo root, DNS lives on Cloudflare: four A records
 `@` → 185.199.108.153 / .109.153 / .110.153 / .111.153 and a `www` CNAME →
@@ -74,8 +77,8 @@ domain is set by the `CNAME` file at the repo root, DNS lives on Cloudflare: fou
 `acb.html`, `mdc.html`, `review.html` + `review/`, `platform.html`, `README.md`, this
 file). The repo also hosts an unrelated line, `local-llm.html`, a single-file local-model
 benchmarking terminal that talks to Ollama from the browser; it shares only the design
-system. Quidence, the owner's learning site, lives in its own repo and is only linked
-from here (§1). Do not fold these together when reasoning about any of them.
+system. Quidence (§1) and Qidolab (§1a), the owner's two sites, live in their own repos
+and are only linked from here. Do not fold these together when reasoning about any of them.
 
 ---
 
@@ -83,12 +86,15 @@ from here (§1). Do not fold these together when reasoning about any of them.
 
 **What it is.** A learning site for school and further mathematics, statistics, and
 introductory physics: Pre-Algebra, Algebra I, Geometry, Algebra II; Pre-calculus,
-Calculus, Statistics, Linear Algebra; Physics 1 and Physics 2 Foundations. Each course
-has short lessons, "Test your understanding" check problems with several parts, and two
-California-inspired field projects. Quidence checks the fixed parts of an answer and
-saves calculations, drawings and explanations for review; it does not verify every
-written step. Records stay in the learner's browser; accounts and cloud sync are paused
-for public testing. (All of this from the AA01 README and homepage as of 2026-10-08.)
+Calculus, Statistics, Linear Algebra, Number Theory (added 2026-10-10: ten proof projects,
+no check problems); Physics 1 and Physics 2 Foundations. Most courses have short lessons,
+"Test your understanding" check problems with several parts, and two California-inspired
+field projects (52 check problems, 20 field projects). English and Spanish (2026-10-09).
+Quidence checks the fixed parts of an answer and saves calculations, drawings and
+explanations for review; it does not verify every written step. Records stay in the
+learner's browser; accounts and cloud sync are paused for public testing. Its homepage
+footer links to Qidolab. (From the AA01 README, CURRENT_STATUS and homepage at main
+c886343, read 2026-10-12.)
 
 **Source of truth.** Repo `SteJ20996/AA01` (attach with add_repo; clone lands at
 /home/user/aa01): `README.md`, `CURRENT_STATUS.md` (状态入口), `BRAND_MIGRATION.md`
@@ -98,17 +104,47 @@ quidence.com / .app / .org, `.com` canonical), `LOCAL_ONLY_REVIEW.md`,
 the `static-release/` bundle for hosting.
 
 **Hosting.** Canonical address `https://www.quidence.com/` (owner's instruction,
-2026-10-08). Nothing was deployed there yet on that date (no DNS record). The owner will
-move all Quidence content to that site themselves.
+2026-10-08). The owner reported it live on 2026-10-12. Cloud sessions here cannot open it
+(the environment's network policy denies the host); read the facts from the AA01 repo.
 
 **What the portfolio does with it, and nothing more.** The homepage's Q·Quidence tile
 and the short `platform.html` page describe Quidence in a few plain sentences and link
 to www.quidence.com. **Never embed, copy, mirror or build the AA01 app into this repo**
 (owner, 2026-10-08: "目前链接里不要把这个zip里的内容全部放进去，目前先放
-www.quidence.com这个链接"). Brand colors for the tile: navy #142236, teal #71ddc5 /
-#62c4af, Q icon (AA01 `assets/favicon.svg`). Site-copy rules (§5) apply to every word
-written about Quidence here: plain language, no em dashes, nothing that reads as a
-study, recruitment or data collection.
+www.quidence.com这个链接"). Brand colors for the card (Quidence's palette since
+2026-10-12, "mist violet × deep teal"): deep teal #153f44 ground (its header and
+theme-color), mint #68e1af accent (its logo accent on dark), primary #15565b, mint surface
+#ddf1e8, mist violet page #f3f1f7, coral #b94f3d; contrast pairs in AA01
+`review/mist-teal-color-contrast-20261012.json`. Until 2026-10-12 the card used navy
+#142236 with teal #71ddc5 / #62c4af. Site-copy rules (§5) apply to every word written
+about Quidence here: plain language, no em dashes, nothing that reads as a study,
+recruitment or data collection.
+
+## 1a. Qidolab (the sister puzzle site; on the homepage since site#3)
+
+**What it is.** "Qidolab · Brain games": 18 hands-on puzzles (water jugs, ring of lights,
+coin balance, a counterexample hunt, clock, tiling, bridge, take-away, one-stroke path and
+more), each with an optional extra step and an extreme challenge. No timer, hints on
+request, progress saved in the browser. English (default), 简体中文, 繁體中文 (Taiwan), and
+Español. Tagline copy: "18 brain games. Try a different move, then choose whether to go
+further." Footer "qidolab / LITTLE DISCOVERIES". A bridge panel links to Quidence
+("Quidence Education"), and Quidence's footer links back.
+
+**Source of truth.** Public repo `SteJ20996/Qidolab` (read-only clone at
+/home/user/stej20996/qidolab; `README.md`, `DEPLOYMENT.zh-CN.md`, `branch-content.mjs`,
+`welcome.mjs`, `theme.css`), served by Cloudflare Workers from `main`. Facts above from
+main a882be9, read 2026-10-12. Cloud sessions here cannot open qidolab.com (network policy).
+
+**History in this repo.** Qidolab was first built inside this repo as `qidolab/` through
+PRs titled `[qidolab#1]`–`[qidolab#7]` (2026-10-11 to 10-12, playtest, palettes, launch
+prep, Taiwan Chinese), then moved to its own repo; `[qidolab#8]` (3d7527f) removed every
+copy and retired the stephenjia.com preview addresses. The `qidolab#n` line is closed here
+at 8. **Never copy Qidolab back into this repo**; the portfolio only links to qidolab.com.
+
+**Brand colors for the card.** Qidolab's desktop palette: warm cream #f8f5ec ground with
+sage #dfe5d8 and apricot #eddfd5 light, warm charcoal #37423c, sage #ccd8c7, apricot
+#dfbea2 / #c3a080. Narrow screens on Qidolab itself use midnight #162b4a and lake blue
+#b9dfef; its favicon is the Quidence magnifier on navy #142236.
 
 ## 2. The Delta record (retired)
 
@@ -198,14 +234,19 @@ wording.
   hairline-ruled tiles (flex-wrap, gap 1px over a rule-colored ground); a zoom control
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
-  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Q (Quidence), ∅ (ACB), ≠ (MDC),
-  ∩ (scoping review, `review.html`); Δ retired with Delta.
-  Exception (since 2026-10-08, delta#19; before that the tile previewed Delta's
-  black-gold): the homepage's Q·Quidence tile alone is hardcoded to Quidence's own brand
-  (navy #142236 ground, teal #71ddc5 label and link, teal #62c4af Q watermark) as a
-  preview of www.quidence.com; the rest of the portfolio stays graphite-indigo. The tile
-  is a `<section>`: its "→ Open Quidence" link stretches an overlay over the whole tile,
-  so any click opens www.quidence.com in a new tab. With three paper tiles,
+  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Q (Quidence), ∴ (Qidolab), ∅ (ACB),
+  ≠ (MDC), ∩ (scoping review, `review.html`); Δ retired with Delta.
+  Exception (sites slot, since site#3, 2026-10-12; from delta#19 on 2026-10-08 it was a single
+  navy Quidence tile, and before that a black-gold Delta tile): the fifth slot of the
+  homepage's main band is `div.sites`, two opaque `.brandcard` sections, each hardcoded to its
+  own site's palette (§1, §1a) as a preview: Quidence (deep teal #153f44, mint #68e1af label
+  and link, Q watermark, "→ Open Quidence") above Qidolab (warm cream with sage and apricot
+  light, charcoal text, link #4a6142, label glyph #8f5d3b, "→ Play Qidolab"). The ∴
+  watermark is an inline SVG of three round dots because DM Serif Display has no ∴ and
+  fallbacks draw square dots. Each card's main link stretches an overlay over the card, so
+  any click opens that site in a new tab. Brand cards skip the glass and the text halo. The
+  slot wraps its cards (`flex: 1 1 13rem`), so when a zoom step leaves it alone on a row the
+  two cards sit side by side. The rest of the portfolio stays graphite-indigo. With three paper tiles,
   laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
   the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
   1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
@@ -279,7 +320,10 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
 - `site#n` — the portfolio line from 2026-10-08 on (`index.html`, `acb.html`, `mdc.html`,
   `review.html` + `review/`, `platform.html`, `README.md`, `CLAUDE.md`); starts at `site#1`.
   Assigned: `site#1` = PR #21 (CNAME for stephenjia.com, 2026-10-09); `site#2` = homepage
-  photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo (2026-10-09)
+  photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo, larger desktop
+  type, and the Quidence + Qidolab sites slot (2026-10-09 to 10-12)
+- `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
+  which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)
 
 Every PR title carries its reference as a `[line#n]` prefix. Already assigned: PRs #1–#8
@@ -316,10 +360,11 @@ GitHub's. A new project line starts its own counter at 1.
   data, for the owner to classify: the screening kickoff's agreement rule (≥75% raw
   agreement on a 20-record pilot) differs from protocol §3.5 (Cohen's κ ≥ .70 on a 10%
   subsample), which §5.1 lists as a substantive amendment needing an OSF update.
-- Quidence hosting: `www.quidence.com` had no DNS record on 2026-10-08; the portfolio
-  already links there (homepage tile, `platform.html`, README). When the owner deploys
-  Quidence, nothing on the portfolio needs to change. This repo never hosts or copies
-  Quidence content (owner, 2026-10-08).
+- Quidence and Qidolab hosting: the owner reported both live on 2026-10-12. The portfolio
+  links to both (homepage sites slot, `platform.html`, README). This session could not open
+  either address (environment network policy), so the cards' wording comes from each repo's
+  main branch; if a live site drifts from its repo, the card should follow the live site.
+  This repo never hosts or copies Quidence or Qidolab content (owner, 2026-10-08; §1a).
 - stephenjia.com: domain bought on Cloudflare (2026-10-08); zone active (DNS setup
   "Full"). site#1 (PR #21, opened 2026-10-09) adds the `CNAME` file and switches
   README/CLAUDE.md to the new address. Order that avoids downtime: Cloudflare records first (see the Repo line), then
@@ -329,6 +374,10 @@ GitHub's. A new project line starts its own counter at 1.
   for a you@stephenjia.com forward; turning on the Cloudflare proxy (orange cloud) only
   with SSL/TLS mode "Full (strict)". Content inventory lives in the owner's Claude Doc
   "stephenjia.com 内容整理".
+- Footer padding on the paper pages (fixed in site#3): their compact tier re-padded `.tile`,
+  which wiped the contact strip's reserved left padding and put the first footer link under
+  the zoom buttons at 1280×720 and 1366×768. All four now use `.tile:not(.foot)` and give
+  `.foot` 7rem there; any new page in this chassis must do the same.
 - Homepage photo ground (site#2, site#3): the paper pages (`acb.html`, `mdc.html`, `review.html`,
   `platform.html`) stay plain graphite-indigo on purpose; the owner asked for the homepage.
   If it is ever extended, reuse the recipe and the contrast floor recorded in §5.

@@ -74,7 +74,7 @@
     padding: 1rem 1.2rem; position: relative; transition: background .25s;
   }
   .tile:hover { background: rgba(250,251,252,.4); }
-  .tile:not(.quidence), .foot { text-shadow: 0 0 3px rgba(243,244,246,.9), 0 0 1px rgba(243,244,246,.9); }
+  .tile:not(.brandcard), .foot { text-shadow: 0 0 3px rgba(243,244,246,.9), 0 0 1px rgba(243,244,246,.9); }
   .glyph { text-shadow: none; }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .tile { background: rgba(243,244,246,.9); }
@@ -159,22 +159,47 @@
   .res-line b { display: block; font-weight: 600; font-size: .8rem; }
   .res-line span { color: var(--muted); font-size: .73rem; }
 
-  /* Quidence tile: the learning site's own colors (navy ground, teal accents), a preview of www.quidence.com */
-  .quidence { background: #142236; color: #f3f6fb; overflow: hidden; display: block; text-decoration: none; }
-  .quidence:hover { background: #1b2d47; }
-  .quidence .tile-label { color: #9fb0c6; }
-  .quidence .tile-label b { color: #71ddc5; }
-  .quidence h3 { color: #ffffff; }
-  .quidence p { color: #c8d5e4; }
-  .quidence .glyph {
-    position: absolute; right: .3rem; bottom: -1.4rem;
+  /* Sites slot: the owner's two sites stacked in one slot of the main band, each card in its own
+     site's colors and opaque (no glass, no halo). When the slot is wide (alone on a row after a
+     zoom step) the two cards sit side by side. */
+  .sites { display: flex; flex-wrap: wrap; gap: 1px; min-width: 0; }
+  .sites > .brandcard { flex: 1 1 13rem; min-width: 0; }
+  .brandcard { overflow: hidden; display: block; text-decoration: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .brandcard h3 { margin-bottom: .3rem; }
+  .brandcard .glyph {
+    position: absolute; right: .35rem; bottom: -1rem;
     font-family: 'DM Serif Display', serif;
-    font-size: 6.2rem; line-height: 1; color: #62c4af; opacity: .35;
+    font-size: 4.4rem; line-height: 1;
     pointer-events: none;
   }
-  .quidence .arrowlink { color: #71ddc5; }
-  /* The link's overlay keeps the whole tile clickable. */
-  .quidence .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
+  /* The link's overlay keeps the whole card clickable. */
+  .brandcard .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
+
+  /* Quidence: its 2026-10-12 palette (deep teal header, mint accent), a preview of www.quidence.com */
+  .quidence { background: #153f44; color: #f6f7f9; }
+  .quidence:hover { background: #1a4a50; }
+  .quidence .tile-label { color: #a9c7c3; }
+  .quidence .tile-label b { color: #68e1af; }
+  .quidence h3 { color: #ffffff; }
+  .quidence p { color: #d3e4e1; }
+  .quidence .glyph { color: #68e1af; opacity: .28; }
+  .quidence .arrowlink { color: #68e1af; }
+
+  /* Qidolab: its desktop palette (warm cream, sage and apricot light, warm charcoal), a preview of qidolab.com */
+  .qidolab {
+    background-color: #f8f5ec;
+    background-image: radial-gradient(ellipse at 28% 34%, #dfe5d8cc, transparent 62%), radial-gradient(ellipse at 88% 8%, #eddfd5cc, transparent 42%);
+    color: #37423c;
+  }
+  .qidolab:hover { background-color: #efeadc; }
+  .qidolab .tile-label { color: #5d6256; }
+  .qidolab .tile-label b { color: #8f5d3b; }
+  .qidolab h3 { color: #37423c; }
+  .qidolab p { color: #454f45; }
+  .qidolab .glyph { color: #c3a080; opacity: .5; }
+  /* ∴ drawn as three round dots: the display font has no ∴, and fallbacks draw square dots. */
+  .brandcard .glyph.dots { width: 3rem; height: auto; right: .7rem; bottom: .6rem; fill: currentColor; }
+  .qidolab .arrowlink { color: #4a6142; }
 
   /* Paper tiles */
   .paper .ptag {
@@ -332,13 +357,22 @@
       </ul>
     </section>
 
-    <section class="tile quidence">
-      <p class="tile-label"><b>Q</b> · Learning site</p>
-      <h3>Quidence · Mathematics &amp; Science</h3>
-      <p>Choose a course in mathematics, statistics, or introductory physics, review an idea, and test your understanding with problems that have several parts. Your work stays in your browser.</p>
-      <a class="arrowlink main" href="https://www.quidence.com/" target="_blank" rel="noopener">→ Open Quidence</a>
-      <span class="glyph">Q</span>
-    </section>
+    <div class="sites">
+      <section class="tile brandcard quidence">
+        <p class="tile-label"><b>Q</b> · Learning site</p>
+        <h3>Quidence · Mathematics &amp; Science</h3>
+        <p>Pick a course in mathematics or introductory physics and test your understanding with problems that have several parts. In English and Spanish.</p>
+        <a class="arrowlink main" href="https://www.quidence.com/" target="_blank" rel="noopener">→ Open Quidence</a>
+        <span class="glyph" aria-hidden="true">Q</span>
+      </section>
+      <section class="tile brandcard qidolab">
+        <p class="tile-label"><b>∴</b> · Puzzle site</p>
+        <h3>Qidolab · Brain Games</h3>
+        <p>18 hands-on puzzles: pour water, flip lights, weigh coins. No timer. Stuck? Try a different move.</p>
+        <a class="arrowlink main" href="https://qidolab.com/" target="_blank" rel="noopener">→ Play Qidolab</a>
+        <svg class="glyph dots" viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15" /><circle cx="16" cy="76" r="15" /><circle cx="84" cy="76" r="15" /></svg>
+      </section>
+    </div>
 
   </div>
 

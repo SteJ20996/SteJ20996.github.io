@@ -1,7 +1,12 @@
-/* Keep the original paper background; add color inside interactive content. */
-.topbar .edition{color:#23695d;background:#e4f3ed;border:1px solid #c5e1d5;border-radius:99px;padding:6px 12px;letter-spacing:.2px}
+/* Mist lavender, deep teal, mint and a little coral; gold marks achievement. */
+:root{--paper:#f3f1f7;--ink:#193e43;--muted:#5b6570;--mint:#bdebd9;--line:#dedbe7;--deep:#153f44}
+.topbar .edition{color:#64537c;background:#eae4f2;border:1px solid #d4c9e4;border-radius:99px;padding:6px 12px;letter-spacing:.2px}
+.language-control select,#language-select,.mobile-back{background:#fbf9fd;border-color:#d4cddd}
+.intro .eyebrow>span{background:#bf6557}
+.intro h1 span{color:#326f68}
+.intro .target{background:linear-gradient(transparent 58%,#dfd7ed 58%)}
 .audience-note{color:#46635e;letter-spacing:.1px}
-.activity-nav a{color:#365c59;border-color:#d1e3da;background:#fbfdf8;box-shadow:0 3px 9px #244e4110}
+.activity-nav a{color:#365c59;border-color:#dcd6e6;background:#fcfbfe;box-shadow:0 3px 9px #46375d0d}
 .activity-nav a:hover{background:#e4f5eb;border-color:#70b59a;box-shadow:0 5px 13px #244e4120}
 .activity-nav a[aria-current]{background:linear-gradient(135deg,#d8f2e3,#d6efef);border-color:#488d76;color:#20574b;box-shadow:0 0 0 3px #65ad921a}
 .activity-nav a.is-completed{color:#2f6d55;background:#edf7ec;border-color:#b2d6b8}
@@ -12,12 +17,12 @@
 .activity-nav a.has-branch-star::after{color:#7550ad}
 .outer-next{background:#eee9fa;border-color:#b9a6de;color:#624793}
 .outer-next[aria-current]{background:#e0d6f4;border-color:#7755ac}
-.outer-next.extreme-link{background:#fff0ca;border-color:#c9a24e;color:#795414!important}
-.playground{background:linear-gradient(140deg,#153f4b 0%,#155960 65%,#1a5948 100%);box-shadow:0 17px 35px -23px #196b6059;border:1px solid #2a716b}
+.outer-next.extreme-link{background:#fae3dd;border-color:#d2a398;color:#80473c!important}
+.playground{background:linear-gradient(140deg,#153f44 0%,#15565b 65%,#1b4d48 100%);box-shadow:0 17px 35px -23px #196b6059;border:1px solid #2a716b}
 .playground .experiment-label,.playground .board-caption{color:#c1e9de}
-.playground .experiment-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#ffe2a1;margin-right:7px;vertical-align:1px}
+.playground .experiment-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#f4afa0;margin-right:7px;vertical-align:1px}
 .playground .rule-reminder{color:#c4e2d5}
-.playground .rules{color:#d2e7dc;border-left-color:#c2dc88}
+.playground .rules{color:#d2e7dc;border-left-color:#f4afa0}
 .playground .water{background:linear-gradient(180deg,#7fe6e6,#3cc1ae)}
 .playground .water-surface{background:#d7fff0;opacity:.8}
 .playground .vessel{border-color:#88c8b9;border-top-color:#c7eee2;background:linear-gradient(125deg,#b9fff014,#d6fff407)}
@@ -25,28 +30,28 @@
 .playground .vessel.has-water .quantity{color:#16483f}
 .playground .jug-actions button{background:#d9f3e2;border-color:#89c0a9;color:#205c46;font-weight:500}
 .playground .jug-actions button span[aria-hidden]{color:#367c5d}
-.playground .pour-actions button{background:#f4d891;border-color:#dbb35f;color:#5d461b}
-.primary-button,.branch-button{background:#c7ecd4;color:#214f39;border:1px solid #9ac4a5}
-.playground .primary-button{background:#cfedb7;color:#2a502b;border-color:#a5ca85}
+.playground .pour-actions button{background:#f4afa0;border-color:#d58b7d;color:#633b35}
+.primary-button,.branch-button{background:#bdebd9;color:#214f43;border:1px solid #98c9b5}
+.playground .primary-button{background:#bdebd9;color:#214f43;border-color:#98c9b5}
 .playground button:hover:not(:disabled){filter:brightness(1.04)}
-.playground .placement-tabs button[aria-pressed=true]{background:#eadfb8;border-color:#f2d798;color:#5e4925}
-.hint-button{background:#ebf1fc;border-color:#c6d5ea;color:#375979}
+.playground .placement-tabs button[aria-pressed=true]{background:#ddd2ed;border-color:#c9b6e3;color:#53416c}
+.hint-button{background:#eae4f2;border-color:#cfc4e0;color:#604b7c}
 .success,.discovery,.number-result{background:linear-gradient(125deg,#eaf5dc,#e3f4ed);border-color:#bfd9ad;box-shadow:0 7px 22px -18px #38775455}
-.success-mark{background:#f4d995;color:#765119}
+.success-mark{background:#bdebd9;color:#214f43}
 .next-invite{background:#eff8e9;border-color:#c6dcc0}
-.branch-card{background:#f0f5ec;border-color:#c8ddca}
+.branch-card{background:#f0ebf7;border-color:#d3c8e3}
 .branch-evidence{background:#e5f4ee;border-color:#b9dacf}
 .branch-options button[aria-pressed=true]{background:#ece4f7;border-color:#8d71b5;box-shadow:inset 3px 0 #8061a9}
 .branch-complete{background:#e9def6;color:#604587}
-.success-invitation{background:#f6f7f2;border-color:#a6c9b7;box-shadow:0 20px 70px #183e4538}
+.success-invitation{background:var(--paper);border-color:#c5b8d5;box-shadow:0 20px 70px #183e4538}
 .invitation-symbol{background:#cdebd3;color:#286043}
-.success-invitation .branch-button{background:#deefd3;color:#385e2f;border-color:#b7cea7}
-.success-invitation .extreme-button{background:#f4d995;color:#674a19!important;border-color:#caa352!important}
+.success-invitation .branch-button{background:#bdebd9;color:#214f43;border-color:#98c9b5}
+.success-invitation .extreme-button{background:#f4afa0;color:#633b35!important;border-color:#d58b7d!important}
 .success-invitation .invitation-later{background:#edf0f7;border-color:#ccd4e2;color:#485b74}
 .extreme-view textarea{background:#184c52;border-color:#72a8a0;color:#f0f2d5}
 .extreme-view .extreme-visual svg{background:#16464d}
 .extreme-controls button,.extreme-grid button,.extreme-proof button{background:#e9f1e6;color:#2c5a43;border-color:#b4cfb7}
-.extreme-view button[aria-pressed=true],.extreme-view button.selected{background:#f6df9e;color:#705019;border-color:#caaa5d}
+.extreme-view button[aria-pressed=true],.extreme-view button.selected{background:#fae3dd;color:#80473c;border-color:#d2a398}
 .extreme-grid button.lit{background:#f3d47f;color:#644916}
 .extreme-grid button.covered{background:#d6e8d9;color:#416b52}
 /* A gold title requires all three completed challenges, not answer exposure. */
@@ -62,12 +67,13 @@
 .activity-nav a[data-preview-gold=true]::before{content:'✓';left:5px}
 .activity-nav a[data-preview-gold=true]::after{content:'★';right:5px}
 .activity-nav a[data-preview-gold=true] .orbit-crown[hidden]{display:block!important}
+.brand-bridge:not([data-bridge-theme=gold]){--bridge-background:linear-gradient(115deg,#e8e1f2 0%,#d8eee6 70%,#c9e9e2 100%);--bridge-line:#b5c8c0;--bridge-line-hover:#638f83}
 /* These controls belong only to this appearance preview. */
 .preview-tools{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:10;color:#36544d;font:12px/1.6 system-ui,sans-serif;max-width:calc(100vw - 36px)}
-.preview-tools>summary{cursor:pointer;list-style:none;min-height:44px;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:#fffdf6;border:1px solid #c4d4c7;border-radius:99px;box-shadow:0 4px 20px #15353b18}
+.preview-tools>summary{cursor:pointer;list-style:none;min-height:44px;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:#fcfbfe;border:1px solid #d4cddd;border-radius:99px;box-shadow:0 4px 20px #15353b18}
 .preview-tools>summary::-webkit-details-marker{display:none}
 .preview-tools[open]>summary{border-color:#a0bdab}
-.preview-tool-panel{position:absolute;right:0;bottom:56px;width:304px;max-width:calc(100vw - 36px);padding:18px;border:1px solid #c9dbce;border-radius:18px;background:#fbfcf7;box-shadow:0 12px 34px #15353b25}
+.preview-tool-panel{position:absolute;right:0;bottom:56px;width:304px;max-width:calc(100vw - 36px);padding:18px;border:1px solid #d4cddd;border-radius:18px;background:#fcfbfe;box-shadow:0 12px 34px #15353b25}
 .preview-tool-panel h2{font:500 15px/1.5 system-ui,sans-serif;margin:0 0 5px}
 .preview-tool-panel p{font:12px/1.6 system-ui,sans-serif;margin:0 0 14px;color:#5c7167}
 .preview-tool-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}

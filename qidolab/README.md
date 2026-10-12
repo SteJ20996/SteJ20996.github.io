@@ -1,8 +1,8 @@
-# Qidolab 1.0 — production source
+# Qidolab 1.1 — production source
 
 Target domain: https://qidolab.com/
 
-This folder contains the complete static site: 18 original puzzles, optional extra steps, extreme challenges and Chinese, English and Spanish interfaces. All runtime scripts, styles and logos use local relative paths. No installation or compilation is needed.
+This folder contains the complete static site: 18 original puzzles, optional extra steps, extreme challenges and English, Simplified Chinese, Taiwan Traditional Chinese and Spanish interfaces. All runtime scripts, styles and logos use local relative paths. No installation or compilation is needed.
 
 The approved warm-cream theme uses warm charcoal, sage and muted apricot on desktop (980px and wider). Narrow screens retain cream, midnight blue and lake blue. The separate `../qidolab-preview/` folder retains the appearance comparison tools; none are loaded by this production page.
 
@@ -32,6 +32,10 @@ Official references:
 ## Local preview
 
 From the repository root, run `python3 -m http.server 8080 --directory qidolab` and open http://localhost:8080/. Use an HTTP server because browsers load the game's ES modules through HTTP.
+
+## Languages
+
+First-time visitors start in English. The language menu includes English, 简体中文, 繁體中文 (`zh-TW`, Taiwan usage), and Español. A valid saved preference remains in use on return visits. Taiwan copy is stored locally in `zh-tw-copy.mjs`, prepared offline from authored text using OpenCC with interface/math terminology edits. The game never loads a conversion library or translation service from a CDN.
 
 ## Progress and achievements
 

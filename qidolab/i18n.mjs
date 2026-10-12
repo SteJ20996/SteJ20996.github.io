@@ -1,13 +1,19 @@
 import translations from './translations.mjs';
-export const locales = ['zh-CN', 'en', 'es-MX'];
-export let locale = 'zh-CN';
+import {toTaiwanText} from './zh-tw-copy.mjs';
+export const locales = ['zh-CN', 'en', 'es-MX', 'zh-TW'];
+export let locale = 'en';
 try { const saved = localStorage.getItem('quidence-locale-v1'); if (locales.includes(saved)) locale = saved; } catch {}
-const dictionary = {...translations};
-export function registerTranslations(entries) { Object.assign(dictionary, entries); }
+function withTaiwanCopy(entries){
+  return Object.fromEntries(Object.entries(entries).map(([key,copies])=>[key,{...copies,'zh-TW':copies['zh-TW']??toTaiwanText(copies['zh-CN']??'')} ]));
+}
+const dictionary = withTaiwanCopy(translations);
+export function registerTranslations(entries) { Object.assign(dictionary, withTaiwanCopy(entries)); }
+export function regionalCopy(copy,language=locale){return language==='zh-TW'?toTaiwanText(copy):String(copy);}
 const pluralRules = {en: new Intl.PluralRules('en'), 'es-MX': new Intl.PluralRules('es-MX')};
 // Apply singular agreement while placeholders still identify the relevant quantity.
 // This is intentionally limited to the count nouns used by these activities.
 export function formatCountCopy(copy, params = {}, language = locale) {
+  if(language==='zh-TW')return regionalCopy(copy,language);
   if (!['en', 'es-MX'].includes(language)) return String(copy);
   const rules = pluralRules[language];
   if (!Object.values(params).some(value => typeof value === 'number' && Number.isFinite(value) && rules.select(value) === 'one')) return String(copy);

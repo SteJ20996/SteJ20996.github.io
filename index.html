@@ -120,6 +120,32 @@
   .mast-tag { margin-top: .5rem; font-size: .84rem; color: var(--muted); max-width: 52ch; font-weight: 700; }
   .mast-art { flex-shrink: 0; width: clamp(96px, 11vw, 148px); height: clamp(96px, 11vw, 148px); }
   .mast-art svg { width: 100%; height: 100%; }
+
+  /* Vision: the owner's two sites, stated at the top of the page (site#5). It sits in the
+     masthead's empty middle, so the page does not grow. */
+  .mast { flex-wrap: wrap; }
+  .mast > div:first-child { flex: 0 1 auto; }
+  .vision { flex: 1 1 24rem; max-width: 46rem; border-left: 1px solid var(--rule); padding-left: 1.6rem; align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+  .vision-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem 1rem; margin-bottom: .45rem; }
+  .vision .tile-label { margin-bottom: 0; }
+  .tile p.vision-text { font-size: .8rem; line-height: 1.5; color: var(--body); }
+  .vision-text .vq-name { color: #15565b; }
+  .vision-text .vd-name { color: #4a6142; }
+  .vision-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .vbtn {
+    display: inline-flex; align-items: center; gap: .45rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 800;
+    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+    padding: .45rem .85rem; border-radius: 99px;
+    text-shadow: none; -webkit-text-stroke: 0;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .vbtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px -6px rgba(22,24,30,.35); }
+  .vbtn b { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: .95rem; letter-spacing: 0; text-transform: none; line-height: 1; }
+  .vbtn.vd { background: #f8f5ec; color: #37423c; border: 1px solid #c3a080; }
+  .vbtn.vd b { color: #8f5d3b; }
+  .vbtn.vq { background: #153f44; color: #ffffff; border: 1px solid #153f44; }
+  .vbtn.vq b { color: #68e1af; }
   .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
   .dot { fill: var(--accent); }
 
@@ -289,10 +315,11 @@
     .paper .sub { margin-bottom: .25rem; }
   }
 
-  /* Laptop heights above the compact tier: the masthead circle set the masthead's height, and the
-     semibold text needs that room (the compact tier keeps its own 84px circle). */
-  @media (min-width: 861px) and (min-height: 821px) and (max-height: 1000px) {
-    .mast-art { width: 116px; height: 116px; }
+  /* Laptop and short desktop screens: the vision block needs the masthead's width more than the
+     decorative circle does, so the circle steps aside (its ∫ is the vision label's glyph). */
+  @media (min-width: 861px) and (max-height: 1000px) {
+    .mast-art { display: none; }
+    .vision { max-width: none; }
   }
 
   /* ===== Mobile ===== */
@@ -303,6 +330,8 @@
     .mast { padding: 1.3rem 1.3rem; }
     .mast-art { width: 92px; height: 92px; }
     .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
+    .mast-art { display: none; }   /* its ∫ is the vision label's glyph */
+    .vision { flex-basis: 100%; max-width: none; border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: .9rem; }
   }
 </style>
 </head>
@@ -317,6 +346,16 @@
       <h1>Yizhen <em>(Stephen)</em> Jia</h1>
       <p class="mast-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
     </div>
+    <aside class="vision" aria-label="What I am building">
+      <div class="vision-head">
+        <p class="tile-label"><b>∫</b> · What I'm building</p>
+        <div class="vision-links">
+          <a class="vbtn vd" href="https://qidolab.com/" target="_blank" rel="noopener"><b>∴</b> Play Qidolab ↗</a>
+          <a class="vbtn vq" href="https://www.quidence.com/" target="_blank" rel="noopener"><b>Q</b> Open Quidence ↗</a>
+        </div>
+      </div>
+      <p class="vision-text">I want students to see their own thinking, not just their answers. <span class="vd-name">Qidolab</span> is the playful start: 18 small puzzles with no timer, where a wrong move is just a new try. <span class="vq-name">Quidence</span> is the next step: courses where you test what you understand and keep your work to look back on.</p>
+    </aside>
     <div class="mast-art" aria-hidden="true">
       <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
         <circle cx="170" cy="170" r="80" class="ring" stroke-dasharray="4 8" />

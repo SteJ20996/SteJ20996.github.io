@@ -63,16 +63,16 @@
   .band-main > .about { flex-grow: 1.25; }
   .band-papers > * { flex: 1 1 26rem; min-width: 0; }
 
-  /* Glass tiles: a little over a third of paper over the blurred photo, and a paper-coloured halo under every
+  /* Glass tiles: a quarter of paper over the blurred photo, and a paper-coloured halo under every
    glyph so the text always sits on light ground; the 1px shadow draws the hairline grid that the
    sheet's rule-coloured ground used to provide. */
   .tile {
-    background: rgba(243,244,246,.38);
-    -webkit-backdrop-filter: blur(22px) saturate(.8); backdrop-filter: blur(22px) saturate(.8);
+    background: rgba(243,244,246,.25);
+    -webkit-backdrop-filter: blur(16px) saturate(.9); backdrop-filter: blur(16px) saturate(.9);
     box-shadow: 0 0 0 1px var(--rule);
     padding: 1rem 1.2rem; position: relative; transition: background .25s;
   }
-  .tile:hover { background: rgba(250,251,252,.5); }
+  .tile:hover { background: rgba(250,251,252,.4); }
   /* A 1px paper-coloured edge on each letter. It was a 3px glow, which made the text look soft. */
   .tile:not(.brandcard), .foot { text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .glyph { text-shadow: none; }
@@ -303,9 +303,6 @@
     .mast { padding: 1.3rem 1.3rem; }
     .mast-art { width: 92px; height: 92px; }
     .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
-    /* On a phone the boxes cover almost the whole screen, so they can be much less see-through
-       without hiding the photo; the owner found the phone text unclear at 38%. */
-    .tile:not(.brandcard):not(.foot) { background: rgba(243,244,246,.6); }   /* the contact strip keeps its 96% */
   }
 </style>
 </head>

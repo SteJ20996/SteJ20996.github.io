@@ -251,16 +251,16 @@ wording.
   the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
   1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
   Photo ground on the homepage only (site#2, 2026-10-09, at 50% tiles; site#3 took it to 25%
-  after the owner asked twice for more of the photo; site#4, 2026-10-12, settled at 38% when
-  the owner asked for a less see-through ground and clearer text): `assets/yosemite-light.webp`
+  after the owner asked twice for more of the photo; site#4 tried 38% on computers and 60%
+  on phones, and the owner then asked for "the background transparent as before"
+  (2026-10-13), so it stays at 25% everywhere and clarity comes from the text alone):
+  `assets/yosemite-light.webp`
   (the owner's own Yosemite Tunnel View photo, IMG_6641, 1920×1440, about 135 KB) sits in a
   fixed `body::before` layer (not `background-attachment: fixed`, which iOS Safari ignores).
-  The tiles are glass: paper at 38% over `backdrop-filter: blur(22px) saturate(.8)` (the
-  stronger blur and lower saturation calm the photo behind the words; on phones, 860px and
-  narrower, the boxes are 60% because they cover almost the whole screen and the owner found
-  the phone text unclear, 2026-10-13), hairlines drawn by a 1px box-shadow because the sheet
-  ground is transparent; the contact strip is at 96% (was 86%; bold text scrolling under the
-  sticky strip showed through) and is excluded from the phone rule with `:not(.foot)`; the
+  The tiles are glass: paper at 25% over `backdrop-filter: blur(16px) saturate(.9)`, on
+  every screen size, hairlines drawn by a 1px box-shadow because the sheet ground is
+  transparent; the contact strip is at 96% (was 86%; bold text scrolling under the sticky
+  strip showed through on phones), and any tile rule must exclude it with `:not(.foot)`; the
   Quidence tile stays opaque. Three things keep the text readable on so little paper: a
   1px paper-coloured edge on every letter inside the paper tiles and the contact strip
   (`text-shadow: 0 0 1px`, paper at 95%; watermark glyphs excluded), dark bold homepage
@@ -279,18 +279,18 @@ wording.
   backdrop-filter support and to 94% under `prefers-reduced-transparency`. Rule for any change
   here: run `node tools/contrast-floor.mjs` (headless Chromium; it samples the darkest 5% of
   what sits under the glyph pixels of every text block, halo included) and keep every text
-  colour at 4.5:1 or better; after site#4 (worst case, 1280×720) headings 11.7, body 10.1,
-  small grey 8.0, links and tags 5.6. site#3 first shipped a 3px glow with lighter text
+  colour at 4.5:1 or better; after site#4 (worst case, 1280×720, 25% glass) body 9.2, small
+  grey 6.9, links and tags 5.2, headings 8.1. site#3 first shipped a 3px glow with lighter text
   (#3a3f49 / #4b5260) at 25%: the owner found it faint and blurry ("文字颜色比较淡比较糊",
   then "请再降低一点背景的透明度並且把文字變得更清晰一點", 2026-10-12), so site#4 cut the
-  glow to 1px, darkened the text, raised the glass to 38% with a calmer blur, dropped
+  glow to 1px, darkened the text, dropped
   `-webkit-font-smoothing: antialiased` from the homepage (on macOS it thins the strokes;
   the paper pages keep it), and, after "文字請再加粗一些" and then "still very unclear, i
   want the words much more bold" (2026-10-13), set the text bold as above. The bolder text
   needed room at 1440×900, so laptop heights above the compact tier draw
   the masthead circle at 116px (the circle had set the masthead's height). Do not bring
-  back a wide glow, and do not go below about 38% or back to lighter weights without the
-  owner asking. The site#2
+  back a wide glow, do not make the glass less see-through, and do not go back to lighter
+  weights without the owner asking. The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
   Type scale (site#3, 2026-10-09, owner's ask: a little larger on computers, unchanged on
   phones): the homepage root font is `--base-fs`, 16px on phones, 17px on desktop
@@ -345,7 +345,8 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   Assigned: `site#1` = PR #21 (CNAME for stephenjia.com, 2026-10-09); `site#2` = homepage
   photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo, larger desktop
   type, and the Quidence + Qidolab sites slot (PR #31, merged 2026-10-12); `site#4` = crisper,
-  darker, bold homepage text on 38% glass (2026-10-12/13)
+  darker, bold homepage text on the same 25% glass, sticky contact strip at 96%
+  (2026-10-12/13)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

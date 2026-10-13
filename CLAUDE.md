@@ -246,7 +246,21 @@ wording.
   fallbacks draw square dots. Each card's main link stretches an overlay over the card, so
   any click opens that site in a new tab. Brand cards skip the glass and the text halo. The
   slot wraps its cards (`flex: 1 1 13rem`), so when a zoom step leaves it alone on a row the
-  two cards sit side by side. The rest of the portfolio stays graphite-indigo. With three paper tiles,
+  two cards sit side by side.
+  Vision block (site#5, 2026-10-13, owner: "我想在我的主頁裡增加一些比重的關於兩個最近上線的網頁
+  表明我的願景"): the masthead's empty middle holds `aside.vision`, labelled "∫ · What I'm
+  building", with two pill buttons on the label row ("∴ Play Qidolab ↗" in Qidolab's cream
+  with an apricot border, "Q Open Quidence ↗" in Quidence's deep teal) and the owner's vision
+  in their voice: "I want students to see their own thinking, not just their answers. Qidolab
+  is the playful start: 18 small puzzles with no timer, where a wrong move is just a new try.
+  Quidence is the next step: courses where you test what you understand and keep your work to
+  look back on." (site names in their brand colours #4a6142 / #15565b). Qidolab comes first
+  because it is the way in. The copy is drafted from the two repos and the About tile; the
+  owner may rewrite it. It adds no height: on laptop and short desktop screens (861px+ wide,
+  1000px or less tall) the decorative ∫ circle steps aside so the text runs wide in three
+  lines (the ∫ lives on in the label); on phones the block runs full width under the name with
+  a top rule and the circle is hidden; on tall desktops the circle stays at the right. The
+  sites slot below keeps its two cards. The rest of the portfolio stays graphite-indigo. With three paper tiles,
   laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
   the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
   1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
@@ -346,7 +360,8 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo, larger desktop
   type, and the Quidence + Qidolab sites slot (PR #31, merged 2026-10-12); `site#4` = crisper,
   darker, bold homepage text on the same 25% glass, sticky contact strip at 96%
-  (2026-10-12/13)
+  (PR #32, merged 2026-10-13); `site#5` = vision block for Quidence and Qidolab in the
+  masthead (2026-10-13)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

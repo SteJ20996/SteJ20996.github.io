@@ -260,12 +260,16 @@ wording.
   1px box-shadow because the sheet ground is transparent; the contact strip is at 86%; the
   Quidence tile stays opaque. Three things keep the text readable on so little paper: a
   1px paper-coloured edge on every letter inside the paper tiles and the contact strip
-  (`text-shadow: 0 0 1px`, paper at 95%; watermark glyphs excluded), dark semibold homepage
+  (`text-shadow: 0 0 1px`, paper at 95%; watermark glyphs excluded), dark bold homepage
   text (`--body` #20242b, `--muted` #30353f, `--accent` #284a80; tile paragraphs, small
-  lines, paper subtitles and research notes at 600, job and research titles at 700, the
-  masthead line at 580, mono labels, years and the contact strip at 500; Instrument Sans is
-  loaded as the variable 400..700 range so any weight works; the paper pages keep #454a54 /
-  #737a86 / #31548e at 400), and the
+  lines, paper subtitles, research notes and the masthead line at 700, Instrument Sans's
+  heaviest, plus a 0.2px `-webkit-text-stroke`; job and research titles 700 + 0.3px stroke;
+  the DM Serif headings, which have one weight, + 0.45px stroke; mono labels, years, links,
+  paper tags and the contact strip in JetBrains Mono's real 800. Instrument Sans loads as the
+  variable 400..700 range and JetBrains Mono as 400/500/700/800. Note `.tile p` outranks
+  `.tile-label`, so label weights must be set with `.tile .tile-label`; before site#4 the
+  labels got 600 that way and the browser faked it from the 500 file. The paper pages keep
+  #454a54 / #737a86 / #31548e at 400), and the
   image file itself: full colour, shadows lifted (gamma 0.65), blended 6% toward paper, plus an
   extra blend toward paper rising to 36% over the lower 55% of the frame so the dark forest
   never sits behind text, then a 0.8px blur. Fallbacks: tiles go to 90% without
@@ -278,8 +282,9 @@ wording.
   then "请再降低一点背景的透明度並且把文字變得更清晰一點", 2026-10-12), so site#4 cut the
   glow to 1px, darkened the text, raised the glass to 38% with a calmer blur, dropped
   `-webkit-font-smoothing: antialiased` from the homepage (on macOS it thins the strokes;
-  the paper pages keep it), and, after "文字請再加粗一些", set the text semibold as above.
-  The bolder text needed room at 1440×900, so laptop heights above the compact tier draw
+  the paper pages keep it), and, after "文字請再加粗一些" and then "still very unclear, i
+  want the words much more bold" (2026-10-13), set the text bold as above. The bolder text
+  needed room at 1440×900, so laptop heights above the compact tier draw
   the masthead circle at 116px (the circle had set the masthead's height). Do not bring
   back a wide glow, and do not go below about 38% or back to lighter weights without the
   owner asking. The site#2
@@ -337,7 +342,7 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   Assigned: `site#1` = PR #21 (CNAME for stephenjia.com, 2026-10-09); `site#2` = homepage
   photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo, larger desktop
   type, and the Quidence + Qidolab sites slot (PR #31, merged 2026-10-12); `site#4` = crisper,
-  darker, semibold homepage text on 38% glass (2026-10-12)
+  darker, bold homepage text on 38% glass (2026-10-12/13)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

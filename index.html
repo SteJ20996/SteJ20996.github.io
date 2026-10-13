@@ -7,7 +7,7 @@
 <title>Yizhen (Stephen) Jia · Math Educator &amp; Researcher</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #16181e;
@@ -117,7 +117,7 @@
     letter-spacing: -.01em;
   }
   .mast h1 em { font-style: italic; color: var(--accent); }
-  .mast-tag { margin-top: .5rem; font-size: .84rem; color: var(--muted); max-width: 52ch; font-weight: 580; }
+  .mast-tag { margin-top: .5rem; font-size: .84rem; color: var(--muted); max-width: 52ch; font-weight: 700; }
   .mast-art { flex-shrink: 0; width: clamp(96px, 11vw, 148px); height: clamp(96px, 11vw, 148px); }
   .mast-art svg { width: 100%; height: 100%; }
   .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
@@ -134,9 +134,15 @@
   .about h3 { font-size: 1.15rem; }
   .about p { font-size: .85rem; line-height: 1.6; }
   .about p + p { margin-top: .7rem; }
-  .tile p { font-size: .78rem; color: var(--body); font-weight: 600; }
-  .plainlist small, .paper .sub, .res-line span { font-weight: 600; }   /* semibold reads crisper on glass (owner asked twice for bolder text) */
-  .tile-label, .plainlist .yr, .foot { font-weight: 500; }
+  .tile p { font-size: .78rem; color: var(--body); font-weight: 700; }
+  /* Bold text on the glass (the owner asked three times for bolder, clearer words). Instrument Sans
+     tops out at 700, so a hairline stroke adds the last bit of weight; the serif headings, which come
+     in one weight only, get a slightly wider stroke. Mono labels use JetBrains Mono's real 800. */
+  .plainlist small, .paper .sub, .res-line span { font-weight: 700; }
+  .tile p, .plainlist small, .paper .sub, .res-line span { -webkit-text-stroke: .2px currentColor; }
+  .tile .tile-label, .tile-label b, .mast .mast-over, .plainlist .yr, .foot, .arrowlink, .paper .ptag { font-weight: 800; }
+  .plainlist b, .res-line b { -webkit-text-stroke: .3px currentColor; }
+  .tile h3, .mast h1 { -webkit-text-stroke: .45px currentColor; }
   .tile p.dim { color: var(--muted); }
 
   .plainlist { list-style: none; font-size: .78rem; }

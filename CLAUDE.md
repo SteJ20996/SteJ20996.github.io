@@ -256,8 +256,11 @@ wording.
   (the owner's own Yosemite Tunnel View photo, IMG_6641, 1920×1440, about 135 KB) sits in a
   fixed `body::before` layer (not `background-attachment: fixed`, which iOS Safari ignores).
   The tiles are glass: paper at 38% over `backdrop-filter: blur(22px) saturate(.8)` (the
-  stronger blur and lower saturation calm the photo behind the words), hairlines drawn by a
-  1px box-shadow because the sheet ground is transparent; the contact strip is at 86%; the
+  stronger blur and lower saturation calm the photo behind the words; on phones, 860px and
+  narrower, the boxes are 60% because they cover almost the whole screen and the owner found
+  the phone text unclear, 2026-10-13), hairlines drawn by a 1px box-shadow because the sheet
+  ground is transparent; the contact strip is at 96% (was 86%; bold text scrolling under the
+  sticky strip showed through) and is excluded from the phone rule with `:not(.foot)`; the
   Quidence tile stays opaque. Three things keep the text readable on so little paper: a
   1px paper-coloured edge on every letter inside the paper tiles and the contact strip
   (`text-shadow: 0 0 1px`, paper at 95%; watermark glyphs excluded), dark bold homepage

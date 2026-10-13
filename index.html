@@ -229,7 +229,7 @@
     z-index: 40;
     border-top: 1px solid var(--rule);
     margin-top: -1px;
-    background: rgba(243,244,246,.86);
+    background: rgba(243,244,246,.96);   /* nearly solid: bold text scrolling underneath must not show through */
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
     gap: .6rem 1.6rem;
@@ -303,6 +303,9 @@
     .mast { padding: 1.3rem 1.3rem; }
     .mast-art { width: 92px; height: 92px; }
     .foot { justify-content: center; text-align: center; padding-left: 1.3rem; }
+    /* On a phone the boxes cover almost the whole screen, so they can be much less see-through
+       without hiding the photo; the owner found the phone text unclear at 38%. */
+    .tile:not(.brandcard):not(.foot) { background: rgba(243,244,246,.6); }   /* the contact strip keeps its 96% */
   }
 </style>
 </head>

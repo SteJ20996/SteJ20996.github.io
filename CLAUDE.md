@@ -250,24 +250,47 @@ wording.
   laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
   the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
   1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
-  Photo ground on the homepage only (site#2, 2026-10-09, at 50% tiles; site#3 the same day
-  took it to 25% after the owner asked twice for more of the photo): `assets/yosemite-light.webp`
+  Photo ground on the homepage only (site#2, 2026-10-09, at 50% tiles; site#3 took it to 25%
+  after the owner asked twice for more of the photo; site#4 tried 38% on computers and 60%
+  on phones, and the owner then asked for "the background transparent as before"
+  (2026-10-13), so it stays at 25% everywhere and clarity comes from the text alone):
+  `assets/yosemite-light.webp`
   (the owner's own Yosemite Tunnel View photo, IMG_6641, 1920×1440, about 135 KB) sits in a
   fixed `body::before` layer (not `background-attachment: fixed`, which iOS Safari ignores).
-  The tiles are glass: paper at 25% over `backdrop-filter: blur(16px)`, hairlines drawn by a
-  1px box-shadow because the sheet ground is transparent; the contact strip is at 86%; the
+  The tiles are glass: paper at 25% over `backdrop-filter: blur(16px) saturate(.9)`, on
+  every screen size, hairlines drawn by a 1px box-shadow because the sheet ground is
+  transparent; the contact strip is at 96% (was 86%; bold text scrolling under the sticky
+  strip showed through on phones), and any tile rule must exclude it with `:not(.foot)`; the
   Quidence tile stays opaque. Three things keep the text readable on so little paper: a
-  paper-coloured text halo on everything inside the paper tiles and the contact strip
-  (`text-shadow` 3px + 1px, paper at 90%; the watermark glyphs are excluded), darker homepage
-  text (`--body` #3a3f49, `--muted` #4b5260; the paper pages keep #454a54 / #737a86), and the
+  1px paper-coloured edge on every letter inside the paper tiles and the contact strip
+  (`text-shadow: 0 0 1px`, paper at 95%; watermark glyphs excluded), dark bold homepage
+  text (`--body` #20242b, `--muted` #30353f, `--accent` #284a80; tile paragraphs, small
+  lines, paper subtitles, research notes and the masthead line at 700, Instrument Sans's
+  heaviest, plus a 0.2px `-webkit-text-stroke`; job and research titles 700 + 0.3px stroke;
+  the DM Serif headings, which have one weight, + 0.45px stroke; mono labels, years, links,
+  paper tags and the contact strip in JetBrains Mono's real 800. Instrument Sans loads as the
+  variable 400..700 range and JetBrains Mono as 400/500/700/800. Note `.tile p` outranks
+  `.tile-label`, so label weights must be set with `.tile .tile-label`; before site#4 the
+  labels got 600 that way and the browser faked it from the 500 file. The paper pages keep
+  #454a54 / #737a86 / #31548e at 400), and the
   image file itself: full colour, shadows lifted (gamma 0.65), blended 6% toward paper, plus an
   extra blend toward paper rising to 36% over the lower 55% of the frame so the dark forest
   never sits behind text, then a 0.8px blur. Fallbacks: tiles go to 90% without
   backdrop-filter support and to 94% under `prefers-reduced-transparency`. Rule for any change
   here: run `node tools/contrast-floor.mjs` (headless Chromium; it samples the darkest 5% of
   what sits under the glyph pixels of every text block, halo included) and keep every text
-  colour at 4.5:1 or better; as merged, headings 12, body 6.9, small grey 5.1 (4.9 at
-  1280×720). The site#2
+  colour at 4.5:1 or better; after site#4 (worst case, 1280×720, 25% glass) body 9.2, small
+  grey 6.9, links and tags 5.2, headings 8.1. site#3 first shipped a 3px glow with lighter text
+  (#3a3f49 / #4b5260) at 25%: the owner found it faint and blurry ("文字颜色比较淡比较糊",
+  then "请再降低一点背景的透明度並且把文字變得更清晰一點", 2026-10-12), so site#4 cut the
+  glow to 1px, darkened the text, dropped
+  `-webkit-font-smoothing: antialiased` from the homepage (on macOS it thins the strokes;
+  the paper pages keep it), and, after "文字請再加粗一些" and then "still very unclear, i
+  want the words much more bold" (2026-10-13), set the text bold as above. The bolder text
+  needed room at 1440×900, so laptop heights above the compact tier draw
+  the masthead circle at 116px (the circle had set the masthead's height). Do not bring
+  back a wide glow, do not make the glass less see-through, and do not go back to lighter
+  weights without the owner asking. The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
   Type scale (site#3, 2026-10-09, owner's ask: a little larger on computers, unchanged on
   phones): the homepage root font is `--base-fs`, 16px on phones, 17px on desktop
@@ -321,7 +344,9 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   `review.html` + `review/`, `platform.html`, `README.md`, `CLAUDE.md`); starts at `site#1`.
   Assigned: `site#1` = PR #21 (CNAME for stephenjia.com, 2026-10-09); `site#2` = homepage
   photo ground (2026-10-09); `site#3` = glass tiles at 25% with text halo, larger desktop
-  type, and the Quidence + Qidolab sites slot (2026-10-09 to 10-12)
+  type, and the Quidence + Qidolab sites slot (PR #31, merged 2026-10-12); `site#4` = crisper,
+  darker, bold homepage text on the same 25% glass, sticky contact strip at 96%
+  (2026-10-12/13)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

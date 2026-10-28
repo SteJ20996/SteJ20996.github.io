@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="GambitAura：小棋盤、不靠運氣的雙人策略棋系列。第一款：借路 Jielu。" />
+<meta name="theme-color" content="#f5f2ec" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#11151d" media="(prefers-color-scheme: dark)" />
+<title>GambitAura</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f2ec; --panel: #fffdf8; --ink: #1c2130; --body: #3c4252; --muted: #5f6676; --line: #e2dbcd;
+    --mint: #17a37b; --coral: #e2614c; --gold: #e9b949; --focus: #2b5cd6;
+    --water-a: #2f7896; --water-b: #1d566f; --tile: #efe3cb;
+    --shadow: 0 10px 40px rgba(28, 33, 48, .10);
+    --sans: 'Instrument Sans', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    --serif: 'DM Serif Display', 'Noto Serif TC', 'Songti TC', serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d; --panel: #181d27; --ink: #eef0f5; --body: #c9cdd8; --muted: #9aa1b0; --line: #2a3140;
+      --water-a: #24617b; --water-b: #153f52; --tile: #e4d6ba; --focus: #8fb0ff; --shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151d; --panel: #181d27; --ink: #eef0f5; --body: #c9cdd8; --muted: #9aa1b0; --line: #2a3140;
+    --water-a: #24617b; --water-b: #153f52; --tile: #e4d6ba; --focus: #8fb0ff; --shadow: 0 10px 40px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-height: 1.6; padding: max(14px, env(safe-area-inset-top)) 16px 32px; min-height: 100dvh; }
+  a { color: inherit; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 4px 0 10px; }
+  .wordmark { font-family: var(--serif); font-size: 1.35rem; text-decoration: none; }
+  .wordmark em, .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--mint) 0%, var(--gold) 50%, var(--coral) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .langs { display: flex; gap: 4px; }
+  .chip { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .8rem; color: inherit; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip:focus-visible, .play:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .hero { padding: clamp(28px, 7vw, 72px) 0 clamp(22px, 5vw, 44px); }
+  .hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 9vw, 5rem); line-height: 1; letter-spacing: -.01em; }
+  .hero p { font-size: clamp(1.02rem, 2.4vw, 1.25rem); color: var(--body); max-width: 36rem; margin-top: 16px; }
+  .label { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .game {
+    display: grid; grid-template-columns: 260px 1fr; gap: 26px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--shadow);
+  }
+  @media (max-width: 680px) { .game { grid-template-columns: 1fr; } .game svg { max-width: 300px; margin: 0 auto; } }
+  .game svg { width: 100%; height: auto; display: block; }
+  .game h2 { font-family: var(--serif); font-weight: 400; font-size: 2rem; line-height: 1.15; margin: 6px 0 8px; }
+  .game h2 small { font-family: var(--sans); font-size: 1rem; color: var(--muted); margin-left: 8px; }
+  .game p { color: var(--body); margin-bottom: 10px; }
+  .play {
+    display: inline-block; margin-top: 6px; background: var(--ink); color: var(--bg); text-decoration: none;
+    font-weight: 700; padding: 10px 20px; border-radius: 12px;
+  }
+  .play:hover { filter: brightness(1.15); }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+  @media (max-width: 680px) { .facts { grid-template-columns: 1fr; } }
+  .fact { border-top: 2px solid var(--line); padding-top: 10px; }
+  .fact b { display: block; font-size: 1rem; margin-bottom: 2px; }
+  .fact span { font-size: .9rem; color: var(--muted); }
+  .soon { margin-top: 26px; color: var(--muted); font-size: .92rem; }
+  footer { margin-top: 40px; font-size: .82rem; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="wordmark" href="./">Gambit<em>Aura</em></a>
+    <div class="langs" role="group" aria-label="Language">
+      <button class="chip" data-lang="zh" aria-pressed="true">中文</button>
+      <button class="chip" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="label" data-t="kicker">A strategy game series</div>
+    <h1>Gambit<em>Aura</em></h1>
+    <p data-t="tag">Small boards for two players. No dice, nothing hidden. Every move is yours.</p>
+  </section>
+
+  <section class="game">
+    <svg viewBox="0 0 250 250" role="img" aria-labelledby="miniTitle">
+      <title id="miniTitle">借路 Jielu</title>
+      <defs>
+        <linearGradient id="w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--water-a)"/><stop offset="1" style="stop-color:var(--water-b)"/></linearGradient>
+        <radialGradient id="gm" cx=".35" cy=".3"><stop offset="0" stop-color="#5fe0b6"/><stop offset=".6" stop-color="#17a37b"/><stop offset="1" stop-color="#0e7a5b"/></radialGradient>
+        <radialGradient id="gc" cx=".35" cy=".3"><stop offset="0" stop-color="#ff9a85"/><stop offset=".6" stop-color="#e2614c"/><stop offset="1" stop-color="#b9432f"/></radialGradient>
+      </defs>
+      <rect width="250" height="250" rx="22" fill="url(#w)"/>
+      <g id="mini"></g>
+    </svg>
+    <div>
+      <div class="label">Game 01</div>
+      <h2>借路 <small>Jielu</small></h2>
+      <p data-t="jielu1">Two pieces each, one flag to reach. On your turn, step one square or lift a floor tile and drop it into the water. Every road you build can also be borrowed by the other side.</p>
+      <p data-t="jielu2">The whole game has been solved by computer. With the suggested opening, neither side can force a win.</p>
+      <a class="play" href="jielu/" data-t="play">Play Jielu</a>
+    </div>
+  </section>
+
+  <section class="facts">
+    <div class="fact"><b data-t="f1">Open information</b><span data-t="f1s">Both players see everything. Same position, same options.</span></div>
+    <div class="fact"><b data-t="f2">No luck</b><span data-t="f2s">No dice, no shuffles, no timer. Only the moves decide.</span></div>
+    <div class="fact"><b data-t="f3">Checked for fairness</b><span data-t="f3s">Openings are tested so that moving first or second gives no forced win.</span></div>
+  </section>
+
+  <p class="soon" data-t="soon">More games to come.</p>
+
+  <footer>
+    <span>gambitaura.com</span>
+    <span data-t="by">A game series by</span><a href="https://stephenjia.com/">Yizhen (Stephen) Jia</a>
+  </footer>
+</div>
+<script>
+  // Mini board: the suggested v0.5 opening.
+  (function () {
+    var g = document.getElementById('mini'), s = 50, out = '';
+    var holes = [5, 9, 15, 19], mint = [21, 23], coral = [1, 3];
+    for (var c = 0; c < 25; c++) {
+      if (holes.indexOf(c) >= 0) continue;
+      var x = (c % 5) * s, y = Math.floor(c / 5) * s;
+      var ring = c === 2 ? ' stroke="#17a37b" stroke-width="3"' : c === 22 ? ' stroke="#e2614c" stroke-width="3"' : '';
+      out += '<rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="40" height="40" rx="6" style="fill:var(--tile)"' + ring + '/>';
+      if (c === 2 || c === 22) {
+        var col = c === 2 ? '#17a37b' : '#e2614c';
+        out += '<path d="M' + (x + 19) + ' ' + (y + 14) + 'v23" stroke="#5b4a32" stroke-width="2"/><path d="M' + (x + 20) + ' ' + (y + 15) + 'l13 5l-13 5z" fill="' + col + '"/>';
+      }
+    }
+    mint.concat(coral).forEach(function (c, i) {
+      var x = (c % 5) * s + 25, y = Math.floor(c / 5) * s + 25, m = i < 2;
+      out += '<circle cx="' + x + '" cy="' + y + '" r="14" fill="url(#' + (m ? 'gm' : 'gc') + ')"/>';
+      out += m ? '<path d="M' + x + ' ' + (y - 6) + 'l6 10h-12z" fill="#fff"/>' : '<path d="M' + x + ' ' + (y + 6) + 'l6 -10h-12z" fill="#fff"/>';
+    });
+    g.innerHTML = out;
+  })();
+
+  var T = {
+    zh: {
+      kicker: '雙人策略棋系列',
+      tag: '小棋盤，兩個人。沒有骰子，沒有隱藏資訊。每一步都由你決定。',
+      jielu1: '每方兩枚棋子，各有一面要抵達的旗。輪到你時，走一格，或把一塊地板搬進水裡。你替自己鋪的路，對手也可以借來走。',
+      jielu2: '整個遊戲已用電腦完整求解。用建議的開局，雙方都無法強迫取勝。',
+      play: '開始玩借路',
+      f1: '資訊公開', f1s: '雙方看得到全部。同樣的局面，同樣的選擇。',
+      f2: '不靠運氣', f2s: '沒有骰子、洗牌或計時。只有棋步決定勝負。',
+      f3: '先驗證公平', f3s: '開局先經檢查，確認先走或後走都沒有必勝。',
+      soon: '更多遊戲陸續推出。', by: '遊戲系列作者'
+    },
+    en: {
+      kicker: 'A strategy game series',
+      tag: 'Small boards for two players. No dice, nothing hidden. Every move is yours.',
+      jielu1: 'Two pieces each, one flag to reach. On your turn, step one square or lift a floor tile and drop it into the water. Every road you build can also be borrowed by the other side.',
+      jielu2: 'The whole game has been solved by computer. With the suggested opening, neither side can force a win.',
+      play: 'Play Jielu',
+      f1: 'Open information', f1s: 'Both players see everything. Same position, same options.',
+      f2: 'No luck', f2s: 'No dice, no shuffles, no timer. Only the moves decide.',
+      f3: 'Checked for fairness', f3s: 'Openings are tested so that moving first or second gives no forced win.',
+      soon: 'More games to come.', by: 'A game series by'
+    }
+  };
+  function getLang() {
+    try { var v = localStorage.getItem('ga-jielu-lang'); if (v) return v; } catch (e) {}
+    return (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  function apply(lang) {
+    if (!T[lang]) lang = 'zh';
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = T[lang][el.getAttribute('data-t')]; });
+    document.querySelectorAll('[data-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang)); });
+  }
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-lang');
+      try { localStorage.setItem('ga-jielu-lang', l); } catch (e) {}
+      apply(l);
+    });
+  });
+  apply(getLang());
+</script>
+</body>
+</html>

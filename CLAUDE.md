@@ -2,8 +2,8 @@
 
 **Aliases:** SteJ Delta Project, STEJDP, Delta, the Calibration Mirror, Quidence (the
 learning site that replaced Delta on the portfolio, 2026-10-08), Qidolab (Quidence's sister
-puzzle site, live 2026-10-12; §1a), GambitAura (the owner's strategy-game series, formerly
-"NeoChess"; first game 借路 Jielu; §1b).
+puzzle site, live 2026-10-12; §1a), GambitAura / 罡曜 (the owner's strategy-game
+series, formerly "NeoChess"; Chinese name 罡曜 gāng yào chosen 2026-10-28; first game 借路 Jielu; §1b).
 When the owner mentions any of these names — in this repo or elsewhere — work inside the
 framework defined in this file. This file is the project's persistent memory; keep it
 updated when major decisions change.
@@ -151,8 +151,8 @@ sage #dfe5d8 and apricot #eddfd5 light, warm charcoal #37423c, sage #ccd8c7, apr
 
 ## 1b. GambitAura (the strategy-game series; own repo since 2026-10-28)
 
-**What it is.** A series of small two-player strategy games with open information, no dice
-and no timer (first called "NeoChess"; renamed after the owner bought gambitaura.com on
+**What it is.** 罡曜 GambitAura, a series of small two-player strategy games with open
+information, no dice and no timer (first called "NeoChess"; renamed after the owner bought gambitaura.com on
 2026-10-28, DNS not set up). Game 01 is 借路 Jielu: 5×5 board, two pieces per side, a turn is a
 one-square step or moving an empty floor tile next to one of your pieces into a water square
 next to the same piece; first piece onto its own flag wins.

@@ -79,9 +79,9 @@ domain is set by the `CNAME` file at the repo root, DNS lives on Cloudflare: fou
 file). The repo also hosts an unrelated line, `local-llm.html`, a single-file local-model
 benchmarking terminal that talks to Ollama from the browser; it shares only the design
 system. Quidence (§1) and Qidolab (§1a), the owner's two sites, live in their own repos
-and are only linked from here. GambitAura (§1b) is being built inside this repo under
-`gambitaura/`, the way Qidolab started, and is not linked from the portfolio. Do not fold
-these together when reasoning about any of them.
+and are only linked from here. GambitAura (§1b), the owner's game series, lives in its own
+repo SteJ20996/GambitAura and is not linked from the portfolio. Do not fold these together
+when reasoning about any of them.
 
 ---
 
@@ -149,38 +149,26 @@ sage #dfe5d8 and apricot #eddfd5 light, warm charcoal #37423c, sage #ccd8c7, apr
 #dfbea2 / #c3a080. Narrow screens on Qidolab itself use midnight #162b4a and lake blue
 #b9dfef; its favicon is the Quidence magnifier on navy #142236.
 
-## 1b. GambitAura (the strategy-game series; started 2026-10-28)
+## 1b. GambitAura (the strategy-game series; own repo since 2026-10-28)
 
 **What it is.** A series of small two-player strategy games with open information, no dice
-and no timer. The owner first called it "NeoChess", then renamed it GambitAura after buying
-gambitaura.com (2026-10-28; DNS not set up yet). Game 01 is 借路 Jielu: 5×5 board, two pieces
-per side, a turn is either a one-square step or moving an empty floor tile next to one of
-your pieces into a water square next to the same piece; first piece onto its own flag wins
-(Mint → C1, Coral → C5); threefold repetition draws. The owner's source document is
-`gambitaura/jielu/docs/mechanics-v0.4.md` (v0.4, 2026-10-26; an earlier build lived at
-this-floor-is-mine.stej.chatgpt.site).
+and no timer (first called "NeoChess"; renamed after the owner bought gambitaura.com on
+2026-10-28, DNS not set up). Game 01 is 借路 Jielu: 5×5 board, two pieces per side, a turn is a
+one-square step or moving an empty floor tile next to one of your pieces into a water square
+next to the same piece; first piece onto its own flag wins.
 
-**Where it lives.** `gambitaura/` (series page), `gambitaura/jielu/` (game: `engine.js`
-rules, `ai.js` + `ai-worker.js` computer player, `app.js` UI, zh-Hant/English),
-`gambitaura/jielu/analysis/` (review page + `solver.c` and Node cross-checks). Its own visual
-system (warm paper #f5f2ec, water #2f7896/#1d566f, tile #efe3cb, mint #17a37b, coral #e2614c,
-gold aura #e9b949), not the portfolio's. Preview URL after merge:
-stephenjia.com/gambitaura/. When it moves to gambitaura.com it likely needs its own repo
-(one Pages CNAME per repo), as Qidolab did.
+**Source of truth.** Repo `SteJ20996/GambitAura` (attach with add_repo; clone lands at
+/home/user/gambitaura). Its own `CLAUDE.md` is the project memory: rules, the solver, the
+"Aura Noir" design system (dark void, mint #2ef2b5 / coral #ff5f6d auras, gold #ffd166) and the
+open decisions. Read it there; do not duplicate it here.
 
-**Rules review (gambitaura#1, 2026-10-28).** A full retrograde solve of every position with
-four water squares (456,515,280 states; table not committed, rebuild with `solver solve`)
-shows the v0.4 opening (water B2 D2 B4 D4) is a **forced win for the second player within 22
-plies**: the duty to move leaves the first player only guard-leaving or road-building moves.
-Proven independently by the JS engine replaying the exported strategy (12,121 positions).
-The v0.4 doc's checks (colour-swap symmetry, first-move alternation, 3-ply computer) cannot
-detect a first-vs-second asymmetry. Proposed v0.5 opening, **pending the owner's decision**:
-water on A2 E2 A4 E4, everything else unchanged; theoretical draw, ~50/50 for equal players in
-simulation, 56-ply games at high skill. The demo defaults to v0.5 and keeps v0.4 selectable.
-Also found: the "no immediate reversal" ban only bites after a diagonal tile move with an
-opponent piece on the 2×2 block's fourth corner (~1.3% of positions), can never force a pass,
-and the engine counts it in the repetition key only when it bites. Any change to the board,
-opening or win rule must be re-solved before it ships (`gambitaura/README.md`).
+**History in this repo.** `gambitaura#1` (2026-10-28) was built here under `gambitaura/` on
+branch `claude/happy-dirac-od45bx`, never merged to main: the 借路 v0.4 rules review, a full
+retrograde solve (the v0.4 opening is a forced win for the second player within 22 plies; the
+proposed v0.5 opening, water A2 E2 A4 E4, is a theoretical draw), and the first demo.
+`gambitaura#2` moved it all to the GambitAura repo with the Aura Noir redesign and removed the
+copy from this branch. **Never copy GambitAura back into this repo**; if the portfolio ever
+features it, it only links out, as with Quidence and Qidolab.
 
 ## 2. The Delta record (retired)
 
@@ -401,8 +389,9 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)
-- `gambitaura#n` — the GambitAura game series (`gambitaura/`, §1b); starts at `gambitaura#1`
-  = 借路 v0.4 rules review, solver, and the first playable demo (2026-10-28)
+- `gambitaura#n` — the GambitAura game series (§1b). `gambitaura#1` = 借路 v0.4 rules review,
+  solver and first demo, built here (2026-10-28); `gambitaura#2` = move to the SteJ20996/GambitAura
+  repo with the Aura Noir redesign. The counter continues in that repo.
 
 Every PR title carries its reference as a `[line#n]` prefix. Already assigned: PRs #1–#8
 retitled `delta#1`–`delta#8`; PR #9 is `llm#1`. Before opening a new PR, find the highest
@@ -411,10 +400,8 @@ GitHub's. A new project line starts its own counter at 1.
 
 ## 6. Open threads (update as they resolve)
 
-- GambitAura / 借路 (§1b): owner to decide whether to adopt the v0.5 opening (A2 E2 A4 E4;
-  runner-up C2 B3 D3 C4) and update the mechanics doc (§2 table, §4/§5.1 examples, §5.3 and
-  §7.2 wording, §11); gambitaura.com DNS and hosting not set up; play-testing with people
-  still needed (the 50/50 figures come from random-slip simulation).
+- GambitAura (§1b): open decisions are tracked in the GambitAura repo's CLAUDE.md (Chinese
+  name, v0.5 opening, gambitaura.com hosting). Nothing for this repo except the pointer above.
 
 - Field-period rules from the 99-guideline doc (recorded now, execute at IRB package
   stage): recruitment page as a standalone /study.html with experience-near language

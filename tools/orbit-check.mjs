@@ -20,7 +20,10 @@ const probe = page => page.evaluate(() => {
   for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) if (hit(rs[i], rs[j])) out.push(`${ids[i]} touches ${ids[j]}`);
   rs.forEach((r, i) => { if (r.x < 0 || r.y < 0 || r.x + r.w > innerWidth || r.y + r.h > innerHeight) out.push(`${ids[i]} off screen`); });
   const contact = box(document.querySelector('.ob-contact'));
-  const hub = open < 0 ? [box(document.querySelector('.ob-hub'))] : [box(document.querySelector('.ob-name')), box(document.querySelector('.ob-hub .mark'))];
+  // the hub as its visible parts (tight text boxes): its box is wider than its text, and the corners stay empty
+  const tight = el => { const rg = document.createRange(); rg.selectNodeContents(el); const b = rg.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height }; };
+  const hub = open < 0 ? [box(document.querySelector('.ob-hub .mark')), ...['.ob-name', '.ob-over', '.ob-tag', '.ob-hint'].map(q => tight(document.querySelector(q)))]
+                       : [box(document.querySelector('.ob-name')), box(document.querySelector('.ob-hub .mark'))];
   rs.forEach((r, i) => { if (i !== open && hub.some(h => hit(r, h))) out.push(`${ids[i]} touches the hub`); if (hit(r, contact)) out.push(`${ids[i]} touches the contact strip`); });
   if (document.documentElement.scrollWidth > innerWidth) out.push('page scrolls sideways');
   return { out, fs: getComputedStyle(document.documentElement).fontSize };

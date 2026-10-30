@@ -280,7 +280,9 @@ wording.
   with key words coloured (blue #284a80, violet #5a3d9a, a gold highlighter stroke
   rgba(226,176,52,.45) under dark text, gold text #6e4e0c for years and labels, and each site's
   own colour for its name), plus: for What I'm building, a framing paragraph and four points per
-  site taken from §1 and §1a; for About, a strip of four facts; for Teaching and Education, a
+  site taken from §1 and §1a; for About, a strip of four facts (Teaching, Studying, Building,
+  Writing: "Two preprints and a scoping review"; a "Based in" fact was dropped in site#10 with
+  the address); for Teaching and Education, a
   short paragraph beside a gold timeline; for Research, the two questions beside the three
   papers; for the papers, the paper pages' own paragraphs, verbatim (ACB's three ways and "What
   decides whether it happens", MDC's three conditions and "Why the usual explanations miss it",
@@ -318,6 +320,14 @@ wording.
   keep your work to look back on. In English and Spanish."), then the papers band, then 01 to 04.
   The vision sits beside the name when the masthead is wider than 66rem (container query) and
   stacks below it otherwise.
+  The role line over the name, in both layouts (site#10, 2026-10-30, owner: "增加一個類似於學習內容
+  創作者的身份，把我的地址Walnut, CA删去"): "Math Teacher · Doctoral Student · Learning Content
+  Creator". No location appears anywhere on the homepage. Each role is a `span.role` kept whole
+  (`white-space: nowrap`) so the line breaks only between roles; in the sheet the third role may
+  break once, before "Content Creator" (a 393px phone shows four lines), and phones 340px or
+  narrower break freely, because a whole role there would push the name column past the card. In
+  the orbit the line never wraps and may run wider than the hub's box (negative side margins);
+  the hub fit measures the text itself, so it still clears the pieces.
   The ∫ mark (site#7): a fixed Times-style ∫ outline (taken from Liberation Serif, SIL OFL) with
   two dashed elliptical rings turning opposite ways (40s and 60s a turn) and a dot running each
   ring (SMIL `animateMotion`), all slowed by `--k: .6`; the owner's pick among the demos was
@@ -448,7 +458,9 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   `tools/orbit-check.mjs` (PR #36, merged 2026-10-30); `site#8` = the orbit's centre scaled to
   fill about two thirds of its disc, faster moves, and fuller panels with coloured key words
   (desktop only; PR #37, merged 2026-10-30); `site#9` = regular-weight body text in the orbit,
-  bold kept for titles and key words (desktop only; 2026-10-30)
+  bold kept for titles and key words (desktop only; PR #38, merged 2026-10-30); `site#10` = the
+  role line becomes "Math Teacher · Doctoral Student · Learning Content Creator" in both layouts,
+  and the address (Walnut, CA) leaves the homepage (2026-10-30)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

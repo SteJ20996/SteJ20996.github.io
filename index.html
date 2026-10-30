@@ -131,6 +131,8 @@
     .vision { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: .9rem; }
   }
   .vision .tile-label { margin-bottom: .35rem; }
+  /* the role line breaks only between roles (and once inside the long third one); the tiniest phones may break anywhere */
+  @media (min-width: 341px) { .mast-over .role { white-space: nowrap; } }
   .mast-id { display: flex; align-items: center; gap: 1.1rem; }
   .mast-id .mark { flex: none; width: 7.2rem; height: 7.2rem; }
   .bcards { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .55rem; }
@@ -336,7 +338,7 @@
     -webkit-text-stroke: .45px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .ob-name em { font-style: italic; color: var(--acc); }
   .ob-hub-more { transition: opacity .35s; }
-  .ob-over { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--mut); margin-top: .6rem; }
+  .ob-over { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--mut); margin: .6rem -8rem 0; white-space: nowrap; }
   .ob-tag { font-size: .84rem; font-weight: 400; line-height: 1.45; color: var(--ink2); margin: .35rem auto 0; max-width: 23.5rem; text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .ob-hint { display: inline-flex; align-items: center; gap: .45rem; margin-top: .7rem; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; color: var(--acc); }
   .ob-hint i { width: .45rem; height: .45rem; border-radius: 50%; background: var(--acc); animation: ob-ping 2.4s ease-out infinite; }
@@ -563,7 +565,7 @@
       <button class="ob-hub-hit" type="button" aria-label="Back to the overview" tabindex="-1"></button>
     </div>
     <div class="ob-hub-more">
-      <p class="ob-over">Math Teacher · Doctoral Student · Walnut, CA</p>
+      <p class="ob-over"><span class="role">Math Teacher</span> · <span class="role">Doctoral Student</span> · <span class="role">Learning Content Creator</span></p>
       <p class="ob-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
       <p class="ob-hint"><i></i>Pick any piece to open it</p>
     </div>
@@ -631,7 +633,7 @@
         <p>I teach math, from grade-school basics to <b class="hb">SAT Math and AP Calculus</b>, and I am working on a <b class="hb">doctorate in education</b>. What interests me is not just the answer on the page but <mark class="hg">how a student got there</mark>, and <mark class="hg">whether they could do it again alone</mark>.</p>
         <p>My research at Westcliff University asks an old question in a new situation: when an AI tool helped with the homework, <b class="hv">how does a student decide the work is ready to hand in</b>, and where does their own understanding fit in? Two preprints grew out of that question.</p>
         <p class="dim">The classroom and the research share one question: <b class="hv">how do we know what a student really understands?</b> Everything on this page is a different angle on that problem.</p>
-        <div class="facts"><div><span>Teaching</span><b>SAT Math, AP Calculus, statistics, K–8</b></div><div><span>Studying</span><b>EdD, Westcliff University</b></div><div><span>Building</span><b>Qidolab and Quidence</b></div><div><span>Based in</span><b>Walnut, California</b></div></div>
+        <div class="facts"><div><span>Teaching</span><b>SAT Math, AP Calculus, statistics, K–8</b></div><div><span>Studying</span><b>EdD, Westcliff University</b></div><div><span>Building</span><b>Qidolab and Quidence</b></div><div><span>Writing</span><b>Two preprints and a scoping review</b></div></div>
         </div>
       </div>
       <footer class="pd-foot">
@@ -873,7 +875,7 @@
     <div class="mast-id">
       <svg class="mark v-c " viewBox="0 0 400 400" aria-hidden="true"><g class="orbit o-in"><g transform="rotate(-28 200 200)"><ellipse cx="200" cy="200" rx="176" ry="78" class="ring r-in" style="stroke-width:3.53"/><circle r="10" class="dot d-in"><animateMotion dur="7.5s" repeatCount="indefinite" path="M376,200 A176,78 0 1,1 24,200 A176,78 0 1,1 376,200"/></circle></g></g><g class="orbit o-out"><g transform="rotate(32 200 200)"><ellipse cx="200" cy="200" rx="194" ry="112" class="ring r-out" style="stroke-width:3.53"/><circle r="8" class="dot d-out"><animateMotion dur="12s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear" path="M394,200 A194,112 0 1,1 6,200 A194,112 0 1,1 394,200"/></circle></g></g><path class="int" transform="translate(30 30)" d="M152.7 236Q150.8 236 148.1 235.2Q145.5 234.5 144.7 233.8V233.3Q144.9 232.5 145.6 229.3Q146.3 226.2 146.6 224.7H147.9Q152.4 229.2 156.2 229.2Q159.7 229.2 162 224.1Q164.3 218.9 164.3 210.9L163.9 166.8Q163.9 149.2 164.8 131.2Q165.3 124.3 168.5 118.1Q171.8 111.9 177 107.9Q182.3 104 186.9 104Q188.5 104 191.4 104.7Q194.4 105.3 195.3 106.1V106.7L194.2 111L193.1 115.3H191.7Q187.1 110.7 183.4 110.7Q179.9 110.7 177.6 115.8Q175.3 121 175.3 129.1L175.6 164.5Q175.6 169.2 175.3 179.8Q175.1 190.4 174.5 209Q174.1 216.2 170.8 222.3Q167.5 228.5 162.4 232.3Q157.3 236 152.7 236Z"/></svg>
       <div>
-        <p class="mast-over">Math Teacher · Doctoral Student · Walnut, CA</p>
+        <p class="mast-over"><span class="role">Math Teacher</span> · <span class="role">Doctoral Student</span> · Learning <span class="role">Content Creator</span></p>
         <h1>Yizhen <em>(Stephen)</em> Jia</h1>
         <p class="mast-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
       </div>

@@ -110,8 +110,8 @@ the `static-release/` bundle for hosting.
 2026-10-08). The owner reported it live on 2026-10-12. Cloud sessions here cannot open it
 (the environment's network policy denies the host); read the facts from the AA01 repo.
 
-**What the portfolio does with it, and nothing more.** The homepage's Q·Quidence tile
-and the short `platform.html` page describe Quidence in a few plain sentences and link
+**What the portfolio does with it, and nothing more.** The homepage's "What I'm building"
+piece (since site#7; §5) and the short `platform.html` page describe Quidence in a few plain sentences and link
 to www.quidence.com. **Never embed, copy, mirror or build the AA01 app into this repo**
 (owner, 2026-10-08: "目前链接里不要把这个zip里的内容全部放进去，目前先放
 www.quidence.com这个链接"). Brand colors for the card (Quidence's palette since
@@ -258,42 +258,54 @@ wording.
   hairline-ruled tiles (flex-wrap, gap 1px over a rule-colored ground); a zoom control
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
-  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home; since site#6 it sits only in the vision
-  label, the masthead circle is gone), Q (Quidence), ∴ (Qidolab), ∅ (ACB),
+  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home; since site#7 the animated ∫ mark
+  below), Q (Quidence), ∴ (Qidolab), ∅ (ACB),
   ≠ (MDC), ∩ (scoping review, `review.html`); Δ retired with Delta.
-  Exception (sites slot, since site#3, 2026-10-12; from delta#19 on 2026-10-08 it was a single
-  navy Quidence tile, and before that a black-gold Delta tile): the fifth slot of the
-  homepage's main band is `div.sites`, two opaque `.brandcard` sections, each hardcoded to its
-  own site's palette (§1, §1a) as a preview: Quidence (deep teal #153f44, mint #68e1af label
-  and link, Q watermark, "→ Open Quidence") above Qidolab (warm cream with sage and apricot
-  light, charcoal text, link #4a6142, label glyph #8f5d3b, "→ Play Qidolab"). The ∴
-  watermark is an inline SVG of three round dots because DM Serif Display has no ∴ and
-  fallbacks draw square dots. Each card's main link stretches an overlay over the card, so
-  any click opens that site in a new tab. Brand cards skip the glass and the text halo. The
-  slot wraps its cards (`flex: 1 1 13rem`), so when a zoom step leaves it alone on a row the
-  two cards sit side by side.
-  Vision block (site#5, 2026-10-13, owner: "我想在我的主頁裡增加一些比重的關於兩個最近上線的網頁
-  表明我的願景"): the masthead's empty middle holds `aside.vision`, labelled "∫ · What I'm
-  building", with two pill buttons on the label row ("∴ Play Qidolab ↗" in Qidolab's cream
-  with an apricot border, "Q Open Quidence ↗" in Quidence's deep teal) and the owner's vision
-  in their voice: "I want students to see their own thinking, not just their answers. Qidolab
-  is the playful start: 18 small puzzles with no timer, where a wrong move is just a new try.
-  Quidence is the next step: courses where you test what you understand and keep your work to
-  look back on." (site names in their brand colours #4a6142 / #15565b). Qidolab comes first
-  because it is the way in. The copy is drafted from the two repos and the About tile; the
-  owner may rewrite it. Layout (site#6, 2026-10-30, after the owner's screenshot "右邊的圖
-  有點崩壞" from a 2560px screen at page zoom 1.6): the decorative ∫ circle that sat at the
-  masthead's right is removed (on the photo its rings vanished, leaving a stray ∫ and dots, and
-  when zoomed it wrapped onto its own row). `.mast` is a size container (`container-type:
-  inline-size`); the name block is at most about 28rem wide at any size or zoom, so the vision
-  sits beside it (`flex: 1 1 0`, left rule) when the masthead is wider than 58rem and stacks
-  under it (full width, top rule) at 58rem or less. rem follows the zoom buttons, so the switch
-  follows zoom; a `max-width: 860px` media rule repeats the stacked layout for browsers without
-  container queries. Checked at seven screen sizes × five zoom levels: when beside, the vision
-  always gets at least 29rem. The sites slot below keeps its two cards. The rest of the portfolio stays graphite-indigo. With three paper tiles,
+  Homepage since site#7 (2026-10-30; owner: "做一個大膽的，直接把我的名字資訊加上積分符號放在
+  最中間，然後周圍一圈都是我的經歷和我的作品", then, of the result, "this is good enough"): two
+  layouts in one file, and the content appears in both, so **a copy change must be made twice**
+  (the orbit's piece or panel, and the sheet's tile).
+  Computers (a mouse, 1101px+ wide and 640px+ tall; the script sets `html.ob-on` from that
+  one media query) get the orbit, `div.ob`: the ∫ mark, name, line and tagline in the middle,
+  and eight glass pieces on an elliptical ring. Each piece has a glyph badge, a mono label, a
+  serif title and one plain sentence of summary, about the same length for all eight (owner:
+  "每個板塊裡面文字佔比差不太多"; 118 to 128 characters of title plus summary). Clockwise from the
+  top: What I'm building (∴ + Q), the three papers down the right (∅ ≠ ∩), 04 Education at the
+  bottom, then 03, 02, 01 up the left. Tab and panel order is building, 01 to 04, then the papers.
+  Clicking a piece detaches it from the ring: its frame grows into a large panel on the left
+  (owner asked twice for it larger, +20% then +15%: about 1006×612 at 1280×720, at most 71rem
+  wide) with the full homepage copy, plus, for the papers, the plain-language lists already on
+  the paper pages (ACB's three ways, MDC's three conditions, the review's Venn). The other seven
+  and the hub fly to a round dial at the bottom right (owner: "保持圓狀"; 13.5rem: glyph badges on
+  a circle around a small mark and name, a dashed circle on the empty slot, and one label above
+  the dial naming whatever badge the pointer or keyboard is on, because a dial that small has no
+  room for captions). Clicking a badge switches pieces, the hub or "Overview ✕" or Esc returns,
+  ← → step, `#acb`-style hash links open a piece, focus moves to the panel heading and back,
+  reduced motion stops all movement. The script fits the type size to the window (12 to 21px on
+  `--obfs`, which overrides the zoom buttons; they are hidden there) and positions everything in
+  px. Pieces move by the `translate` property so the hover `scale` grows them in place (with
+  `transform` the scale would also scale their offset and they would jump away from the
+  pointer). Check any change with `node tools/orbit-check.mjs` (every piece open at seven
+  computer sizes; the sheet on touch sizes) and the contrast floor below.
+  Phones, iPads and narrow windows get the sheet: the masthead has the mark (7.2rem) beside the
+  name, then the vision block ("→ · What I'm building", the lead sentence "I want students to
+  see their own thinking, not just their answers.", and two cards in each site's colours: cream
+  Qidolab "The playful start: 18 small puzzles with no timer, where a wrong move is just a new
+  try." and deep-teal Quidence "The next step: courses where you test what you understand and
+  keep your work to look back on. In English and Spanish."), then the papers band, then 01 to 04.
+  The vision sits beside the name when the masthead is wider than 66rem (container query) and
+  stacks below it otherwise.
+  The ∫ mark (site#7): a fixed Times-style ∫ outline (taken from Liberation Serif, SIL OFL) with
+  two dashed elliptical rings turning opposite ways (40s and 60s a turn) and a dot running each
+  ring (SMIL `animateMotion`), all slowed by `--k: .6`; the owner's pick among the demos was
+  "慢版C++特大" (ring variant C++, viewBox 400). Colour #284a80.
+  Before site#7 (in git at 58c7fbf): the main band's fifth slot was `div.sites`, two opaque
+  brand cards (site#3); the masthead held the vision block with two pill buttons (site#5) and,
+  until site#6, a decorative ∫ circle, which on the photo lost its rings and was removed.
+  The rest of the portfolio stays graphite-indigo. With three paper tiles,
   laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
-  the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
-  1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
+  the About tile's closing aside (`.about p.dim`) so the sheet still fits one screen where a
+  computer-sized window gets it; the 820px compact mode is otherwise unchanged.
   Photo ground on the homepage only (site#2, 2026-10-09, at 50% tiles; site#3 took it to 25%
   after the owner asked twice for more of the photo; site#4 tried 38% on computers and 60%
   on phones, and the owner then asked for "the background transparent as before"
@@ -336,11 +348,18 @@ wording.
   back a wide glow, do not make the glass less see-through, and do not go back to lighter
   weights without the owner asking. The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
+  The 25% rule is for the sheet's tiles. The orbit's pieces (site#7) float on the photo with no
+  sheet behind them and carry summaries, so they hold more paper: a 70% to 50% gradient over
+  `blur(16px) saturate(1.15)`, the open panel 93% to 86%, the hub on a 58% to 34% glass disc,
+  the same dark bold text and 1px edge. The owner approved that look on 2026-10-30. Since
+  site#7 the contrast tool checks both layouts (orbit overview, two open pieces, the sheet at
+  iPad and phone sizes); worst case then: the hub's small accent hint 4.65, piece labels 6.8,
+  summaries 11.0, panel text 9.5 or better, the sheet as before.
   Type scale (site#3, 2026-10-09, owner's ask: a little larger on computers, unchanged on
   phones): the homepage root font is `--base-fs`, 16px on phones, 17px on desktop
   (min-width 861px) and 14.5px in the compact tier (desktop, 820px or less tall; it was
   13.5px). The zoom control multiplies `--base-fs` (`calc(var(--base-fs) * z)`), so every
-  tier keeps its own steps. The laptop tier (861px+ wide, 1000px or less tall) tightens tile
+  tier keeps its own steps (on the sheet; the orbit sizes its own type, see above). The laptop tier (861px+ wide, 1000px or less tall) tightens tile
   and masthead padding so the larger type still fits one screen at 1440×900, 1536×864 and
   the 1470×956 / 1512×982 MacBook sizes. Any tier that re-pads `.tile` must use
   `.tile:not(.foot)`: the contact strip is a tile too, and its 6.2rem left padding is what keeps
@@ -392,7 +411,10 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   darker, bold homepage text on the same 25% glass, sticky contact strip at 96%
   (PR #32, merged 2026-10-13); `site#5` = vision block for Quidence and Qidolab in the
   masthead (PR #33, merged 2026-10-13); `site#6` = masthead circle removed, vision beside or
-  stacked by the masthead's own width (2026-10-30)
+  stacked by the masthead's own width (PR #35, merged 2026-10-30); `site#7` = the homepage as an
+  orbit on computers (eight summary pieces around the animated ∫ mark; a piece opens into a
+  large panel, the rest gather in a round dial) and a tidier sheet on phones and iPads, plus
+  `tools/orbit-check.mjs` (2026-10-30)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)
@@ -438,7 +460,8 @@ GitHub's. A new project line starts its own counter at 1.
   agreement on a 20-record pilot) differs from protocol §3.5 (Cohen's κ ≥ .70 on a 10%
   subsample), which §5.1 lists as a substantive amendment needing an OSF update.
 - Quidence and Qidolab hosting: the owner reported both live on 2026-10-12. The portfolio
-  links to both (homepage sites slot, `platform.html`, README). This session could not open
+  links to both (the homepage's "What I'm building" piece and vision block, `platform.html`,
+  README). This session could not open
   either address (environment network policy), so the cards' wording comes from each repo's
   main branch; if a live site drifts from its repo, the card should follow the live site.
   This repo never hosts or copies Quidence or Qidolab content (owner, 2026-10-08; §1a).

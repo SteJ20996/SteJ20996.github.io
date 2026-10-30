@@ -2,19 +2,28 @@
 // For every text block it samples what sits under the glyph pixels themselves (tile, blurred
 // photo and text halo included), takes the darkest 5% and reports the contrast ratio against
 // the text colour. Usage: node tools/contrast-floor.mjs [index.html] [floor]   (default 4.5)
+// Since site#7 it checks both homepage layouts: the desktop orbit (overview, and one piece open
+// with the dial in the corner) and the sheet that phones and iPads get.
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 const pw = await import('playwright').catch(() => import('/opt/node22/lib/node_modules/playwright/index.mjs'));
 const file = resolve(process.argv[2] || 'index.html'); const floor = Number(process.argv[3] || 4.5);
-const SEL = '.tile h1, .tile h3, .tile p, .tile small, .tile .yr, .tile .tile-label, .tile a, .tile .ptag, .res-line span, .mast-tag, .mast-over, .foot .copy, .foot a';   // glass tiles and the opaque site cards alike
+const SEL = ['.tile h1, .tile h3, .tile p, .tile small, .tile .yr, .tile .tile-label, .tile a, .tile .ptag, .res-line span, .mast-tag, .mast-over, .foot .copy, .foot a, .bcard span',   // the sheet
+  '.ob-label, .ob-title, .ob-sum, .ob-name, .ob-over, .ob-tag, .ob-hint, .ob-contact a, .ob-say, .gl-num, .gl-sym',   // the orbit and the dial
+  '.ob-detail .pd-pos, .ob-detail .pd-label, .ob-detail h2, .ob-detail p, .ob-detail li, .ob-detail small, .ob-detail .yr, .ob-detail a, .ob-detail button'].join(', ');   // an open piece
+// [width, height, touch, hash]: computers get the orbit; touch screens get the sheet
+const RUNS = [[1440, 900, false, ''], [1280, 720, false, ''], [1440, 900, false, '#building'], [1280, 720, false, '#acb'],
+              [1180, 820, true, ''], [393, 852, true, '']];
 const browser = await pw.chromium.launch(); let worstOverall = Infinity;
-for (const [w, h] of [[1440, 900], [1280, 720]]) {
-  const page = await browser.newPage({ viewport: { width: w, height: h } });
-  await page.goto(pathToFileURL(file).href, { waitUntil: 'networkidle', timeout: 15000 }).catch(() => {});
-  await page.waitForTimeout(400);
-  const boxes = await page.evaluate(SEL => [...document.querySelectorAll(SEL)].map(el => { const r = el.getBoundingClientRect();
+for (const [w, h, touch, hash] of RUNS) {
+  const page = await browser.newPage({ viewport: { width: w, height: h }, hasTouch: touch, isMobile: touch && w < 900 });
+  await page.goto(pathToFileURL(file).href + hash, { waitUntil: 'networkidle', timeout: 15000 }).catch(() => {});
+  await page.addStyleTag({ content: '*, *::before, *::after { animation: none !important; transition: none !important; }' });   // hold still between the two shots
+  await page.waitForTimeout(600);
+  const boxes = await page.evaluate(SEL => [...document.querySelectorAll(SEL)].filter(el => !el.checkVisibility || el.checkVisibility(   // skip faded and hidden copies (a closed panel, an open piece's face)
+    { checkOpacity: true, checkVisibilityCSS: true, opacityProperty: true, visibilityProperty: true })).map(el => { const r = el.getBoundingClientRect();
     return { x: r.x, y: r.y, w: r.width, h: r.height, color: getComputedStyle(el).color, tag: (el.className || el.tagName) + '' }; }).filter(b => b.w >= 4 && b.h >= 4), SEL);
-  const hide = '.glyph, .mast-art { visibility: hidden !important; }';
+  const hide = '.pd-wm { visibility: hidden !important; }';   // the open panel's faint watermark glyph
   const mask = await page.addStyleTag({ content: `* { color: rgb(255,0,0) !important; text-shadow: none !important; } ${hide}` });
   await page.waitForTimeout(100); const maskPng = (await page.screenshot()).toString('base64');
   await page.evaluate(el => el.remove(), mask);
@@ -40,7 +49,7 @@ for (const [w, h] of [[1440, 900], [1280, 720]]) {
   }, { maskPng, bgPng, boxes });
   const worst = new Map();
   for (const r of rows) if (!worst.has(r.color) || r.ratio < worst.get(r.color).ratio) worst.set(r.color, r);
-  console.log(`${w}x${h}`);
+  console.log(`${w}x${h}${touch ? ' touch' : ''}${hash ? ' ' + hash : ''}`);
   for (const [color, r] of [...worst].sort((a, b) => a[1].ratio - b[1].ratio)) { console.log(`  ${r.ratio.toFixed(2)}:1  ${color.padEnd(18)} (${r.tag})`); worstOverall = Math.min(worstOverall, r.ratio); }
   await page.close();
 }

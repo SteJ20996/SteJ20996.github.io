@@ -258,7 +258,8 @@ wording.
   hairline-ruled tiles (flex-wrap, gap 1px over a rule-colored ground); a zoom control
   (0.8x-1.6x, five steps, persisted in localStorage key `yj-zoom`) whose buttons sit in
   the sticky contact strip's reserved left padding so they never cover text; reflow on
-  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home), Q (Quidence), ∴ (Qidolab), ∅ (ACB),
+  zoom is 5 tiles -> 4+1 -> 3+2; glyph family ∫ (home; since site#6 it sits only in the vision
+  label, the masthead circle is gone), Q (Quidence), ∴ (Qidolab), ∅ (ACB),
   ≠ (MDC), ∩ (scoping review, `review.html`); Δ retired with Delta.
   Exception (sites slot, since site#3, 2026-10-12; from delta#19 on 2026-10-08 it was a single
   navy Quidence tile, and before that a black-gold Delta tile): the fifth slot of the
@@ -280,11 +281,16 @@ wording.
   Quidence is the next step: courses where you test what you understand and keep your work to
   look back on." (site names in their brand colours #4a6142 / #15565b). Qidolab comes first
   because it is the way in. The copy is drafted from the two repos and the About tile; the
-  owner may rewrite it. It adds no height: on laptop and short desktop screens (861px+ wide,
-  1000px or less tall) the decorative ∫ circle steps aside so the text runs wide in three
-  lines (the ∫ lives on in the label); on phones the block runs full width under the name with
-  a top rule and the circle is hidden; on tall desktops the circle stays at the right. The
-  sites slot below keeps its two cards. The rest of the portfolio stays graphite-indigo. With three paper tiles,
+  owner may rewrite it. Layout (site#6, 2026-10-30, after the owner's screenshot "右邊的圖
+  有點崩壞" from a 2560px screen at page zoom 1.6): the decorative ∫ circle that sat at the
+  masthead's right is removed (on the photo its rings vanished, leaving a stray ∫ and dots, and
+  when zoomed it wrapped onto its own row). `.mast` is a size container (`container-type:
+  inline-size`); the name block is at most about 28rem wide at any size or zoom, so the vision
+  sits beside it (`flex: 1 1 0`, left rule) when the masthead is wider than 58rem and stacks
+  under it (full width, top rule) at 58rem or less. rem follows the zoom buttons, so the switch
+  follows zoom; a `max-width: 860px` media rule repeats the stacked layout for browsers without
+  container queries. Checked at seven screen sizes × five zoom levels: when beside, the vision
+  always gets at least 29rem. The sites slot below keeps its two cards. The rest of the portfolio stays graphite-indigo. With three paper tiles,
   laptop-height screens (861px+ wide, 1000px or less tall since site#3; 940px before) hide
   the About tile's closing aside (`.about p.dim`) so the homepage still fits one screen from
   1280×800 to 2560×1440; the 820px compact mode is otherwise unchanged.
@@ -324,9 +330,9 @@ wording.
   glow to 1px, darkened the text, dropped
   `-webkit-font-smoothing: antialiased` from the homepage (on macOS it thins the strokes;
   the paper pages keep it), and, after "文字請再加粗一些" and then "still very unclear, i
-  want the words much more bold" (2026-10-13), set the text bold as above. The bolder text
-  needed room at 1440×900, so laptop heights above the compact tier draw
-  the masthead circle at 116px (the circle had set the masthead's height). Do not bring
+  want the words much more bold" (2026-10-13), set the text bold as above. (The bolder text
+  needed room at 1440×900; site#4 shrank the masthead circle for that, and site#6 removed the
+  circle altogether.) Do not bring
   back a wide glow, do not make the glass less see-through, and do not go back to lighter
   weights without the owner asking. The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
@@ -385,7 +391,8 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   type, and the Quidence + Qidolab sites slot (PR #31, merged 2026-10-12); `site#4` = crisper,
   darker, bold homepage text on the same 25% glass, sticky contact strip at 96%
   (PR #32, merged 2026-10-13); `site#5` = vision block for Quidence and Qidolab in the
-  masthead (2026-10-13)
+  masthead (PR #33, merged 2026-10-13); `site#6` = masthead circle removed, vision beside or
+  stacked by the masthead's own width (2026-10-30)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

@@ -10,9 +10,11 @@ const pw = await import('playwright').catch(() => import('/opt/node22/lib/node_m
 const file = resolve(process.argv[2] || 'index.html'); const floor = Number(process.argv[3] || 4.5);
 const SEL = ['.tile h1, .tile h3, .tile p, .tile small, .tile .yr, .tile .tile-label, .tile a, .tile .ptag, .res-line span, .mast-tag, .mast-over, .foot .copy, .foot a, .bcard span',   // the sheet
   '.ob-label, .ob-title, .ob-sum, .ob-name, .ob-over, .ob-tag, .ob-hint, .ob-contact a, .ob-say, .gl-num, .gl-sym',   // the orbit and the dial
-  '.ob-detail .pd-pos, .ob-detail .pd-label, .ob-detail h2, .ob-detail p, .ob-detail li, .ob-detail small, .ob-detail .yr, .ob-detail a, .ob-detail button'].join(', ');   // an open piece
+  '.ob-detail .pd-pos, .ob-detail .pd-label, .ob-detail h2, .ob-detail p, .ob-detail li, .ob-detail small, .ob-detail .yr, .ob-detail a, .ob-detail button',   // an open piece
+  '.ob .hb, .ob .hv, .ob .hq, .ob .hd, .ob mark.hg, .ob .bcard em, .ob .bc-list > span, .ob .facts span, .ob .facts b, .ob .tl b, .ob .chips span, .ob .plist b, .ob .links .status'].join(', ');   // its key words and small parts
 // [width, height, touch, hash]: computers get the orbit; touch screens get the sheet
 const RUNS = [[1440, 900, false, ''], [1280, 720, false, ''], [1440, 900, false, '#building'], [1280, 720, false, '#acb'],
+              [1440, 900, false, '#about'], [1280, 720, false, '#teaching'], [1440, 900, false, '#review'],
               [1180, 820, true, ''], [393, 852, true, '']];
 const browser = await pw.chromium.launch(); let worstOverall = Infinity;
 for (const [w, h, touch, hash] of RUNS) {

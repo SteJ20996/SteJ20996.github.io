@@ -60,7 +60,7 @@
   .band { display: flex; flex-wrap: wrap; gap: 1px; }
   .band-main { flex: 1; }
   .band-main > * { flex: 1 1 16rem; min-width: 0; }
-  .band-main > .about { flex-grow: 1.25; }
+  .band-main > .about { flex-grow: 1.7; }
   .band-papers > * { flex: 1 1 26rem; min-width: 0; }
 
   /* Glass tiles: a quarter of paper over the blurred photo, and a paper-coloured halo under every
@@ -74,8 +74,7 @@
   }
   .tile:hover { background: rgba(250,251,252,.4); }
   /* A 1px paper-coloured edge on each letter. It was a 3px glow, which made the text look soft. */
-  .tile:not(.brandcard), .foot { text-shadow: 0 0 1px rgba(243,244,246,.95); }
-  .glyph { text-shadow: none; }
+  .tile, .foot { text-shadow: 0 0 1px rgba(243,244,246,.95); }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .tile { background: rgba(243,244,246,.9); }
   }
@@ -127,30 +126,27 @@
      used to sit on the right: on the photo its rings vanished and it broke the row when zoomed.) */
   .mast > div:first-child { flex: 0 0 auto; max-width: 100%; }
   .vision { flex: 1 1 0; min-width: 0; border-left: 1px solid var(--rule); padding-left: 1.6rem; align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
-  @container (max-width: 58rem) {
+  @container (max-width: 66rem) {
     .mast > div:first-child, .vision { flex: 1 1 100%; }
     .vision { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: .9rem; }
   }
-  .vision-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem 1rem; margin-bottom: .45rem; }
-  .vision .tile-label { margin-bottom: 0; }
+  .vision .tile-label { margin-bottom: .35rem; }
+  .mast-id { display: flex; align-items: center; gap: 1.1rem; }
+  .mast-id .mark { flex: none; width: 7.2rem; height: 7.2rem; }
+  .bcards { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .55rem; }
+  .bcard { flex: 1 1 13rem; min-width: 0; display: flex; flex-direction: column; gap: .25rem; padding: .7rem .9rem; border-radius: 10px;
+           text-decoration: none; text-shadow: none; -webkit-text-stroke: 0; transition: transform .15s, box-shadow .15s; }
+  .bcard:hover { transform: translateY(-2px); box-shadow: 0 8px 22px -12px rgba(22,24,30,.45); }
+  .bcard .bc-top { font-family: 'DM Serif Display', serif; font-size: 1.02rem; line-height: 1.15; }
+  .bcard .bc-top b { font-weight: 400; margin-right: .3rem; }
+  .bcard .bc-text { font-size: .74rem; line-height: 1.45; font-weight: 600; }
+  .bcard .bc-go { font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-top: auto; padding-top: .2rem; }
+  .bcard.qd { background-color: #f8f5ec; background-image: radial-gradient(ellipse at 20% 30%, #dfe5d8cc, transparent 62%), radial-gradient(ellipse at 92% 8%, #eddfd5cc, transparent 45%);
+              color: #37423c; border: 1px solid #dccfbc; }
+  .bcard.qd .bc-top b { color: #8f5d3b; } .bcard.qd .bc-text { color: #454f45; } .bcard.qd .bc-go { color: #4a6142; }
+  .bcard.qc { background: #153f44; color: #fff; border: 1px solid #153f44; }
+  .bcard.qc .bc-top b { color: #68e1af; } .bcard.qc .bc-text { color: #d3e4e1; } .bcard.qc .bc-go { color: #68e1af; }
   .tile p.vision-text { font-size: .8rem; line-height: 1.5; color: var(--body); }
-  .vision-text .vq-name { color: #15565b; }
-  .vision-text .vd-name { color: #4a6142; }
-  .vision-links { display: flex; flex-wrap: wrap; gap: .5rem; }
-  .vbtn {
-    display: inline-flex; align-items: center; gap: .45rem;
-    font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 800;
-    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
-    padding: .45rem .85rem; border-radius: 99px;
-    text-shadow: none; -webkit-text-stroke: 0;
-    transition: transform .15s, box-shadow .15s;
-  }
-  .vbtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px -6px rgba(22,24,30,.35); }
-  .vbtn b { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: .95rem; letter-spacing: 0; text-transform: none; line-height: 1; }
-  .vbtn.vd { background: #f8f5ec; color: #37423c; border: 1px solid #c3a080; }
-  .vbtn.vd b { color: #8f5d3b; }
-  .vbtn.vq { background: #153f44; color: #ffffff; border: 1px solid #153f44; }
-  .vbtn.vq b { color: #68e1af; }
 
   /* ===== Tiles ===== */
   .tile h3 {
@@ -195,48 +191,6 @@
   .res-line:last-of-type { border-bottom: none; }
   .res-line b { display: block; font-weight: 700; font-size: .8rem; }
   .res-line span { color: var(--muted); font-size: .73rem; }
-
-  /* Sites slot: the owner's two sites stacked in one slot of the main band, each card in its own
-     site's colors and opaque (no glass, no halo). When the slot is wide (alone on a row after a
-     zoom step) the two cards sit side by side. */
-  .sites { display: flex; flex-wrap: wrap; gap: 1px; min-width: 0; }
-  .sites > .brandcard { flex: 1 1 13rem; min-width: 0; }
-  .brandcard { overflow: hidden; display: block; text-decoration: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .brandcard h3 { margin-bottom: .3rem; }
-  .brandcard .glyph {
-    position: absolute; right: .35rem; bottom: -1rem;
-    font-family: 'DM Serif Display', serif;
-    font-size: 4.4rem; line-height: 1;
-    pointer-events: none;
-  }
-  /* The link's overlay keeps the whole card clickable. */
-  .brandcard .arrowlink.main::after { content: ''; position: absolute; inset: 0; }
-
-  /* Quidence: its 2026-10-12 palette (deep teal header, mint accent), a preview of www.quidence.com */
-  .quidence { background: #153f44; color: #f6f7f9; }
-  .quidence:hover { background: #1a4a50; }
-  .quidence .tile-label { color: #a9c7c3; }
-  .quidence .tile-label b { color: #68e1af; }
-  .quidence h3 { color: #ffffff; }
-  .quidence p { color: #d3e4e1; }
-  .quidence .glyph { color: #68e1af; opacity: .28; }
-  .quidence .arrowlink { color: #68e1af; }
-
-  /* Qidolab: its desktop palette (warm cream, sage and apricot light, warm charcoal), a preview of qidolab.com */
-  .qidolab {
-    background-color: #f8f5ec;
-    background-image: radial-gradient(ellipse at 28% 34%, #dfe5d8cc, transparent 62%), radial-gradient(ellipse at 88% 8%, #eddfd5cc, transparent 42%);
-    color: #37423c;
-  }
-  .qidolab:hover { background-color: #efeadc; }
-  .qidolab .tile-label { color: #5d6256; }
-  .qidolab .tile-label b { color: #8f5d3b; }
-  .qidolab h3 { color: #37423c; }
-  .qidolab p { color: #454f45; }
-  .qidolab .glyph { color: #c3a080; opacity: .5; }
-  /* ∴ drawn as three round dots: the display font has no ∴, and fallbacks draw square dots. */
-  .brandcard .glyph.dots { width: 3rem; height: auto; right: .7rem; bottom: .6rem; fill: currentColor; }
-  .qidolab .arrowlink { color: #4a6142; }
 
   /* Paper tiles */
   .paper .ptag {
@@ -328,32 +282,572 @@
     .mast > div:first-child, .vision { flex: 1 1 100%; }
     .vision { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: .9rem; }
   }
+
+  .mark { display: block; overflow: visible; }
+  .mark .int { fill: var(--mark, #284a80); }
+  .mark .ring { fill: none; stroke: var(--mark, #284a80); stroke-width: 3; stroke-linecap: round; }
+  .mark .r-in { stroke-dasharray: 8 13; opacity: .62; }
+  .mark .r-out { stroke-dasharray: 12 18; opacity: .42; }
+  .mark .dot { fill: var(--mark, #284a80); }
+  .mark .d-out { opacity: .7; }
+  .mark .orbit { transform-box: view-box; transform-origin: 50% 50%; }
+  .v-c .o-in  { animation: mk-spin calc(40s / var(--k, 1)) linear infinite; }
+  .v-c .o-out { animation: mk-spin calc(60s / var(--k, 1)) linear infinite reverse; }
+  @keyframes mk-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .mark .orbit { animation: none; } }
+
+
+  /* ================= Desktop orbit (site#7) ================= */
+  :root { --k: .6; }                       /* the ∫ mark's rings at the slow speed */
+  .ob { display: none; }
+  html.ob-on { font-size: var(--obfs, 17px) !important; }   /* the orbit fits its own type size to the window */
+  html.ob-on body { padding: 0; height: 100dvh; overflow: hidden; }
+  html.ob-on .sheet, html.ob-on .zoomer { display: none; }
+  html.ob-on .ob { display: block; position: fixed; inset: 0; }
+  .ob {
+    --cw: 15.5rem; --mw: 6.4rem;
+    --dur: 820ms; --ease: cubic-bezier(.65,0,.35,1); --out: cubic-bezier(.22,1,.36,1); --spring: cubic-bezier(.34,1.4,.5,1);
+    --ink2: #20242b; --mut: #30353f; --acc: #284a80;
+  }
+  .ob::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(243,244,246,.42), rgba(243,244,246,0) 72%); transition: opacity .6s; }
+  .ob.has-open::before { opacity: 0; }
+  .ob.no-anim, .ob.no-anim * { transition: none !important; }
+
+  .ob-track, .ob-disc, .ob-ghost, .ob-hub, .ob-card { position: absolute; left: 0; top: 0; }
+  .ob-track, .ob-disc { border-radius: 50%; pointer-events: none;
+    transition: translate var(--dur) var(--ease), width var(--dur) var(--ease), height var(--dur) var(--ease); }
+  .ob-track { border: 1.5px dashed rgba(40,74,128,.34); }
+  .ob-disc { z-index: 0; background: radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.58), rgba(243,244,246,.34) 72%);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgba(255,255,255,.45), 0 30px 80px -50px rgba(22,24,30,.5); }
+  .ob-ghost { border-radius: 50%; border: 1.5px dashed rgba(40,74,128,.6); background: rgba(243,244,246,.35); opacity: 0; transition: opacity .25s; }
+  .ob.has-open .ob-ghost { opacity: 1; transition: opacity .4s calc(var(--dur) * .7); }
+
+  /* ---- the hub: the ∫ mark and the name ---- */
+  .ob-hub { z-index: 1; width: 21rem; text-align: center; transform-origin: 0 0; transition: transform var(--dur) var(--ease); }
+  .ob-hub-top { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .ob-hub .mark { width: 9.6rem; height: 9.6rem; }
+  .ob-name { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 2.15rem; line-height: 1.05; margin-top: .15rem; color: var(--ink);
+    -webkit-text-stroke: .45px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
+  .ob-name em { font-style: italic; color: var(--acc); }
+  .ob-hub-more { transition: opacity .35s; }
+  .ob-over { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--mut); margin-top: .6rem; }
+  .ob-tag { font-size: .84rem; font-weight: 700; line-height: 1.45; color: var(--ink2); margin: .35rem auto 0; max-width: 19rem; -webkit-text-stroke: .2px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
+  .ob-hint { display: inline-flex; align-items: center; gap: .45rem; margin-top: .7rem; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; color: var(--acc); }
+  .ob-hint i { width: .45rem; height: .45rem; border-radius: 50%; background: var(--acc); animation: ob-ping 2.4s ease-out infinite; }
+  @keyframes ob-ping { 0% { box-shadow: 0 0 0 0 rgba(40,74,128,.45); } 70%, 100% { box-shadow: 0 0 0 .55rem rgba(40,74,128,0); } }
+  .ob-hub-hit { position: absolute; inset: -.4rem -.6rem; border: 0; background: none; cursor: pointer; display: none; border-radius: 1.4rem; }
+  .ob.has-open .ob-hub-more { opacity: 0; pointer-events: none; }
+  .ob.has-open .ob-hub-hit { display: block; }
+  .ob-hub-hit:focus-visible { outline: 3px solid rgba(40,74,128,.5); }
+
+  /* ---- the eight pieces ---- */
+  .ob-card { z-index: 2; border-radius: 20px; overflow: hidden; color: var(--ink);
+    background: linear-gradient(158deg, rgba(255,255,255,.7), rgba(243,244,246,.5) 52%, rgba(232,236,244,.56));
+    -webkit-backdrop-filter: blur(16px) saturate(1.15); backdrop-filter: blur(16px) saturate(1.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(255,255,255,.4), 0 0 0 1px rgba(40,74,128,.15), 0 18px 40px -24px rgba(22,24,30,.55);
+    transition: translate var(--dur) var(--ease) var(--d, 0ms), width var(--dur) var(--ease) var(--d, 0ms), height var(--dur) var(--ease) var(--d, 0ms),
+                border-radius var(--dur) var(--ease), background .35s, box-shadow .35s, scale .35s var(--spring), -webkit-backdrop-filter .4s, backdrop-filter .4s;
+    animation: ob-in .9s var(--spring) calc(var(--i) * 75ms + 120ms) backwards, ob-bob 7.5s ease-in-out calc(var(--i) * -.95s) infinite; }
+  @keyframes ob-in { from { opacity: 0; scale: .55; } }
+  @keyframes ob-bob { 50% { transform: translateY(-5px); } }
+  /* a thread of light along the top edge, in the piece's own tint */
+  .ob-card::before { content: ''; position: absolute; left: 16%; right: 16%; top: 0; height: 2px; border-radius: 2px; z-index: 3; pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--tint), transparent); opacity: .55; transition: opacity .35s, left .35s, right .35s; }
+  /* a sheen that passes over the glass on hover */
+  .ob-card::after { content: ''; position: absolute; inset: -20% -60%; z-index: 3; pointer-events: none; translate: -70% 0;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.42) 50%, transparent 62%); opacity: 0; }
+  .ob:not(.has-open) .ob-card:hover { scale: 1.035; background: linear-gradient(158deg, rgba(255,255,255,.86), rgba(243,244,246,.7) 55%, rgba(232,236,244,.72));
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px color-mix(in srgb, var(--tint) 45%, transparent), 0 22px 46px -22px color-mix(in srgb, var(--tint) 60%, rgba(22,24,30,.5)); }
+  .ob:not(.has-open) .ob-card:hover::before { opacity: 1; left: 6%; right: 6%; }
+  .ob:not(.has-open) .ob-card:hover::after { opacity: 1; translate: 70% 0; transition: translate .9s var(--out), opacity .2s; }
+  .ob-card:has(.ob-face:focus-visible) { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tint) 55%, transparent), 0 18px 40px -24px rgba(22,24,30,.55); }
+
+  .ob-face { position: absolute; inset: 0; border: 0; padding: 0; background: none; text-align: left; color: inherit; font: inherit; cursor: pointer; transition: opacity .2s; }
+  .ob-face:focus-visible { outline: none; }
+  .ob-full { position: absolute; left: 0; top: 0; width: var(--cw); padding: .9rem 1.1rem 1rem; display: flex; flex-direction: column; transition: opacity .35s .12s; }
+  .ob-row { display: flex; align-items: center; gap: .55rem; margin-bottom: .5rem; }
+  .ob-label { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mut); }
+  .ob-arrow { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .8rem; color: var(--tint); opacity: .45; transition: translate .35s var(--spring), opacity .35s; }
+  .ob-card:hover .ob-arrow { translate: .25rem 0; opacity: 1; }
+  .ob-title { font-family: 'DM Serif Display', serif; font-size: 1.14rem; line-height: 1.12; -webkit-text-stroke: .35px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
+  .ob-sum { margin-top: .35rem; font-size: .78rem; line-height: 1.45; font-weight: 700; color: var(--ink2); -webkit-text-stroke: .15px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
+  .ob-mini { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .15s; }
+
+  /* glyph badges */
+  .gl { flex: none; display: inline-grid; place-items: center; width: 1.85rem; height: 1.85rem; border-radius: 50%; font-style: normal;
+    font-family: 'DM Serif Display', 'Times New Roman', serif; font-size: 1.05rem; line-height: 1; }
+  .gl-sym { color: #fff; background: linear-gradient(140deg, #4a6fae, #284a80 55%, #1d355e); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 4px 10px -4px rgba(40,74,128,.7); }
+  .gl-num { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; color: var(--acc);
+    background: linear-gradient(140deg, rgba(255,255,255,.9), rgba(214,222,236,.85)); box-shadow: inset 0 0 0 1px rgba(40,74,128,.28); }
+  .gl-pair { display: inline-flex; flex: none; }
+  .gl-qd { background: linear-gradient(140deg, #fbf8f0, #eddfd5); color: #8f5d3b; box-shadow: inset 0 0 0 1px #c3a080; }
+  .gl-qd svg { width: 46%; fill: currentColor; }
+  .gl-qc { background: linear-gradient(140deg, #1d5a60, #153f44); color: #68e1af; margin-left: -.55rem; box-shadow: 0 0 0 2px rgba(255,255,255,.75); }
+  .ob-card:hover .ob-row .gl-sym, .ob-card:hover .ob-row .gl-num { rotate: -12deg; }
+  .ob-row .gl { transition: rotate .45s var(--spring); }
+  .ob-mini .gl { width: 2.1rem; height: 2.1rem; font-size: 1.1rem; }   /* the dial's badge size (BG), so a flying tile carries a small badge */
+  .ob-mini .gl-num { font-size: .66rem; }
+  .ob-mini .gl-pair .gl { width: 1.2rem; height: 1.2rem; font-size: .72rem; }
+  .ob-mini .gl-pair .gl-qc { width: 1.35rem; height: 1.35rem; margin-left: -.5rem; box-shadow: 0 0 0 1.5px #fff; }
+
+  /* ---- open: one piece leaves the ring and becomes the panel; the rest gather in the corner ---- */
+  .ob.has-open .ob-card { animation: none; }
+  /* the tiles stay visible while they fly to the corner; the badge appears on the way and the glass melts away on arrival */
+  .ob-card.is-mini { border-radius: 50%; background: rgba(243,244,246,0); box-shadow: 0 0 0 3px rgba(255,255,255,.88), 0 10px 20px -8px rgba(22,24,30,.55); -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px);
+    transition: translate var(--dur) var(--ease) var(--d, 0ms), width var(--dur) var(--ease) var(--d, 0ms), height var(--dur) var(--ease) var(--d, 0ms),
+                border-radius var(--dur) var(--ease) var(--d, 0ms), scale .35s var(--spring),
+                background .4s calc(var(--dur) * .75 + var(--d, 0ms)), box-shadow .4s calc(var(--dur) * .75 + var(--d, 0ms)),
+                -webkit-backdrop-filter .4s calc(var(--dur) * .75 + var(--d, 0ms)), backdrop-filter .4s calc(var(--dur) * .75 + var(--d, 0ms)); }
+  .ob-card.is-mini::before { opacity: 0; }
+  .ob-card.is-mini .ob-full { opacity: 0; transition: opacity .18s; }
+  .ob-card.is-mini .ob-mini { opacity: 1; transition: opacity .35s calc(var(--dur) * .3 + var(--d, 0ms)); }
+  .ob-card.is-mini[data-id="building"] { background: rgba(250,250,252,.96); }
+  .ob-card.is-mini:hover { scale: 1.16; }
+  .ob-card.is-mini:has(.ob-face:focus-visible) { box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(40,74,128,.6); }
+  /* one label above the dial names whatever the pointer or keyboard is on */
+  .ob-say { position: absolute; left: 0; top: 0; z-index: 7; translate: -50% -100%; white-space: nowrap; pointer-events: none;
+    padding: .42rem .85rem .44rem; border-radius: 99px; font-size: .74rem; font-weight: 700; color: var(--ink);
+    background: rgba(243,244,246,.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    box-shadow: 0 0 0 1px rgba(40,74,128,.16), 0 8px 18px -10px rgba(22,24,30,.45); opacity: 0; transition: opacity .2s; }
+  .ob-say.hot { color: var(--acc); box-shadow: 0 0 0 1px var(--acc), 0 8px 18px -10px rgba(40,74,128,.5); }
+  .ob.has-open .ob-say { opacity: 1; transition: opacity .4s calc(var(--dur) * .75); }
+  .ob-card.was-open { z-index: 4; }
+  .ob-card.is-open { z-index: 6; border-radius: 26px; cursor: default;
+    transition: translate var(--dur) var(--out), width var(--dur) var(--out), height var(--dur) var(--out), border-radius var(--dur) var(--out), background .35s, box-shadow .35s;
+    background: linear-gradient(165deg, rgba(255,255,255,.93), rgba(243,244,246,.86) 50%, rgba(236,239,245,.88));
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(40,74,128,.18), 0 50px 100px -50px rgba(22,24,30,.6); }
+  .ob-card.is-open::before { left: 4%; right: 4%; opacity: .9; }
+  .ob-card.is-open .ob-face { opacity: 0; pointer-events: none; }
+  .ob-card.is-open .ob-full, .ob-card.is-open .ob-mini { opacity: 0; transition: opacity .12s; }
+
+  .ob-detail { position: absolute; left: 0; top: 0; width: var(--pw, 40rem); height: 100%; display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden; transition: opacity .18s, visibility 0s .18s; }
+  .ob-card.is-open .ob-detail { opacity: 1; visibility: visible; transition: opacity .4s calc(var(--dur) * .45), visibility 0s; }
+  .ob-detail.measure { height: auto; } .ob-detail.measure .pd-scroll { flex: none; overflow: visible; }
+  .pd-wm { position: absolute; right: -.6rem; top: -2.2rem; font-family: 'DM Serif Display', 'Times New Roman', serif; font-size: 15rem; line-height: 1; color: var(--tint); opacity: .06; pointer-events: none; }
+  .pd-head { position: relative; display: flex; align-items: center; gap: .4rem; padding: .85rem .95rem .3rem 1.9rem; }
+  .pd-pos { margin-right: auto; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .12em; color: var(--mut); }
+  .pd-head button, .pd-foot button, .jump button { font-family: 'JetBrains Mono', monospace; font-weight: 800; cursor: pointer; color: var(--ink);
+    border: 1px solid rgba(40,74,128,.22); background: rgba(255,255,255,.7); border-radius: 99px; transition: border-color .2s, color .2s, background .2s, translate .25s var(--spring); }
+  .pd-head button { height: 2rem; min-width: 2rem; padding: 0 .75rem; font-size: .62rem; white-space: nowrap; }
+  .pd-head button:hover, .pd-foot button:hover, .jump button:hover { border-color: var(--acc); color: var(--acc); background: #fff; }
+  .pd-scroll { position: relative; flex: 1 1 auto; min-height: 0; overflow: auto; padding: .5rem 1.9rem 1.3rem; }
+  .pd-hero { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.1rem; }
+  .pd-hero .gl { width: 3.3rem; height: 3.3rem; font-size: 1.75rem; } .pd-hero .gl-num { font-size: .95rem; } .pd-hero .gl-qc { margin-left: -1rem; }
+  .pd-label { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+  .pd-hero h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 2.45rem; line-height: 1.08; margin-top: .15rem; -webkit-text-stroke: .4px currentColor; outline: none; }
+  .pd-body > * { max-width: 48rem; }
+  .pd-body p { font-size: 1.04rem; line-height: 1.62; font-weight: 600; color: var(--ink2); margin-bottom: .75rem; }
+  .pd-body p.sub { font-size: .86rem; color: var(--mut); }
+  .pd-body p.lead { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.35rem; line-height: 1.3; color: var(--ink); }
+  .pd-body p.dim { color: var(--mut); }
+  .pd-foot { display: flex; justify-content: space-between; gap: .6rem; padding: .7rem 1.1rem .95rem; border-top: 1px solid rgba(198,202,210,.65); }
+  .pd-foot button { padding: .5rem .9rem; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; }
+  .pd-foot .pd-prev:hover { translate: -.2rem 0; } .pd-foot .pd-next:hover { translate: .2rem 0; }
+  /* the panel's contents rise in, one after another, once the frame has grown */
+  .ob-card.is-open .pd-hero, .ob-card.is-open .pd-body > * { animation: pd-up .6s var(--out) both; animation-delay: calc(var(--dur) * .5 + var(--n, 0) * 70ms); }
+  .pd-body > :nth-child(1) { --n: 1; } .pd-body > :nth-child(2) { --n: 2; } .pd-body > :nth-child(3) { --n: 3; } .pd-body > :nth-child(4) { --n: 4; }
+  @keyframes pd-up { from { opacity: 0; translate: 0 .8rem; } }
+
+  /* panel contents */
+  .ob .links { display: flex; gap: 1.3rem; margin-top: .2rem; }
+  .ob .links a { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; color: var(--acc); text-decoration: none; }
+  .ob .links a.sublink { color: var(--mut); }
+  .ob .links a:hover { text-decoration: underline; }
+  .ob .jump { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .4rem; }
+  .ob .jump span { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mut); margin-right: .2rem; }
+  .ob .jump button { padding: .4rem .8rem; font-size: .66rem; }
+  .ob .res-line { margin: 0 0 1rem; } .ob .res-line b { display: block; font-weight: 700; font-size: 1.05rem; }
+  .ob .res-line span { display: block; font-weight: 600; color: var(--ink2); font-size: .93rem; line-height: 1.55; }
+  .ob .plainlist { list-style: none; } .ob .plainlist li { padding: .65rem 0; border-bottom: 1px dashed rgba(198,202,210,.9); }
+  .ob .plainlist li:last-child { border-bottom: none; }
+  .ob .plainlist b { display: block; font-weight: 700; font-size: 1.05rem; } .ob .plainlist small { display: block; font-weight: 600; color: var(--mut); font-size: .88rem; }
+  .ob .plainlist .yr { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .62rem; color: var(--mut); }
+  .ob .bcards { margin-top: .6rem; gap: .8rem; } .ob .bcard { flex: 1 1 15rem; padding: 1rem 1.1rem; border-radius: 14px; }
+  .ob .bcard .bc-top { font-size: 1.25rem; } .ob .bcard .bc-text { font-size: .86rem; } .ob .bcard .bc-go { font-size: .64rem; }
+
+  .ob .trio { margin: .4rem 0 1rem; }
+  .ob .trio-h { font-family: 'DM Serif Display', serif; font-size: 1.2rem; line-height: 1.2; color: var(--ink); margin-bottom: .55rem !important; }
+  .ob .trio ol { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .7rem; }
+  .ob .trio li { padding: .8rem .9rem .9rem; border-radius: 14px; background: linear-gradient(160deg, rgba(255,255,255,.85), rgba(236,239,245,.7));
+    box-shadow: inset 0 0 0 1px rgba(40,74,128,.14); font-size: .86rem; line-height: 1.5; font-weight: 600; color: var(--ink2); }
+  .ob .trio li i { display: block; font-family: 'DM Serif Display', serif; font-style: normal; font-size: 1.35rem; line-height: 1; color: var(--tint); margin-bottom: .35rem; }
+  .ob .trio li b { display: block; font-weight: 700; font-size: .98rem; color: var(--ink); margin-bottom: .2rem; }
+  .ob .venn-row { display: flex; align-items: center; gap: 1.3rem; margin: .3rem 0 .9rem; }
+  .ob .venn { flex: none; width: 11.5rem; overflow: visible; }
+  .ob .venn circle { fill: var(--tint); fill-opacity: .08; stroke: var(--tint); stroke-opacity: .6; stroke-width: 1.5; }
+  .ob .venn text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 13px; fill: var(--ink); }
+  .ob .venn text.core { font-family: 'DM Serif Display', serif; font-size: 30px; fill: var(--tint); }
+  .ob .venn-row p { margin-bottom: 0; }
+
+  /* contact, always in the top right corner */
+  .ob-contact { position: absolute; right: 1.2rem; top: 1.1rem; z-index: 8; display: flex; gap: 1.1rem; padding: .5rem 1.05rem; border-radius: 99px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; background: rgba(243,244,246,.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgba(40,74,128,.14), 0 10px 24px -16px rgba(22,24,30,.4); }
+  .ob-contact a { color: var(--ink); text-decoration: none; } .ob-contact a:hover { color: var(--acc); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ob { --dur: 1ms; }
+    .ob *, .ob *::before, .ob *::after { animation: none !important; }
+    .ob-card::after { display: none; }
+  }
 </style>
 </head>
 <body>
+
+<!-- Desktop orbit (site#7): computers with a mouse, 1101px+ wide and 640px+ tall. Phones and iPads see the sheet below instead. -->
+<div class="ob" id="ob" aria-label="Yizhen (Stephen) Jia, overview">
+  <div class="ob-disc" aria-hidden="true"></div>
+  <div class="ob-track" aria-hidden="true"></div>
+  <div class="ob-ghost" aria-hidden="true"></div>
+  <p class="ob-say" id="obSay" aria-hidden="true">Pick another piece</p>
+  <div class="ob-hub" id="obHub">
+    <div class="ob-hub-top">
+      <svg class="mark v-c " viewBox="0 0 400 400" aria-hidden="true"><g class="orbit o-in"><g transform="rotate(-28 200 200)"><ellipse cx="200" cy="200" rx="176" ry="78" class="ring r-in" style="stroke-width:3.53"/><circle r="10" class="dot d-in"><animateMotion dur="7.5s" repeatCount="indefinite" path="M376,200 A176,78 0 1,1 24,200 A176,78 0 1,1 376,200"/></circle></g></g><g class="orbit o-out"><g transform="rotate(32 200 200)"><ellipse cx="200" cy="200" rx="194" ry="112" class="ring r-out" style="stroke-width:3.53"/><circle r="8" class="dot d-out"><animateMotion dur="12s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear" path="M394,200 A194,112 0 1,1 6,200 A194,112 0 1,1 394,200"/></circle></g></g><path class="int" transform="translate(30 30)" d="M152.7 236Q150.8 236 148.1 235.2Q145.5 234.5 144.7 233.8V233.3Q144.9 232.5 145.6 229.3Q146.3 226.2 146.6 224.7H147.9Q152.4 229.2 156.2 229.2Q159.7 229.2 162 224.1Q164.3 218.9 164.3 210.9L163.9 166.8Q163.9 149.2 164.8 131.2Q165.3 124.3 168.5 118.1Q171.8 111.9 177 107.9Q182.3 104 186.9 104Q188.5 104 191.4 104.7Q194.4 105.3 195.3 106.1V106.7L194.2 111L193.1 115.3H191.7Q187.1 110.7 183.4 110.7Q179.9 110.7 177.6 115.8Q175.3 121 175.3 129.1L175.6 164.5Q175.6 169.2 175.3 179.8Q175.1 190.4 174.5 209Q174.1 216.2 170.8 222.3Q167.5 228.5 162.4 232.3Q157.3 236 152.7 236Z"/></svg>
+      <h1 class="ob-name">Yizhen <em>(Stephen)</em> Jia</h1>
+      <button class="ob-hub-hit" type="button" aria-label="Back to the overview" tabindex="-1"></button>
+    </div>
+    <div class="ob-hub-more">
+      <p class="ob-over">Math Teacher · Doctoral Student · Walnut, CA</p>
+      <p class="ob-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
+      <p class="ob-hint"><i></i>Pick any piece to open it</p>
+    </div>
+  </div>
+  <article class="ob-card" id="c-building" data-id="building" data-slot="0" data-say="What I'm building" style="--i:0; --tint:#15565b">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-building">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl-pair"><span class="gl gl-qd"><svg viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15"/><circle cx="16" cy="76" r="15"/><circle cx="84" cy="76" r="15"/></svg></span><span class="gl gl-qc">Q</span></span><span class="ob-label">What I'm building</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">Qidolab &amp; Quidence</span>
+        <span class="ob-sum">A playful start with 18 small puzzles, then courses where you test what you understand and keep your work.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl-pair"><span class="gl gl-qd"><svg viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15"/><circle cx="16" cy="76" r="15"/><circle cx="84" cy="76" r="15"/></svg></span><span class="gl gl-qc">Q</span></span></span>
+    </button>
+    <section class="ob-detail" id="d-building" aria-labelledby="h-building" inert>
+      
+      <header class="pd-head">
+        <span class="pd-pos">1 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Scoping review">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: About">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl-pair"><span class="gl gl-qd"><svg viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15"/><circle cx="16" cy="76" r="15"/><circle cx="84" cy="76" r="15"/></svg></span><span class="gl gl-qc">Q</span></span><div><p class="pd-label">What I'm building</p><h2 id="h-building" tabindex="-1">Qidolab &amp; Quidence</h2></div></div>
+        <div class="pd-body">
+        <p class="lead">I want students to see their own thinking, not just their answers.</p>
+        <div class="bcards">
+          <a class="bcard qd" href="https://qidolab.com/" target="_blank" rel="noopener"><span class="bc-top"><b>∴</b>Qidolab · Brain Games</span>
+            <span class="bc-text">The playful start: 18 small puzzles with no timer, where a wrong move is just a new try.</span><span class="bc-go">Play Qidolab ↗</span></a>
+          <a class="bcard qc" href="https://www.quidence.com/" target="_blank" rel="noopener"><span class="bc-top"><b>Q</b>Quidence · Mathematics &amp; Science</span>
+            <span class="bc-text">The next step: courses where you test what you understand and keep your work to look back on. In English and Spanish.</span><span class="bc-go">Open Quidence ↗</span></a>
+        </div>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Scoping review</button>
+        <button type="button" class="pd-next">About →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-about" data-id="about" data-slot="7" data-say="01 · About" style="--i:1; --tint:#284a80">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-about">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-num">01</span><span class="ob-label">01 · About</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">Reasoning, not just answers</span>
+        <span class="ob-sum">A math teacher who cares how a student got there, and whether they could do it again alone.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-num">01</span></span>
+    </button>
+    <section class="ob-detail" id="d-about" aria-labelledby="h-about" inert>
+      <span class="pd-wm" aria-hidden="true">01</span>
+      <header class="pd-head">
+        <span class="pd-pos">2 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: What I'm building">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Teaching">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-num">01</span><div><p class="pd-label">01 · About</p><h2 id="h-about" tabindex="-1">Reasoning, not just answers</h2></div></div>
+        <div class="pd-body">
+        <p>I teach math, from grade-school basics to SAT Math and AP Calculus, and I am working on a doctorate in education. What interests me is not just the answer on the page but how a student got there, and whether they could do it again alone.</p>
+        <p>My research at Westcliff University asks an old question in a new situation: when an AI tool helped with the homework, how does a student decide the work is ready to hand in, and where does their own understanding fit in? Two preprints grew out of that question.</p>
+        <p class="dim">The classroom and the research share one question: how do we know what a student really understands? Everything on this page is a different angle on that problem.</p>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← What I'm building</button>
+        <button type="button" class="pd-next">Teaching →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-teaching" data-id="teaching" data-slot="6" data-say="02 · Teaching" style="--i:2; --tint:#284a80">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-teaching">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-num">02</span><span class="ob-label">02 · Teaching</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">From K–8 to AP Calculus</span>
+        <span class="ob-sum">SAT Math and AP Calculus in Rowland Heights, high school statistics in Oakland, tutoring in Belmont.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-num">02</span></span>
+    </button>
+    <section class="ob-detail" id="d-teaching" aria-labelledby="h-teaching" inert>
+      <span class="pd-wm" aria-hidden="true">02</span>
+      <header class="pd-head">
+        <span class="pd-pos">3 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: About">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Research">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-num">02</span><div><p class="pd-label">02 · Teaching</p><h2 id="h-teaching" tabindex="-1">From K–8 to AP Calculus</h2></div></div>
+        <div class="pd-body">
+        <ul class="plainlist">
+          <li><b>SAT Math &amp; AP Calculus Instructor</b><small>Elite Open School · Rowland Heights, CA</small><span class="yr">Since 2024</span></li>
+          <li><b>HS Statistics &amp; Pre-Calculus</b><small>Bay Area Technology School · Oakland</small><span class="yr">2024</span></li>
+          <li><b>K&#8211;8 Math Tutor, 50+ students</b><small>S.A.M Singapore Math · Belmont</small><span class="yr">2023/24</span></li>
+        </ul>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← About</button>
+        <button type="button" class="pd-next">Research →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-research" data-id="research" data-slot="5" data-say="03 · Research" style="--i:3; --tint:#284a80">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-research">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-num">03</span><span class="ob-label">03 · Research</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">Two questions I study</span>
+        <span class="ob-sum">How students decide that math homework done with AI help is ready to hand in, and what their charts show.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-num">03</span></span>
+    </button>
+    <section class="ob-detail" id="d-research" aria-labelledby="h-research" inert>
+      <span class="pd-wm" aria-hidden="true">03</span>
+      <header class="pd-head">
+        <span class="pd-pos">4 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Teaching">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Education">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-num">03</span><div><p class="pd-label">03 · Research</p><h2 id="h-research" tabindex="-1">Two questions I study</h2></div></div>
+        <div class="pd-body">
+        <div class="res-line"><b>Handing in work that AI helped with</b><span>How first-year college students decide, in their own words, whether math homework done with AI help is ready to submit.</span></div>
+        <div class="res-line"><b>Charts, graphs, and what they show</b><span>How students turn real data into charts, and what those charts reveal about their understanding.</span></div>
+        <p class="jump"><span>Papers</span><button type="button" data-go="acb">∅ The Absent Cognitive Baseline</button><button type="button" data-go="mdc">≠ Metacognitively Discordant Completion</button><button type="button" data-go="review">∩ Graphicacy in the Generative AI Era</button></p>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Teaching</button>
+        <button type="button" class="pd-next">Education →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-education" data-id="education" data-slot="4" data-say="04 · Education" style="--i:4; --tint:#284a80">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-education">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-num">04</span><span class="ob-label">04 · Education</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">From mathematics to education</span>
+        <span class="ob-sum">Mathematics and statistics degrees from Stony Brook, and now a doctorate in education at Westcliff.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-num">04</span></span>
+    </button>
+    <section class="ob-detail" id="d-education" aria-labelledby="h-education" inert>
+      <span class="pd-wm" aria-hidden="true">04</span>
+      <header class="pd-head">
+        <span class="pd-pos">5 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Research">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Absent Cognitive Baseline">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-num">04</span><div><p class="pd-label">04 · Education</p><h2 id="h-education" tabindex="-1">From mathematics to education</h2></div></div>
+        <div class="pd-body">
+        <ul class="plainlist">
+          <li><b>EdD, Leadership, Curriculum &amp; Instruction</b><small>Westcliff University</small><span class="yr">Since 2024</span></li>
+          <li><b>M.S. Applied Mathematics &amp; Statistics</b><small>Stony Brook University</small><span class="yr">2023</span></li>
+          <li><b>B.S. Mathematics</b><small>Stony Brook University</small><span class="yr">2021</span></li>
+        </ul>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Research</button>
+        <button type="button" class="pd-next">Absent Cognitive Baseline →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-acb" data-id="acb" data-slot="1" data-say="∅ Absent Cognitive Baseline" style="--i:5; --tint:#31548e">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-acb">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-sym">∅</span><span class="ob-label">Preprint · EdArXiv 2026</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">The Absent Cognitive Baseline</span>
+        <span class="ob-sum">When AI does the thinking before a skill forms, a student may have nothing to compare against.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-sym">∅</span></span>
+    </button>
+    <section class="ob-detail" id="d-acb" aria-labelledby="h-acb" inert>
+      <span class="pd-wm" aria-hidden="true">∅</span>
+      <header class="pd-head">
+        <span class="pd-pos">6 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Education">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Discordant Completion">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-sym">∅</span><div><p class="pd-label">Preprint · EdArXiv 2026</p><h2 id="h-acb" tabindex="-1">The Absent Cognitive Baseline</h2></div></div>
+        <div class="pd-body">
+        <p class="sub">Theorizing a structural gap in AI-native college students' academic self-assessment · with Jiarui Xu</p>
+        <p>The paper suggests that when an AI tool does the thinking before a skill has formed, a student may be left with nothing of their own to compare against when they ask themselves whether they understand.</p>
+        <div class="trio"><p class="trio-h">Three ways the gap shows up</p><ol><li><i>I</i><b>Unknowability</b>Not being able to tell where your own understanding ends, because there is no memory of doing this kind of work without help.</li><li><i>II</i><b>False calibration</b>Feeling that you understand because the AI's answer reads so smoothly.</li><li><i>III</i><b>De-normalization of struggle</b>Losing the sense that getting stuck is a normal part of learning.</li></ol></div>
+        <p class="links"><a href="acb.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/4cr8j_v5" target="_blank" rel="noopener">EdArXiv ↗</a></p>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Education</button>
+        <button type="button" class="pd-next">Discordant Completion →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-mdc" data-id="mdc" data-slot="2" data-say="≠ Discordant Completion" style="--i:6; --tint:#31548e">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-mdc">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-sym">≠</span><span class="ob-label">Preprint · EdArXiv 2026</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">Metacognitively Discordant Completion</span>
+        <span class="ob-sum">Handing in correct, complete work while knowing, right then, that you do not understand it.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-sym">≠</span></span>
+    </button>
+    <section class="ob-detail" id="d-mdc" aria-labelledby="h-mdc" inert>
+      <span class="pd-wm" aria-hidden="true">≠</span>
+      <header class="pd-head">
+        <span class="pd-pos">7 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Absent Cognitive Baseline">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: Scoping review">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-sym">≠</span><div><p class="pd-label">Preprint · EdArXiv 2026</p><h2 id="h-mdc" tabindex="-1">Metacognitively Discordant Completion</h2></div></div>
+        <div class="pd-body">
+        <p class="sub">The aware pass-through of non-understanding in generative AI learning</p>
+        <p>With AI, a student can hand in work that is correct and complete while knowing, at that moment, that they do not understand it. This paper gives that experience a name and works out what it is.</p>
+        <div class="trio"><p class="trio-h">It takes all three at once</p><ol><li><i>I</i><b>Effort invested</b>Real work went into the task. This is not a student who skipped it; the effort is there in the chat history.</li><li><i>II</i><b>Non-understanding known</b>At the moment of handing in, the student knows, by their own standard, that they do not understand the work.</li><li><i>III</i><b>Completion released anyway</b>They hand it in anyway, knowing that.</li></ol></div>
+        <p class="links"><a href="mdc.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv ↗</a></p>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Absent Cognitive Baseline</button>
+        <button type="button" class="pd-next">Scoping review →</button>
+      </footer>
+    </section>
+  </article>
+  <article class="ob-card" id="c-review" data-id="review" data-slot="3" data-say="∩ Scoping review" style="--i:7; --tint:#31548e">
+    <button class="ob-face" type="button" aria-expanded="false" aria-controls="d-review">
+      <span class="ob-full">
+        <span class="ob-row"><span class="gl gl-sym">∩</span><span class="ob-label">Scoping review · Interim</span><span class="ob-arrow" aria-hidden="true">→</span></span>
+        <span class="ob-title">Graphicacy in the Generative AI Era</span>
+        <span class="ob-sum">Mapping the studies where charts, generative AI and learning meet, as of about mid-June 2026.</span>
+      </span>
+      <span class="ob-mini" aria-hidden="true"><span class="gl gl-sym">∩</span></span>
+    </button>
+    <section class="ob-detail" id="d-review" aria-labelledby="h-review" inert>
+      <span class="pd-wm" aria-hidden="true">∩</span>
+      <header class="pd-head">
+        <span class="pd-pos">8 / 8</span>
+        <button type="button" class="pd-prev" aria-label="Previous: Discordant Completion">‹</button>
+        <button type="button" class="pd-next" aria-label="Next: What I'm building">›</button>
+        <button type="button" class="pd-close">Overview ✕</button>
+      </header>
+      <div class="pd-scroll">
+        <div class="pd-hero"><span class="gl gl-sym">∩</span><div><p class="pd-label">Scoping review · Interim</p><h2 id="h-review" tabindex="-1">Graphicacy in the Generative AI Era</h2></div></div>
+        <div class="pd-body">
+        <p class="sub">A PRISMA-ScR scoping review of an emerging three-way intersection in education · with Jiarui Xu</p>
+        <p>The review maps the studies where charts, generative AI and learning meet. This interim version shows the search and the studies found so far, as of about mid-June 2026.</p>
+        <div class="venn-row"><svg class="venn" viewBox="0 0 250 170" aria-hidden="true">
+          <circle cx="95" cy="68" r="52"/><circle cx="155" cy="68" r="52"/><circle cx="125" cy="115" r="52"/>
+          <text x="62" y="40" text-anchor="middle">Charts</text><text x="190" y="40" text-anchor="middle">Gen AI</text>
+          <text x="125" y="160" text-anchor="middle">Learning</text><text x="125" y="95" text-anchor="middle" class="core">∩</text></svg>
+          <div><p class="trio-h">Where three things meet</p>
+          <p>It asks how much research sits at that meeting point, what job the AI does there, and how the studies measure chart skills.</p></div></div>
+        <p class="links"><a href="review.html">→ Read more</a><a class="sublink" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF ↗</a></p>
+        </div>
+      </div>
+      <footer class="pd-foot">
+        <button type="button" class="pd-prev">← Discordant Completion</button>
+        <button type="button" class="pd-next">What I'm building →</button>
+      </footer>
+    </section>
+  </article>
+  <nav class="ob-contact" aria-label="Contact">
+    <a href="mailto:stephenjia3852@gmail.com">stephenjia3852@gmail.com</a>
+    <a href="https://www.linkedin.com/in/yizhen-j-4ba85825b/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a href="https://github.com/SteJ20996" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</div>
 
 <main class="sheet">
 
   <!-- Masthead -->
   <header class="tile mast">
-    <div>
-      <p class="mast-over">Math Teacher · Doctoral Student · Walnut, CA</p>
-      <h1>Yizhen <em>(Stephen)</em> Jia</h1>
-      <p class="mast-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
+    <div class="mast-id">
+      <svg class="mark v-c " viewBox="0 0 400 400" aria-hidden="true"><g class="orbit o-in"><g transform="rotate(-28 200 200)"><ellipse cx="200" cy="200" rx="176" ry="78" class="ring r-in" style="stroke-width:3.53"/><circle r="10" class="dot d-in"><animateMotion dur="7.5s" repeatCount="indefinite" path="M376,200 A176,78 0 1,1 24,200 A176,78 0 1,1 376,200"/></circle></g></g><g class="orbit o-out"><g transform="rotate(32 200 200)"><ellipse cx="200" cy="200" rx="194" ry="112" class="ring r-out" style="stroke-width:3.53"/><circle r="8" class="dot d-out"><animateMotion dur="12s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear" path="M394,200 A194,112 0 1,1 6,200 A194,112 0 1,1 394,200"/></circle></g></g><path class="int" transform="translate(30 30)" d="M152.7 236Q150.8 236 148.1 235.2Q145.5 234.5 144.7 233.8V233.3Q144.9 232.5 145.6 229.3Q146.3 226.2 146.6 224.7H147.9Q152.4 229.2 156.2 229.2Q159.7 229.2 162 224.1Q164.3 218.9 164.3 210.9L163.9 166.8Q163.9 149.2 164.8 131.2Q165.3 124.3 168.5 118.1Q171.8 111.9 177 107.9Q182.3 104 186.9 104Q188.5 104 191.4 104.7Q194.4 105.3 195.3 106.1V106.7L194.2 111L193.1 115.3H191.7Q187.1 110.7 183.4 110.7Q179.9 110.7 177.6 115.8Q175.3 121 175.3 129.1L175.6 164.5Q175.6 169.2 175.3 179.8Q175.1 190.4 174.5 209Q174.1 216.2 170.8 222.3Q167.5 228.5 162.4 232.3Q157.3 236 152.7 236Z"/></svg>
+      <div>
+        <p class="mast-over">Math Teacher · Doctoral Student · Walnut, CA</p>
+        <h1>Yizhen <em>(Stephen)</em> Jia</h1>
+        <p class="mast-tag">I teach math, and I study how students decide whether they really understand the work they hand in.</p>
+      </div>
     </div>
     <aside class="vision" aria-label="What I am building">
-      <div class="vision-head">
-        <p class="tile-label"><b>∫</b> · What I'm building</p>
-        <div class="vision-links">
-          <a class="vbtn vd" href="https://qidolab.com/" target="_blank" rel="noopener"><b>∴</b> Play Qidolab ↗</a>
-          <a class="vbtn vq" href="https://www.quidence.com/" target="_blank" rel="noopener"><b>Q</b> Open Quidence ↗</a>
-        </div>
+      <p class="tile-label"><b>→</b> · What I'm building</p>
+      <p class="vision-text">I want students to see their own thinking, not just their answers.</p>
+      <div class="bcards">
+        <a class="bcard qd" href="https://qidolab.com/" target="_blank" rel="noopener">
+          <span class="bc-top"><b>∴</b>Qidolab · Brain Games</span>
+          <span class="bc-text">The playful start: 18 small puzzles with no timer, where a wrong move is just a new try.</span>
+          <span class="bc-go">Play Qidolab ↗</span>
+        </a>
+        <a class="bcard qc" href="https://www.quidence.com/" target="_blank" rel="noopener">
+          <span class="bc-top"><b>Q</b>Quidence · Mathematics &amp; Science</span>
+          <span class="bc-text">The next step: courses where you test what you understand and keep your work to look back on. In English and Spanish.</span>
+          <span class="bc-go">Open Quidence ↗</span>
+        </a>
       </div>
-      <p class="vision-text">I want students to see their own thinking, not just their answers. <span class="vd-name">Qidolab</span> is the playful start: 18 small puzzles with no timer, where a wrong move is just a new try. <span class="vq-name">Quidence</span> is the next step: courses where you test what you understand and keep your work to look back on.</p>
     </aside>
   </header>
 
-  <!-- Main band: 01 02 03 04 Δ -->
+  <!-- Papers band -->
+  <div class="band band-papers">
+
+    <section class="tile paper acb">
+      <span class="ptag">Preprint · EdArXiv 2026</span>
+      <h3>The Absent Cognitive Baseline</h3>
+      <p class="sub">Theorizing a structural gap in AI-native college students' academic self-assessment · with Jiarui Xu</p>
+      <p>The paper suggests that when an AI tool does the thinking before a skill has formed, a student may be left with nothing of their own to compare against when they ask themselves whether they understand.</p>
+      <a class="arrowlink" href="acb.html">→ Read more</a>
+      <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/4cr8j_v5" target="_blank" rel="noopener">EdArXiv</a>
+    </section>
+
+    <section class="tile paper mdc">
+      <span class="ptag">Preprint · EdArXiv 2026</span>
+      <h3>Metacognitively Discordant Completion</h3>
+      <p class="sub">The aware pass-through of non-understanding in generative AI learning</p>
+      <p>With AI, a student can hand in work that is correct and complete while knowing, at that moment, that they do not understand it. This paper gives that experience a name and works out what it is.</p>
+      <a class="arrowlink" href="mdc.html">→ Read more</a>
+      <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv</a>
+    </section>
+
+    <section class="tile paper review">
+      <span class="ptag">Scoping review · Interim version</span>
+      <h3>Graphicacy in the Generative AI Era</h3>
+      <p class="sub">A PRISMA-ScR scoping review of an emerging three-way intersection in education · with Jiarui Xu</p>
+      <p>The review maps the studies where charts, generative AI and learning meet. This interim version shows the search and the studies found so far, as of about mid-June 2026.</p>
+      <a class="arrowlink" href="review.html">→ Read more</a>
+      <a class="arrowlink sub" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF</a>
+    </section>
+
+  </div>
+
+  <!-- Main band: 01 02 03 04 -->
   <div class="band band-main">
 
     <section class="tile about">
@@ -394,54 +888,6 @@
       </ul>
     </section>
 
-    <div class="sites">
-      <section class="tile brandcard quidence">
-        <p class="tile-label"><b>Q</b> · Learning site</p>
-        <h3>Quidence · Mathematics &amp; Science</h3>
-        <p>Pick a course in mathematics or introductory physics and test your understanding with problems that have several parts. In English and Spanish.</p>
-        <a class="arrowlink main" href="https://www.quidence.com/" target="_blank" rel="noopener">→ Open Quidence</a>
-        <span class="glyph" aria-hidden="true">Q</span>
-      </section>
-      <section class="tile brandcard qidolab">
-        <p class="tile-label"><b>∴</b> · Puzzle site</p>
-        <h3>Qidolab · Brain Games</h3>
-        <p>18 hands-on puzzles: pour water, flip lights, weigh coins. No timer. Stuck? Try a different move.</p>
-        <a class="arrowlink main" href="https://qidolab.com/" target="_blank" rel="noopener">→ Play Qidolab</a>
-        <svg class="glyph dots" viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15" /><circle cx="16" cy="76" r="15" /><circle cx="84" cy="76" r="15" /></svg>
-      </section>
-    </div>
-
-  </div>
-
-  <!-- Papers band -->
-  <div class="band band-papers">
-
-    <section class="tile paper acb">
-      <span class="ptag">Preprint · EdArXiv 2026</span>
-      <h3>The Absent Cognitive Baseline</h3>
-      <p class="sub">Theorizing a structural gap in AI-native college students' academic self-assessment · with Jiarui Xu</p>
-      <p>The paper suggests that when an AI tool does the thinking before a skill has formed, a student may be left with nothing of their own to compare against when they ask themselves whether they understand.</p>
-      <a class="arrowlink" href="acb.html">→ Read more</a>
-      <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/4cr8j_v5" target="_blank" rel="noopener">EdArXiv</a>
-    </section>
-
-    <section class="tile paper mdc">
-      <span class="ptag">Preprint · EdArXiv 2026</span>
-      <h3>Metacognitively Discordant Completion</h3>
-      <p class="sub">The aware pass-through of non-understanding in generative AI learning</p>
-      <p>With AI, a student can hand in work that is correct and complete while knowing, at that moment, that they do not understand it. This paper gives that experience a name and works out what it is.</p>
-      <a class="arrowlink" href="mdc.html">→ Read more</a>
-      <a class="arrowlink sub" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv</a>
-    </section>
-
-    <section class="tile paper review">
-      <span class="ptag">Scoping review · Interim version</span>
-      <h3>Graphicacy in the Generative AI Era</h3>
-      <p class="sub">A PRISMA-ScR scoping review of an emerging three-way intersection in education · with Jiarui Xu</p>
-      <p>The review maps the studies where charts, generative AI and learning meet. This interim version shows the search and the studies found so far, as of about mid-June 2026.</p>
-      <a class="arrowlink" href="review.html">→ Read more</a>
-      <a class="arrowlink sub" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF</a>
-    </section>
 
   </div>
 
@@ -475,6 +921,174 @@
     document.getElementById('zin').addEventListener('click', function () { z = Math.min(MAX, +(z + STEP).toFixed(2)); apply(); });
     document.getElementById('zout').addEventListener('click', function () { z = Math.max(MIN, +(z - STEP).toFixed(2)); apply(); });
     apply();
+  })();
+</script>
+<script>
+  function markMotion() {
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var k = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--k')) || 1;
+    document.querySelectorAll('svg.v-c').forEach(function (s) {
+      if (reduce && s.pauseAnimations) s.pauseAnimations();
+      s.querySelectorAll('animateMotion').forEach(function (m) {
+        if (!m.dataset.base) m.dataset.base = parseFloat(m.getAttribute('dur'));
+        m.setAttribute('dur', (m.dataset.base / k).toFixed(2) + 's');
+      });
+    });
+  }
+ markMotion();
+
+  (function () {
+    var MQ = matchMedia('(min-width: 1101px) and (min-height: 640px) and (hover: hover) and (pointer: fine)');
+    var root = document.documentElement, ob = document.getElementById('ob');
+    var cards = [].slice.call(ob.querySelectorAll('.ob-card')), N = cards.length;
+    var IDS = cards.map(function (c) { return c.dataset.id; });
+    var SLOT = cards.map(function (c) { return +c.dataset.slot; });
+    var hub = document.getElementById('obHub'), hubTop = hub.querySelector('.ob-hub-top');
+    var disc = ob.querySelector('.ob-disc'), track = ob.querySelector('.ob-track'), ghost = ob.querySelector('.ob-ghost'), contact = ob.querySelector('.ob-contact');
+    var CW = 15.5, DC = 13.5, BG = 2.1, HUB_S = .38, on = false, cur = -1, G = null;   // DC: the corner dial's width, BG: its badges
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function put(el, x, y, w, h, s) {
+      // pieces move by the translate property: the hover scale then grows them in place (the hub alone scales, by transform)
+      if (s) el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + s + ')';
+      else el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
+      if (w != null) { el.style.width = w.toFixed(1) + 'px'; el.style.height = h.toFixed(1) + 'px'; }
+    }
+    function ell(el, cx, cy, rx, ry) { put(el, cx - rx, cy - ry, 2 * rx, 2 * ry); }
+    function hit(a, b, g) { return a.x < b.x + b.w + g && b.x < a.x + a.w + g && a.y < b.y + b.h + g && b.y < a.y + a.h + g; }
+    function at(cx, cy, rx, ry, slot, w, h, deg) { var t = (deg == null ? slot * 45 : deg) * Math.PI / 180; return { x: cx + rx * Math.sin(t) - w / 2, y: cy - ry * Math.cos(t) - h / 2, w: w, h: h }; }
+
+    // measure everything at one type size and lay out both states
+    function geom(fs) {
+      root.style.setProperty('--obfs', fs + 'px');
+      var r = fs, W = innerWidth, H = innerHeight, m = 1.2 * r, cw = CW * r;
+      var hs = cards.map(function (c) { return c.querySelector('.ob-full').offsetHeight; });
+      var hw = hub.offsetWidth, hh = hub.offsetHeight, ht = hubTop.offsetHeight;
+      var nm = hub.querySelector('.ob-name'), mk = hub.querySelector('.mark');
+      var cx = W / 2, cy = H / 2;
+      var ry = H / 2 - m - Math.max(hs[SLOT.indexOf(0)], hs[SLOT.indexOf(4)]) / 2;
+      var rx = Math.min(W / 2 - m - cw / 2, ry * 1.9);
+      var ring = cards.map(function (c, k) { return at(cx, cy, rx, ry, SLOT[k], cw, hs[k]); });
+      // the corner: a round dial, badges on a circle around the small mark and name
+      var dc = DC * r, bg = BG * r, cr = (dc - bg) / 2, mcx = W - m - dc / 2, mcy = H - m - dc / 2;
+      var mini = cards.map(function (c, k) { var a = at(mcx, mcy, cr, cr, SLOT[k], bg, bg); a.sx = a.x + bg / 2; a.sy = a.y + bg / 2; return a; });
+      // the small hub is the mark with the name under it: two boxes, not one wide one
+      var hy = mcy - HUB_S * ht / 2;
+      var hubMini = [{ x: mcx - HUB_S * mk.offsetWidth / 2, y: hy, w: HUB_S * mk.offsetWidth, h: HUB_S * mk.offsetHeight },
+                     { x: mcx - HUB_S * nm.offsetWidth / 2, y: hy + HUB_S * nm.offsetTop, w: HUB_S * nm.offsetWidth, h: HUB_S * nm.offsetHeight }];
+      var availW = W - dc - 3 * m, pw = Math.min(availW, 71 * r);
+      var ct = { x: W - 1.2 * r - contact.offsetWidth, y: 1.1 * r, w: contact.offsetWidth, h: contact.offsetHeight };
+      var pTop = ct.y + ct.h + .6 * r;   // the wide panel stays clear of the contact strip
+      return { fs: fs, r: r, m: m, W: W, H: H, cx: cx, cy: cy, rx: rx, ry: ry, cw: cw, hs: hs, ring: ring, hw: hw, hh: hh, ht: ht,
+               mcx: mcx, mcy: mcy, cr: cr, bg: bg, dc: dc, mini: mini, hubMini: hubMini, contact: ct,
+               panel: { x: m + (availW - pw) / 2, w: pw, top: pTop, maxH: H - m - pTop, minH: Math.min(H - m - pTop, Math.max(28 * r, .85 * H)) }, availW: availW };
+    }
+    function fits(g) {
+      var gap = .35 * g.r, hubR = { x: g.cx - g.hw / 2, y: g.cy - g.hh / 2, w: g.hw, h: g.hh }, why = g.why = [];
+      if (g.availW < 34 * g.r) why.push('panel width'); if (g.ry <= 0) why.push('ring height');
+      g.ring.forEach(function (a, i) {
+        if (a.x < g.m / 3 || a.y < g.m / 3 || a.x + a.w > g.W - g.m / 3 || a.y + a.h > g.H - g.m / 3) why.push('ring off screen ' + IDS[i]);
+        if (hit(a, hubR, gap)) why.push('ring/hub ' + IDS[i]); if (hit(a, g.contact, gap)) why.push('ring/contact ' + IDS[i]);
+        g.ring.forEach(function (b, j) { if (j > i && hit(a, b, gap)) why.push('ring ' + IDS[i] + '/' + IDS[j]); });
+      });
+      g.mini.forEach(function (a, i) {
+        g.mini.forEach(function (b, j) { if (j > i && hit(a, b, gap * .6)) why.push('corner ' + IDS[i] + '/' + IDS[j]); });
+        if (hit(a, g.contact, gap)) why.push('corner/contact ' + IDS[i]); if (g.hubMini.some(function (h) { return hit(a, h, gap * .6); })) why.push('corner/hub ' + IDS[i]);
+        if (a.y < g.m / 3) why.push('corner off screen ' + IDS[i]);
+      });
+      return !why.length;
+    }
+    function fit() { for (var fs = 21; fs >= 12; fs -= .5) { G = geom(fs); if (fits(G)) return; } }
+
+    function slotDist(a, b) { var d = Math.abs(SLOT[a] - SLOT[b]) % 8; return Math.min(d, 8 - d); }
+    function apply(instant, from) {
+      if (!G) return;
+      if (instant) ob.classList.add('no-anim');
+      var open = cur >= 0;
+      ob.classList.toggle('has-open', open);
+      cards.forEach(function (c, k) {
+        var isOpen = k === cur, face = c.querySelector('.ob-face'), det = c.querySelector('.ob-detail');
+        var wasOpen = c.classList.contains('is-open') && !isOpen;
+        c.classList.toggle('is-open', isOpen);
+        c.classList.toggle('is-mini', open && !isOpen);
+        if (wasOpen) { c.classList.add('was-open'); setTimeout(function () { c.classList.remove('was-open'); }, 900); }
+        face.setAttribute('aria-expanded', isOpen); face.inert = isOpen; det.inert = !isOpen;
+        // the others ripple out from the piece that was chosen
+        var ref = open ? cur : from;
+        c.style.setProperty('--d', (ref >= 0 && ref !== k && !(from >= 0 && open) ? slotDist(k, ref) * 35 : 0) + 'ms');
+        if (isOpen) {
+          var P = G.panel; c.style.setProperty('--pw', P.w + 'px');
+          det.classList.add('measure'); var nat = det.offsetHeight; det.classList.remove('measure');
+          var ph = Math.min(P.maxH, Math.max(P.minH, nat));
+          put(c, P.x, P.top + (P.maxH - ph) / 2, P.w, ph);
+        } else if (open) { var a = G.mini[k]; put(c, a.x, a.y, a.w, a.h); }
+        else { var b = G.ring[k]; put(c, b.x, b.y, b.w, b.h); }
+      });
+      if (open) {
+        put(hub, G.mcx - HUB_S * G.hw / 2, G.mcy - HUB_S * G.ht / 2, null, null, HUB_S);
+        ell(track, G.mcx, G.mcy, G.cr, G.cr);
+        var dr = G.cr - G.bg / 2 - .2 * G.r; ell(disc, G.mcx, G.mcy, dr, dr);
+        var gs = G.mini[cur], gr = G.bg / 2 + .2 * G.r; put(ghost, gs.sx - gr, gs.sy - gr, 2 * gr, 2 * gr);
+        say.style.left = G.mcx.toFixed(1) + 'px'; say.style.top = (G.mcy - G.dc / 2 - .55 * G.r).toFixed(1) + 'px';
+      } else {
+        put(hub, G.cx - G.hw / 2, G.cy - G.hh / 2, null, null, 1);
+        ell(track, G.cx, G.cy, G.rx, G.ry);
+        ell(disc, G.cx, G.cy, G.rx - G.cw / 2 - .5 * G.r, G.ry - Math.max.apply(null, G.hs) / 2 - .5 * G.r);
+      }
+      if (instant) { ob.offsetWidth; requestAnimationFrame(function () { requestAnimationFrame(function () { ob.classList.remove('no-anim'); }); }); }
+    }
+
+    function open(k) {
+      if (k === cur) return;
+      var prev = cur; cur = k; apply(false, prev);
+      history.replaceState(null, '', '#' + IDS[k]);
+      setTimeout(function () { var h2 = cards[k].querySelector('h2'); if (cur === k && h2) h2.focus({ preventScroll: true }); }, reduce ? 0 : 520);
+    }
+    function close() {
+      if (cur < 0) return;
+      var prev = cur; cur = -1; apply(false, prev);
+      history.replaceState(null, '', location.pathname + location.search);
+      cards[prev].querySelector('.ob-face').focus({ preventScroll: true });
+    }
+    function step(d) { open(((cur < 0 ? 0 : cur) + d + N) % N); }
+
+    cards.forEach(function (c, k) {
+      c.querySelector('.ob-face').addEventListener('click', function () { open(k); });
+      c.querySelectorAll('.pd-prev').forEach(function (b) { b.addEventListener('click', function () { step(-1); }); });
+      c.querySelectorAll('.pd-next').forEach(function (b) { b.addEventListener('click', function () { step(1); }); });
+      c.querySelector('.pd-close').addEventListener('click', close);
+      c.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { open(IDS.indexOf(b.dataset.go)); }); });
+    });
+    hub.querySelector('.ob-hub-hit').addEventListener('click', close);
+    // the label above the dial follows the pointer and the keyboard
+    var say = document.getElementById('obSay');
+    function tell(text) { say.textContent = text || 'Pick another piece'; say.classList.toggle('hot', !!text); }
+    cards.forEach(function (c) {
+      var f = c.querySelector('.ob-face');
+      ['mouseenter', 'focus'].forEach(function (ev) { f.addEventListener(ev, function () { if (c.classList.contains('is-mini')) tell(c.dataset.say); }); });
+      ['mouseleave', 'blur'].forEach(function (ev) { f.addEventListener(ev, function () { tell(); }); });
+    });
+    var hh = hub.querySelector('.ob-hub-hit');
+    ['mouseenter', 'focus'].forEach(function (ev) { hh.addEventListener(ev, function () { tell('↺ Back to the overview'); }); });
+    ['mouseleave', 'blur'].forEach(function (ev) { hh.addEventListener(ev, function () { tell(); }); });
+    document.addEventListener('keydown', function (e) {
+      if (!on || cur < 0) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); }
+    });
+
+    function mode() {
+      var want = MQ.matches;
+      if (want !== on) { on = want; root.classList.toggle('ob-on', on); }
+      if (on) { fit(); apply(true); }
+    }
+    var raf = 0;
+    addEventListener('resize', function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(mode); });
+    (MQ.addEventListener ? MQ.addEventListener('change', mode) : MQ.addListener(mode));
+    var start = IDS.indexOf(location.hash.slice(1)); if (start >= 0) cur = start;
+    mode();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (on) { fit(); apply(true); } });
+    window.__ob = { open: open, close: close, geom: function () { return G; } };   // for headless checks
   })();
 </script>
 </body>

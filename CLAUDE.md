@@ -369,12 +369,18 @@ wording.
   needed room at 1440×900; site#4 shrank the masthead circle for that, and site#6 removed the
   circle altogether.) Do not bring
   back a wide glow, do not make the glass less see-through, and do not go back to lighter
-  weights without the owner asking. The site#2
+  weights without the owner asking. The owner did ask, for computers only (site#9,
+  2026-10-30: "電腦版介面上除了標題和著重強調的詞句之外，正文部分可以不用粗體"): in the orbit,
+  body text (piece summaries, the hub's tagline, panel paragraphs, list and card text, fact
+  chips) is regular 400 with no stroke; titles, mono labels, buttons, years, list-item
+  headings, the coloured key words and site names stay bold. The sheet keeps its bold text.
+  The site#2
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
   The 25% rule is for the sheet's tiles. The orbit's pieces (site#7) float on the photo with no
   sheet behind them and carry summaries, so they hold more paper: a 70% to 50% gradient over
   `blur(16px) saturate(1.15)`, the open panel 93% to 86% (no blur since site#8), the hub on a
-  58% to 34% glass disc, the same dark bold text and 1px edge. The owner approved that look on
+  58% to 34% glass disc, the same dark text and 1px edge (its body text regular since site#9,
+  see above). The owner approved that look on
   2026-10-30. Since site#7 the contrast tool checks both layouts (orbit overview, open pieces,
   the sheet at iPad and phone sizes; since site#8 also About, Teaching and the review open, and
   the coloured words); worst case after site#8: the hub's small accent hint 4.80, piece labels
@@ -441,7 +447,8 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   large panel, the rest gather in a round dial) and a tidier sheet on phones and iPads, plus
   `tools/orbit-check.mjs` (PR #36, merged 2026-10-30); `site#8` = the orbit's centre scaled to
   fill about two thirds of its disc, faster moves, and fuller panels with coloured key words
-  (desktop only; 2026-10-30)
+  (desktop only; PR #37, merged 2026-10-30); `site#9` = regular-weight body text in the orbit,
+  bold kept for titles and key words (desktop only; 2026-10-30)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)

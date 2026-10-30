@@ -306,25 +306,30 @@
   html.ob-on .ob { display: block; position: fixed; inset: 0; }
   .ob {
     --cw: 15.5rem; --mw: 6.4rem;
-    --dur: 820ms; --ease: cubic-bezier(.65,0,.35,1); --out: cubic-bezier(.22,1,.36,1); --spring: cubic-bezier(.34,1.4,.5,1);
+    --dur: 580ms; --ease: cubic-bezier(.65,0,.35,1); --out: cubic-bezier(.22,1,.36,1); --spring: cubic-bezier(.34,1.4,.5,1);
     --ink2: #20242b; --mut: #30353f; --acc: #284a80;
   }
   .ob::before { content: ''; position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(243,244,246,.42), rgba(243,244,246,0) 72%); transition: opacity .6s; }
   .ob.has-open::before { opacity: 0; }
   .ob.no-anim, .ob.no-anim * { transition: none !important; }
+  .ob.quick { --dur: 420ms; }   /* one open piece to another */
 
   .ob-track, .ob-disc, .ob-ghost, .ob-hub, .ob-card { position: absolute; left: 0; top: 0; }
-  .ob-track, .ob-disc { border-radius: 50%; pointer-events: none;
-    transition: translate var(--dur) var(--ease), width var(--dur) var(--ease), height var(--dur) var(--ease); }
-  .ob-track { border: 1.5px dashed rgba(40,74,128,.34); }
+  .ob-track, .ob-disc, .ob-ring { border-radius: 50%; pointer-events: none; }
+  /* the overview track and the dial's ring stay put and cross-fade; the disc travels by transform (cheap with its blur) */
+  .ob-track { border: 1.5px dashed rgba(40,74,128,.34); transition: opacity .3s; }
+  .ob.has-open .ob-track { opacity: 0; }
+  .ob-ring { position: absolute; left: 0; top: 0; border: 1.5px dashed rgba(40,74,128,.45); opacity: 0; transition: opacity .2s; }
+  .ob.has-open .ob-ring { opacity: 1; transition: opacity .35s calc(var(--dur) * .7); }
+  .ob-disc { transform-origin: 0 0; transition: transform var(--dur) var(--ease); }
   .ob-disc { z-index: 0; background: radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.58), rgba(243,244,246,.34) 72%);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgba(255,255,255,.45), 0 30px 80px -50px rgba(22,24,30,.5); }
   .ob-ghost { border-radius: 50%; border: 1.5px dashed rgba(40,74,128,.6); background: rgba(243,244,246,.35); opacity: 0; transition: opacity .25s; }
   .ob.has-open .ob-ghost { opacity: 1; transition: opacity .4s calc(var(--dur) * .7); }
 
   /* ---- the hub: the ∫ mark and the name ---- */
-  .ob-hub { z-index: 1; width: 21rem; text-align: center; transform-origin: 0 0; transition: transform var(--dur) var(--ease); }
+  .ob-hub { z-index: 1; width: 25rem; text-align: center; transform-origin: 0 0; transition: transform var(--dur) var(--ease); }
   .ob-hub-top { position: relative; display: flex; flex-direction: column; align-items: center; }
   .ob-hub .mark { width: 9.6rem; height: 9.6rem; }
   .ob-name { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 2.15rem; line-height: 1.05; margin-top: .15rem; color: var(--ink);
@@ -332,7 +337,7 @@
   .ob-name em { font-style: italic; color: var(--acc); }
   .ob-hub-more { transition: opacity .35s; }
   .ob-over { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--mut); margin-top: .6rem; }
-  .ob-tag { font-size: .84rem; font-weight: 700; line-height: 1.45; color: var(--ink2); margin: .35rem auto 0; max-width: 19rem; -webkit-text-stroke: .2px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
+  .ob-tag { font-size: .84rem; font-weight: 700; line-height: 1.45; color: var(--ink2); margin: .35rem auto 0; max-width: 23.5rem; -webkit-text-stroke: .2px currentColor; text-shadow: 0 0 1px rgba(243,244,246,.95); }
   .ob-hint { display: inline-flex; align-items: center; gap: .45rem; margin-top: .7rem; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; color: var(--acc); }
   .ob-hint i { width: .45rem; height: .45rem; border-radius: 50%; background: var(--acc); animation: ob-ping 2.4s ease-out infinite; }
   @keyframes ob-ping { 0% { box-shadow: 0 0 0 0 rgba(40,74,128,.45); } 70%, 100% { box-shadow: 0 0 0 .55rem rgba(40,74,128,0); } }
@@ -394,11 +399,10 @@
   /* ---- open: one piece leaves the ring and becomes the panel; the rest gather in the corner ---- */
   .ob.has-open .ob-card { animation: none; }
   /* the tiles stay visible while they fly to the corner; the badge appears on the way and the glass melts away on arrival */
-  .ob-card.is-mini { border-radius: 50%; background: rgba(243,244,246,0); box-shadow: 0 0 0 3px rgba(255,255,255,.88), 0 10px 20px -8px rgba(22,24,30,.55); -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px);
+  .ob-card.is-mini { border-radius: 50%; background: rgba(243,244,246,0); box-shadow: 0 0 0 3px rgba(255,255,255,.88), 0 10px 20px -8px rgba(22,24,30,.55); -webkit-backdrop-filter: none; backdrop-filter: none;
     transition: translate var(--dur) var(--ease) var(--d, 0ms), width var(--dur) var(--ease) var(--d, 0ms), height var(--dur) var(--ease) var(--d, 0ms),
                 border-radius var(--dur) var(--ease) var(--d, 0ms), scale .35s var(--spring),
-                background .4s calc(var(--dur) * .75 + var(--d, 0ms)), box-shadow .4s calc(var(--dur) * .75 + var(--d, 0ms)),
-                -webkit-backdrop-filter .4s calc(var(--dur) * .75 + var(--d, 0ms)), backdrop-filter .4s calc(var(--dur) * .75 + var(--d, 0ms)); }
+                background .3s calc(var(--dur) * .75 + var(--d, 0ms)), box-shadow .3s calc(var(--dur) * .75 + var(--d, 0ms)); }
   .ob-card.is-mini::before { opacity: 0; }
   .ob-card.is-mini .ob-full { opacity: 0; transition: opacity .18s; }
   .ob-card.is-mini .ob-mini { opacity: 1; transition: opacity .35s calc(var(--dur) * .3 + var(--d, 0ms)); }
@@ -413,7 +417,7 @@
   .ob-say.hot { color: var(--acc); box-shadow: 0 0 0 1px var(--acc), 0 8px 18px -10px rgba(40,74,128,.5); }
   .ob.has-open .ob-say { opacity: 1; transition: opacity .4s calc(var(--dur) * .75); }
   .ob-card.was-open { z-index: 4; }
-  .ob-card.is-open { z-index: 6; border-radius: 26px; cursor: default;
+  .ob-card.is-open { z-index: 6; border-radius: 26px; cursor: default; -webkit-backdrop-filter: none; backdrop-filter: none;   /* near-opaque: blur would only cost frames */
     transition: translate var(--dur) var(--out), width var(--dur) var(--out), height var(--dur) var(--out), border-radius var(--dur) var(--out), background .35s, box-shadow .35s;
     background: linear-gradient(165deg, rgba(255,255,255,.93), rgba(243,244,246,.86) 50%, rgba(236,239,245,.88));
     box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(40,74,128,.18), 0 50px 100px -50px rgba(22,24,30,.6); }
@@ -423,22 +427,34 @@
 
   .ob-detail { position: absolute; left: 0; top: 0; width: var(--pw, 40rem); height: 100%; display: flex; flex-direction: column;
     opacity: 0; visibility: hidden; transition: opacity .18s, visibility 0s .18s; }
-  .ob-card.is-open .ob-detail { opacity: 1; visibility: visible; transition: opacity .4s calc(var(--dur) * .45), visibility 0s; }
+  .ob-card.is-open .ob-detail { opacity: 1; visibility: visible; transition: opacity .3s calc(var(--dur) * .4), visibility 0s; }
+  .pd-hero, .pd-body { zoom: var(--pz, 1); }
   .ob-detail.measure { height: auto; } .ob-detail.measure .pd-scroll { flex: none; overflow: visible; }
   .pd-wm { position: absolute; right: -.6rem; top: -2.2rem; font-family: 'DM Serif Display', 'Times New Roman', serif; font-size: 15rem; line-height: 1; color: var(--tint); opacity: .06; pointer-events: none; }
   .pd-head { position: relative; display: flex; align-items: center; gap: .4rem; padding: .85rem .95rem .3rem 1.9rem; }
   .pd-pos { margin-right: auto; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .12em; color: var(--mut); }
-  .pd-head button, .pd-foot button, .jump button { font-family: 'JetBrains Mono', monospace; font-weight: 800; cursor: pointer; color: var(--ink);
+  .pd-head button, .pd-foot button, .ob .hop, .ob .plist button { font-family: 'JetBrains Mono', monospace; font-weight: 800; cursor: pointer; color: var(--ink);
     border: 1px solid rgba(40,74,128,.22); background: rgba(255,255,255,.7); border-radius: 99px; transition: border-color .2s, color .2s, background .2s, translate .25s var(--spring); }
   .pd-head button { height: 2rem; min-width: 2rem; padding: 0 .75rem; font-size: .62rem; white-space: nowrap; }
-  .pd-head button:hover, .pd-foot button:hover, .jump button:hover { border-color: var(--acc); color: var(--acc); background: #fff; }
-  .pd-scroll { position: relative; flex: 1 1 auto; min-height: 0; overflow: auto; padding: .5rem 1.9rem 1.3rem; }
-  .pd-hero { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.1rem; }
-  .pd-hero .gl { width: 3.3rem; height: 3.3rem; font-size: 1.75rem; } .pd-hero .gl-num { font-size: .95rem; } .pd-hero .gl-qc { margin-left: -1rem; }
+  .pd-head button:hover, .pd-foot button:hover, .ob .hop:hover, .ob .plist button:hover { border-color: var(--acc); color: var(--acc); background: #fff; }
+  .pd-scroll { position: relative; flex: 1 1 auto; min-height: 0; overflow: auto; padding: .3rem 1.9rem 1.1rem; }
+  /* a panel that has to scroll fades at the bottom until you reach the end */
+  .pd-scroll.more { -webkit-mask-image: linear-gradient(#000 calc(100% - 3rem), transparent); mask-image: linear-gradient(#000 calc(100% - 3rem), transparent); }
+  .pd-hero { display: flex; align-items: center; gap: .9rem; margin-bottom: .6rem; }
+  .pd-hero .gl { width: 2.9rem; height: 2.9rem; font-size: 1.55rem; } .pd-hero .gl-num { font-size: .95rem; } .pd-hero .gl-qc { margin-left: -1rem; }
   .pd-label { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
-  .pd-hero h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 2.45rem; line-height: 1.08; margin-top: .15rem; -webkit-text-stroke: .4px currentColor; outline: none; }
-  .pd-body > * { max-width: 48rem; }
-  .pd-body p { font-size: 1.04rem; line-height: 1.62; font-weight: 600; color: var(--ink2); margin-bottom: .75rem; }
+  .pd-hero h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 2.2rem; line-height: 1.08; margin-top: .15rem; -webkit-text-stroke: .4px currentColor; outline: none; }
+  .pd-body > p, .pd-body > .res-line, .ob .cols p { max-width: 50rem; }   /* reading lines stay short; grids and cards use the panel's width */
+  .ob .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); gap: .4rem 2.4rem; align-items: start; }
+  .ob .cols .tl { margin-top: 0; }
+  .ob .cols p { line-height: 1.5; margin-bottom: .5rem; }
+  .ob .cols.paper { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+  .ob .cols .trio { margin-top: 0; }
+  .ob .cols .trio ol { grid-template-columns: 1fr; gap: .35rem; }
+  .ob .cols .trio li { display: grid; grid-template-columns: 2rem 1fr; column-gap: .35rem; padding: .45rem .85rem .5rem .7rem; font-size: .84rem; line-height: 1.42; }
+  .ob .cols .trio li b { font-size: .94rem; margin-bottom: .1rem; }
+  .ob .cols .trio li i { grid-row: span 2; margin: .05rem 0 0; font-size: 1.45rem; text-align: center; }
+  .pd-body p { font-size: .96rem; line-height: 1.55; font-weight: 600; color: var(--ink2); margin-bottom: .75rem; }
   .pd-body p.sub { font-size: .86rem; color: var(--mut); }
   .pd-body p.lead { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.35rem; line-height: 1.3; color: var(--ink); }
   .pd-body p.dim { color: var(--mut); }
@@ -446,8 +462,9 @@
   .pd-foot button { padding: .5rem .9rem; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; }
   .pd-foot .pd-prev:hover { translate: -.2rem 0; } .pd-foot .pd-next:hover { translate: .2rem 0; }
   /* the panel's contents rise in, one after another, once the frame has grown */
-  .ob-card.is-open .pd-hero, .ob-card.is-open .pd-body > * { animation: pd-up .6s var(--out) both; animation-delay: calc(var(--dur) * .5 + var(--n, 0) * 70ms); }
+  .ob-card.is-open .pd-hero, .ob-card.is-open .pd-body > * { animation: pd-up .45s var(--out) both; animation-delay: calc(var(--dur) * .42 + var(--n, 0) * 40ms); }
   .pd-body > :nth-child(1) { --n: 1; } .pd-body > :nth-child(2) { --n: 2; } .pd-body > :nth-child(3) { --n: 3; } .pd-body > :nth-child(4) { --n: 4; }
+  .pd-body > :nth-child(5) { --n: 5; } .pd-body > :nth-child(n+6) { --n: 6; }
   @keyframes pd-up { from { opacity: 0; translate: 0 .8rem; } }
 
   /* panel contents */
@@ -455,9 +472,6 @@
   .ob .links a { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; color: var(--acc); text-decoration: none; }
   .ob .links a.sublink { color: var(--mut); }
   .ob .links a:hover { text-decoration: underline; }
-  .ob .jump { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .4rem; }
-  .ob .jump span { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mut); margin-right: .2rem; }
-  .ob .jump button { padding: .4rem .8rem; font-size: .66rem; }
   .ob .res-line { margin: 0 0 1rem; } .ob .res-line b { display: block; font-weight: 700; font-size: 1.05rem; }
   .ob .res-line span { display: block; font-weight: 600; color: var(--ink2); font-size: .93rem; line-height: 1.55; }
   .ob .plainlist { list-style: none; } .ob .plainlist li { padding: .65rem 0; border-bottom: 1px dashed rgba(198,202,210,.9); }
@@ -468,7 +482,7 @@
   .ob .bcard .bc-top { font-size: 1.25rem; } .ob .bcard .bc-text { font-size: .86rem; } .ob .bcard .bc-go { font-size: .64rem; }
 
   .ob .trio { margin: .4rem 0 1rem; }
-  .ob .trio-h { font-family: 'DM Serif Display', serif; font-size: 1.2rem; line-height: 1.2; color: var(--ink); margin-bottom: .55rem !important; }
+  .ob .trio-h { font-family: 'DM Serif Display', serif; font-size: 1.1rem; line-height: 1.2; color: var(--ink); margin: .2rem 0 .45rem !important; }
   .ob .trio ol { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .7rem; }
   .ob .trio li { padding: .8rem .9rem .9rem; border-radius: 14px; background: linear-gradient(160deg, rgba(255,255,255,.85), rgba(236,239,245,.7));
     box-shadow: inset 0 0 0 1px rgba(40,74,128,.14); font-size: .86rem; line-height: 1.5; font-weight: 600; color: var(--ink2); }
@@ -481,6 +495,44 @@
   .ob .venn text.core { font-family: 'DM Serif Display', serif; font-size: 30px; fill: var(--tint); }
   .ob .venn-row p { margin-bottom: 0; }
 
+  /* key words in the panels: blue, violet, a gold highlighter stroke, and the two sites' own colours */
+  .ob .hb { color: #284a80; font-weight: 700; }
+  .ob .hv { color: #5a3d9a; font-weight: 700; }
+  .ob mark.hg { color: inherit; font-weight: 700; padding: 0 .12em; border-radius: .2em;
+    background: linear-gradient(transparent 58%, rgba(226,176,52,.45) 58%, rgba(226,176,52,.45) 92%, transparent 92%); }
+  .ob .hq { color: #15565b; font-weight: 700; } .ob .hd { color: #4a6142; font-weight: 700; }
+  .ob .bcard em { font-style: normal; font-weight: 700; } .ob .bcard.qd em { color: #7d4f30; } .ob .bcard.qc em { color: #68e1af; }
+  .ob .bc-list { display: flex; flex-direction: column; gap: .3rem; margin: .35rem 0 .2rem; }
+  .ob .bc-list > span { position: relative; padding-left: 1rem; font-size: .84rem; line-height: 1.45; font-weight: 600; }
+  .ob .bc-list > span::before { content: ''; position: absolute; left: .1rem; top: .55em; width: .38rem; height: .38rem; border-radius: 50%; background: currentColor; opacity: .55; }
+  .ob .bcard.qd .bc-list { color: #454f45; } .ob .bcard.qc .bc-list { color: #d3e4e1; }
+  .ob .bcard.qd .bc-list > span::before { background: #c3a080; opacity: 1; } .ob .bcard.qc .bc-list > span::before { background: #68e1af; opacity: 1; }
+  .ob .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; margin-top: .4rem; }
+  .ob .facts > div { padding: .7rem .85rem; border-radius: 12px; background: linear-gradient(160deg, rgba(255,255,255,.85), rgba(236,239,245,.7)); box-shadow: inset 0 0 0 1px rgba(40,74,128,.14); }
+  .ob .facts span { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; color: #6e4e0c; }
+  .ob .facts b { display: block; font-size: .95rem; line-height: 1.35; margin-top: .2rem; color: var(--ink); }
+  .ob .tl { list-style: none; position: relative; margin: .5rem 0 1rem; padding-left: 1.6rem; }
+  .ob .tl::before { content: ''; position: absolute; left: .45rem; top: .5rem; bottom: .5rem; width: 2px; border-radius: 2px; background: linear-gradient(#e2b034, rgba(40,74,128,.35)); }
+  .ob .tl li { position: relative; padding: .45rem 0 .7rem; }
+  .ob .tl li::before { content: ''; position: absolute; left: -1.42rem; top: .78rem; width: .7rem; height: .7rem; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2.5px #e2b034; }
+  .ob .tl .yr { display: inline-block; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .62rem; letter-spacing: .08em; color: #6e4e0c;
+    background: rgba(226,176,52,.16); border-radius: 99px; padding: .12rem .5rem; }
+  .ob .tl b { display: block; font-weight: 700; font-size: 1.1rem; margin-top: .25rem; } .ob .tl small { display: block; font-weight: 600; color: var(--mut); font-size: .9rem; }
+  .ob .hop { padding: .4rem .85rem; font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 .3rem; }
+  .ob .plist { display: grid; gap: .55rem; margin-top: .2rem; }
+  .ob .plist button { display: flex; align-items: center; gap: .85rem; text-align: left; padding: .7rem .9rem; border-radius: 14px; letter-spacing: 0; text-transform: none; font-family: 'Instrument Sans', sans-serif; }
+  .ob .plist b { display: block; font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.1rem; color: var(--ink); }
+  .ob .plist small { display: block; font-size: .86rem; font-weight: 600; color: var(--ink2); line-height: 1.4; margin-top: .1rem; }
+  .ob .plist button:hover { translate: .2rem 0; }
+  .ob .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: .2rem 0 .9rem; }
+  .ob .chips span { padding: .4rem .75rem; border-radius: 99px; font-size: .84rem; font-weight: 600; color: var(--ink2); background: rgba(255,255,255,.75); box-shadow: inset 0 0 0 1px rgba(40,74,128,.16); }
+  .ob .chips b { color: #284a80; }
+  .pd-foot { align-items: center; }
+  .pd-foot .links { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; justify-content: center; margin: 0 auto; }
+  .pd-foot .links .status { margin-left: 0; }
+  .ob .links .status { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: #6e4e0c; }
+  .ob .res-line b.hb, .ob .res-line b.hv { font-size: 1.1rem; }
+
   /* contact, always in the top right corner */
   .ob-contact { position: absolute; right: 1.2rem; top: 1.1rem; z-index: 8; display: flex; gap: 1.1rem; padding: .5rem 1.05rem; border-radius: 99px;
     font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: .6rem; background: rgba(243,244,246,.86);
@@ -488,7 +540,7 @@
   .ob-contact a { color: var(--ink); text-decoration: none; } .ob-contact a:hover { color: var(--acc); }
 
   @media (prefers-reduced-motion: reduce) {
-    .ob { --dur: 1ms; }
+    .ob, .ob.quick { --dur: 1ms; }
     .ob *, .ob *::before, .ob *::after { animation: none !important; }
     .ob-card::after { display: none; }
   }
@@ -500,6 +552,7 @@
 <div class="ob" id="ob" aria-label="Yizhen (Stephen) Jia, overview">
   <div class="ob-disc" aria-hidden="true"></div>
   <div class="ob-track" aria-hidden="true"></div>
+  <div class="ob-ring" aria-hidden="true"></div>
   <div class="ob-ghost" aria-hidden="true"></div>
   <p class="ob-say" id="obSay" aria-hidden="true">Pick another piece</p>
   <div class="ob-hub" id="obHub">
@@ -534,12 +587,17 @@
       <div class="pd-scroll">
         <div class="pd-hero"><span class="gl-pair"><span class="gl gl-qd"><svg viewBox="0 0 100 92" aria-hidden="true" focusable="false"><circle cx="50" cy="16" r="15"/><circle cx="16" cy="76" r="15"/><circle cx="84" cy="76" r="15"/></svg></span><span class="gl gl-qc">Q</span></span><div><p class="pd-label">What I'm building</p><h2 id="h-building" tabindex="-1">Qidolab &amp; Quidence</h2></div></div>
         <div class="pd-body">
-        <p class="lead">I want students to see their own thinking, not just their answers.</p>
+        <p class="lead">I want students to <b class="hb">see their own thinking</b>, not just their answers.</p>
+        <p>I build two small websites around that one idea, and each links to the other. <b class="hd">Qidolab</b> is the playful way in: puzzles where you try a different move, then choose whether to go further. <b class="hq">Quidence</b> is the next step: courses where you <mark class="hg">test what you understand</mark> and keep your work to look back on.</p>
         <div class="bcards">
           <a class="bcard qd" href="https://qidolab.com/" target="_blank" rel="noopener"><span class="bc-top"><b>∴</b>Qidolab · Brain Games</span>
-            <span class="bc-text">The playful start: 18 small puzzles with no timer, where a wrong move is just a new try.</span><span class="bc-go">Play Qidolab ↗</span></a>
+            <span class="bc-text"><em>18 hands-on puzzles</em>: pour water between jugs, flip a ring of lights, weigh coins, hunt for a counterexample, and more.</span>
+            <span class="bc-list"><span><em>No timer.</em> A wrong move is just a new try.</span><span>Hints only when you ask; an extra step or an extreme challenge when you want more.</span><span>Your progress stays in your browser.</span><span>English, 简体中文, 繁體中文 and Español.</span></span>
+            <span class="bc-go">Play Qidolab ↗</span></a>
           <a class="bcard qc" href="https://www.quidence.com/" target="_blank" rel="noopener"><span class="bc-top"><b>Q</b>Quidence · Mathematics &amp; Science</span>
-            <span class="bc-text">The next step: courses where you test what you understand and keep your work to look back on. In English and Spanish.</span><span class="bc-go">Open Quidence ↗</span></a>
+            <span class="bc-text">Courses from <em>Pre-Algebra to Calculus</em>, Statistics, Linear Algebra and Number Theory, plus Physics 1 and 2 Foundations.</span>
+            <span class="bc-list"><span>Short lessons, then <em>“Test your understanding”</em> problems with several parts.</span><span>Field projects inspired by places in California.</span><span>It checks the fixed parts of an answer and <em>saves your calculations, drawings and explanations</em> to look back on.</span><span>Records stay in your browser. English and Spanish.</span></span>
+            <span class="bc-go">Open Quidence ↗</span></a>
         </div>
         </div>
       </div>
@@ -569,9 +627,10 @@
       <div class="pd-scroll">
         <div class="pd-hero"><span class="gl gl-num">01</span><div><p class="pd-label">01 · About</p><h2 id="h-about" tabindex="-1">Reasoning, not just answers</h2></div></div>
         <div class="pd-body">
-        <p>I teach math, from grade-school basics to SAT Math and AP Calculus, and I am working on a doctorate in education. What interests me is not just the answer on the page but how a student got there, and whether they could do it again alone.</p>
-        <p>My research at Westcliff University asks an old question in a new situation: when an AI tool helped with the homework, how does a student decide the work is ready to hand in, and where does their own understanding fit in? Two preprints grew out of that question.</p>
-        <p class="dim">The classroom and the research share one question: how do we know what a student really understands? Everything on this page is a different angle on that problem.</p>
+        <p>I teach math, from grade-school basics to <b class="hb">SAT Math and AP Calculus</b>, and I am working on a <b class="hb">doctorate in education</b>. What interests me is not just the answer on the page but <mark class="hg">how a student got there</mark>, and <mark class="hg">whether they could do it again alone</mark>.</p>
+        <p>My research at Westcliff University asks an old question in a new situation: when an AI tool helped with the homework, <b class="hv">how does a student decide the work is ready to hand in</b>, and where does their own understanding fit in? Two preprints grew out of that question.</p>
+        <p class="dim">The classroom and the research share one question: <b class="hv">how do we know what a student really understands?</b> Everything on this page is a different angle on that problem.</p>
+        <div class="facts"><div><span>Teaching</span><b>SAT Math, AP Calculus, statistics, K–8</b></div><div><span>Studying</span><b>EdD, Westcliff University</b></div><div><span>Building</span><b>Qidolab and Quidence</b></div><div><span>Based in</span><b>Walnut, California</b></div></div>
         </div>
       </div>
       <footer class="pd-foot">
@@ -600,11 +659,13 @@
       <div class="pd-scroll">
         <div class="pd-hero"><span class="gl gl-num">02</span><div><p class="pd-label">02 · Teaching</p><h2 id="h-teaching" tabindex="-1">From K–8 to AP Calculus</h2></div></div>
         <div class="pd-body">
-        <ul class="plainlist">
-          <li><b>SAT Math &amp; AP Calculus Instructor</b><small>Elite Open School · Rowland Heights, CA</small><span class="yr">Since 2024</span></li>
-          <li><b>HS Statistics &amp; Pre-Calculus</b><small>Bay Area Technology School · Oakland</small><span class="yr">2024</span></li>
-          <li><b>K&#8211;8 Math Tutor, 50+ students</b><small>S.A.M Singapore Math · Belmont</small><span class="yr">2023/24</span></li>
-        </ul>
+        <div class="cols"><div>
+        <p>I have taught math from <b class="hb">grade-school basics</b> to <b class="hb">SAT Math and AP Calculus</b>, in Belmont, Oakland and Rowland Heights. In every room I look for the same thing: <mark class="hg">how a student got there</mark>, and whether they could do it again alone.</p>
+        <p class="dim">The classroom is where my research question comes from: <b class="hv">how do we know what a student really understands?</b></p>
+        <button type="button" class="hop" data-go="research">03 · See the research →</button>
+        </div><div>
+        <ol class="tl"><li><span class="yr">Since 2024</span><b>SAT Math &amp; AP Calculus Instructor</b><small>Elite Open School · Rowland Heights, CA</small></li><li><span class="yr">2024</span><b>HS Statistics &amp; Pre-Calculus</b><small>Bay Area Technology School · Oakland</small></li><li><span class="yr">2023/24</span><b>K&#8211;8 Math Tutor, <span class="hv">50+ students</span></b><small>S.A.M Singapore Math · Belmont</small></li></ol>
+        </div></div>
         </div>
       </div>
       <footer class="pd-foot">
@@ -633,9 +694,18 @@
       <div class="pd-scroll">
         <div class="pd-hero"><span class="gl gl-num">03</span><div><p class="pd-label">03 · Research</p><h2 id="h-research" tabindex="-1">Two questions I study</h2></div></div>
         <div class="pd-body">
-        <div class="res-line"><b>Handing in work that AI helped with</b><span>How first-year college students decide, in their own words, whether math homework done with AI help is ready to submit.</span></div>
-        <div class="res-line"><b>Charts, graphs, and what they show</b><span>How students turn real data into charts, and what those charts reveal about their understanding.</span></div>
-        <p class="jump"><span>Papers</span><button type="button" data-go="acb">∅ The Absent Cognitive Baseline</button><button type="button" data-go="mdc">≠ Metacognitively Discordant Completion</button><button type="button" data-go="review">∩ Graphicacy in the Generative AI Era</button></p>
+        <div class="cols"><div>
+        <p>Two questions run through my work at Westcliff University.</p>
+        <div class="res-line"><b class="hb">Handing in work that AI helped with</b><span>How first-year college students decide, in their own words, whether math homework done with AI help is ready to submit.</span></div>
+        <div class="res-line"><b class="hv">Charts, graphs, and what they show</b><span>How students turn real data into charts, and what those charts reveal about their understanding.</span></div>
+        </div><div>
+        <p class="trio-h">What has come out of it so far</p>
+        <div class="plist">
+          <button type="button" data-go="acb"><span class="gl gl-sym">∅</span><span><b>The Absent Cognitive Baseline</b><small>When AI does the thinking before a skill forms, a student may have nothing to compare against.</small></span></button>
+          <button type="button" data-go="mdc"><span class="gl gl-sym">≠</span><span><b>Metacognitively Discordant Completion</b><small>Handing in correct, complete work while knowing, right then, that you do not understand it.</small></span></button>
+          <button type="button" data-go="review"><span class="gl gl-sym">∩</span><span><b>Graphicacy in the Generative AI Era</b><small>Mapping the studies where charts, generative AI and learning meet, as of about mid-June 2026.</small></span></button>
+        </div>
+        </div></div>
         </div>
       </div>
       <footer class="pd-foot">
@@ -664,11 +734,12 @@
       <div class="pd-scroll">
         <div class="pd-hero"><span class="gl gl-num">04</span><div><p class="pd-label">04 · Education</p><h2 id="h-education" tabindex="-1">From mathematics to education</h2></div></div>
         <div class="pd-body">
-        <ul class="plainlist">
-          <li><b>EdD, Leadership, Curriculum &amp; Instruction</b><small>Westcliff University</small><span class="yr">Since 2024</span></li>
-          <li><b>M.S. Applied Mathematics &amp; Statistics</b><small>Stony Brook University</small><span class="yr">2023</span></li>
-          <li><b>B.S. Mathematics</b><small>Stony Brook University</small><span class="yr">2021</span></li>
-        </ul>
+        <div class="cols"><div>
+        <p>I studied <b class="hb">mathematics</b>, then <b class="hb">applied mathematics and statistics</b>, both at Stony Brook University. Since 2024 I have been working on a <b class="hv">doctorate in education</b> at Westcliff University, in Leadership, Curriculum and Instruction. The research on this page is part of it.</p>
+        <button type="button" class="hop" data-go="research">03 · See the research →</button>
+        </div><div>
+        <ol class="tl"><li><span class="yr">Since 2024</span><b>EdD, Leadership, Curriculum &amp; Instruction</b><small>Westcliff University</small></li><li><span class="yr">2023</span><b>M.S. Applied Mathematics &amp; Statistics</b><small>Stony Brook University</small></li><li><span class="yr">2021</span><b>B.S. Mathematics</b><small>Stony Brook University</small></li></ol>
+        </div></div>
         </div>
       </div>
       <footer class="pd-foot">
@@ -698,13 +769,17 @@
         <div class="pd-hero"><span class="gl gl-sym">∅</span><div><p class="pd-label">Preprint · EdArXiv 2026</p><h2 id="h-acb" tabindex="-1">The Absent Cognitive Baseline</h2></div></div>
         <div class="pd-body">
         <p class="sub">Theorizing a structural gap in AI-native college students' academic self-assessment · with Jiarui Xu</p>
-        <p>The paper suggests that when an AI tool does the thinking before a skill has formed, a student may be left with nothing of their own to compare against when they ask themselves whether they understand.</p>
+        <div class="cols paper"><div>
+        <p>The paper suggests that when an AI tool does the thinking <b class="hb">before a skill has formed</b>, a student may be left with <mark class="hg">nothing of their own to compare against</mark> when they ask themselves whether they understand.</p>
         <div class="trio"><p class="trio-h">Three ways the gap shows up</p><ol><li><i>I</i><b>Unknowability</b>Not being able to tell where your own understanding ends, because there is no memory of doing this kind of work without help.</li><li><i>II</i><b>False calibration</b>Feeling that you understand because the AI's answer reads so smoothly.</li><li><i>III</i><b>De-normalization of struggle</b>Losing the sense that getting stuck is a normal part of learning.</li></ol></div>
-        <p class="links"><a href="acb.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/4cr8j_v5" target="_blank" rel="noopener">EdArXiv ↗</a></p>
+        </div><div>
+        <p class="trio-h">What decides whether it happens</p><p>The paper says three things shape whether this gap opens: <b class="hb">how the AI was used</b>, <b class="hb">who was using it</b>, and <b class="hb">whether the setting pushed students to let the tool do the work</b>. To study it, the paper proposes close, one-on-one interviews with a small number of students about their own experience, a method called <b class="hv">interpretative phenomenological analysis</b>.</p>
+        <p class="trio-h">The sibling construct</p><p>ACB describes the case where a student has no way to judge their own understanding at all. Its sister paper, <b class="hv">Metacognitively Discordant Completion</b>, describes the case where the student does judge, knows they do not understand, and hands the work in anyway.</p><button type="button" class="hop" data-go="mdc">≠ The sister paper →</button>
+        </div></div>
         </div>
       </div>
       <footer class="pd-foot">
-        <button type="button" class="pd-prev">← Education</button>
+        <button type="button" class="pd-prev">← Education</button><span class="links"><a href="acb.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/4cr8j_v5" target="_blank" rel="noopener">EdArXiv ↗</a><span class="status">Preprint v5 · under journal review</span></span>
         <button type="button" class="pd-next">Discordant Completion →</button>
       </footer>
     </section>
@@ -730,13 +805,17 @@
         <div class="pd-hero"><span class="gl gl-sym">≠</span><div><p class="pd-label">Preprint · EdArXiv 2026</p><h2 id="h-mdc" tabindex="-1">Metacognitively Discordant Completion</h2></div></div>
         <div class="pd-body">
         <p class="sub">The aware pass-through of non-understanding in generative AI learning</p>
-        <p>With AI, a student can hand in work that is correct and complete while knowing, at that moment, that they do not understand it. This paper gives that experience a name and works out what it is.</p>
+        <div class="cols paper"><div>
+        <p>With AI, a student can hand in work that is <b class="hb">correct and complete</b> while <mark class="hg">knowing, at that moment, that they do not understand it</mark>. This paper gives that experience a name and works out what it is.</p>
         <div class="trio"><p class="trio-h">It takes all three at once</p><ol><li><i>I</i><b>Effort invested</b>Real work went into the task. This is not a student who skipped it; the effort is there in the chat history.</li><li><i>II</i><b>Non-understanding known</b>At the moment of handing in, the student knows, by their own standard, that they do not understand the work.</li><li><i>III</i><b>Completion released anyway</b>They hand it in anyway, knowing that.</li></ol></div>
-        <p class="links"><a href="mdc.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv ↗</a></p>
+        </div><div>
+        <p class="trio-h">Why the usual explanations miss it</p><p>One common explanation says the student mistakenly believes they understand; here the student knows they do not. Another says a rule was broken; here no rule was broken. A third says the student stopped trying; here the effort was real. <b class="hv">MDC is the case that all three explanations miss.</b></p>
+        <p class="trio-h">The sibling construct</p><p>MDC describes the case where the student knows they do not understand and hands the work in anyway. Its sister paper, the <b class="hv">Absent Cognitive Baseline</b>, describes the case where the student has no way to judge at all.</p><button type="button" class="hop" data-go="acb">∅ The sister paper →</button>
+        </div></div>
         </div>
       </div>
       <footer class="pd-foot">
-        <button type="button" class="pd-prev">← Absent Cognitive Baseline</button>
+        <button type="button" class="pd-prev">← Absent Cognitive Baseline</button><span class="links"><a href="mdc.html">→ Read more</a><a class="sublink" href="https://osf.io/preprints/edarxiv/wzjxf_v1" target="_blank" rel="noopener">EdArXiv ↗</a><span class="status">Preprint v1</span></span>
         <button type="button" class="pd-next">Scoping review →</button>
       </footer>
     </section>
@@ -762,18 +841,19 @@
         <div class="pd-hero"><span class="gl gl-sym">∩</span><div><p class="pd-label">Scoping review · Interim</p><h2 id="h-review" tabindex="-1">Graphicacy in the Generative AI Era</h2></div></div>
         <div class="pd-body">
         <p class="sub">A PRISMA-ScR scoping review of an emerging three-way intersection in education · with Jiarui Xu</p>
-        <p>The review maps the studies where charts, generative AI and learning meet. This interim version shows the search and the studies found so far, as of about mid-June 2026.</p>
+        <p>The review maps the studies where charts, generative AI and learning meet. This <b class="hb">interim version</b> shows the search and the studies found so far, as of about mid-June 2026.</p>
         <div class="venn-row"><svg class="venn" viewBox="0 0 250 170" aria-hidden="true">
           <circle cx="95" cy="68" r="52"/><circle cx="155" cy="68" r="52"/><circle cx="125" cy="115" r="52"/>
           <text x="62" y="40" text-anchor="middle">Charts</text><text x="190" y="40" text-anchor="middle">Gen AI</text>
           <text x="125" y="160" text-anchor="middle">Learning</text><text x="125" y="95" text-anchor="middle" class="core">∩</text></svg>
           <div><p class="trio-h">Where three things meet</p>
-          <p>It asks how much research sits at that meeting point, what job the AI does there, and how the studies measure chart skills.</p></div></div>
-        <p class="links"><a href="review.html">→ Read more</a><a class="sublink" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF ↗</a></p>
+          <p>This review looks for studies where three things meet: reading or making charts, generative AI, and learning. The skill of reading and making charts is called <b class="hv">graphicacy</b>.</p>
+          <p>It asks <b class="hb">how much research sits at that meeting point</b>, <b class="hb">what job the AI does there</b>, and <b class="hb">how the studies measure chart skills</b>.</p></div></div>
+        <div class="chips"><span><b>11</b> databases searched, four of them regional</span><span>Plan registered on OSF before screening began (a <b class="hv">protocol</b>)</span><span><b>Interim</b> numbers, as of about mid-June 2026</span></div>
         </div>
       </div>
       <footer class="pd-foot">
-        <button type="button" class="pd-prev">← Discordant Completion</button>
+        <button type="button" class="pd-prev">← Discordant Completion</button><span class="links"><a href="review.html">→ Read more</a><a class="sublink" href="https://osf.io/s8ebf/" target="_blank" rel="noopener">OSF ↗</a><span class="status">Interim version</span></span>
         <button type="button" class="pd-next">What I'm building →</button>
       </footer>
     </section>
@@ -944,7 +1024,7 @@
     var IDS = cards.map(function (c) { return c.dataset.id; });
     var SLOT = cards.map(function (c) { return +c.dataset.slot; });
     var hub = document.getElementById('obHub'), hubTop = hub.querySelector('.ob-hub-top');
-    var disc = ob.querySelector('.ob-disc'), track = ob.querySelector('.ob-track'), ghost = ob.querySelector('.ob-ghost'), contact = ob.querySelector('.ob-contact');
+    var disc = ob.querySelector('.ob-disc'), track = ob.querySelector('.ob-track'), ghost = ob.querySelector('.ob-ghost'), ring = ob.querySelector('.ob-ring'), contact = ob.querySelector('.ob-contact');
     var CW = 15.5, DC = 13.5, BG = 2.1, HUB_S = .38, on = false, cur = -1, G = null;   // DC: the corner dial's width, BG: its badges
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -963,12 +1043,13 @@
       root.style.setProperty('--obfs', fs + 'px');
       var r = fs, W = innerWidth, H = innerHeight, m = 1.2 * r, cw = CW * r;
       var hs = cards.map(function (c) { return c.querySelector('.ob-full').offsetHeight; });
-      var hw = hub.offsetWidth, hh = hub.offsetHeight, ht = hubTop.offsetHeight;
+      var hw = hub.offsetWidth, hh = hub.offsetHeight, ht = hubTop.offsetHeight, parts = hubParts();
       var nm = hub.querySelector('.ob-name'), mk = hub.querySelector('.mark');
       var cx = W / 2, cy = H / 2;
       var ry = H / 2 - m - Math.max(hs[SLOT.indexOf(0)], hs[SLOT.indexOf(4)]) / 2;
       var rx = Math.min(W / 2 - m - cw / 2, ry * 1.9);
       var ring = cards.map(function (c, k) { return at(cx, cy, rx, ry, SLOT[k], cw, hs[k]); });
+      var drx = rx - cw / 2 - .5 * r, dry = ry - Math.max.apply(null, hs) / 2 - .5 * r;   // the glass disc inside the ring
       // the corner: a round dial, badges on a circle around the small mark and name
       var dc = DC * r, bg = BG * r, cr = (dc - bg) / 2, mcx = W - m - dc / 2, mcy = H - m - dc / 2;
       var mini = cards.map(function (c, k) { var a = at(mcx, mcy, cr, cr, SLOT[k], bg, bg); a.sx = a.x + bg / 2; a.sy = a.y + bg / 2; return a; });
@@ -979,16 +1060,16 @@
       var availW = W - dc - 3 * m, pw = Math.min(availW, 71 * r);
       var ct = { x: W - 1.2 * r - contact.offsetWidth, y: 1.1 * r, w: contact.offsetWidth, h: contact.offsetHeight };
       var pTop = ct.y + ct.h + .6 * r;   // the wide panel stays clear of the contact strip
-      return { fs: fs, r: r, m: m, W: W, H: H, cx: cx, cy: cy, rx: rx, ry: ry, cw: cw, hs: hs, ring: ring, hw: hw, hh: hh, ht: ht,
+      return { fs: fs, r: r, m: m, W: W, H: H, cx: cx, cy: cy, rx: rx, ry: ry, cw: cw, hs: hs, ring: ring, hw: hw, hh: hh, ht: ht, parts: parts, drx: drx, dry: dry,
                mcx: mcx, mcy: mcy, cr: cr, bg: bg, dc: dc, mini: mini, hubMini: hubMini, contact: ct,
                panel: { x: m + (availW - pw) / 2, w: pw, top: pTop, maxH: H - m - pTop, minH: Math.min(H - m - pTop, Math.max(28 * r, .85 * H)) }, availW: availW };
     }
     function fits(g) {
-      var gap = .35 * g.r, hubR = { x: g.cx - g.hw / 2, y: g.cy - g.hh / 2, w: g.hw, h: g.hh }, why = g.why = [];
+      var gap = .35 * g.r, hubP = hubAt(g, 1), why = g.why = [];
       if (g.availW < 34 * g.r) why.push('panel width'); if (g.ry <= 0) why.push('ring height');
       g.ring.forEach(function (a, i) {
         if (a.x < g.m / 3 || a.y < g.m / 3 || a.x + a.w > g.W - g.m / 3 || a.y + a.h > g.H - g.m / 3) why.push('ring off screen ' + IDS[i]);
-        if (hit(a, hubR, gap)) why.push('ring/hub ' + IDS[i]); if (hit(a, g.contact, gap)) why.push('ring/contact ' + IDS[i]);
+        if (hubP.some(function (p) { return hit(a, p, gap); })) why.push('ring/hub ' + IDS[i]); if (hit(a, g.contact, gap)) why.push('ring/contact ' + IDS[i]);
         g.ring.forEach(function (b, j) { if (j > i && hit(a, b, gap)) why.push('ring ' + IDS[i] + '/' + IDS[j]); });
       });
       g.mini.forEach(function (a, i) {
@@ -998,7 +1079,36 @@
       });
       return !why.length;
     }
-    function fit() { for (var fs = 21; fs >= 12; fs -= .5) { G = geom(fs); if (fits(G)) return; } }
+    function fit() {
+      ob.classList.add('no-anim'); hub.style.transform = 'none';   // measure the hub at its own size
+      for (var fs = 28; fs >= 12; fs -= .5) { G = geom(fs); if (fits(G)) break; }   // big screens may go past 21px so the pieces keep up with the hub
+      hubScale(G);
+    }
+    // the hub's parts (tight text boxes), unscaled, relative to the hub's top left
+    function hubParts() {
+      var hr = hub.getBoundingClientRect();
+      return ['.mark', '.ob-name', '.ob-over', '.ob-tag', '.ob-hint'].map(function (q) {
+        var el = hub.querySelector(q), b;
+        if (q === '.mark') b = el.getBoundingClientRect(); else { var rg = document.createRange(); rg.selectNodeContents(el); b = rg.getBoundingClientRect(); }
+        return { x: b.left - hr.left, y: b.top - hr.top, w: b.width, h: b.height };
+      });
+    }
+    function hubAt(g, s) { return g.parts.map(function (p) { return { x: g.cx + s * (p.x - g.hw / 2), y: g.cy + s * (p.y - g.hh / 2), w: s * p.w, h: s * p.h }; }); }
+    // owner: the middle should fill about 60 to 70% of the ellipse. Grow the hub until a part would leave the disc
+    // or touch a piece, and stop when the block covers about two thirds of the disc.
+    function hubScale(g) {
+      var inDisc = function (x, y) { var a = (x - g.cx) / (.97 * g.drx), b = (y - g.cy) / (.97 * g.dry); return a * a + b * b <= 1; };
+      var box = function (P) { var x0 = Math.min.apply(null, P.map(function (p) { return p.x; })), y0 = Math.min.apply(null, P.map(function (p) { return p.y; }));
+        var x1 = Math.max.apply(null, P.map(function (p) { return p.x + p.w; })), y1 = Math.max.apply(null, P.map(function (p) { return p.y + p.h; })); return (x1 - x0) * (y1 - y0); };
+      var area = Math.PI * g.drx * g.dry, s;
+      for (s = 2.6; s > 1; s -= .02) {
+        var P = hubAt(g, s);
+        if (box(P) > .68 * area) continue;
+        if (P.every(function (p) { return inDisc(p.x, p.y) && inDisc(p.x + p.w, p.y) && inDisc(p.x, p.y + p.h) && inDisc(p.x + p.w, p.y + p.h); }) &&
+            !P.some(function (p) { return g.ring.some(function (c) { return hit(p, c, .5 * g.r); }) || hit(p, g.contact, .5 * g.r); })) break;
+      }
+      g.hsc = Math.max(1, s); g.fill = box(hubAt(g, g.hsc)) / area;
+    }
 
     function slotDist(a, b) { var d = Math.abs(SLOT[a] - SLOT[b]) % 8; return Math.min(d, 8 - d); }
     function apply(instant, from) {
@@ -1015,34 +1125,46 @@
         face.setAttribute('aria-expanded', isOpen); face.inert = isOpen; det.inert = !isOpen;
         // the others ripple out from the piece that was chosen
         var ref = open ? cur : from;
-        c.style.setProperty('--d', (ref >= 0 && ref !== k && !(from >= 0 && open) ? slotDist(k, ref) * 35 : 0) + 'ms');
+        c.style.setProperty('--d', (ref >= 0 && ref !== k && !(from >= 0 && open) ? slotDist(k, ref) * 22 : 0) + 'ms');
         if (isOpen) {
           var P = G.panel; c.style.setProperty('--pw', P.w + 'px');
-          det.classList.add('measure'); var nat = det.offsetHeight; det.classList.remove('measure');
+          // a short piece grows its own type (up to 1.3x) until it fills the frame, so no panel looks half empty
+          det.style.setProperty('--pz', 1); det.classList.add('measure'); var nat = det.offsetHeight;
+          if (nat < P.minH) {
+            var lo = 1, hi = 1.3;
+            for (var it = 0; it < 7; it++) { var mid = (lo + hi) / 2; det.style.setProperty('--pz', mid); if (det.offsetHeight <= P.minH) lo = mid; else hi = mid; }
+            det.style.setProperty('--pz', lo.toFixed(3)); nat = det.offsetHeight;
+          }
+          det.classList.remove('measure');
           var ph = Math.min(P.maxH, Math.max(P.minH, nat));
           put(c, P.x, P.top + (P.maxH - ph) / 2, P.w, ph);
+          var sc = det.querySelector('.pd-scroll'); sc.scrollTop = 0; sc.classList.toggle('more', nat > ph + 1);
         } else if (open) { var a = G.mini[k]; put(c, a.x, a.y, a.w, a.h); }
         else { var b = G.ring[k]; put(c, b.x, b.y, b.w, b.h); }
       });
+      // sizes that never animate: the overview track, the dial's ring and the disc's own box
+      ell(track, G.cx, G.cy, G.rx, G.ry); ell(ring, G.mcx, G.mcy, G.cr, G.cr);
+      disc.style.width = (2 * G.drx).toFixed(1) + 'px'; disc.style.height = (2 * G.dry).toFixed(1) + 'px';
       if (open) {
         put(hub, G.mcx - HUB_S * G.hw / 2, G.mcy - HUB_S * G.ht / 2, null, null, HUB_S);
-        ell(track, G.mcx, G.mcy, G.cr, G.cr);
-        var dr = G.cr - G.bg / 2 - .2 * G.r; ell(disc, G.mcx, G.mcy, dr, dr);
+        var dr = G.cr - G.bg / 2 - .2 * G.r;
+        disc.style.transform = 'translate(' + (G.mcx - dr).toFixed(1) + 'px,' + (G.mcy - dr).toFixed(1) + 'px) scale(' + (dr / G.drx).toFixed(4) + ',' + (dr / G.dry).toFixed(4) + ')';
         var gs = G.mini[cur], gr = G.bg / 2 + .2 * G.r; put(ghost, gs.sx - gr, gs.sy - gr, 2 * gr, 2 * gr);
         say.style.left = G.mcx.toFixed(1) + 'px'; say.style.top = (G.mcy - G.dc / 2 - .55 * G.r).toFixed(1) + 'px';
       } else {
-        put(hub, G.cx - G.hw / 2, G.cy - G.hh / 2, null, null, 1);
-        ell(track, G.cx, G.cy, G.rx, G.ry);
-        ell(disc, G.cx, G.cy, G.rx - G.cw / 2 - .5 * G.r, G.ry - Math.max.apply(null, G.hs) / 2 - .5 * G.r);
+        put(hub, G.cx - G.hsc * G.hw / 2, G.cy - G.hsc * G.hh / 2, null, null, G.hsc);
+        disc.style.transform = 'translate(' + (G.cx - G.drx).toFixed(1) + 'px,' + (G.cy - G.dry).toFixed(1) + 'px)';
       }
       if (instant) { ob.offsetWidth; requestAnimationFrame(function () { requestAnimationFrame(function () { ob.classList.remove('no-anim'); }); }); }
     }
 
     function open(k) {
       if (k === cur) return;
-      var prev = cur; cur = k; apply(false, prev);
+      var prev = cur; cur = k;
+      if (prev >= 0) { ob.classList.add('quick'); clearTimeout(open.t); open.t = setTimeout(function () { ob.classList.remove('quick'); }, 520); }
+      apply(false, prev);
       history.replaceState(null, '', '#' + IDS[k]);
-      setTimeout(function () { var h2 = cards[k].querySelector('h2'); if (cur === k && h2) h2.focus({ preventScroll: true }); }, reduce ? 0 : 520);
+      setTimeout(function () { var h2 = cards[k].querySelector('h2'); if (cur === k && h2) h2.focus({ preventScroll: true }); }, reduce ? 0 : 380);
     }
     function close() {
       if (cur < 0) return;
@@ -1060,6 +1182,7 @@
       c.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { open(IDS.indexOf(b.dataset.go)); }); });
     });
     hub.querySelector('.ob-hub-hit').addEventListener('click', close);
+    ob.querySelectorAll('.pd-scroll').forEach(function (sc) { sc.addEventListener('scroll', function () { sc.classList.toggle('more', sc.scrollTop + sc.clientHeight < sc.scrollHeight - 4); }); });
     // the label above the dial follows the pointer and the keyboard
     var say = document.getElementById('obSay');
     function tell(text) { say.textContent = text || 'Pick another piece'; say.classList.toggle('hot', !!text); }

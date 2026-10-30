@@ -264,7 +264,8 @@ wording.
   Homepage since site#7 (2026-10-30; owner: "做一個大膽的，直接把我的名字資訊加上積分符號放在
   最中間，然後周圍一圈都是我的經歷和我的作品", then, of the result, "this is good enough"): two
   layouts in one file, and the content appears in both, so **a copy change must be made twice**
-  (the orbit's piece or panel, and the sheet's tile).
+  (the orbit's piece or panel, and the sheet's tile). Since site#8 the orbit's panels also carry
+  more than the sheet (desktop only, owner's ask); that extra lives only in the panels.
   Computers (a mouse, 1101px+ wide and 640px+ tall; the script sets `html.ob-on` from that
   one media query) get the orbit, `div.ob`: the ∫ mark, name, line and tagline in the middle,
   and eight glass pieces on an elliptical ring. Each piece has a glyph badge, a mono label, a
@@ -274,16 +275,38 @@ wording.
   bottom, then 03, 02, 01 up the left. Tab and panel order is building, 01 to 04, then the papers.
   Clicking a piece detaches it from the ring: its frame grows into a large panel on the left
   (owner asked twice for it larger, +20% then +15%: about 1006×612 at 1280×720, at most 71rem
-  wide) with the full homepage copy, plus, for the papers, the plain-language lists already on
-  the paper pages (ACB's three ways, MDC's three conditions, the review's Venn). The other seven
+  wide). Panel content since site#8 (owner: "顯示文字太少，可以多一些篇幅去描述我的這個產品或者經歷，
+  重點字可以用其他顏色標注…別用大紅色，可以使用藍色，紫色，金色"): the homepage copy verbatim,
+  with key words coloured (blue #284a80, violet #5a3d9a, a gold highlighter stroke
+  rgba(226,176,52,.45) under dark text, gold text #6e4e0c for years and labels, and each site's
+  own colour for its name), plus: for What I'm building, a framing paragraph and four points per
+  site taken from §1 and §1a; for About, a strip of four facts; for Teaching and Education, a
+  short paragraph beside a gold timeline; for Research, the two questions beside the three
+  papers; for the papers, the paper pages' own paragraphs, verbatim (ACB's three ways and "What
+  decides whether it happens", MDC's three conditions and "Why the usual explanations miss it",
+  each one's "sibling construct", the review's Venn text and three fact chips), with Read more,
+  the preprint link and its status in the panel's footer. New sentences drafted then, for the
+  owner to rewrite at will: "I build two small websites around that one idea, and each links to
+  the other.", "In every room I look for the same thing…", "Two questions run through my work at
+  Westcliff University.", "The research on this page is part of it." No new dissertation wording
+  was added (§3). Panels must fit without scrolling: a short one grows its own type up to 1.3×
+  (CSS `zoom` on hero and body, set by the script) to fill the frame; one that still overflows
+  fades at its bottom edge. The other seven
   and the hub fly to a round dial at the bottom right (owner: "保持圓狀"; 13.5rem: glyph badges on
   a circle around a small mark and name, a dashed circle on the empty slot, and one label above
   the dial naming whatever badge the pointer or keyboard is on, because a dial that small has no
   room for captions). Clicking a badge switches pieces, the hub or "Overview ✕" or Esc returns,
   ← → step, `#acb`-style hash links open a piece, focus moves to the panel heading and back,
-  reduced motion stops all movement. The script fits the type size to the window (12 to 21px on
-  `--obfs`, which overrides the zoom buttons; they are hidden there) and positions everything in
-  px. Pieces move by the `translate` property so the hover `scale` grows them in place (with
+  reduced motion stops all movement. The script fits the type size to the window (12 to 28px on
+  `--obfs`, which overrides the zoom buttons; they are hidden there; 21px until site#8) and
+  positions everything in px. The centre (site#8, owner: "中間區域的字可以大一點，佔橢圓的60-70%面積")
+  is scaled by the script until its mark and text lines fill about 60 to 68% of the glass disc,
+  stopping before any line leaves the disc or touches a piece (59 to 63% from 1280×720 to
+  2560×1440; name about 52px on a 2000px-wide screen). Speed (site#8, owner: switching felt
+  "卡頓"): moves take 580ms (820ms before), one open piece to another 420ms, panel text rises in
+  sooner, and nothing that changes size runs a live blur: the open panel and the flying pieces
+  drop `backdrop-filter`, and the disc travels by `transform` while the overview track and the
+  dial's ring stay put and cross-fade. Pieces move by the `translate` property so the hover `scale` grows them in place (with
   `transform` the scale would also scale their offset and they would jump away from the
   pointer). Check any change with `node tools/orbit-check.mjs` (every piece open at seven
   computer sizes; the sheet on touch sizes) and the contrast floor below.
@@ -350,11 +373,13 @@ wording.
   recipe (50% tiles, no halo, gamma 0.55 / 25% wash) is in git at 00fe32a.
   The 25% rule is for the sheet's tiles. The orbit's pieces (site#7) float on the photo with no
   sheet behind them and carry summaries, so they hold more paper: a 70% to 50% gradient over
-  `blur(16px) saturate(1.15)`, the open panel 93% to 86%, the hub on a 58% to 34% glass disc,
-  the same dark bold text and 1px edge. The owner approved that look on 2026-10-30. Since
-  site#7 the contrast tool checks both layouts (orbit overview, two open pieces, the sheet at
-  iPad and phone sizes); worst case then: the hub's small accent hint 4.65, piece labels 6.8,
-  summaries 11.0, panel text 9.5 or better, the sheet as before.
+  `blur(16px) saturate(1.15)`, the open panel 93% to 86% (no blur since site#8), the hub on a
+  58% to 34% glass disc, the same dark bold text and 1px edge. The owner approved that look on
+  2026-10-30. Since site#7 the contrast tool checks both layouts (orbit overview, open pieces,
+  the sheet at iPad and phone sizes; since site#8 also About, Teaching and the review open, and
+  the coloured words); worst case after site#8: the hub's small accent hint 4.80, piece labels
+  6.8, gold text 5.5, the Qidolab card's highlighted words (#7d4f30) 5.7, summaries 11.0, the
+  sheet as before. Gold as text must stay #6e4e0c or darker (#8a6418 measured 3.9:1).
   Type scale (site#3, 2026-10-09, owner's ask: a little larger on computers, unchanged on
   phones): the homepage root font is `--base-fs`, 16px on phones, 17px on desktop
   (min-width 861px) and 14.5px in the compact tier (desktop, 820px or less tall; it was
@@ -414,7 +439,9 @@ The canonical reference is `<line>#<n>`, counted separately per project line:
   stacked by the masthead's own width (PR #35, merged 2026-10-30); `site#7` = the homepage as an
   orbit on computers (eight summary pieces around the animated ∫ mark; a piece opens into a
   large panel, the rest gather in a round dial) and a tidier sheet on phones and iPads, plus
-  `tools/orbit-check.mjs` (2026-10-30)
+  `tools/orbit-check.mjs` (PR #36, merged 2026-10-30); `site#8` = the orbit's centre scaled to
+  fill about two thirds of its disc, faster moves, and fuller panels with coloured key words
+  (desktop only; 2026-10-30)
 - `qidolab#n` — Qidolab built inside this repo (2026-10-11/12); closed here at `qidolab#8`,
   which moved it out (§1a)
 - `llm#n` — the local-llm terminal line (`local-llm.html`)
